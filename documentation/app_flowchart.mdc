@@ -1,0 +1,22 @@
+---
+description: Apply these rules when making changes to the project
+globs:
+alwaysApply: true
+---
+
+Update this rule if user requested changes to the project requirement, etc.
+flowchart TD
+  A[User visits website]
+  A --> B[Public Website]
+  B --> C[Articles Section]
+  B --> D[Fixtures Section]
+  B --> E[Galleries Section]
+  B --> F[Team Players and Coaches Section]
+  B --> G[Contact Section]
+  C --> H[Share Article to Facebook]
+
+  I[Admin visits login page]
+  I --> J[Clerk Auth Login]
+  J --> K[Admin Dashboard]
+  K --> L[Manage Content - Add, Edit, Delete]
+  L --> M[Content Updates Reflected on Public Website]

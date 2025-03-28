@@ -1,0 +1,106 @@
+---
+description: Apply these rules when making changes to the project
+globs:
+alwaysApply: true
+---
+
+Update this rule if user requested changes to the project requirement, etc.
+## Project Overview
+
+* **Type:** Rugby Team Website
+* **Description:** A website developed for a rugby team aimed at supporters and potential members. The site includes articles, fixtures, galleries, player and coach information, and contact pages. It features a visually appealing and mobile-responsive design following v0.dev frontend guidelines.
+* **Primary Goal:** Implement a secure admin area with Clerk Auth (email/password) for content management (add, edit, delete) and deliver a modern public-facing website with social media (Facebook) sharing capabilities.
+
+## Project Structure
+
+### Framework-Specific Routing
+
+* **Directory Rules:**
+
+    * **Next.js 14 (App Router):** Enforce the `app/` directory with nested route folders for the secure admin area and public website sections. Routes will follow the `app/[route]/page.tsx` convention.
+    * Example 1: Next.js 14 App Router → `app/admin/login/page.tsx` for the authentication page.
+    * Example 2: Next.js 14 App Router → `app/articles/page.tsx` for listing articles.
+
+### Core Directories
+
+* **Versioned Structure:**
+
+    * **app/api:** Holds Next.js 14 API routes using Route Handlers for server-side operations (e.g. content updates, authentication verifications).
+    * **app/dashboard:** Contains the secure admin dashboard pages following v0.dev layout patterns, including layouts and nested routing for content management.
+    * **app/public:** Hosts pages for the public-facing website (articles, fixtures, galleries, etc.) built with Shadcn UI components.
+
+### Key Files
+
+* **Stack-Versioned Patterns:**
+
+    * **app/dashboard/layout.tsx:** Next.js 14 root layout for the admin dashboard ensuring secure access and consistent v0.dev styling.
+    * **app/articles/page.tsx:** Public route for displaying articles with mobile-responsive design and integrated social media sharing logic.
+
+## Tech Stack Rules
+
+* **Version Enforcement:**
+
+    * **next@14:** Must use the App Router (`app/` directory) and avoid using the legacy `pages/` structure. Server components and Route Handlers are to be used in APIs.
+    * **Tailwind CSS:** Enforce utility-first styling; ensure custom themes align with v0.dev guidelines.
+    * **TypeScript:** Strict type enforcement and modular code structure.
+    * **Shadcn UI:** Pre-made UI components must be integrated for consistency.
+    * **Clerk Auth:** Use for secure admin email/password authentication; no public user accounts required.
+
+## PRD Compliance
+
+* **Non-Negotiable:**
+
+    * "Secure admin authentication via Clerk Auth is required with email/password login only; all content management actions (add, edit, delete) should be handled in the admin dashboard."
+
+## App Flow Integration
+
+* **Stack-Aligned Flow:**
+
+    * Example: Next.js 14 Auth Flow → `app/admin/login/page.tsx` for handling admin login with Clerk Auth, with redirection to the dashboard on successful authentication.
+    * Example: Real-time content updates integrated in public pages (e.g. `app/articles/page.tsx`) reflecting administrative actions.
+
+## Best Practices
+
+* **Next.js 14**
+
+    * Enforce the App Router with the `app/` directory and nested route folders.
+    * Utilize server components and Route Handlers for efficient data fetching and security.
+    * Maintain consistent code splitting and lazy loading for performance.
+
+* **Tailwind CSS**
+
+    * Use utility-first classes for responsive design.
+    * Adhere to established design tokens from v0.dev guidelines.
+    * Maintain a consistent theming strategy and avoid style conflicts.
+
+* **TypeScript**
+
+    * Enable strict mode for better type safety.
+    * Use clear interface and type definitions for all components.
+    * Leverage modular code structure to enhance maintainability.
+
+* **Shadcn UI**
+
+    * Utilize pre-built UI components to ensure design consistency.
+    * Customize components following v0.dev design language.
+    * Keep component properties well-documented.
+
+* **Clerk Auth**
+
+    * Securely implement email/password authentication for admins.
+    * Ensure minimal exposure of authentication endpoints.
+    * Regularly update dependencies to maintain security standards.
+
+* **Supabase**
+
+    * Use Supabase for backend data management and real-time updates.
+    * Maintain clear separation between public data and secure admin operations.
+    * Leverage built-in API orchestration to streamline calls from the Next.js app.
+
+## Rules
+
+* Derive folder/file patterns **directly** from the tech stack versions specified above.
+* If Next.js 14 App Router: Enforce the `app/` directory with nested route folders, especially for admin and public sections.
+* Never mix version patterns (e.g., no `pages/` in App Router projects).
+* Maintain consistency between the public site and admin dashboard following v0.dev and Shadcn UI guidelines.
+* Ensure real-time content updates are reflected seamlessly between admin actions and the public-facing pages.

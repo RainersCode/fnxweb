@@ -1,0 +1,32 @@
+---
+description: Apply these rules when making changes to the project
+globs:
+alwaysApply: true
+---
+
+Update this rule if user requested changes to the project requirement, etc.
+# Rugby Teams Website App Flow Document
+
+## Onboarding and Sign-In/Sign-Up
+
+New users discovering the website will primarily do so as supporters visiting the public landing page, which is designed with modern aesthetics and responsiveness as defined by v0.dev. All public users can browse the articles, fixtures, galleries, team players, coaches, and contact information without any need to create an account. However, administrators accessing the site for content management use a separate, discreet login link that directs them to the admin authentication page. On this page, admins are prompted to enter their email and password, ensuring that only authorized personnel can proceed. The authentication process is simple and secure, and administrators have the option to recover lost passwords through a straightforward recovery workflow if necessary. Signing out is equally simple with an available sign out button to end the session and return to the login page.
+
+## Main Dashboard or Home Page
+
+Upon visiting the public website, supporters are immediately greeted with a clean and responsive landing page. This page is built to capture attention with engaging visuals and clear navigation sections such as articles, fixtures, galleries, team players, coaches, and contacts. Each section is distinctly presented so that users can easily find and access the content of interest. For administrators, once successfully logged in, the landing page transitions into an admin dashboard that mirrors the public design aesthetics. This dashboard is organized with clear navigation menus and headers, allowing admins to quickly locate the different content management modules. There is an intuitive sidebar that houses links to various content types and social media integration features, ensuring a seamless move from one section to another.
+
+## Detailed Feature Flows and Page Transitions
+
+Supporters visiting the public pages can explore various content areas smoothly. From the landing page, they can click on individual sections to view detailed articles, schedules for fixtures, and image galleries, all optimized for mobile responsiveness. When a visitor selects an article, the page displays full content with integrated social media sharing options, particularly a prompt for sharing on Facebook. Navigational links help users return to the main sections or continue exploring the site. On the administrative side, once the admin logs in, they are welcomed by a well-organized dashboard that allows immediate access to the content management interface. Administrators can add new content by clicking on clearly marked action buttons for articles, fixtures, galleries, team players, coaches, and contacts. Each content category has dedicated pages where existing entries can be edited or deleted. Administrators navigate between these modules via a consistent sidebar menu. Advanced workflows such as triggering a Facebook share for a newly published article are integrated within the content editing pages, ensuring that the action flows seamlessly within the broader content management process. The transition from content input to immediate public update is handled in real time, preserving data consistency and user experience across the site.
+
+## Settings and Account Management
+
+Administrators have access to a dedicated settings section within the admin dashboard where they can manage personal information and update authentication credentials like changing their password or email address. This part of the interface is designed to be straightforward so that updates and preferences can be modified with minimal navigation. Additionally, notification preferences related to content management or social media sharing may be adjusted if necessary. Once changes are made, administrators can easily navigate back to the main dashboard through clear, intuitive buttons or links that lead them back, ensuring that the overall workflow remains uninterrupted and logical.
+
+## Error States and Alternate Paths
+
+If a user, particularly an admin, enters an incorrect email or password during the sign-in process, the website will display a clear and concise error message that indicates the nature of the error along with options to retry or use the password recovery process. In cases where the admin tries to execute a restricted action, such as attempting to delete content without confirmation, a warning message appears detailing the consequences and options to confirm or cancel the action. Should connectivity issues arise, informative fallback screens are presented, explaining that the system is experiencing temporary issues and providing instructions on how to regain normal flow. If a page fails to load correctly, a generic error page is triggered with an option to return to the previous page or the dashboard. These error states ensure that all deviations from the expected path are handled gracefully, allowing users to reestablish proper workflow with minimal disruption.
+
+## Conclusion and Overall App Journey
+
+The rugby teams website provides two distinct experiences: one for public supporters and one for site administrators. Supporters are welcomed by a visually appealing, modern landing page that makes navigating between articles, fixtures, galleries, team players, coaches, and contacts an intuitive experience. Administrators, on the other hand, access a secure admin login to enter a dashboard where they can add, edit, and delete content using simple, uniform interfaces that reflect the public design. All interactions, from logging in and managing content to sharing articles on Facebook, flow smoothly together to create a cohesive user experience. By ensuring mobile responsiveness, error handling, and clear navigation, the application meets its goal of providing an efficient content management system for administrators while delivering engaging public-facing pages to supporters.

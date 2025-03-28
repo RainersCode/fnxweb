@@ -1,0 +1,186 @@
+---
+description: Apply these rules when making changes to the project
+globs:
+alwaysApply: true
+---
+
+Update this rule if user requested changes to the project requirement, etc.
+# Backend Structure Document
+
+## Backend Architecture
+
+The backend is built using a combination of modern, scalable, and easy-to-manage technologies. Here’s a simple breakdown of how it works:
+
+- **Design Pattern & Frameworks:**
+  - The backend is centered on the Supabase platform, which provides a managed PostgreSQL database and built-in APIs. This approach minimizes custom code by leveraging existing, well-tested components.
+  - Clerk Auth is integrated to handle all aspects of admin authentication, ensuring that only authorized users have access to the content management system (CMS).
+
+- **Scalability & Maintainability:**
+  - The use of managed services (Supabase and Clerk Auth) ensures that the system can grow over time without needing a complete rewrite.
+  - The architecture is modular, meaning that if we want to add new features (like additional social media integrations), these can be incorporated without affecting existing components.
+
+- **Performance:**
+  - The combination of real-time Supabase features and optimized API endpoints ensures that data is fetched and updated quickly, which is critical for a responsive user experience on both the public page and the admin dashboard.
+
+## Database Management
+
+The data is mainly managed by Supabase, which uses PostgreSQL under the hood. This makes it easy to store and retrieve structured content.
+
+- **Technologies Used:**
+  - **SQL Database:**
+    - PostgreSQL is the core database technology.
+  - **Other Managed Features:**
+    - Supabase offers built-in real-time capabilities and SQL functions that simplify handling events like data modifications.
+
+- **Data Handling:**
+  - Data is structured into clear sections like articles, fixtures, galleries, team players, coaches, and contacts.
+  - Data retrieval is managed through RESTful APIs automatically exposed by Supabase and secured via Supabase's Row Level Security (RLS) features.
+  - Regular maintenance and backups are handled by Supabase, ensuring data integrity and quick recovery if required.
+
+## Database Schema
+
+The data stored in the PostgreSQL database is organized in a human-friendly manner. Below is a human-readable explanation followed by an example SQL schema:
+
+### Human Readable Format
+
+- **Articles Table:** Contains information for club news and blog posts, such as title, content, publish date, and associated metadata.
+- **Fixtures Table:** Holds details on upcoming and past games, including opponent names, dates, and scores.
+- **Galleries Table:** Stores links or paths to images and metadata such as captions and upload dates.
+- **Team Players Table:** Lists players with details like name, position, and a short biography.
+- **Coaches Table:** Contains profiles for the coaching staff and their roles.
+- **Contacts Table:** Stores contact information for the rugby club, including phone numbers, email addresses, and social media links.
+
+### Example SQL Schema (PostgreSQL)
+
+-- Articles Table
+CREATE TABLE articles (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    published_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    author VARCHAR(100)
+);
+
+-- Fixtures Table
+CREATE TABLE fixtures (
+    id SERIAL PRIMARY KEY,
+    opponent VARCHAR(255) NOT NULL,
+    match_date DATE NOT NULL,
+    location VARCHAR(255),
+    score VARCHAR(50)
+);
+
+-- Galleries Table
+CREATE TABLE galleries (
+    id SERIAL PRIMARY KEY,
+    image_url TEXT NOT NULL,
+    caption VARCHAR(255),
+    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Team Players Table
+CREATE TABLE team_players (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    position VARCHAR(100),
+    bio TEXT
+);
+
+-- Coaches Table
+CREATE TABLE coaches (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    role VARCHAR(100),
+    bio TEXT
+);
+
+-- Contacts Table
+CREATE TABLE contacts (
+    id SERIAL PRIMARY KEY,
+    type VARCHAR(50), -- e.g., email, phone, social media
+    value VARCHAR(255) NOT NULL
+);
+
+## API Design and Endpoints
+
+The backend offers services primarily through a RESTful API design which allows communication between the frontend and the backend systems.
+
+- **API Approach:**
+  - RESTful APIs provided by Supabase handle operations like creation, reading, updating, and deletion of content.
+  - Clerk Auth also exposes endpoints for secure authentication, ensuring that admin-only actions are protected.
+
+- **Key Endpoints and Their Functions:**
+  - **Content Endpoints:**
+    - GET requests to fetch articles, fixtures, galleries, players, and coaches for public viewing.
+    - POST, PUT, DELETE endpoints for admins to manage content through the CMS.
+  - **Authentication Endpoints:**
+    - Endpoints for admin login, implemented via Clerk Auth.
+  - **Social Media Integration Endpoint:**
+    - A dedicated API endpoint that integrates with the Facebook API for sharing articles, taking care to respect Facebook’s rate limits.
+
+## Hosting Solutions
+
+The project utilizes managed cloud services for hosting,
+
+- **Cloud Providers:**
+  - **Supabase:**
+    - Acts as the main backend as a service (BaaS) by providing hosting for the PostgreSQL database, API services, and real-time functionalities.
+  - **Clerk Auth:**
+    - Provides hosted authentication services, reducing the overhead of managing security in-house.
+
+- **Benefits:**
+  - **Reliability:** Managed services offer high uptime and robust scalability.
+  - **Scalability:** As user load increases, Supabase can scale naturally, ensuring that the website remains fast and responsive.
+  - **Cost-effectiveness:** Using cloud providers reduces the need for dedicated servers and associated maintenance expenses.
+
+## Infrastructure Components
+
+Several key components work together to enhance the website’s performance and reliability:
+
+- **Load Balancers:** May be used to distribute API requests evenly if the volume increases, ensuring no single server is overwhelmed.
+- **Caching Mechanisms:** Implemented either at the CDN level or within Supabase to speed up frequent data retrieval operations, reducing database load.
+- **Content Delivery Network (CDN):** Likely provided by Vercel for static assets, ensuring images, styles, and JavaScript files load quickly regardless of the user's geo-location.
+- **Integration Services:** The Facebook API is used for enabling content sharing, making sure the website remains interactive and engaged with social media.
+
+## Security Measures
+
+Security is a top priority, and several measures ensure that both data and user actions are protected:
+
+- **Authentication & Authorization:**
+  - Clerk Auth is used to secure the admin dashboard with email/password login, ensuring only authorized users can make changes.
+  - Supabase integrates secure policies (Row Level Security) to restrict data access based on user roles.
+
+- **Data Encryption:**
+  - Data in transit is encrypted using HTTPS throughout communications.
+  - Sensitive data stored in the database may be encrypted as per best practices and compliance standards.
+
+- **Additional Protections:**
+  - Regular reviews and updates to dependencies and libraries help close security vulnerabilities.
+  - Awareness of API rate limits (particularly when dealing with the Facebook API) and implementing retries/back-offs help safeguard against abuse.
+
+## Monitoring and Maintenance
+
+Consistent monitoring and maintenance practices keep the system running smoothly:
+
+- **Monitoring Tools:**
+  - Supabase offers built-in monitoring for database performance and API usage.
+  - External services (e.g., Vercel's monitoring tools) can track uptime and performance for the frontend and API endpoints.
+
+- **Maintenance Practices:**
+  - Regular updates are scheduled to apply security patches and improve performance.
+  - Log analysis and error tracking help developers quickly identify and resolve issues.
+  - Automated backups via Supabase ensure data integrity and quick recovery in case of failures.
+
+## Conclusion and Overall Backend Summary
+
+This backend structure is designed with simplicity, scalability, and performance in mind, ensuring that all aspects of the rugby club website meet the needs of both public users and administrative staff:
+
+- **Key Components:**
+  - A managed PostgreSQL database via Supabase structured into clear, easy-to-manage tables.
+  - RESTful API endpoints that allow secure and efficient content management and retrieval.
+  - Integration of Clerk Auth for a secure, straightforward login system for admins and the use of Facebook API for social media sharing.
+  - Cloud hosting and infrastructure that leverage load balancers, caching, and CDNs to optimize performance and reliability.
+
+Overall, the backend is a robust, secure, and maintainable solution that supports current project goals and is flexible enough to accommodate future enhancements or integrations.
+
+This comprehensive setup ensures that the system is user-friendly for non-technical staff while maintaining high standards of performance and security for all users.

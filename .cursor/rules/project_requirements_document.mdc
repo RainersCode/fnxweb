@@ -1,0 +1,150 @@
+---
+description: Apply these rules when making changes to the project
+globs:
+alwaysApply: true
+---
+
+Update this rule if user requested changes to the project requirement, etc.
+# Project Requirements Document
+
+## 1. Project Overview
+
+This project aims to create a dedicated website for a rugby club, catering primarily to supporters and potential club members. The website serves as the central hub for all club-related content such as articles, fixtures, galleries, team players, coaches, and contacts. While the public-facing pages showcase engaging and accessible content designed using modern patterns from v0.dev, the backend focuses on empowering club admins with a robust content management system. Admin users, authenticated via email/password, have the exclusive ability to add, edit, or delete content, ensuring the site remains accurate and fresh at all times.
+
+The purpose of this project is to provide an intuitive platform that simplifies content management for the club’s authorized personnel while presenting supporters with a visually appealing and mobile-responsive public website. Key objectives include secure admin authentication, seamless content updates, and smooth social media integration (specifically for sharing articles on Facebook). Success will be measured by the ease of content management for admins, responsive design compliance on all devices, and active engagement from the supporters through the public-facing content.
+
+## 2. In-Scope vs. Out-of-Scope
+
+**In-Scope:**
+
+*   Development of a public-facing website displaying articles, fixtures, galleries, team players, coaches, and contacts.
+
+*   Integration of frontend design and layout as per v0.dev guidelines.
+
+*   Implementation of admin-only authentication using email/password.
+
+*   Creation of a comprehensive admin dashboard that allows authenticated admins to:
+
+    *   Add new content (articles, fixtures, galleries, team players, coaches, contacts).
+    *   Edit and delete existing content.
+
+*   Social media integration for sharing articles directly to Facebook.
+
+*   Ensuring full mobile responsiveness and adherence to accessibility standards.
+
+*   Use of the provided CodeGuide Starter Lite boilerplate structure and modern tech stack.
+
+**Out-of-Scope:**
+
+*   No public or regular user authentication or member-specific functionalities other than the admin login.
+*   Advanced role-based permissions (all admins will have uniform access rights).
+*   Any extensive backend analytics, reporting, or external integrations beyond the specified social media sharing.
+*   Offline functionality or native mobile application development.
+*   Third-party payment integration or e-commerce features.
+
+## 3. User Flow
+
+For public visitors, the experience begins at a clean, responsive landing page where the design immediately captures attention with its modern aesthetics. Visitors can easily navigate through various sections such as articles, fixtures, galleries, team players, coaches, and contacts. From the landing page, users can click on individual sections to view detailed content, and are provided with options to share articles on Facebook. The website is designed to be intuitive and accessible across all devices, ensuring that supporters and aspiring club members have a seamless browsing experience.
+
+Admins, on the other hand, access a discreet login link that leads to a secure authentication page. After logging in using their email and password, they enter an admin dashboard that mirrors the public site’s design aesthetics. Here, admins can efficiently manage content in all specified categories – adding new entries, modifying existing information, or deleting outdated content. Once changes are saved, they are immediately reflected on the live public pages, creating a harmonious flow between the admin and public experiences.
+
+## 4. Core Features
+
+*   **Admin Authentication:**
+
+    *   Secure login for club admins using email and password.
+    *   Restricted access to only authenticated admin users.
+
+*   **Content Management:**
+
+    *   Admin dashboard for adding, editing, and deleting articles.
+    *   Management interfaces for fixtures, galleries, team players, coaches, and contacts.
+    *   Uniform permission levels for all admin users to simplify workflow.
+
+*   **Public Website Display:**
+
+    *   Clean, modern landing page designed as per v0.dev guidelines.
+    *   Dynamic sections for articles, fixtures, galleries, team players, coaches, and contacts.
+    *   Mobile-responsive design ensuring accessibility on all devices.
+
+*   **Social Media Integration:**
+
+    *   Automated or on-demand article sharing functionality to Facebook.
+
+*   **Immediate Content Updates:**
+
+    *   Real-time reflection of content changes from the admin dashboard to the public website.
+
+## 5. Tech Stack & Tools
+
+*   **Frontend:**
+
+    *   Next.js – A React framework for server-side rendering and static site generation.
+    *   Tailwind CSS – Utility-first CSS framework for rapid UI styling.
+    *   Typescript – Superset of JavaScript adding type safety.
+    *   Shadcn UI – Pre-made UI components tailored for consistency in design.
+    *   V0 by Vercel – For prototyping and building modern frontend components and layout patterns.
+
+*   **Backend:**
+
+    *   Supabase – Backend-as-a-Service (BaaS) for database management, authentication, and API integration.
+    *   Clerk Auth – For managing admin authentication using email/password.
+
+*   **Other Tools:**
+
+    *   Cursor – Advanced IDE for AI-powered coding with real-time suggestions.
+    *   Additional integrations for managing design guidelines from v0.dev.
+
+## 6. Non-Functional Requirements
+
+*   **Performance:**
+
+    *   Fast load times across all pages, optimized for both desktop and mobile.
+    *   Efficient data queries to ensure real-time updates on content changes.
+
+*   **Security:**
+
+    *   Secure admin authentication with proper encryption for passwords.
+    *   Controlled access to the content management system ensuring no unauthorized changes.
+
+*   **Usability:**
+
+    *   Intuitive and accessible design for both public users and admins.
+    *   Consistent user interface following the design guidelines from v0.dev.
+
+*   **Compliance:**
+
+    *   Ensure the website meets basic web accessibility standards.
+    *   Responsive design to cater to all screen sizes and devices.
+
+## 7. Constraints & Assumptions
+
+*   The solution relies on the availability and responsiveness of Supabase for backend operations and Clerk Auth for the authentication process.
+*   All administrators have the same level of permissions; no role-based access control is required.
+*   The frontend design and component layouts are pre-defined using v0.dev, limiting extensive customization.
+*   It is assumed that social media integration, particularly for Facebook sharing, will use available APIs with standard rate limits.
+*   The development environment will follow the structure provided by the CodeGuide Starter Lite kit.
+
+## 8. Known Issues & Potential Pitfalls
+
+*   **API Rate Limits:**
+
+    *   Facebook API for sharing may have rate limits; consider implementing caching or throttling mechanisms.
+
+*   **Authentication Dependencies:**
+
+    *   Reliance on Clerk Auth means that any downtime or issues with the service could affect admin access.
+
+*   **Design Consistency:**
+
+    *   Ensuring that the admin dashboard remains visually consistent with the public site might require extra careful integration with the v0.dev components.
+
+*   **Responsive Design Challenges:**
+
+    *   Variations in mobile device interfaces could pose challenges; thorough testing across devices is recommended.
+
+*   **Real-Time Content Updates:**
+
+    *   Ensure the synchronization between admin actions and public content display is efficient, which might require careful handling of database events and caching strategies.
+
+By keeping these potential issues in mind and planning accordingly, the project aims to deliver a robust, user-friendly website for the rugby club with seamless admin-controlled content management and engaging public-facing pages.

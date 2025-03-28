@@ -1,0 +1,52 @@
+---
+description: Apply these rules when making changes to the project
+globs:
+alwaysApply: true
+---
+
+Update this rule if user requested changes to the project requirement, etc.
+# Implementation plan
+
+## Phase 1: Environment Setup
+
+1. Create a new repository using the CodeGuide Starter Lite boilerplate as specified in the project requirements (Project Goal: Using CodeGuide Starter Lite).
+2. Open the repository in the Cursor IDE (Tools: Cursor IDE).
+3. Install Node.js (ensure your system meets project prerequisites) and initialize the project with Next.js 14 (Tech Stack: Frontend - Next.js). Note: Use Next.js 14 instead of the latest version, since it offers better support with current AI coding tools and LLM models.
+4. Set up Tailwind CSS, TypeScript, and Shadcn UI by installing the corresponding packages (Tech Stack: Frontend - Tailwind CSS, TypeScript, Shadcn UI).
+5. Run `npm run dev` to verify the development server is running and all installations are correct (Validation: Check localhost for Next.js starter page).
+
+## Phase 2: Frontend Development
+
+6. Create the public homepage at `/pages/index.tsx` following the modern, responsive design guidelines from v0.dev (Design & Style: v0.dev guidelines).
+7. Build a dedicated admin login page at `/pages/admin/login.tsx` and integrate Clerk Auth’s UI widget for secure email/password authentication (Key Features: Admin Authentication; Tech Stack: Clerk Auth).
+8. Set up routing for the admin dashboard by creating `/pages/admin/dashboard.tsx` to serve as the main hub for content management (Key Features: Content Management).
+9. Develop UI components for managing articles, fixtures, galleries, team players, coaches, and contacts. Place these components in the `/components/` directory (Key Features: Content Management; Design & Style: v0.dev guidelines).
+10. Implement social media integration by adding a Facebook share button in the article component (Key Features: Social Media Integration). Ensure that clicking the button calls Facebook’s sharing API.
+11. Use responsive design techniques (with Tailwind CSS) to ensure the site adapts to all screen sizes (Design & Style: Responsive design requirements).
+12. **Validation**: Run `npm run dev` and navigate through public and admin routes to ensure pages render correctly.
+
+## Phase 3: Backend Development
+
+13. Set up a Supabase project for handling the database and API operations (Tech Stack: Supabase). Create the project in your Supabase dashboard.
+14. Define and deploy the database schema for articles, fixtures, galleries, team players, coaches, and contacts in Supabase (Key Features: Content Management).
+15. Validate the schema creation by reviewing the tables and relationships in the Supabase dashboard (Validation: Verify tables exist).
+16. Integrate Clerk Auth for admin authentication on the backend by following its official setup instructions (Key Features: Admin Authentication; Tech Stack: Clerk Auth).
+17. Create Next.js API routes under `/pages/api/admin/` to handle CRUD operations for content (e.g., `/pages/api/admin/articles.ts`) (Key Features: Content Management).
+18. In each API route, use Supabase's client library to perform database operations and ensure proper authentication via Clerk (Tech Stack: Supabase, Clerk Auth).
+19. **Validation**: Test each CRUD endpoint using tools like Postman or `curl` to ensure a 200 OK response and correct data handling.
+
+## Phase 4: Integration
+
+20. Integrate the admin login page with Clerk Auth by configuring the client-side authentication in `/pages/admin/login.tsx` and validating successful sign-in (Key Features: Admin Authentication).
+21. Connect the admin dashboard and UI components to the corresponding Next.js API routes for content management by calling these endpoints using fetch or a preferred HTTP client (Key Features: Content Management).
+22. Integrate Facebook article sharing by binding the share button in the article component to a function that invokes Facebook’s API on article publication (Key Features: Social Media Integration).
+23. **Validation**: Simulate admin login, create/update content, and trigger article sharing on Facebook to verify end-to-end data flow and functionality.
+
+## Phase 5: Deployment
+
+24. Set up environment variables for Supabase (API keys, URLs) and Clerk Auth in a `.env.local` file (Tech Stack: Backend - Supabase, Clerk Auth) and ensure they are not exposed publicly.
+25. Build the production version of the Next.js application using `npm run build` (Tech Stack: Next.js 14).
+26. Deploy the application to Vercel, ensuring that the deployment configuration adheres to the CodeGuide Starter Lite setup and v0.dev guidelines (Deployment: Vercel Deployment).
+27. **Validation**: After deployment, visit the production URL to confirm that the public site loads, admin authentication works, and API endpoints are fully operational.
+
+End of implementation plan.

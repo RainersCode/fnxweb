@@ -69,8 +69,10 @@ function Hero() {
             </p>
           </div>
           <div className="flex flex-row gap-3">
-            <Button size="lg" className="gap-4">
-              Get Started <MoveRight className="h-4 w-4" />
+            <Button variant="skewed" size="lg">
+              <span className="transform skew-x-[12deg] flex items-center gap-4">
+                Get Started <MoveRight className="h-4 w-4" />
+              </span>
             </Button>
           </div>
         </div>

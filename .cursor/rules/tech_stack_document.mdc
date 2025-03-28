@@ -1,0 +1,66 @@
+---
+description: Apply these rules when making changes to the project
+globs:
+alwaysApply: true
+---
+
+Update this rule if user requested changes to the project requirement, etc.
+# Tech Stack Document
+
+This document outlines the technology choices made for building a modern and user-friendly rugby club website. It is written in plain language to make it easily understandable for everyone. 
+
+## Frontend Technologies
+
+- **Next.js**: This React-based framework helps in rendering pages quickly. It supports both server-side rendering and static page generation for fast load times and an excellent user experience.
+- **Tailwind CSS**: A utility-first CSS framework that speeds up the styling process. It allows for rapid, consistent, and responsive design in line with the modern aesthetics provided by the v0.dev design guidelines.
+- **TypeScript**: A superset of JavaScript that adds type checking. This not only makes the code more reliable but also easier to maintain and debug.
+- **Shadcn UI**: A component library that comes with pre-built, visually consistent UI elements, ensuring that both the public website and the admin dashboard have a unified and modern look.
+- **V0 by Vercel**: Utilized for prototyping and building frontend components, it offers modern design patterns that fit seamlessly into the overall site design as pre-defined by v0.dev.
+
+These frontend choices emphasize a crisp, responsive, and accessible interface for supporters and potential club members visiting the site's public pages.
+
+## Backend Technologies
+
+- **Supabase**: Acts as our Backend-as-a-Service (BaaS) solution. It manages databases, provides real-time APIs, and simplifies backend operations. Supabase is instrumental in handling content updates, ensuring that any change made by admins is reflected immediately on the public website.
+- **Clerk Auth**: Powers the admin authentication using an email/password login system. This secure method ensures that only authorized club administrators can access and modify website content.
+
+The backend setup combines these services to offer a powerful yet straightforward system for managing dynamic content, all while keeping security at the forefront.
+
+## Infrastructure and Deployment
+
+- **Hosting & Deployment**: Leveraging platforms like Vercel allows for smooth deployment of the website. Vercel's integration with Next.js simplifies the process, ensuring that both development and updates to the site are seamless.
+- **CI/CD Pipelines & Version Control**: By adopting version control systems integrated with CI/CD pipelines, developers can ensure that every piece of code is tested and deployed reliably. The project uses the CodeGuide Starter Lite structure from GitHub as its base, which helps in managing code, collaboration, and tracking changes efficiently.
+- **Cursor IDE**: An advanced IDE that provides AI-powered coding assistance and real-time suggestions. This tool enhances productivity and ensures high-quality code standards.
+
+This infrastructure setup guarantees that the project is not only scalable and reliable but also easy to update and maintain over time.
+
+## Third-Party Integrations
+
+- **Facebook Sharing**: The website includes a feature that allows articles to be shared directly on Facebook. This social media integration is key to engaging supporters and extending the club's online presence.
+- **Design & Prototyping Tools**: The frontend design elements are guided by v0.dev standards, ensuring visual consistency and modern aesthetics across the site.
+
+These integrations enhance the functionality of the project by connecting it to popular platforms and leveraging design tools that make the development process smoother.
+
+## Security and Performance Considerations
+
+- **Security Measures**:
+  - Secure admin login implemented via Clerk Auth with email/password verification ensures that only authorized personnel can manage the website content.
+  - Utilizing industry-standard encryption and secure data transmission to protect sensitive information.
+- **Performance Optimizations**:
+  - Next.js’s server-side rendering and static site generation aid in delivering content rapidly to users.
+  - Tailwind CSS, with its efficient styling approach, contributes to faster page loads and responsiveness across devices.
+  - Supabase’s real-time database updates ensure that any changes in content are promptly and securely reflected on the public site.
+
+These considerations address both the safety of data and the overall smoothness of the user experience.
+
+## Conclusion and Overall Tech Stack Summary
+
+In summary, the chosen technologies are aligned with the project's goals of producing a fast, secure, and visually appealing website for a rugby club. Here’s a recap:
+
+- **Frontend**: Next.js, Tailwind CSS, TypeScript, Shadcn UI, and design components from V0 by Vercel to deliver a beautiful, responsive, and modern user interface.
+- **Backend**: Supabase and Clerk Auth work together to handle dynamic content management and secure, straightforward admin authentication.
+- **Infrastructure**: Vercel deployment, integrated CI/CD pipelines, and advanced development tools like Cursor ensure reliable, maintainable, and scalable operations.
+- **Third-Party Integrations**: Facebook sharing for articles enhances engagement, supported by a design framework that upholds consistency across public and admin interfaces.
+- **Security & Performance**: Robust authentication, real-time updates, and responsive design practices keep the system secure and optimized.
+
+This tech stack not only meets the current needs of the rugby club website but also provides the flexibility to scale and evolve the platform as future requirements emerge. The combination of these well-integrated tools and frameworks ensures that both the administration and the public experience are smooth, secure, and satisfying.

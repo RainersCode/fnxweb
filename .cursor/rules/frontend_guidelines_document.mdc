@@ -1,0 +1,86 @@
+---
+description: Apply these rules when making changes to the project
+globs:
+alwaysApply: true
+---
+
+Update this rule if user requested changes to the project requirement, etc.
+# Frontend Guideline Document
+
+This document outlines the frontend setup for the rugby club website with admin content management. It covers the overall architecture, core design principles, styling and theming, component structure, state management, routing, performance optimizations, and quality assurance practices. It is written in everyday language so everyone can grasp the technical details without needing an advanced background.
+
+## Frontend Architecture
+
+Our frontend is built using Next.js, a popular React framework that helps us build fast, scalable web applications. We use TypeScript for added reliability and error detection while coding. Shadcn UI and elements from V0 by Vercel provide predefined designs and components that match our modern aesthetic.
+
+This setup lets us grow the website without much hassle. The component-based approach in Next.js makes it easy to add or modify parts of the site. The architecture supports both the public-facing website and the admin dashboard, which share a consistent design and structure. By using these modern tools, we ensure that our website is maintainable, scalable, and quick to load.
+
+## Design Principles
+
+We base our design on the guidelines from v0.dev, keeping focus on:
+
+- **Usability:** The site is easy to navigate for supporters, players, and club members. Clear menus and buttons help users find what they need quickly.
+- **Accessibility:** We make sure the interface works well for everyone. This means readable fonts, good color contrast, and design elements that work on any device or for users with different abilities.
+- **Responsiveness:** Whether you're on a desktop, tablet, or smartphone, the layout adjusts accordingly. Both the public site and the dashboard are designed using flexible layouts and mobile-first design techniques.
+- **Consistency:** Branding and design are uniformly applied. The public website and the admin dashboard share similar fonts, colors, and layouts to create a cohesive experience.
+
+## Styling and Theming
+
+For styling, we rely on Tailwind CSS, which speeds up writing clean, reusable CSS. We follow a modern design style with hints of minimalism. Here are some key details:
+
+- **Approach:** We use Tailwind's utility classes alongside component-based CSS to ensure that styling is clear and consistent. This approach makes tweaking and theming straightforward.
+- **CSS Methodology:** Rather than traditional CSS naming conventions, we leverage Tailwind’s built-in responsive classes. This speeds up the process and keeps the markup neat.
+- **Theming & Styles:** Our design is modern with a touch of flat design. We adopt a light/dark theme if needed, with design patterns inspired by V0.dev and Shadcn UI. A sample color palette might be:
+  - Primary: #006600 (a deep, rugby-inspired green)
+  - Secondary: #FFFFFF (a clean white)
+  - Accent: #FFCC00 (for highlights)
+  - Neutral: #F5F5F5 and #333333 for backgrounds and text
+
+- **Fonts:** We use the ‘Inter’ font for its modern look and clarity on all devices. The font is both web- and print-friendly and aligns well with our design inspiration from V0.dev.
+
+## Component Structure
+
+Our project follows a component-based architecture. Here's what that means:
+
+- **Organization:** We structure the UI into reusable components. Layouts, buttons, forms, cards, and other elements are built as independent components. This modular structure helps in reusing code between pages.
+- **Reusability and Maintenance:** Each component is designed small and focused. This allows developers to update parts of the UI without affecting the rest of the application. Both the public website and the admin sections benefit from this, ensuring design consistency and easier maintenance.
+
+## State Management
+
+State management in our frontend is balanced and efficient:
+
+- We utilize Next.js built-in state management using React's useState and useContext hooks. This is enough for managing UI state or small data-sharing tasks.
+- For data fetching and caching, we plan on using SWR, which optimizes requests to our Supabase backend. This helps in fetching articles, fixtures, and other content for the public site and the admin dashboard.
+- The simplicity of the state management setup ensures that data updates smoothly across components, making the user experience seamless.
+
+## Routing and Navigation
+
+The website navigation and routing are handled by Next.js routing system:
+
+- **Routing:** Pages are structured in a file-based routing system. For example, public pages like articles, fixtures, and contacts live in the main directory, while admin pages are placed under an '/admin' subdirectory.
+- **Navigation:** We have clear menus for both the public site and the admin dashboard. In the public site, navigation links direct users to various sections like teams, articles, and galleries. For admins, the dashboard includes links to content management pages for articles, fixtures, and more.
+- **Smooth Transitions:** Next.js built-in routing helps with client-side transitions, ensuring the navigation feels smooth and responsive.
+
+## Performance Optimization
+
+We pay close attention to the website’s performance to ensure a great user experience:
+
+- **Lazy Loading and Code Splitting:** Parts of the application that are not immediately needed, like certain admin components, are loaded on demand. This keeps the initial load fast.
+- **Asset Optimization:** Images and static assets are optimized through Next.js Image component and proper caching strategies.
+- **Efficient Data Fetching:** SWR helps by only fetching the data when necessary and caching results. This is particularly useful for real-time content updates on the public site.
+
+These strategies collectively contribute to faster page loads and a more responsive interface.
+
+## Testing and Quality Assurance
+
+Maintaining a high-quality frontend is essential. Here’s our approach:
+
+- **Testing Strategies:** We include unit tests to check individual components, integration tests for how components work together, and end-to-end tests to simulate user behavior. 
+- **Tools:** Some of the tools and frameworks used include Jest for unit tests and React Testing Library for component testing. For end-to-end testing, Cypress might be employed to simulate user interactions and ensure everything works as expected.
+- **Continuous Integration:** Testing is integrated into our development workflow so that every change is validated against these tests, ensuring reliability and reducing bugs.
+
+## Conclusion and Overall Frontend Summary
+
+To sum it up, the frontend of our rugby club website is crafted with a modern, clean, and responsive design inspired by v0.dev. Using Next.js with TypeScript ensures a robust architecture that scales well. Tailwind CSS along with Shadcn UI empowers us to maintain consistency in styling across both the public website and the admin dashboard.
+
+Through a clear component-based structure, efficient state management, and a smooth routing setup, our project provides a seamless experience for users and admins alike. Performance optimizations and rigorous testing further ensure that the site remains fast and reliable. By following these guidelines, we aim to deliver a front-end that not only meets but exceeds modern web standards and user expectations.
