@@ -1,126 +1,126 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import Image from "next/image"
-import { Card, CardContent } from "@/components/ui/card"
-import { CalendarDays, Clock, MapPin, Trophy, ChevronDown } from "lucide-react"
-import MainLayout from "@/components/main-layout"
-import { ParallaxHeroSection } from "@/components/ui/parallax-hero-section"
+import { useState } from 'react'
+import Image from 'next/image'
+import { Card, CardContent } from '@/components/ui/card'
+import { CalendarDays, Clock, MapPin, Trophy, ChevronDown } from 'lucide-react'
+import MainLayout from '@/components/layout/main-layout'
+import { ParallaxHeroSection } from '@/components/features/parallax-hero-section'
 
 export default function FixturesPage() {
-  const [activeTab, setActiveTab] = useState("upcoming")
+  const [activeTab, setActiveTab] = useState('upcoming')
   const [expandedMatch, setExpandedMatch] = useState<number | null>(null)
 
   const upcomingMatches = [
     {
       id: 1,
-      date: "May 15, 2025",
-      time: "14:30",
-      homeTeam: "Riverside RFC",
-      awayTeam: "Oakwood RFC",
-      location: "Home Ground, Riverside Park",
-      homeImage: "/placeholder.svg?height=64&width=64&text=Home",
-      awayImage: "/placeholder.svg?height=64&width=64&text=Away",
-      competition: "Regional League",
+      date: 'May 15, 2025',
+      time: '14:30',
+      homeTeam: 'Riverside RFC',
+      awayTeam: 'Oakwood RFC',
+      location: 'Home Ground, Riverside Park',
+      homeImage: '/placeholder.svg?height=64&width=64&text=Home',
+      awayImage: '/placeholder.svg?height=64&width=64&text=Away',
+      competition: 'Regional League',
       ticketsAvailable: true,
-      directions: "https://maps.google.com",
-      notes: "Season opener. Pre-match lunch available at the clubhouse from 12:30.",
+      directions: 'https://maps.google.com',
+      notes: 'Season opener. Pre-match lunch available at the clubhouse from 12:30.',
     },
     {
       id: 2,
-      date: "May 22, 2025",
-      time: "15:00",
-      homeTeam: "Hillside RFC",
-      awayTeam: "Riverside RFC",
-      location: "Hillside Stadium, Hill Road",
-      homeImage: "/placeholder.svg?height=64&width=64&text=Away2",
-      awayImage: "/placeholder.svg?height=64&width=64&text=Home",
-      competition: "Regional League",
+      date: 'May 22, 2025',
+      time: '15:00',
+      homeTeam: 'Hillside RFC',
+      awayTeam: 'Riverside RFC',
+      location: 'Hillside Stadium, Hill Road',
+      homeImage: '/placeholder.svg?height=64&width=64&text=Away2',
+      awayImage: '/placeholder.svg?height=64&width=64&text=Home',
+      competition: 'Regional League',
       ticketsAvailable: false,
-      directions: "https://maps.google.com",
-      notes: "Away supporters welcome. Limited parking available.",
+      directions: 'https://maps.google.com',
+      notes: 'Away supporters welcome. Limited parking available.',
     },
     {
       id: 3,
-      date: "May 29, 2025",
-      time: "14:30",
-      homeTeam: "Riverside RFC",
-      awayTeam: "Valley RFC",
-      location: "Home Ground, Riverside Park",
-      homeImage: "/placeholder.svg?height=64&width=64&text=Home",
-      awayImage: "/placeholder.svg?height=64&width=64&text=Away3",
-      competition: "Regional League",
+      date: 'May 29, 2025',
+      time: '14:30',
+      homeTeam: 'Riverside RFC',
+      awayTeam: 'Valley RFC',
+      location: 'Home Ground, Riverside Park',
+      homeImage: '/placeholder.svg?height=64&width=64&text=Home',
+      awayImage: '/placeholder.svg?height=64&width=64&text=Away3',
+      competition: 'Regional League',
       ticketsAvailable: true,
-      directions: "https://maps.google.com",
-      notes: "Club fundraiser event after the match.",
+      directions: 'https://maps.google.com',
+      notes: 'Club fundraiser event after the match.',
     },
     {
       id: 4,
-      date: "June 5, 2025",
-      time: "15:00",
-      homeTeam: "Lakeside RFC",
-      awayTeam: "Riverside RFC",
-      location: "Lakeside Ground, Lake Road",
-      homeImage: "/placeholder.svg?height=64&width=64&text=Away4",
-      awayImage: "/placeholder.svg?height=64&width=64&text=Home",
-      competition: "Regional League",
+      date: 'June 5, 2025',
+      time: '15:00',
+      homeTeam: 'Lakeside RFC',
+      awayTeam: 'Riverside RFC',
+      location: 'Lakeside Ground, Lake Road',
+      homeImage: '/placeholder.svg?height=64&width=64&text=Away4',
+      awayImage: '/placeholder.svg?height=64&width=64&text=Home',
+      competition: 'Regional League',
       ticketsAvailable: false,
-      directions: "https://maps.google.com",
-      notes: "Coach transport available for away supporters.",
+      directions: 'https://maps.google.com',
+      notes: 'Coach transport available for away supporters.',
     },
   ]
 
   const pastMatches = [
     {
       id: 101,
-      date: "April 24, 2025",
-      time: "14:30",
-      homeTeam: "Riverside RFC",
-      awayTeam: "Mountain RFC",
+      date: 'April 24, 2025',
+      time: '14:30',
+      homeTeam: 'Riverside RFC',
+      awayTeam: 'Mountain RFC',
       homeScore: 24,
       awayScore: 17,
-      location: "Home Ground, Riverside Park",
-      homeImage: "/placeholder.svg?height=64&width=64&text=Home",
-      awayImage: "/placeholder.svg?height=64&width=64&text=Past1",
-      competition: "Regional League",
-      result: "Win",
-      highlights: "https://youtube.com",
-      motm: "James Wilson",
-      notes: "Hard-fought victory with a last-minute try.",
+      location: 'Home Ground, Riverside Park',
+      homeImage: '/placeholder.svg?height=64&width=64&text=Home',
+      awayImage: '/placeholder.svg?height=64&width=64&text=Past1',
+      competition: 'Regional League',
+      result: 'Win',
+      highlights: 'https://youtube.com',
+      motm: 'James Wilson',
+      notes: 'Hard-fought victory with a last-minute try.',
     },
     {
       id: 102,
-      date: "April 17, 2025",
-      time: "15:00",
-      homeTeam: "Forest RFC",
-      awayTeam: "Riverside RFC",
+      date: 'April 17, 2025',
+      time: '15:00',
+      homeTeam: 'Forest RFC',
+      awayTeam: 'Riverside RFC',
       homeScore: 15,
       awayScore: 15,
-      location: "Forest Ground, Tree Lane",
-      homeImage: "/placeholder.svg?height=64&width=64&text=Past2",
-      awayImage: "/placeholder.svg?height=64&width=64&text=Home",
-      competition: "Regional League",
-      result: "Draw",
-      highlights: "https://youtube.com",
-      motm: "Ryan Johnson",
-      notes: "Dramatic draw with both teams scoring in the final 10 minutes.",
+      location: 'Forest Ground, Tree Lane',
+      homeImage: '/placeholder.svg?height=64&width=64&text=Past2',
+      awayImage: '/placeholder.svg?height=64&width=64&text=Home',
+      competition: 'Regional League',
+      result: 'Draw',
+      highlights: 'https://youtube.com',
+      motm: 'Ryan Johnson',
+      notes: 'Dramatic draw with both teams scoring in the final 10 minutes.',
     },
     {
       id: 103,
-      date: "April 10, 2025",
-      time: "14:30",
-      homeTeam: "Riverside RFC",
-      awayTeam: "Seaside RFC",
+      date: 'April 10, 2025',
+      time: '14:30',
+      homeTeam: 'Riverside RFC',
+      awayTeam: 'Seaside RFC',
       homeScore: 32,
       awayScore: 12,
-      location: "Home Ground, Riverside Park",
-      homeImage: "/placeholder.svg?height=64&width=64&text=Home",
-      awayImage: "/placeholder.svg?height=64&width=64&text=Past3",
-      competition: "Regional League",
-      result: "Win",
-      highlights: "https://youtube.com",
-      motm: "Chris Williams",
-      notes: "Dominant performance with excellent attacking play.",
+      location: 'Home Ground, Riverside Park',
+      homeImage: '/placeholder.svg?height=64&width=64&text=Home',
+      awayImage: '/placeholder.svg?height=64&width=64&text=Past3',
+      competition: 'Regional League',
+      result: 'Win',
+      highlights: 'https://youtube.com',
+      motm: 'Chris Williams',
+      notes: 'Dominant performance with excellent attacking play.',
     },
   ]
 
@@ -143,32 +143,32 @@ export default function FixturesPage() {
         />
 
         {/* Fixtures Section */}
-        <section className="py-16 bg-white">
+        <section className="bg-white py-16">
           <div className="container mx-auto px-4 sm:px-6">
             {/* Tabs */}
-            <div className="flex flex-wrap justify-center gap-4 mb-12">
+            <div className="mb-12 flex flex-wrap justify-center gap-4">
               <button
-                className={`px-6 py-3 font-medium tracking-wide transform skew-x-[-12deg] transition-all duration-300 ${
-                  activeTab === "upcoming"
-                    ? "bg-teal-800 text-white"
-                    : "bg-white border border-teal-800 text-teal-800 hover:bg-teal-50"
+                className={`skew-x-[-12deg] transform px-6 py-3 font-medium tracking-wide transition-all duration-300 ${
+                  activeTab === 'upcoming'
+                    ? 'bg-teal-800 text-white'
+                    : 'border border-teal-800 bg-white text-teal-800 hover:bg-teal-50'
                 }`}
-                onClick={() => setActiveTab("upcoming")}
+                onClick={() => setActiveTab('upcoming')}
               >
-                <span className="transform skew-x-[12deg] inline-flex items-center gap-2">
+                <span className="inline-flex skew-x-[12deg] transform items-center gap-2">
                   <CalendarDays className="h-5 w-5" />
                   Upcoming Matches
                 </span>
               </button>
               <button
-                className={`px-6 py-3 font-medium tracking-wide transform skew-x-[-12deg] transition-all duration-300 ${
-                  activeTab === "past"
-                    ? "bg-teal-800 text-white"
-                    : "bg-white border border-teal-800 text-teal-800 hover:bg-teal-50"
+                className={`skew-x-[-12deg] transform px-6 py-3 font-medium tracking-wide transition-all duration-300 ${
+                  activeTab === 'past'
+                    ? 'bg-teal-800 text-white'
+                    : 'border border-teal-800 bg-white text-teal-800 hover:bg-teal-50'
                 }`}
-                onClick={() => setActiveTab("past")}
+                onClick={() => setActiveTab('past')}
               >
-                <span className="transform skew-x-[12deg] inline-flex items-center gap-2">
+                <span className="inline-flex skew-x-[12deg] transform items-center gap-2">
                   <Trophy className="h-5 w-5" />
                   Past Results
                 </span>
@@ -176,12 +176,12 @@ export default function FixturesPage() {
             </div>
 
             {/* Upcoming Matches */}
-            {activeTab === "upcoming" && (
+            {activeTab === 'upcoming' && (
               <div className="space-y-6">
                 {upcomingMatches.map((match) => (
                   <Card
                     key={match.id}
-                    className="overflow-hidden border-none bg-white shadow-md hover:shadow-xl transition-all duration-300"
+                    className="overflow-hidden border-none bg-white shadow-md transition-all duration-300 hover:shadow-xl"
                   >
                     <CardContent className="p-0">
                       <div className="flex items-center justify-between bg-teal-800 p-3 text-white">
@@ -197,10 +197,10 @@ export default function FixturesPage() {
                       <div className="p-6">
                         <div className="flex items-center justify-between">
                           <div className="flex flex-1 flex-col items-center">
-                            <div className="relative h-16 w-16 overflow-hidden transform rotate-45 bg-zinc-100">
-                              <div className="absolute inset-0 transform -rotate-45 flex items-center justify-center">
+                            <div className="relative h-16 w-16 rotate-45 transform overflow-hidden bg-zinc-100">
+                              <div className="absolute inset-0 flex -rotate-45 transform items-center justify-center">
                                 <Image
-                                  src={match.homeImage || "/placeholder.svg"}
+                                  src={match.homeImage || '/placeholder.svg'}
                                   alt={match.homeTeam}
                                   width={64}
                                   height={64}
@@ -208,18 +208,20 @@ export default function FixturesPage() {
                                 />
                               </div>
                             </div>
-                            <h3 className="mt-4 font-bold text-teal-900 tracking-tight">{match.homeTeam}</h3>
+                            <h3 className="mt-4 font-bold tracking-tight text-teal-900">
+                              {match.homeTeam}
+                            </h3>
                           </div>
                           <div className="px-4 text-center">
-                            <span className="text-xl font-black text-zinc-400 tracking-tighter transform skew-x-[-12deg] inline-block">
+                            <span className="inline-block skew-x-[-12deg] transform text-xl font-black tracking-tighter text-zinc-400">
                               VS
                             </span>
                           </div>
                           <div className="flex flex-1 flex-col items-center">
-                            <div className="relative h-16 w-16 overflow-hidden transform rotate-45 bg-zinc-100">
-                              <div className="absolute inset-0 transform -rotate-45 flex items-center justify-center">
+                            <div className="relative h-16 w-16 rotate-45 transform overflow-hidden bg-zinc-100">
+                              <div className="absolute inset-0 flex -rotate-45 transform items-center justify-center">
                                 <Image
-                                  src={match.awayImage || "/placeholder.svg"}
+                                  src={match.awayImage || '/placeholder.svg'}
                                   alt={match.awayTeam}
                                   width={64}
                                   height={64}
@@ -227,7 +229,9 @@ export default function FixturesPage() {
                                 />
                               </div>
                             </div>
-                            <h3 className="mt-4 font-bold text-zinc-700 tracking-tight">{match.awayTeam}</h3>
+                            <h3 className="mt-4 font-bold tracking-tight text-zinc-700">
+                              {match.awayTeam}
+                            </h3>
                           </div>
                         </div>
                         <div className="mt-6 flex items-center gap-2 text-sm text-zinc-600">
@@ -235,33 +239,39 @@ export default function FixturesPage() {
                           <span className="font-medium">{match.location}</span>
                         </div>
 
-                        <div className="mt-4 flex justify-between items-center">
-                          <span className="text-sm text-teal-700 font-medium">{match.competition}</span>
+                        <div className="mt-4 flex items-center justify-between">
+                          <span className="text-sm font-medium text-teal-700">
+                            {match.competition}
+                          </span>
                           <button
                             onClick={() => toggleMatchDetails(match.id)}
-                            className="px-6 py-2 font-medium tracking-wide transform skew-x-[-12deg] transition-all duration-300 text-teal-800 hover:text-teal-900 border border-teal-800 hover:bg-teal-50"
+                            className="skew-x-[-12deg] transform border border-teal-800 px-6 py-2 font-medium tracking-wide text-teal-800 transition-all duration-300 hover:bg-teal-50 hover:text-teal-900"
                           >
-                            <span className="transform skew-x-[12deg] inline-flex items-center gap-2">
+                            <span className="inline-flex skew-x-[12deg] transform items-center gap-2">
                               Match Details
                               <ChevronDown
-                                className={`h-4 w-4 transition-transform ${expandedMatch === match.id ? "rotate-180" : ""}`}
+                                className={`h-4 w-4 transition-transform ${expandedMatch === match.id ? 'rotate-180' : ''}`}
                               />
                             </span>
                           </button>
                         </div>
 
                         {expandedMatch === match.id && (
-                          <div className="mt-4 pt-4 border-t border-zinc-100">
-                            <p className="text-sm text-zinc-600 mb-4">{match.notes}</p>
-                            <div className="flex flex-col sm:flex-row gap-4">
+                          <div className="mt-4 border-t border-zinc-100 pt-4">
+                            <p className="mb-4 text-sm text-zinc-600">{match.notes}</p>
+                            <div className="flex flex-col gap-4 sm:flex-row">
                               <a href={match.directions} target="_blank" rel="noopener noreferrer">
-                                <button className="px-6 py-3 w-full sm:w-auto bg-teal-800 hover:bg-teal-900 text-white font-medium tracking-wide transform skew-x-[-12deg] transition-all duration-300">
-                                  <span className="transform skew-x-[12deg] inline-flex items-center">GET DIRECTIONS</span>
+                                <button className="w-full skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900 sm:w-auto">
+                                  <span className="inline-flex skew-x-[12deg] transform items-center">
+                                    GET DIRECTIONS
+                                  </span>
                                 </button>
                               </a>
                               {match.ticketsAvailable && (
-                                <button className="px-6 py-3 w-full sm:w-auto bg-white text-teal-800 hover:bg-teal-50 font-medium tracking-wide transform skew-x-[-12deg] transition-all duration-300 border border-teal-800">
-                                  <span className="transform skew-x-[12deg] inline-flex items-center">MATCH INFORMATION</span>
+                                <button className="w-full skew-x-[-12deg] transform border border-teal-800 bg-white px-6 py-3 font-medium tracking-wide text-teal-800 transition-all duration-300 hover:bg-teal-50 sm:w-auto">
+                                  <span className="inline-flex skew-x-[12deg] transform items-center">
+                                    MATCH INFORMATION
+                                  </span>
                                 </button>
                               )}
                             </div>
@@ -275,21 +285,21 @@ export default function FixturesPage() {
             )}
 
             {/* Past Results */}
-            {activeTab === "past" && (
+            {activeTab === 'past' && (
               <div className="space-y-6">
                 {pastMatches.map((match) => (
                   <Card
                     key={match.id}
-                    className="overflow-hidden border-none bg-white shadow-md hover:shadow-xl transition-all duration-300"
+                    className="overflow-hidden border-none bg-white shadow-md transition-all duration-300 hover:shadow-xl"
                   >
                     <CardContent className="p-0">
                       <div
                         className={`flex items-center justify-between p-3 text-white ${
-                          match.result === "Win"
-                            ? "bg-teal-800"
-                            : match.result === "Draw"
-                              ? "bg-amber-600"
-                              : "bg-zinc-700"
+                          match.result === 'Win'
+                            ? 'bg-teal-800'
+                            : match.result === 'Draw'
+                              ? 'bg-amber-600'
+                              : 'bg-zinc-700'
                         }`}
                       >
                         <div className="flex items-center gap-2">
@@ -303,10 +313,10 @@ export default function FixturesPage() {
                       <div className="p-6">
                         <div className="flex items-center justify-between">
                           <div className="flex flex-1 flex-col items-center">
-                            <div className="relative h-16 w-16 overflow-hidden transform rotate-45 bg-zinc-100">
-                              <div className="absolute inset-0 transform -rotate-45 flex items-center justify-center">
+                            <div className="relative h-16 w-16 rotate-45 transform overflow-hidden bg-zinc-100">
+                              <div className="absolute inset-0 flex -rotate-45 transform items-center justify-center">
                                 <Image
-                                  src={match.homeImage || "/placeholder.svg"}
+                                  src={match.homeImage || '/placeholder.svg'}
                                   alt={match.homeTeam}
                                   width={64}
                                   height={64}
@@ -314,20 +324,22 @@ export default function FixturesPage() {
                                 />
                               </div>
                             </div>
-                            <h3 className="mt-4 font-bold text-teal-900 tracking-tight">{match.homeTeam}</h3>
+                            <h3 className="mt-4 font-bold tracking-tight text-teal-900">
+                              {match.homeTeam}
+                            </h3>
                           </div>
                           <div className="px-4 text-center">
                             <div className="text-xl font-black tracking-tighter">
                               <span className="text-teal-900">{match.homeScore}</span>
-                              <span className="text-zinc-400 mx-2">-</span>
+                              <span className="mx-2 text-zinc-400">-</span>
                               <span className="text-teal-900">{match.awayScore}</span>
                             </div>
                           </div>
                           <div className="flex flex-1 flex-col items-center">
-                            <div className="relative h-16 w-16 overflow-hidden transform rotate-45 bg-zinc-100">
-                              <div className="absolute inset-0 transform -rotate-45 flex items-center justify-center">
+                            <div className="relative h-16 w-16 rotate-45 transform overflow-hidden bg-zinc-100">
+                              <div className="absolute inset-0 flex -rotate-45 transform items-center justify-center">
                                 <Image
-                                  src={match.awayImage || "/placeholder.svg"}
+                                  src={match.awayImage || '/placeholder.svg'}
                                   alt={match.awayTeam}
                                   width={64}
                                   height={64}
@@ -335,30 +347,36 @@ export default function FixturesPage() {
                                 />
                               </div>
                             </div>
-                            <h3 className="mt-4 font-bold text-zinc-700 tracking-tight">{match.awayTeam}</h3>
+                            <h3 className="mt-4 font-bold tracking-tight text-zinc-700">
+                              {match.awayTeam}
+                            </h3>
                           </div>
                         </div>
 
-                        <div className="mt-4 flex justify-between items-center">
-                          <span className="text-sm text-teal-700 font-medium">{match.competition}</span>
+                        <div className="mt-4 flex items-center justify-between">
+                          <span className="text-sm font-medium text-teal-700">
+                            {match.competition}
+                          </span>
                           <button
                             onClick={() => toggleMatchDetails(match.id)}
-                            className="px-6 py-2 font-medium tracking-wide transform skew-x-[-12deg] transition-all duration-300 text-teal-800 hover:text-teal-900 border border-teal-800 hover:bg-teal-50"
+                            className="skew-x-[-12deg] transform border border-teal-800 px-6 py-2 font-medium tracking-wide text-teal-800 transition-all duration-300 hover:bg-teal-50 hover:text-teal-900"
                           >
-                            <span className="transform skew-x-[12deg] inline-flex items-center gap-2">
+                            <span className="inline-flex skew-x-[12deg] transform items-center gap-2">
                               Match Details
                               <ChevronDown
-                                className={`h-4 w-4 transition-transform ${expandedMatch === match.id ? "rotate-180" : ""}`}
+                                className={`h-4 w-4 transition-transform ${expandedMatch === match.id ? 'rotate-180' : ''}`}
                               />
                             </span>
                           </button>
                         </div>
 
                         {expandedMatch === match.id && (
-                          <div className="mt-4 pt-4 border-t border-zinc-100">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                          <div className="mt-4 border-t border-zinc-100 pt-4">
+                            <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
                               <div>
-                                <p className="text-sm font-medium text-teal-900">Man of the Match</p>
+                                <p className="text-sm font-medium text-teal-900">
+                                  Man of the Match
+                                </p>
                                 <p className="text-sm text-zinc-600">{match.motm}</p>
                               </div>
                               <div>
@@ -366,10 +384,12 @@ export default function FixturesPage() {
                                 <p className="text-sm text-zinc-600">{match.location}</p>
                               </div>
                             </div>
-                            <p className="text-sm text-zinc-600 mb-4">{match.notes}</p>
+                            <p className="mb-4 text-sm text-zinc-600">{match.notes}</p>
                             <a href={match.highlights} target="_blank" rel="noopener noreferrer">
-                              <button className="px-6 py-3 w-full sm:w-auto bg-teal-800 hover:bg-teal-900 text-white font-medium tracking-wide transform skew-x-[-12deg] transition-all duration-300">
-                                <span className="transform skew-x-[12deg] inline-flex items-center">WATCH HIGHLIGHTS</span>
+                              <button className="w-full skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900 sm:w-auto">
+                                <span className="inline-flex skew-x-[12deg] transform items-center">
+                                  WATCH HIGHLIGHTS
+                                </span>
                               </button>
                             </a>
                           </div>
@@ -384,47 +404,39 @@ export default function FixturesPage() {
         </section>
 
         {/* Season Stats Section */}
-        <section className="py-16 bg-zinc-50">
+        <section className="bg-zinc-50 py-16">
           <div className="container mx-auto px-4 sm:px-6">
-            <div className="max-w-2xl mx-auto text-center mb-12">
-              <h2 className="text-4xl font-black tracking-tighter text-teal-900 uppercase">
+            <div className="mx-auto mb-12 max-w-2xl text-center">
+              <h2 className="text-4xl font-black uppercase tracking-tighter text-teal-900">
                 SEASON <span className="font-light italic tracking-wide text-teal-700">STATS</span>
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <Card
-                className="overflow-hidden border-none shadow-md transform hover:scale-[1.02] transition-all duration-300"
-              >
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
+              <Card className="transform overflow-hidden border-none shadow-md transition-all duration-300 hover:scale-[1.02]">
                 <CardContent className="p-6 text-center">
-                  <h3 className="text-lg font-medium text-teal-900 mb-2">Played</h3>
+                  <h3 className="mb-2 text-lg font-medium text-teal-900">Played</h3>
                   <p className="text-4xl font-bold text-teal-800">15</p>
                 </CardContent>
               </Card>
 
-              <Card
-                className="overflow-hidden border-none shadow-md transform hover:scale-[1.02] transition-all duration-300"
-              >
+              <Card className="transform overflow-hidden border-none shadow-md transition-all duration-300 hover:scale-[1.02]">
                 <CardContent className="p-6 text-center">
-                  <h3 className="text-lg font-medium text-teal-900 mb-2">Won</h3>
+                  <h3 className="mb-2 text-lg font-medium text-teal-900">Won</h3>
                   <p className="text-4xl font-bold text-teal-800">9</p>
                 </CardContent>
               </Card>
 
-              <Card
-                className="overflow-hidden border-none shadow-md transform hover:scale-[1.02] transition-all duration-300"
-              >
+              <Card className="transform overflow-hidden border-none shadow-md transition-all duration-300 hover:scale-[1.02]">
                 <CardContent className="p-6 text-center">
-                  <h3 className="text-lg font-medium text-teal-900 mb-2">Drawn</h3>
+                  <h3 className="mb-2 text-lg font-medium text-teal-900">Drawn</h3>
                   <p className="text-4xl font-bold text-teal-800">2</p>
                 </CardContent>
               </Card>
 
-              <Card
-                className="overflow-hidden border-none shadow-md transform hover:scale-[1.02] transition-all duration-300"
-              >
+              <Card className="transform overflow-hidden border-none shadow-md transition-all duration-300 hover:scale-[1.02]">
                 <CardContent className="p-6 text-center">
-                  <h3 className="text-lg font-medium text-teal-900 mb-2">Lost</h3>
+                  <h3 className="mb-2 text-lg font-medium text-teal-900">Lost</h3>
                   <p className="text-4xl font-bold text-teal-800">4</p>
                 </CardContent>
               </Card>
@@ -435,4 +447,3 @@ export default function FixturesPage() {
     </MainLayout>
   )
 }
-

@@ -1,14 +1,17 @@
-"use client"
+'use client'
 
-import { default as NextImage } from "next/image"
-import { useState, useEffect } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { CalendarDays, ChevronLeft, ChevronRight, Clock, MapPin } from "lucide-react"
-import MainLayout from "@/components/main-layout"
-import { SectionContainer } from "@/components/ui/section-container"
-import { GridContainer } from "@/components/ui/grid-container"
-import { SectionTitle } from "@/components/ui/section-title"
-import Link from "next/link"
+import { default as NextImage } from 'next/image'
+import { useState, useEffect } from 'react'
+import { Card, CardContent } from '@/components/ui/card'
+import { CalendarDays, ChevronLeft, ChevronRight, Clock, MapPin } from 'lucide-react'
+import MainLayout from '@/components/layout/main-layout'
+import { GridContainer } from '@/components/ui/grid-container'
+import { SectionContainer } from '@/components/shared/section-container'
+import { SectionTitle } from '@/components/shared/section-title'
+import { HeroSection } from '@/components/features/hero-section'
+import { ParallaxHeroSection } from '@/components/features/parallax-hero-section'
+import { MapSection } from '@/components/features/map-section'
+import Link from 'next/link'
 
 export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -16,27 +19,44 @@ export default function HomePage() {
 
   const newsItems = [
     {
-      title: "SEASON OPENER THIS SATURDAY",
-      description: "Join us for our first match of the season against local rivals.",
-      image: "/placeholder.svg?height=1080&width=1920&text=Season Opener",
+      title: 'SEASON OPENER THIS SATURDAY',
+      description: 'Join us for our first match of the season against local rivals.',
+      image: '/placeholder.svg?height=1080&width=1920&text=Season Opener',
     },
     {
-      title: "NEW TRAINING SCHEDULE",
-      description: "Coach Williams has announced the new training schedule for the upcoming season.",
-      image: "/placeholder.svg?height=1080&width=1920&text=Training Schedule",
+      title: 'NEW TRAINING SCHEDULE',
+      description:
+        'Coach Williams has announced the new training schedule for the upcoming season.',
+      image: '/placeholder.svg?height=1080&width=1920&text=Training Schedule',
     },
     {
-      title: "COMMUNITY FUNDRAISER SUCCESS",
-      description: "Our recent community fundraiser raised over £2,000 for new training equipment.",
-      image: "/placeholder.svg?height=1080&width=1920&text=Fundraiser",
+      title: 'COMMUNITY FUNDRAISER SUCCESS',
+      description: 'Our recent community fundraiser raised over £2,000 for new training equipment.',
+      image: '/placeholder.svg?height=1080&width=1920&text=Fundraiser',
     },
   ]
 
   const galleryImages = [
-    { src: "/placeholder.svg?height=600&width=800&text=Match Day", alt: "Match Day Action", category: "matches" },
-    { src: "/placeholder.svg?height=600&width=800&text=Training", alt: "Team Training", category: "training" },
-    { src: "/placeholder.svg?height=600&width=800&text=Community", alt: "Community Event", category: "community" },
-    { src: "/placeholder.svg?height=600&width=800&text=Celebration", alt: "Victory Celebration", category: "matches" },
+    {
+      src: '/placeholder.svg?height=600&width=800&text=Match Day',
+      alt: 'Match Day Action',
+      category: 'matches',
+    },
+    {
+      src: '/placeholder.svg?height=600&width=800&text=Training',
+      alt: 'Team Training',
+      category: 'training',
+    },
+    {
+      src: '/placeholder.svg?height=600&width=800&text=Community',
+      alt: 'Community Event',
+      category: 'community',
+    },
+    {
+      src: '/placeholder.svg?height=600&width=800&text=Celebration',
+      alt: 'Victory Celebration',
+      category: 'matches',
+    },
   ]
 
   useEffect(() => {
@@ -48,11 +68,11 @@ export default function HomePage() {
       setScrollY(window.scrollY)
     }
 
-    window.addEventListener("scroll", handleScroll, { passive: true })
+    window.addEventListener('scroll', handleScroll, { passive: true })
 
     return () => {
       clearInterval(interval)
-      window.removeEventListener("scroll", handleScroll)
+      window.removeEventListener('scroll', handleScroll)
     }
   }, [newsItems.length])
 
@@ -70,15 +90,15 @@ export default function HomePage() {
         {/* Hero Section with News Carousel and Shapes */}
         <section className="relative h-[80vh] overflow-hidden">
           {/* Decorative Shapes */}
-          <div className="absolute top-20 right-[10%] w-32 h-32 bg-teal-500/20 rounded-full blur-xl z-0"></div>
-          <div className="absolute bottom-20 left-[5%] w-64 h-64 bg-teal-700/10 rounded-full blur-xl z-0"></div>
-          <div className="absolute top-[30%] left-[20%] w-16 h-16 border-4 border-teal-500/30 transform rotate-45 z-0"></div>
-          <div className="absolute bottom-[40%] right-[15%] w-24 h-24 border-8 border-teal-800/20 rounded-full z-0"></div>
-          <div className="absolute top-[20%] right-[30%] w-20 h-20 bg-transparent border-r-4 border-t-4 border-teal-600/30 transform rotate-12 z-0"></div>
+          <div className="absolute right-[10%] top-20 z-0 h-32 w-32 rounded-full bg-teal-500/20 blur-xl"></div>
+          <div className="absolute bottom-20 left-[5%] z-0 h-64 w-64 rounded-full bg-teal-700/10 blur-xl"></div>
+          <div className="absolute left-[20%] top-[30%] z-0 h-16 w-16 rotate-45 transform border-4 border-teal-500/30"></div>
+          <div className="absolute bottom-[40%] right-[15%] z-0 h-24 w-24 rounded-full border-8 border-teal-800/20"></div>
+          <div className="absolute right-[30%] top-[20%] z-0 h-20 w-20 rotate-12 transform border-r-4 border-t-4 border-teal-600/30 bg-transparent"></div>
 
           {/* Sharp diagonal line */}
-          <div className="absolute top-0 right-0 w-[150px] h-[150px] overflow-hidden z-0">
-            <div className="absolute top-0 right-0 w-[300px] h-[50px] bg-teal-800/20 transform rotate-45 translate-y-[-50%] translate-x-[25%]"></div>
+          <div className="absolute right-0 top-0 z-0 h-[150px] w-[150px] overflow-hidden">
+            <div className="absolute right-0 top-0 h-[50px] w-[300px] translate-x-[25%] translate-y-[-50%] rotate-45 transform bg-teal-800/20"></div>
           </div>
 
           <div className="absolute inset-0 z-0">
@@ -86,11 +106,11 @@ export default function HomePage() {
               <div
                 key={index}
                 className={`absolute inset-0 transition-opacity duration-1000 ${
-                  index === currentSlide ? "opacity-100" : "opacity-0"
+                  index === currentSlide ? 'opacity-100' : 'opacity-0'
                 }`}
               >
                 <NextImage
-                  src={item.image || "/placeholder.svg"}
+                  src={item.image || '/placeholder.svg'}
                   alt={item.title}
                   fill
                   className="object-cover brightness-90"
@@ -100,43 +120,45 @@ export default function HomePage() {
             ))}
           </div>
 
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-transparent z-[1]" />
+          <div className="absolute inset-0 z-[1] bg-gradient-to-b from-black/30 to-transparent" />
 
-          <div className="absolute inset-0 flex items-center justify-between px-4 sm:px-8 z-20">
+          <div className="absolute inset-0 z-20 flex items-center justify-between px-4 sm:px-8">
             <button
               onClick={prevSlide}
-              className="px-4 py-4 font-medium tracking-wide transform skew-x-[-12deg] transition-all duration-300 bg-white/90 text-teal-800 hover:text-teal-900 hover:bg-white shadow-lg"
+              className="skew-x-[-12deg] transform bg-white/90 px-4 py-4 font-medium tracking-wide text-teal-800 shadow-lg transition-all duration-300 hover:bg-white hover:text-teal-900"
               aria-label="Previous slide"
             >
-              <span className="transform skew-x-[12deg] inline-flex items-center">
+              <span className="inline-flex skew-x-[12deg] transform items-center">
                 <ChevronLeft className="h-6 w-6" />
               </span>
             </button>
             <button
               onClick={nextSlide}
-              className="px-4 py-4 font-medium tracking-wide transform skew-x-[-12deg] transition-all duration-300 bg-white/90 text-teal-800 hover:text-teal-900 hover:bg-white shadow-lg"
+              className="skew-x-[-12deg] transform bg-white/90 px-4 py-4 font-medium tracking-wide text-teal-800 shadow-lg transition-all duration-300 hover:bg-white hover:text-teal-900"
               aria-label="Next slide"
             >
-              <span className="transform skew-x-[12deg] inline-flex items-center">
+              <span className="inline-flex skew-x-[12deg] transform items-center">
                 <ChevronRight className="h-6 w-6" />
               </span>
             </button>
           </div>
 
-          <div className="container mx-auto px-4 sm:px-6 relative z-10 flex h-full flex-col items-start justify-center">
-            <div className="bg-white/80 backdrop-blur-sm p-6 sm:p-8 rounded-none relative clip-path-polygon">
+          <div className="container relative z-10 mx-auto flex h-full flex-col items-start justify-center px-4 sm:px-6">
+            <div className="clip-path-polygon relative rounded-none bg-white/80 p-6 backdrop-blur-sm sm:p-8">
               {/* Accent line */}
               <div className="absolute left-0 top-0 h-full w-1 bg-teal-800"></div>
 
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-none tracking-tighter text-teal-900 uppercase">
+              <h1 className="text-3xl font-extrabold uppercase leading-none tracking-tighter text-teal-900 sm:text-4xl md:text-5xl">
                 {newsItems[currentSlide].title}
               </h1>
-              <p className="mt-4 max-w-xl text-base sm:text-lg text-zinc-700 font-medium">
+              <p className="mt-4 max-w-xl text-base font-medium text-zinc-700 sm:text-lg">
                 {newsItems[currentSlide].description}
               </p>
               <div className="mt-6">
-                <button className="px-6 py-3 font-medium tracking-wide transform skew-x-[-12deg] transition-all duration-300 bg-teal-800 hover:bg-teal-900 text-white">
-                  <span className="transform skew-x-[12deg] inline-flex items-center">READ MORE</span>
+                <button className="skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
+                  <span className="inline-flex skew-x-[12deg] transform items-center">
+                    READ MORE
+                  </span>
                 </button>
               </div>
             </div>
@@ -146,8 +168,8 @@ export default function HomePage() {
                 <button
                   key={index}
                   onClick={() => setCurrentSlide(index)}
-                  className={`h-2 w-8 transform skew-x-[-12deg] transition-all duration-300 ${
-                    index === currentSlide ? "bg-teal-800 w-12" : "bg-white/60 hover:bg-teal-50"
+                  className={`h-2 w-8 skew-x-[-12deg] transform transition-all duration-300 ${
+                    index === currentSlide ? 'w-12 bg-teal-800' : 'bg-white/60 hover:bg-teal-50'
                   }`}
                   aria-label={`Go to slide ${index + 1}`}
                 />
@@ -162,62 +184,67 @@ export default function HomePage() {
             className="absolute inset-0 z-0"
             style={{
               backgroundImage: "url('/placeholder.svg?height=1080&width=1920&text=Rugby Team')",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
               transform: `translateY(${scrollY * 0.3}px)`,
-              transition: "transform 0.1s linear",
+              transition: 'transform 0.1s linear',
             }}
           />
-          <div className="absolute inset-0 bg-white/85 z-0" />
+          <div className="absolute inset-0 z-0 bg-white/85" />
 
           {/* Additional parallax elements */}
           <div
-            className="absolute right-0 top-[30%] w-64 h-64 bg-teal-500/5 rounded-full z-0"
+            className="absolute right-0 top-[30%] z-0 h-64 w-64 rounded-full bg-teal-500/5"
             style={{
               transform: `translateY(${scrollY * -0.2}px)`,
-              transition: "transform 0.1s linear",
+              transition: 'transform 0.1s linear',
             }}
           />
           <div
-            className="absolute left-[5%] bottom-[20%] w-32 h-32 border-2 border-teal-700/10 transform rotate-45 z-0"
+            className="absolute bottom-[20%] left-[5%] z-0 h-32 w-32 rotate-45 transform border-2 border-teal-700/10"
             style={{
               transform: `translateY(${scrollY * -0.15}px) rotate(45deg)`,
-              transition: "transform 0.1s linear",
+              transition: 'transform 0.1s linear',
             }}
           />
 
           {/* Sharp diagonal divider at top */}
-          <div className="absolute top-0 left-0 right-0 h-16 overflow-hidden z-10">
-            <div className="absolute top-0 left-0 right-0 h-32 bg-white transform -skew-y-3"></div>
+          <div className="absolute left-0 right-0 top-0 z-10 h-16 overflow-hidden">
+            <div className="absolute left-0 right-0 top-0 h-32 -skew-y-3 transform bg-white"></div>
           </div>
 
           <div className="relative z-10">
-            <div className="max-w-2xl mx-auto text-center mb-12">
+            <div className="mx-auto mb-12 max-w-2xl text-center">
               <SectionTitle title="OUR" titleHighlight="SQUAD" />
             </div>
 
             <GridContainer cols={2} gap="lg" className="items-center">
               <div
-                className="bg-white overflow-hidden shadow-md transform hover:scale-[1.02] transition-transform duration-300"
-                style={{ clipPath: "polygon(0 0, 100% 0, 100% 92%, 95% 100%, 0 100%)" }}
+                className="transform overflow-hidden bg-white shadow-md transition-transform duration-300 hover:scale-[1.02]"
+                style={{ clipPath: 'polygon(0 0, 100% 0, 100% 92%, 95% 100%, 0 100%)' }}
               >
                 <NextImage
                   src="/placeholder.svg?height=600&width=800&text=Team Photo"
                   alt="Team Photo"
                   width={800}
                   height={600}
-                  className="w-full h-auto"
+                  className="h-auto w-full"
                 />
               </div>
 
               <div className="space-y-6">
-                <h3 className="text-2xl font-bold text-teal-900 uppercase tracking-tight">JOIN OUR WINNING TEAM</h3>
+                <h3 className="text-2xl font-bold uppercase tracking-tight text-teal-900">
+                  JOIN OUR WINNING TEAM
+                </h3>
                 <p className="text-zinc-700">
-                  We&apos;re always looking for passionate players to join our ranks. Whether you&apos;re an experienced
-                  player or new to the sport, there&apos;s a place for you at Riverside Rugby Club.
+                  We&apos;re always looking for passionate players to join our ranks. Whether
+                  you&apos;re an experienced player or new to the sport, there&apos;s a place for
+                  you at Riverside Rugby Club.
                 </p>
-                <button className="px-6 py-3 font-medium tracking-wide transform skew-x-[-12deg] transition-all duration-300 bg-teal-800 hover:bg-teal-900 text-white">
-                  <span className="transform skew-x-[12deg] inline-flex items-center">LEARN MORE</span>
+                <button className="skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
+                  <span className="inline-flex skew-x-[12deg] transform items-center">
+                    LEARN MORE
+                  </span>
                 </button>
               </div>
             </GridContainer>
@@ -226,48 +253,50 @@ export default function HomePage() {
 
         {/* Gallery Section */}
         <SectionContainer className="bg-white">
-          <div className="max-w-2xl mx-auto text-center mb-12">
+          <div className="mx-auto mb-12 max-w-2xl text-center">
             <SectionTitle title="LATEST" titleHighlight="PHOTOS" />
             <p className="mt-4 text-lg text-zinc-600">
               Capturing the spirit and energy of our club through memorable moments.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {galleryImages.map((image, index) => (
               <div
                 key={index}
-                className="relative overflow-hidden group transform hover:scale-[1.02] transition-all duration-300 cursor-pointer"
-                style={{ clipPath: "polygon(0 0, 100% 0, 95% 100%, 0 95%)" }}
+                className="group relative transform cursor-pointer overflow-hidden transition-all duration-300 hover:scale-[1.02]"
+                style={{ clipPath: 'polygon(0 0, 100% 0, 95% 100%, 0 95%)' }}
               >
                 <NextImage
                   src={image.src}
                   alt={image.alt}
                   width={800}
                   height={600}
-                  className="w-full h-64 object-cover"
+                  className="h-64 w-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-teal-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-                  <h3 className="text-white font-bold">{image.alt}</h3>
-                  <p className="text-teal-100 text-sm">{image.category}</p>
+                <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-teal-900/80 to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  <h3 className="font-bold text-white">{image.alt}</h3>
+                  <p className="text-sm text-teal-100">{image.category}</p>
                 </div>
               </div>
             ))}
           </div>
 
           <div className="mt-12 text-center">
-            <Link 
-              href="/gallery" 
-              className="inline-flex px-6 py-3 font-medium tracking-wide transform skew-x-[-12deg] transition-all duration-300 bg-teal-800 hover:bg-teal-900 text-white"
+            <Link
+              href="/gallery"
+              className="inline-flex skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900"
             >
-              <span className="transform skew-x-[12deg] inline-flex items-center">VIEW ALL PHOTOS</span>
+              <span className="inline-flex skew-x-[12deg] transform items-center">
+                VIEW ALL PHOTOS
+              </span>
             </Link>
           </div>
         </SectionContainer>
 
         {/* Upcoming Matches Section */}
         <SectionContainer>
-          <div className="text-center mb-12">
+          <div className="mb-12 text-center">
             <SectionTitle title="UPCOMING" titleHighlight="MATCHES" />
           </div>
 
@@ -275,12 +304,12 @@ export default function HomePage() {
             {[1, 2, 3].map((match) => (
               <Card key={match} className="relative overflow-hidden">
                 <CardContent className="p-6">
-                  <div className="flex items-center gap-2 text-teal-800 mb-4">
+                  <div className="mb-4 flex items-center gap-2 text-teal-800">
                     <CalendarDays className="h-5 w-5" />
                     <span className="text-sm font-medium">Saturday, March 30th, 2024</span>
                   </div>
-                  <h3 className="text-xl font-bold text-teal-900 mb-2">Riverside vs Eagles</h3>
-                  <div className="flex items-center gap-2 text-zinc-600 mb-2">
+                  <h3 className="mb-2 text-xl font-bold text-teal-900">Riverside vs Eagles</h3>
+                  <div className="mb-2 flex items-center gap-2 text-zinc-600">
                     <Clock className="h-4 w-4" />
                     <span className="text-sm">Kick-off: 15:00</span>
                   </div>
@@ -288,8 +317,10 @@ export default function HomePage() {
                     <MapPin className="h-4 w-4" />
                     <span className="text-sm">Home Ground</span>
                   </div>
-                  <button className="px-6 py-3 font-medium tracking-wide transform skew-x-[-12deg] transition-all duration-300 bg-teal-800 hover:bg-teal-900 text-white w-full">
-                    <span className="transform skew-x-[12deg] inline-flex items-center">MATCH DETAILS</span>
+                  <button className="w-full skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
+                    <span className="inline-flex skew-x-[12deg] transform items-center">
+                      MATCH DETAILS
+                    </span>
                   </button>
                 </CardContent>
               </Card>
@@ -300,4 +331,3 @@ export default function HomePage() {
     </MainLayout>
   )
 }
-

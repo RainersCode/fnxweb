@@ -1,29 +1,91 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server"
-import { NextRequest, NextResponse } from "next/server"
+import { authMiddleware, clerkClient } from '@clerk/nextjs'
+import { NextResponse } from 'next/server'
 
-// Default Next.js middleware to allow all requests
-export function middleware(request: NextRequest) {
-  return NextResponse.next()
+
+const publicPaths = [
+  '/articles',
+  '/fixtures',
+  '/galleries',
+  '/team',
+  '/contact',
+  '/sign-in',
+  '/api/webhook/clerk',
+]
+
+const isPublic = (path: string) => {
+  // Exact match for homepage
+  if (path === '/') return true
+  // Check other public paths
+  return publicPaths.some((publicPath) => path.startsWith(publicPath))
 }
 
-/**
- * Uncomment the following code to enable authentication with Clerk
- */
+export default authMiddleware({
+  async afterAuth(auth, req) {
+    const { userId } = auth
+    const path = req.nextUrl.pathname
 
-// const isProtectedRoute = createRouteMatcher(['/protected'])
+    console.log('Initial Auth Debug:', {
+      path,
+      userId,
+      auth: JSON.stringify(auth),
+      isPublicPath: isPublic(path),
+    })
 
-// export default clerkMiddleware(async (auth, req) => {
-//     if (isProtectedRoute(req)) {
-//       // Handle protected routes check here
-//       return NextResponse.redirect(req.nextUrl.origin)
-//     }
+    // Allow public paths and static files
+    if (isPublic(path) || path.includes('.')) {
+      console.log('Allowing public path:', path)
+      return NextResponse.next()
+    }
 
-//     return NextResponse.next()
-// })  
+    // If trying to access admin routes
+    if (path.startsWith('/admin')) {
+      console.log('Attempting to access admin route:', path)
+      const allowedEmails = process.env.ALLOWED_EMAILS
 
+      // If not authenticated, redirect to sign-in
+      if (!userId) {
+        console.log('No userId found - redirecting to sign-in')
+        const signInUrl = new URL('/sign-in', req.url)
+        signInUrl.searchParams.set('redirect_url', req.url)
+        return NextResponse.redirect(signInUrl)
+      }
+
+      try {
+        console.log('Fetching user details for userId:', userId)
+        // Get the user's email directly from Clerk
+        const user = await clerkClient.users.getUser(userId)
+        const userEmail = user.emailAddresses[0]?.emailAddress
+
+        console.log('Auth check details:', {
+          userEmail,
+          isEmailAllowed: allowedEmails.includes(userEmail || ''),
+          hasEmail: !!userEmail,
+        })
+
+        // If no email or not authorized
+        if (!userEmail || !allowedEmails.includes(userEmail)) {
+          console.log('Authorization failed:', {
+            email: userEmail,
+            isAllowed: allowedEmails.includes(userEmail || ''),
+            allowedEmails,
+          })
+          return NextResponse.redirect(new URL('/', req.url))
+        }
+
+        console.log('Authorization successful for:', userEmail)
+        return NextResponse.next()
+      } catch (error) {
+        console.error('Error in auth process:', error)
+        return NextResponse.redirect(new URL('/', req.url))
+      }
+    }
+
+    return NextResponse.next()
+  },
+  publicRoutes: publicPaths,
+})
+
+// Stop Middleware running on static files and api routes
 export const config = {
-  matcher: [
-    // Skip Next.js internals and all static files, unless found in search params
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)|api/webhooks).*)",
-  ],
+  matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
 }
