@@ -35,17 +35,19 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
             </div>
             <nav className="hidden md:flex">
               <ul className="flex items-center">
-                {['HOME', 'TEAM', 'FIXTURES', 'NEWS', 'GALLERY', 'CONTACT'].map((item, index) => (
-                  <li key={item}>
-                    <Link
-                      href={item === 'HOME' ? '/' : `/${item.toLowerCase()}`}
-                      className={`group relative mx-1 overflow-hidden px-4 py-5 text-sm font-medium tracking-wide text-white transition-all duration-300 hover:text-teal-100 ${currentPage === item ? 'text-teal-100' : ''}`}
-                    >
-                      <span className="relative z-10">{item}</span>
-                      <span className="absolute inset-0 -z-0 skew-x-[-12deg] scale-x-[0.8] scale-y-[0.8] transform bg-teal-600 opacity-0 transition-opacity duration-300 group-hover:scale-100 group-hover:opacity-100"></span>
-                    </Link>
-                  </li>
-                ))}
+                {['HOME', 'ABOUT', 'TEAM', 'FIXTURES', 'NEWS', 'GALLERY', 'CONTACT'].map(
+                  (item, index) => (
+                    <li key={item}>
+                      <Link
+                        href={item === 'HOME' ? '/' : `/${item.toLowerCase()}`}
+                        className={`group relative mx-1 overflow-hidden px-4 py-5 text-sm font-medium tracking-wide text-white transition-all duration-300 hover:text-teal-100 ${currentPage === item ? 'text-teal-100' : ''}`}
+                      >
+                        <span className="relative z-10">{item}</span>
+                        <span className="absolute inset-0 -z-0 skew-x-[-12deg] scale-x-[0.8] scale-y-[0.8] transform bg-teal-600 opacity-0 transition-opacity duration-300 group-hover:scale-100 group-hover:opacity-100"></span>
+                      </Link>
+                    </li>
+                  )
+                )}
               </ul>
             </nav>
             <div className="flex items-center gap-4">
@@ -113,22 +115,24 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
             </div>
             <nav className="mt-12">
               <ul className="flex flex-col space-y-6">
-                {['HOME', 'TEAM', 'FIXTURES', 'NEWS', 'GALLERY', 'CONTACT'].map((item, index) => (
-                  <li
-                    key={item}
-                    className="animate-slide-in-right opacity-100"
-                    style={{ animationDelay: `${index * 150}ms` }}
-                  >
-                    <Link
-                      href={item === 'HOME' ? '/' : `/${item.toLowerCase()}`}
-                      className="group flex items-center text-lg font-medium tracking-wide text-white hover:text-teal-100"
-                      onClick={() => setMobileMenuOpen(false)}
+                {['HOME', 'ABOUT', 'TEAM', 'FIXTURES', 'NEWS', 'GALLERY', 'CONTACT'].map(
+                  (item, index) => (
+                    <li
+                      key={item}
+                      className="animate-slide-in-right opacity-100"
+                      style={{ animationDelay: `${index * 150}ms` }}
                     >
-                      <span className="mr-4 h-0.5 w-8 origin-left scale-x-0 transform bg-white transition-transform duration-300 group-hover:scale-x-100"></span>
-                      {item}
-                    </Link>
-                  </li>
-                ))}
+                      <Link
+                        href={item === 'HOME' ? '/' : `/${item.toLowerCase()}`}
+                        className="group flex items-center text-lg font-medium tracking-wide text-white hover:text-teal-100"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <span className="mr-4 h-0.5 w-8 origin-left scale-x-0 transform bg-white transition-transform duration-300 group-hover:scale-x-100"></span>
+                        {item}
+                      </Link>
+                    </li>
+                  )
+                )}
               </ul>
               {isSignedIn ? (
                 <>
@@ -205,6 +209,14 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
                     className="inline-block transform font-medium tracking-wide transition-transform hover:translate-x-1 hover:text-teal-700"
                   >
                     HOME
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/about"
+                    className="inline-block transform font-medium tracking-wide transition-transform hover:translate-x-1 hover:text-teal-700"
+                  >
+                    ABOUT
                   </Link>
                 </li>
                 <li>

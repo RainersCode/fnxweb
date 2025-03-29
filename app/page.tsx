@@ -23,6 +23,7 @@ import { MapSection } from '@/components/features/map-section'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import { Article, Gallery, GalleryImage } from '@/types/supabase'
+import { aboutUsData } from '@/data/about-us'
 
 // Define a type for our fallback news items
 interface FallbackNewsItem {
@@ -342,7 +343,7 @@ export default function HomePage() {
 
           <div className="relative z-10">
             <div className="mx-auto mb-12 max-w-2xl text-center">
-              <SectionTitle title="OUR" titleHighlight="SQUAD" />
+              <SectionTitle title="ABOUT" titleHighlight="US" />
             </div>
 
             <GridContainer cols={2} gap="lg" className="items-center">
@@ -351,8 +352,8 @@ export default function HomePage() {
                 style={{ clipPath: 'polygon(0 0, 100% 0, 100% 92%, 95% 100%, 0 100%)' }}
               >
                 <NextImage
-                  src="/placeholder.svg?height=600&width=800&text=Team Photo"
-                  alt="Team Photo"
+                  src={aboutUsData.imageUrl}
+                  alt="Rugby Club Team"
                   width={800}
                   height={600}
                   className="h-auto w-full"
@@ -361,18 +362,21 @@ export default function HomePage() {
 
               <div className="space-y-6">
                 <h3 className="text-2xl font-bold uppercase tracking-tight text-teal-900">
-                  JOIN OUR WINNING TEAM
+                  {aboutUsData.mission.title}
                 </h3>
-                <p className="text-zinc-700">
-                  We&apos;re always looking for passionate players to join our ranks. Whether
-                  you&apos;re an experienced player or new to the sport, there&apos;s a place for
-                  you at Riverside Rugby Club.
+                <p className="mb-6 text-zinc-700">
+                  {aboutUsData.mission.content.substring(0, 200)}...
                 </p>
-                <button className="skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
-                  <span className="inline-flex skew-x-[12deg] transform items-center">
-                    LEARN MORE
-                  </span>
-                </button>
+                <div className="mt-8">
+                  <Link href="/about">
+                    <button className="group skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
+                      <span className="inline-flex skew-x-[12deg] transform items-center">
+                        LEARN MORE
+                        <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                      </span>
+                    </button>
+                  </Link>
+                </div>
               </div>
             </GridContainer>
           </div>
