@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Trash2, Edit, Plus, Search, Loader2, CalendarDays, X } from 'lucide-react'
 import { SectionContainer } from '@/components/shared/section-container'
 import { SectionTitle } from '@/components/shared/section-title'
+import { ImageUploader } from '@/components/shared/image-uploader'
 import { Article } from '@/types/supabase'
 import { Button } from '@/components/ui/button'
 import {
@@ -52,6 +53,7 @@ export default function AdminArticlesPage() {
   }
   const [formData, setFormData] = useState(emptyFormState)
   const [currentArticleId, setCurrentArticleId] = useState<string | null>(null)
+  const [currentImagePath, setCurrentImagePath] = useState<string | null>(null)
 
   // Delete confirmation dialog
   const [articleToDelete, setArticleToDelete] = useState<Article | null>(null)
@@ -115,6 +117,66 @@ export default function AdminArticlesPage() {
     })
   }
 
+  // Handle image upload
+  const handleImageUploaded = async (url: string, path: string) => {
+    // If there was an existing image, we need to delete it
+    if (formData.image_url && formData.image_url !== url) {
+      try {
+        // Extract the path from the URL
+        const pathMatch = formData.image_url.match(/media\/([^?]+)/)
+        if (pathMatch && pathMatch[1]) {
+          const oldPath = `${pathMatch[1]}`
+          // Delete the old image using the API
+          await fetch('/api/admin/delete-media', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ path: oldPath }),
+          })
+        }
+      } catch (error) {
+        console.error('Error deleting old image:', error)
+      }
+    }
+
+    setFormData({
+      ...formData,
+      image_url: url,
+    })
+    setCurrentImagePath(path)
+  }
+
+  // Handle image removal
+  const handleImageRemoved = async () => {
+    // If there was an existing image, we need to delete it
+    if (formData.image_url) {
+      try {
+        // Extract the path from the URL
+        const pathMatch = formData.image_url.match(/media\/([^?]+)/)
+        if (pathMatch && pathMatch[1]) {
+          const path = `${pathMatch[1]}`
+          // Delete the image using the API
+          await fetch('/api/admin/delete-media', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ path }),
+          })
+        }
+      } catch (error) {
+        console.error('Error deleting image:', error)
+      }
+    }
+
+    setFormData({
+      ...formData,
+      image_url: '',
+    })
+    setCurrentImagePath(null)
+  }
+
   // Handle form submission for adding a new article
   const handleAddArticle = async () => {
     if (!formData.title || !formData.content || !formData.slug) return
@@ -145,6 +207,7 @@ export default function AdminArticlesPage() {
 
       setShowAddDialog(false)
       setFormData(emptyFormState)
+      setCurrentImagePath(null)
       await fetchArticles()
     } catch (error) {
       console.error('Error adding article:', error)
@@ -200,6 +263,7 @@ export default function AdminArticlesPage() {
       setShowEditDialog(false)
       setFormData(emptyFormState)
       setCurrentArticleId(null)
+      setCurrentImagePath(null)
       await fetchArticles()
     } catch (error) {
       console.error('Error updating article:', error)
@@ -213,6 +277,32 @@ export default function AdminArticlesPage() {
     if (!articleToDelete) return
 
     try {
+      // First, check if the article has an image and delete it
+      if (articleToDelete.image_url) {
+        try {
+          // Extract the path from the URL
+          const pathMatch = articleToDelete.image_url.match(/media\/([^?]+)/)
+          if (pathMatch && pathMatch[1]) {
+            const path = `${pathMatch[1]}`
+            // Delete the image using the API
+            const response = await fetch('/api/admin/delete-media', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ path }),
+            })
+
+            if (!response.ok) {
+              console.error('Failed to delete image:', await response.json())
+            }
+          }
+        } catch (imageError) {
+          console.error('Error deleting article image:', imageError)
+          // Continue with article deletion even if image deletion fails
+        }
+      }
+
       const response = await fetch('/api/admin/articles', {
         method: 'DELETE',
         headers: {
@@ -248,103 +338,100 @@ export default function AdminArticlesPage() {
         <div className="relative z-10">
           <div className="mx-auto mb-8 max-w-2xl text-center">
             <SectionTitle title="MANAGE" titleHighlight="ARTICLES" />
+            <p className="mt-4 text-muted-foreground">
+              Add, edit and delete articles for the club website.
+            </p>
           </div>
 
-          {/* Controls */}
-          <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+          <div className="mb-8 flex items-center justify-between">
             <div className="relative w-full max-w-sm">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
               <Input
+                type="search"
                 placeholder="Search articles..."
-                className="pl-8"
+                className="pl-10"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-              {searchQuery && (
-                <button className="absolute right-2 top-2.5" onClick={() => setSearchQuery('')}>
-                  <X className="h-4 w-4 text-gray-400" />
-                </button>
-              )}
             </div>
-            <Button
-              onClick={() => {
-                setFormData(emptyFormState)
-                setShowAddDialog(true)
-              }}
-              className="bg-teal-800 text-white hover:bg-teal-900"
-            >
-              <Plus className="mr-2 h-4 w-4" /> Add New Article
+            <Button onClick={() => setShowAddDialog(true)}>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Article
             </Button>
           </div>
 
-          {/* Articles List */}
           {loading ? (
-            <div className="flex items-center justify-center py-16">
-              <Loader2 className="h-8 w-8 animate-spin text-teal-700" />
+            <div className="flex min-h-[400px] items-center justify-center">
+              <Loader2 className="mr-2 h-6 w-6 animate-spin" />
+              <span>Loading articles...</span>
             </div>
           ) : filteredArticles.length === 0 ? (
-            <div className="rounded-lg border border-gray-200 bg-white p-8 text-center">
-              <p className="text-gray-500">No articles found</p>
+            <div className="flex min-h-[400px] flex-col items-center justify-center">
+              <p className="mb-4 text-lg font-medium">No articles found</p>
+              <Button variant="outline" onClick={() => setShowAddDialog(true)}>
+                <Plus className="mr-2 h-4 w-4" />
+                Add your first article
+              </Button>
             </div>
           ) : (
-            <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
-              <div className="grid grid-cols-1 divide-y divide-gray-200">
-                {filteredArticles.map((article) => (
-                  <div key={article.id} className="p-6">
-                    <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
-                      <div className="flex-1">
-                        <h3 className="text-xl font-bold text-teal-900">{article.title}</h3>
-
-                        <div className="mb-2 mt-1 flex items-center gap-2 text-sm text-gray-500">
-                          <CalendarDays className="h-4 w-4" />
-                          <span>Published: {formatDate(article.published_at)}</span>
-                          {article.published_at !== article.updated_at && (
-                            <span>(Updated: {formatDate(article.updated_at)})</span>
-                          )}
-                        </div>
-
-                        {article.author && (
-                          <div className="mb-2 text-sm text-gray-600">
-                            <span className="font-medium">Author:</span> {article.author}
-                          </div>
-                        )}
-
-                        <p className="text-gray-600">
-                          {article.content.length > 150
-                            ? `${article.content.substring(0, 150)}...`
-                            : article.content}
-                        </p>
-
-                        {article.is_featured && (
-                          <div className="mt-2">
-                            <span className="inline-block rounded-full bg-teal-100 px-2 py-1 text-xs font-medium text-teal-800">
-                              Featured
-                            </span>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleEditClick(article)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="text-red-600 hover:bg-red-50 hover:text-red-700"
-                          onClick={() => setArticleToDelete(article)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
+            <div className="space-y-4">
+              {filteredArticles.map((article) => (
+                <div
+                  key={article.id}
+                  className="flex flex-col rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md md:flex-row md:items-center md:justify-between"
+                >
+                  <div className="flex-1 space-y-2">
+                    <h3 className="text-xl font-semibold leading-tight tracking-tight text-gray-800">
+                      {article.title}
+                    </h3>
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500">
+                      {article.is_featured && (
+                        <span className="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-800">
+                          Featured
+                        </span>
+                      )}
+                      <span className="inline-flex items-center">
+                        <CalendarDays className="mr-1 h-4 w-4" />
+                        {formatDate(article.published_at)}
+                      </span>
+                      {article.author && <span>By {article.author}</span>}
                     </div>
                   </div>
-                ))}
-              </div>
+                  <div className="mt-4 flex items-center space-x-2 md:mt-0">
+                    <Button variant="outline" size="sm" onClick={() => handleEditClick(article)}>
+                      <Edit className="mr-2 h-4 w-4" />
+                      Edit
+                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => setArticleToDelete(article)}
+                        >
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          Delete
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This will permanently delete the article &quot;{articleToDelete?.title}
+                            &quot;. This action cannot be undone.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel onClick={() => setArticleToDelete(null)}>
+                            Cancel
+                          </AlertDialogCancel>
+                          <AlertDialogAction onClick={deleteArticle}>Delete</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>
@@ -352,93 +439,101 @@ export default function AdminArticlesPage() {
 
       {/* Add Article Dialog */}
       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-        <DialogContent className="sm:max-w-[550px]">
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
           <DialogHeader>
             <DialogTitle>Add New Article</DialogTitle>
             <DialogDescription>
-              Create a new article to be published on the website.
+              Create a new article to be displayed on the website.
             </DialogDescription>
           </DialogHeader>
-
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
               <Label htmlFor="title">Title</Label>
               <Input
                 id="title"
                 name="title"
+                placeholder="Enter article title"
                 value={formData.title}
                 onChange={handleInputChange}
                 onBlur={generateSlug}
-                placeholder="Article title"
               />
             </div>
-
             <div className="grid gap-2">
               <Label htmlFor="slug">Slug</Label>
-              <Input
-                id="slug"
-                name="slug"
-                value={formData.slug}
-                onChange={handleInputChange}
-                placeholder="article-slug"
-              />
+              <div className="flex items-center gap-2">
+                <Input
+                  id="slug"
+                  name="slug"
+                  placeholder="article-url-slug"
+                  value={formData.slug}
+                  onChange={handleInputChange}
+                  className="flex-1"
+                />
+                <Button type="button" variant="outline" onClick={generateSlug}>
+                  Generate
+                </Button>
+              </div>
             </div>
-
-            <div className="grid gap-2">
-              <Label htmlFor="content">Content</Label>
-              <Textarea
-                id="content"
-                name="content"
-                value={formData.content}
-                onChange={handleInputChange}
-                placeholder="Article content"
-                className="min-h-[150px]"
-              />
-            </div>
-
-            <div className="grid gap-2">
-              <Label htmlFor="image_url">Image URL (optional)</Label>
-              <Input
-                id="image_url"
-                name="image_url"
-                value={formData.image_url}
-                onChange={handleInputChange}
-                placeholder="https://example.com/image.jpg"
-              />
-            </div>
-
             <div className="grid gap-2">
               <Label htmlFor="author">Author (optional)</Label>
               <Input
                 id="author"
                 name="author"
+                placeholder="Enter author name"
                 value={formData.author}
                 onChange={handleInputChange}
-                placeholder="Author name"
               />
             </div>
-
+            <div className="grid gap-2">
+              <Label>Featured Image</Label>
+              <ImageUploader
+                imageUrl={formData.image_url}
+                onImageUploaded={handleImageUploaded}
+                onImageRemoved={handleImageRemoved}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="content">Content</Label>
+              <Textarea
+                id="content"
+                name="content"
+                placeholder="Write your article content here..."
+                value={formData.content}
+                onChange={handleInputChange}
+                className="min-h-[200px]"
+              />
+            </div>
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="is_featured"
                 checked={formData.is_featured}
                 onCheckedChange={handleCheckboxChange}
               />
-              <Label htmlFor="is_featured">Featured article</Label>
+              <Label htmlFor="is_featured" className="cursor-pointer">
+                Feature this article on homepage
+              </Label>
             </div>
           </div>
-
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowAddDialog(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                setShowAddDialog(false)
+                setFormData(emptyFormState)
+              }}
+            >
               Cancel
             </Button>
-            <Button
-              onClick={handleAddArticle}
-              className="bg-teal-800 text-white hover:bg-teal-900"
-              disabled={formLoading || !formData.title || !formData.content || !formData.slug}
-            >
-              {formLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Add Article
+            <Button type="button" onClick={handleAddArticle} disabled={formLoading}>
+              {formLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                'Save Article'
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -446,119 +541,104 @@ export default function AdminArticlesPage() {
 
       {/* Edit Article Dialog */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent className="sm:max-w-[550px]">
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
           <DialogHeader>
             <DialogTitle>Edit Article</DialogTitle>
             <DialogDescription>Make changes to the article.</DialogDescription>
           </DialogHeader>
-
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
               <Label htmlFor="edit-title">Title</Label>
               <Input
                 id="edit-title"
                 name="title"
+                placeholder="Enter article title"
                 value={formData.title}
                 onChange={handleInputChange}
-                placeholder="Article title"
+                onBlur={generateSlug}
               />
             </div>
-
             <div className="grid gap-2">
               <Label htmlFor="edit-slug">Slug</Label>
-              <Input
-                id="edit-slug"
-                name="slug"
-                value={formData.slug}
-                onChange={handleInputChange}
-                placeholder="article-slug"
-              />
+              <div className="flex items-center gap-2">
+                <Input
+                  id="edit-slug"
+                  name="slug"
+                  placeholder="article-url-slug"
+                  value={formData.slug}
+                  onChange={handleInputChange}
+                  className="flex-1"
+                />
+                <Button type="button" variant="outline" onClick={generateSlug}>
+                  Generate
+                </Button>
+              </div>
             </div>
-
-            <div className="grid gap-2">
-              <Label htmlFor="edit-content">Content</Label>
-              <Textarea
-                id="edit-content"
-                name="content"
-                value={formData.content}
-                onChange={handleInputChange}
-                placeholder="Article content"
-                className="min-h-[150px]"
-              />
-            </div>
-
-            <div className="grid gap-2">
-              <Label htmlFor="edit-image_url">Image URL (optional)</Label>
-              <Input
-                id="edit-image_url"
-                name="image_url"
-                value={formData.image_url}
-                onChange={handleInputChange}
-                placeholder="https://example.com/image.jpg"
-              />
-            </div>
-
             <div className="grid gap-2">
               <Label htmlFor="edit-author">Author (optional)</Label>
               <Input
                 id="edit-author"
                 name="author"
-                value={formData.author}
+                placeholder="Enter author name"
+                value={formData.author || ''}
                 onChange={handleInputChange}
-                placeholder="Author name"
               />
             </div>
-
+            <div className="grid gap-2">
+              <Label>Featured Image</Label>
+              <ImageUploader
+                imageUrl={formData.image_url}
+                onImageUploaded={handleImageUploaded}
+                onImageRemoved={handleImageRemoved}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="edit-content">Content</Label>
+              <Textarea
+                id="edit-content"
+                name="content"
+                placeholder="Write your article content here..."
+                value={formData.content}
+                onChange={handleInputChange}
+                className="min-h-[200px]"
+              />
+            </div>
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="edit-is_featured"
                 checked={formData.is_featured}
                 onCheckedChange={handleCheckboxChange}
               />
-              <Label htmlFor="edit-is_featured">Featured article</Label>
+              <Label htmlFor="edit-is_featured" className="cursor-pointer">
+                Feature this article on homepage
+              </Label>
             </div>
           </div>
-
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowEditDialog(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                setShowEditDialog(false)
+                setFormData(emptyFormState)
+                setCurrentArticleId(null)
+              }}
+            >
               Cancel
             </Button>
-            <Button
-              onClick={handleUpdateArticle}
-              className="bg-teal-800 text-white hover:bg-teal-900"
-              disabled={formLoading || !formData.title || !formData.content || !formData.slug}
-            >
-              {formLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Update Article
+            <Button type="button" onClick={handleUpdateArticle} disabled={formLoading}>
+              {formLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                'Update Article'
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
-      {/* Delete Confirmation Dialog */}
-      <AlertDialog
-        open={!!articleToDelete}
-        onOpenChange={(open) => !open && setArticleToDelete(null)}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This will permanently delete the article &quot;{articleToDelete?.title}&quot;. This
-              action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={deleteArticle}
-              className="bg-red-600 text-white hover:bg-red-700"
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </main>
   )
 }

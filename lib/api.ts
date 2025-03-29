@@ -366,18 +366,20 @@ export async function deleteContact(id: string) {
 
 // Storage (Media uploads)
 export async function uploadMedia(file: File, path: string) {
-  const { data, error } = await supabase.storage.from('media').upload(path, file)
+  const adminClient = createAdminClient()
+  const { data, error } = await adminClient.storage.from('media').upload(path, file)
 
   if (error) throw error
 
   // Get public URL
-  const { data: publicUrlData } = supabase.storage.from('media').getPublicUrl(path)
+  const { data: publicUrlData } = adminClient.storage.from('media').getPublicUrl(path)
 
   return publicUrlData.publicUrl
 }
 
 export async function deleteMedia(path: string) {
-  const { error } = await supabase.storage.from('media').remove([path])
+  const adminClient = createAdminClient()
+  const { error } = await adminClient.storage.from('media').remove([path])
 
   if (error) throw error
   return true
