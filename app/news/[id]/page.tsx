@@ -7,21 +7,13 @@ import Link from 'next/link'
 import { ArrowLeft, CalendarDays, Facebook, Share2, User } from 'lucide-react'
 import MainLayout from '@/components/layout/main-layout'
 import { SectionContainer } from '@/components/shared/section-container'
-
-interface NewsItem {
-  id: number
-  title: string
-  description: string
-  content: string
-  image: string
-  date: string
-  author: string
-}
+import { supabase } from '@/lib/supabase'
+import { Article } from '@/types/supabase'
 
 export default function NewsDetailPage() {
   const params = useParams()
   const router = useRouter()
-  const [newsItem, setNewsItem] = useState<NewsItem | null>(null)
+  const [article, setArticle] = useState<Article | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [scrollY, setScrollY] = useState(0)
 
@@ -40,87 +32,27 @@ export default function NewsDetailPage() {
     }
   }, [])
 
-  // This would be fetched from Supabase in a real application
+  // Fetch article from Supabase
   useEffect(() => {
-    // Simulate API call
-    setIsLoading(true)
+    const fetchArticle = async () => {
+      setIsLoading(true)
+      try {
+        const { data, error } = await supabase.from('articles').select('*').eq('id', id).single()
 
-    // Sample data - in a real app, this would be fetched from Supabase
-    const mockNewsItems: NewsItem[] = [
-      {
-        id: 1,
-        title: 'SEASON OPENER THIS SATURDAY',
-        description: 'Join us for our first match of the season against local rivals.',
-        content:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nAt vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
-        image: '/placeholder.svg?height=600&width=900&text=Season Opener',
-        date: '2023-04-15',
-        author: 'Coach Williams',
-      },
-      {
-        id: 2,
-        title: 'NEW TRAINING SCHEDULE',
-        description:
-          'Coach Williams has announced the new training schedule for the upcoming season.',
-        content:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nAt vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
-        image: '/placeholder.svg?height=600&width=900&text=Training Schedule',
-        date: '2023-04-10',
-        author: 'Team Manager',
-      },
-      {
-        id: 3,
-        title: 'COMMUNITY FUNDRAISER SUCCESS',
-        description:
-          'Our recent community fundraiser raised over £2,000 for new training equipment.',
-        content:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nAt vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
-        image: '/placeholder.svg?height=600&width=900&text=Fundraiser',
-        date: '2023-04-05',
-        author: 'Events Coordinator',
-      },
-      {
-        id: 4,
-        title: 'PLAYER OF THE MONTH ANNOUNCED',
-        description:
-          'Congratulations to James Thompson for being named Player of the Month for March!',
-        content:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nAt vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
-        image: '/placeholder.svg?height=600&width=900&text=Player of the Month',
-        date: '2023-04-01',
-        author: 'Coaching Staff',
-      },
-      {
-        id: 5,
-        title: 'NEW TEAM KIT UNVEILED',
-        description:
-          'Check out our brand new team kit for the upcoming season, now available in the club shop.',
-        content:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nAt vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
-        image: '/placeholder.svg?height=600&width=900&text=New Kit',
-        date: '2023-03-25',
-        author: 'Club Secretary',
-      },
-      {
-        id: 6,
-        title: 'JUNIOR RUGBY CAMP REGISTRATIONS OPEN',
-        description: 'Summer rugby camp registrations are now open for children aged 7-14.',
-        content:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nAt vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.',
-        image: '/placeholder.svg?height=600&width=900&text=Junior Camp',
-        date: '2023-03-20',
-        author: 'Youth Development Officer',
-      },
-    ]
+        if (error) throw error
 
-    // Find the news item by ID
-    const foundItem = mockNewsItems.find((item) => item.id === parseInt(id))
-
-    if (foundItem) {
-      setNewsItem(foundItem)
+        setArticle(data)
+      } catch (error) {
+        console.error('Error fetching article:', error)
+        setArticle(null)
+      } finally {
+        setIsLoading(false)
+      }
     }
 
-    setIsLoading(false)
+    if (id) {
+      fetchArticle()
+    }
   }, [id])
 
   // Format date to readable string
@@ -153,7 +85,7 @@ export default function NewsDetailPage() {
     )
   }
 
-  if (!newsItem) {
+  if (!article) {
     return (
       <MainLayout currentPage="NEWS">
         <main className="flex-1 pb-16">
@@ -185,7 +117,7 @@ export default function NewsDetailPage() {
           <div
             className="absolute inset-0 z-0"
             style={{
-              backgroundImage: `url(${newsItem.image})`,
+              backgroundImage: `url(${article.image_url || '/placeholder.svg?height=600&width=900&text=Rugby News'})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               transform: `translateY(${scrollY * 0.3}px)`,
@@ -201,18 +133,20 @@ export default function NewsDetailPage() {
           <div className="container relative z-10 mx-auto px-4 sm:px-6">
             <div className="mx-auto max-w-3xl text-center text-white">
               <h1 className="mb-4 text-4xl font-extrabold tracking-tighter sm:text-5xl md:text-6xl">
-                <span className="text-white">{newsItem.title}</span>
+                <span className="text-white">{article.title}</span>
               </h1>
               <div className="mx-auto mb-6 h-1 w-32 skew-x-[-12deg] transform bg-white"></div>
               <div className="flex justify-center gap-4 text-teal-100">
                 <div className="flex items-center gap-1">
                   <CalendarDays className="h-5 w-5" />
-                  <span>{formatDate(newsItem.date)}</span>
+                  <span>{formatDate(article.published_at)}</span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <User className="h-5 w-5" />
-                  <span>{newsItem.author}</span>
-                </div>
+                {article.author && (
+                  <div className="flex items-center gap-1">
+                    <User className="h-5 w-5" />
+                    <span>{article.author}</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -236,7 +170,7 @@ export default function NewsDetailPage() {
 
               {/* Article content */}
               <div className="prose prose-teal mt-8 max-w-none">
-                {newsItem.content.split('\n\n').map((paragraph, index) => (
+                {article.content.split('\n\n').map((paragraph, index) => (
                   <p key={index} className="mb-4 text-zinc-700">
                     {paragraph}
                   </p>
@@ -248,11 +182,10 @@ export default function NewsDetailPage() {
                 <span className="font-medium text-zinc-700">Share this article:</span>
                 <button
                   onClick={handleShareToFacebook}
-                  className="inline-flex skew-x-[-12deg] transform items-center bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+                  className="flex items-center gap-1 rounded-full bg-blue-600 p-2 text-white transition-colors hover:bg-blue-700"
+                  aria-label="Share to Facebook"
                 >
-                  <span className="inline-flex skew-x-[12deg] transform items-center">
-                    <Facebook className="mr-1 h-4 w-4" /> Share on Facebook
-                  </span>
+                  <Facebook className="h-5 w-5" />
                 </button>
               </div>
             </div>
