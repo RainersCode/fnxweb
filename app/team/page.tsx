@@ -1,94 +1,15 @@
-'use client'
-
-import { useState, useEffect } from 'react'
-import Image from 'next/image'
+import { Suspense } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { CalendarDays, MapPin, Trophy, Users } from 'lucide-react'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import MainLayout from '@/components/layout/main-layout'
 import { teamData } from '@/data/team-data'
+import PlayersList from './components/players-list'
+import CoachesList from './components/coaches-list'
+import Loading from './loading'
 
-export default function TeamPage() {
-  const [scrollY, setScrollY] = useState(0)
-  const [activeTab, setActiveTab] = useState('players')
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY)
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [])
-
-  const players = [
-    {
-      name: 'James Wilson',
-      position: 'Prop',
-      number: 1,
-      image: '/placeholder.svg?height=400&width=300&text=Player 1',
-      bio: 'Team captain with 10 years of experience. Known for powerful scrummaging and leadership on the field.',
-    },
-    {
-      name: 'Michael Thompson',
-      position: 'Hooker',
-      number: 2,
-      image: '/placeholder.svg?height=400&width=300&text=Player 2',
-      bio: 'Joined the club in 2020. Excellent line-out thrower and mobile around the park.',
-    },
-    {
-      name: 'David Roberts',
-      position: 'Lock',
-      number: 4,
-      image: '/placeholder.svg?height=400&width=300&text=Player 3',
-      bio: 'Standing at 6\'6", David is our line-out specialist and a powerful force in the scrum.',
-    },
-    {
-      name: 'Thomas Brown',
-      position: 'Flanker',
-      number: 6,
-      image: '/placeholder.svg?height=400&width=300&text=Player 4',
-      bio: 'Known for his incredible work rate and tackling ability. A true workhorse in the back row.',
-    },
-    {
-      name: 'Ryan Johnson',
-      position: 'Scrum-half',
-      number: 9,
-      image: '/placeholder.svg?height=400&width=300&text=Player 5',
-      bio: 'Quick service and excellent game management. The link between forwards and backs.',
-    },
-    {
-      name: 'Chris Williams',
-      position: 'Fly-half',
-      number: 10,
-      image: '/placeholder.svg?height=400&width=300&text=Player 6',
-      bio: 'Playmaker with a strong kicking game. Controls the tempo and direction of our attack.',
-    },
-  ]
-
-  const coaches = [
-    {
-      name: 'Richard Davies',
-      role: 'Head Coach',
-      image: '/placeholder.svg?height=400&width=300&text=Coach 1',
-      bio: 'Former professional player with 15 years of coaching experience. Focuses on technical skills and game strategy.',
-    },
-    {
-      name: 'Sarah Jenkins',
-      role: 'Strength & Conditioning',
-      image: '/placeholder.svg?height=400&width=300&text=Coach 2',
-      bio: 'Sports science specialist ensuring our players are in peak physical condition throughout the season.',
-    },
-    {
-      name: 'Mark Stevens',
-      role: 'Assistant Coach',
-      image: '/placeholder.svg?height=400&width=300&text=Coach 3',
-      bio: 'Specializes in forward play and set-piece strategy. Former international player.',
-    },
-  ]
-
+// This is a server component to fetch initial data
+export default async function TeamPage() {
   return (
     <MainLayout currentPage="TEAM">
       <main className="flex-1">
@@ -100,8 +21,6 @@ export default function TeamPage() {
               backgroundImage: "url('/placeholder.svg?height=1080&width=1920&text=Team Photo')",
               backgroundSize: 'cover',
               backgroundPosition: 'center',
-              transform: `translateY(${scrollY * 0.3}px)`,
-              transition: 'transform 0.1s linear',
             }}
           />
           <div className="absolute inset-0 z-0 bg-gradient-to-b from-teal-900/80 to-teal-700/80" />
@@ -204,90 +123,41 @@ export default function TeamPage() {
               </h2>
             </div>
 
-            {/* Tab Buttons */}
-            <div className="mb-12 flex justify-center gap-4">
-              <button
-                className={`skew-x-[-12deg] transform px-6 py-3 font-medium tracking-wide transition-all duration-300 ${
-                  activeTab === 'players'
-                    ? 'bg-teal-800 text-white hover:bg-teal-900'
-                    : 'border border-teal-800 bg-white text-teal-800 hover:bg-white hover:text-teal-900'
-                }`}
-                onClick={() => setActiveTab('players')}
-              >
-                <span className="inline-flex skew-x-[12deg] transform items-center gap-2">
-                  <Users className="h-5 w-5" />
-                  Players
-                </span>
-              </button>
-              <button
-                className={`skew-x-[-12deg] transform px-6 py-3 font-medium tracking-wide transition-all duration-300 ${
-                  activeTab === 'coaches'
-                    ? 'bg-teal-800 text-white hover:bg-teal-900'
-                    : 'border border-teal-800 bg-white text-teal-800 hover:bg-white hover:text-teal-900'
-                }`}
-                onClick={() => setActiveTab('coaches')}
-              >
-                <span className="inline-flex skew-x-[12deg] transform items-center gap-2">
-                  <Users className="h-5 w-5" />
-                  Coaching Staff
-                </span>
-              </button>
-            </div>
+            {/* Tabs */}
+            <Tabs defaultValue="players" className="mx-auto max-w-5xl">
+              <TabsList className="mb-10 grid w-full grid-cols-2 bg-transparent">
+                <TabsTrigger
+                  value="players"
+                  className="data-[state=active]:bg-teal-800 data-[state=active]:text-white"
+                >
+                  <span className="inline-flex items-center gap-2">
+                    <Users className="h-5 w-5" />
+                    Players
+                  </span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="coaches"
+                  className="data-[state=active]:bg-teal-800 data-[state=active]:text-white"
+                >
+                  <span className="inline-flex items-center gap-2">
+                    <Users className="h-5 w-5" />
+                    Coaching Staff
+                  </span>
+                </TabsTrigger>
+              </TabsList>
 
-            {/* Players Grid */}
-            {activeTab === 'players' && (
-              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                {players.map((player, index) => (
-                  <div
-                    key={index}
-                    className="transform overflow-hidden bg-white shadow-md transition-all duration-300 hover:scale-[1.02]"
-                  >
-                    <div className="relative h-80">
-                      <Image
-                        src={player.image || '/placeholder.svg'}
-                        alt={player.name}
-                        fill
-                        className="object-cover"
-                      />
-                      <div className="absolute right-0 top-0 -mr-2 flex h-12 w-12 skew-x-[-12deg] transform items-center justify-center bg-teal-800 text-2xl font-bold text-white">
-                        <span className="skew-x-[12deg] transform">{player.number}</span>
-                      </div>
-                    </div>
-                    <div className="p-6">
-                      <h3 className="text-xl font-bold text-teal-900">{player.name}</h3>
-                      <p className="mb-4 font-medium text-teal-700">{player.position}</p>
-                      <p className="text-sm text-zinc-600">{player.bio}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+              <TabsContent value="players">
+                <Suspense fallback={<Loading />}>
+                  <PlayersList />
+                </Suspense>
+              </TabsContent>
 
-            {/* Coaches Grid */}
-            {activeTab === 'coaches' && (
-              <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-                {coaches.map((coach, index) => (
-                  <div
-                    key={index}
-                    className="transform overflow-hidden bg-white shadow-md transition-all duration-300 hover:scale-[1.02]"
-                  >
-                    <div className="relative h-80">
-                      <Image
-                        src={coach.image || '/placeholder.svg'}
-                        alt={coach.name}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                    <div className="p-6">
-                      <h3 className="text-xl font-bold text-teal-900">{coach.name}</h3>
-                      <p className="mb-4 font-medium text-teal-700">{coach.role}</p>
-                      <p className="text-sm text-zinc-600">{coach.bio}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+              <TabsContent value="coaches">
+                <Suspense fallback={<Loading />}>
+                  <CoachesList />
+                </Suspense>
+              </TabsContent>
+            </Tabs>
           </div>
         </section>
       </main>
