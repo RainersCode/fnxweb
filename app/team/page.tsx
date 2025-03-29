@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { CalendarDays, MapPin, Trophy, Users } from 'lucide-react'
 import MainLayout from '@/components/layout/main-layout'
+import { teamData } from '@/data/team-data'
 
 export default function TeamPage() {
   const [scrollY, setScrollY] = useState(0)
@@ -133,15 +134,11 @@ export default function TeamPage() {
                   <div className="bg-teal-800 p-4 text-white">
                     <div className="flex items-center gap-3">
                       <Trophy className="h-6 w-6" />
-                      <h3 className="text-xl font-bold">Club History</h3>
+                      <h3 className="text-xl font-bold">{teamData.clubHistory.title}</h3>
                     </div>
                   </div>
                   <div className="p-6">
-                    <p className="text-zinc-600">
-                      Founded in 1985, Riverside RFC has a proud history of developing local talent
-                      and competing at the regional level. The club has won 3 regional championships
-                      and continues to grow year on year.
-                    </p>
+                    <p className="text-zinc-600">{teamData.clubHistory.content}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -151,23 +148,17 @@ export default function TeamPage() {
                   <div className="bg-teal-800 p-4 text-white">
                     <div className="flex items-center gap-3">
                       <CalendarDays className="h-6 w-6" />
-                      <h3 className="text-xl font-bold">Training Schedule</h3>
+                      <h3 className="text-xl font-bold">{teamData.trainingSchedule.title}</h3>
                     </div>
                   </div>
                   <div className="p-6">
                     <ul className="space-y-2 text-zinc-600">
-                      <li className="flex justify-between">
-                        <span>Tuesday</span>
-                        <span className="font-medium">7:00 PM - 9:00 PM</span>
-                      </li>
-                      <li className="flex justify-between">
-                        <span>Thursday</span>
-                        <span className="font-medium">7:00 PM - 9:00 PM</span>
-                      </li>
-                      <li className="flex justify-between">
-                        <span>Saturday (Match Day)</span>
-                        <span className="font-medium">2:30 PM Kickoff</span>
-                      </li>
+                      {teamData.trainingSchedule.schedule.map((item, index) => (
+                        <li key={index} className="flex justify-between">
+                          <span>{item.day}</span>
+                          <span className="font-medium">{item.time}</span>
+                        </li>
+                      ))}
                     </ul>
                   </div>
                 </CardContent>
@@ -178,19 +169,19 @@ export default function TeamPage() {
                   <div className="bg-teal-800 p-4 text-white">
                     <div className="flex items-center gap-3">
                       <MapPin className="h-6 w-6" />
-                      <h3 className="text-xl font-bold">Home Ground</h3>
+                      <h3 className="text-xl font-bold">{teamData.homeGround.title}</h3>
                     </div>
                   </div>
                   <div className="p-6">
                     <p className="mb-4 text-zinc-600">
-                      Riverside Park, Main Street
-                      <br />
-                      Riverside Town, RT1 2AB
+                      {teamData.homeGround.address.split('\n').map((line, i) => (
+                        <span key={i}>
+                          {line}
+                          {i < teamData.homeGround.address.split('\n').length - 1 && <br />}
+                        </span>
+                      ))}
                     </p>
-                    <p className="text-zinc-600">
-                      Our facilities include a full-size pitch, training area, clubhouse with bar,
-                      and changing rooms.
-                    </p>
+                    <p className="text-zinc-600">{teamData.homeGround.facilities}</p>
                   </div>
                 </CardContent>
               </Card>
