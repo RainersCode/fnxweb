@@ -12,12 +12,27 @@ import { HeroSection } from '@/components/features/hero-section'
 import { ParallaxHeroSection } from '@/components/features/parallax-hero-section'
 import { MapSection } from '@/components/features/map-section'
 import Link from 'next/link'
+import { supabase } from '@/lib/supabase'
+import { Article } from '@/types/supabase'
+
+// Define a type for our fallback news items
+interface FallbackNewsItem {
+  title: string
+  description: string
+  image: string
+}
+
+// Define a type for the combined news items (either Article or FallbackNewsItem)
+type NewsItem = Article | FallbackNewsItem
 
 export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [scrollY, setScrollY] = useState(0)
+  const [articles, setArticles] = useState<Article[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const newsItems = [
+  // Fallback news items if no articles are loaded
+  const fallbackNewsItems: FallbackNewsItem[] = [
     {
       title: 'SEASON OPENER THIS SATURDAY',
       description: 'Join us for our first match of the season against local rivals.',
@@ -59,9 +74,33 @@ export default function HomePage() {
     },
   ]
 
+  // Fetch articles from Supabase
+  useEffect(() => {
+    const fetchArticles = async () => {
+      setLoading(true)
+      try {
+        const { data, error } = await supabase
+          .from('articles')
+          .select('*')
+          .order('published_at', { ascending: false })
+          .limit(3) // Limit to 3 latest articles for the carousel
+
+        if (error) throw error
+        setArticles(data || [])
+      } catch (error) {
+        console.error('Error fetching articles:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchArticles()
+  }, [])
+
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev === newsItems.length - 1 ? 0 : prev + 1))
+      const itemsLength = articles.length > 0 ? articles.length : fallbackNewsItems.length
+      setCurrentSlide((prev) => (prev === itemsLength - 1 ? 0 : prev + 1))
     }, 5000)
 
     const handleScroll = () => {
@@ -74,14 +113,49 @@ export default function HomePage() {
       clearInterval(interval)
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [newsItems.length])
+  }, [articles.length])
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev === newsItems.length - 1 ? 0 : prev + 1))
+    const itemsLength = articles.length > 0 ? articles.length : fallbackNewsItems.length
+    setCurrentSlide((prev) => (prev === itemsLength - 1 ? 0 : prev + 1))
   }
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev === 0 ? newsItems.length - 1 : prev - 1))
+    const itemsLength = articles.length > 0 ? articles.length : fallbackNewsItems.length
+    setCurrentSlide((prev) => (prev === 0 ? itemsLength - 1 : prev - 1))
+  }
+
+  // Use real articles or fallback to sample items
+  const newsItems: NewsItem[] = articles.length > 0 ? articles : fallbackNewsItems
+
+  // Helper function to get the image URL
+  const getImageUrl = (item: NewsItem): string => {
+    if ('id' in item) {
+      // This is an Article
+      return item.image_url || '/placeholder.svg?height=1080&width=1920&text=Rugby News'
+    }
+    // This is a FallbackNewsItem
+    return item.image
+  }
+
+  // Helper function to get description or content
+  const getDescription = (item: NewsItem): string => {
+    if ('id' in item) {
+      // This is an Article
+      return item.content.substring(0, 150) + '...'
+    }
+    // This is a FallbackNewsItem
+    return item.description
+  }
+
+  // Helper function to check if item is an Article
+  const isArticle = (item: NewsItem): item is Article => {
+    return 'id' in item
+  }
+
+  // Helper function to check if item is a FallbackNewsItem
+  const isFallbackNewsItem = (item: NewsItem): item is FallbackNewsItem => {
+    return !('id' in item)
   }
 
   return (
@@ -102,22 +176,44 @@ export default function HomePage() {
           </div>
 
           <div className="absolute inset-0 z-0">
-            {newsItems.map((item, index) => (
-              <div
-                key={index}
-                className={`absolute inset-0 transition-opacity duration-1000 ${
-                  index === currentSlide ? 'opacity-100' : 'opacity-0'
-                }`}
-              >
-                <NextImage
-                  src={item.image || '/placeholder.svg'}
-                  alt={item.title}
-                  fill
-                  className="object-cover brightness-90"
-                  priority={index === 0}
-                />
-              </div>
-            ))}
+            {articles.length > 0
+              ? // Display real articles
+                articles.map((article, index) => (
+                  <div
+                    key={article.id}
+                    className={`absolute inset-0 transition-opacity duration-1000 ${
+                      index === currentSlide ? 'opacity-100' : 'opacity-0'
+                    }`}
+                  >
+                    <NextImage
+                      src={
+                        article.image_url ||
+                        '/placeholder.svg?height=1080&width=1920&text=Rugby News'
+                      }
+                      alt={article.title}
+                      fill
+                      className="object-cover brightness-90"
+                      priority={index === 0}
+                    />
+                  </div>
+                ))
+              : // Display fallback news items
+                fallbackNewsItems.map((item, index) => (
+                  <div
+                    key={index}
+                    className={`absolute inset-0 transition-opacity duration-1000 ${
+                      index === currentSlide ? 'opacity-100' : 'opacity-0'
+                    }`}
+                  >
+                    <NextImage
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className="object-cover brightness-90"
+                      priority={index === 0}
+                    />
+                  </div>
+                ))}
           </div>
 
           <div className="absolute inset-0 z-[1] bg-gradient-to-b from-black/30 to-transparent" />
@@ -149,22 +245,36 @@ export default function HomePage() {
               <div className="absolute left-0 top-0 h-full w-1 bg-teal-800"></div>
 
               <h1 className="text-3xl font-extrabold uppercase leading-none tracking-tighter text-teal-900 sm:text-4xl md:text-5xl">
-                {newsItems[currentSlide].title}
+                {articles.length > 0 && currentSlide < articles.length
+                  ? articles[currentSlide].title
+                  : fallbackNewsItems[currentSlide % fallbackNewsItems.length].title}
               </h1>
               <p className="mt-4 max-w-xl text-base font-medium text-zinc-700 sm:text-lg">
-                {newsItems[currentSlide].description}
+                {articles.length > 0 && currentSlide < articles.length
+                  ? articles[currentSlide].content.substring(0, 150) + '...'
+                  : fallbackNewsItems[currentSlide % fallbackNewsItems.length].description}
               </p>
               <div className="mt-6">
-                <button className="skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
-                  <span className="inline-flex skew-x-[12deg] transform items-center">
-                    READ MORE
-                  </span>
-                </button>
+                {articles.length > 0 && currentSlide < articles.length ? (
+                  <Link href={`/news/${articles[currentSlide].id}`}>
+                    <button className="skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
+                      <span className="inline-flex skew-x-[12deg] transform items-center">
+                        READ MORE
+                      </span>
+                    </button>
+                  </Link>
+                ) : (
+                  <button className="skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
+                    <span className="inline-flex skew-x-[12deg] transform items-center">
+                      READ MORE
+                    </span>
+                  </button>
+                )}
               </div>
             </div>
 
             <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-2">
-              {newsItems.map((_, index) => (
+              {(articles.length > 0 ? articles : fallbackNewsItems).map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentSlide(index)}
@@ -259,54 +369,118 @@ export default function HomePage() {
             </div>
 
             <div className="mb-10 grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-              {newsItems.slice(0, 3).map((item, index) => (
-                <Link href={`/news/${index + 1}`} key={index} className="group block">
-                  <div
-                    className="flex h-full flex-col overflow-hidden bg-white shadow-md transition-all duration-300 hover:shadow-xl"
-                    style={{ clipPath: 'polygon(0 0, 100% 0, 100% 96%, 96% 100%, 0 100%)' }}
-                  >
-                    <div className="relative h-48 overflow-hidden">
-                      <NextImage
-                        src={item.image}
-                        alt={item.title}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    </div>
+              {articles.length > 0
+                ? // Display real articles
+                  articles.slice(0, 3).map((article) => (
+                    <Link href={`/news/${article.id}`} key={article.id} className="group block">
+                      <div
+                        className="flex h-full flex-col overflow-hidden bg-white shadow-md transition-all duration-300 hover:shadow-xl"
+                        style={{ clipPath: 'polygon(0 0, 100% 0, 100% 96%, 96% 100%, 0 100%)' }}
+                      >
+                        <div className="relative h-48 overflow-hidden">
+                          <NextImage
+                            src={
+                              article.image_url ||
+                              '/placeholder.svg?height=600&width=900&text=Rugby News'
+                            }
+                            alt={article.title}
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                        </div>
 
-                    <div className="flex flex-1 flex-col p-6">
-                      <div className="flex items-center gap-2 text-sm text-zinc-500">
-                        <CalendarDays className="h-4 w-4" />
-                        <span>April 15, 2023</span>
+                        <div className="flex flex-1 flex-col p-6">
+                          <div className="flex items-center gap-2 text-sm text-zinc-500">
+                            <CalendarDays className="h-4 w-4" />
+                            <span>
+                              {new Date(article.published_at).toLocaleDateString('en-GB', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                              })}
+                            </span>
+                          </div>
+
+                          <h3 className="mt-2 text-xl font-bold uppercase tracking-tight text-teal-900 group-hover:text-teal-700">
+                            {article.title}
+                          </h3>
+
+                          <p className="mt-2 flex-1 text-sm text-zinc-600">
+                            {article.content.length > 120
+                              ? `${article.content.substring(0, 120)}...`
+                              : article.content}
+                          </p>
+
+                          <div className="mt-4">
+                            <span className="inline-flex items-center text-sm font-medium text-teal-800 group-hover:text-teal-600">
+                              READ MORE
+                              <svg
+                                className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            </span>
+                          </div>
+                        </div>
                       </div>
+                    </Link>
+                  ))
+                : // Display fallback news items
+                  fallbackNewsItems.slice(0, 3).map((item, index) => (
+                    <Link href={`/news/${index + 1}`} key={index} className="group block">
+                      <div
+                        className="flex h-full flex-col overflow-hidden bg-white shadow-md transition-all duration-300 hover:shadow-xl"
+                        style={{ clipPath: 'polygon(0 0, 100% 0, 100% 96%, 96% 100%, 0 100%)' }}
+                      >
+                        <div className="relative h-48 overflow-hidden">
+                          <NextImage
+                            src={item.image}
+                            alt={item.title}
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                        </div>
 
-                      <h3 className="mt-2 text-xl font-bold uppercase tracking-tight text-teal-900 group-hover:text-teal-700">
-                        {item.title}
-                      </h3>
+                        <div className="flex flex-1 flex-col p-6">
+                          <div className="flex items-center gap-2 text-sm text-zinc-500">
+                            <CalendarDays className="h-4 w-4" />
+                            <span>April 15, 2023</span>
+                          </div>
 
-                      <p className="mt-2 flex-1 text-sm text-zinc-600">{item.description}</p>
+                          <h3 className="mt-2 text-xl font-bold uppercase tracking-tight text-teal-900 group-hover:text-teal-700">
+                            {item.title}
+                          </h3>
 
-                      <div className="mt-4">
-                        <span className="inline-flex items-center text-sm font-medium text-teal-800 group-hover:text-teal-600">
-                          READ MORE
-                          <svg
-                            className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </span>
+                          <p className="mt-2 flex-1 text-sm text-zinc-600">{item.description}</p>
+
+                          <div className="mt-4">
+                            <span className="inline-flex items-center text-sm font-medium text-teal-800 group-hover:text-teal-600">
+                              READ MORE
+                              <svg
+                                className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            </span>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </Link>
-              ))}
+                    </Link>
+                  ))}
             </div>
 
             <div className="flex justify-center">

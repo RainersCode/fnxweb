@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { Trash2, Edit, Plus, Search, Loader2, CalendarDays, X } from 'lucide-react'
 import { SectionContainer } from '@/components/shared/section-container'
 import { SectionTitle } from '@/components/shared/section-title'
-import { supabase } from '@/lib/supabase'
 import { Article } from '@/types/supabase'
 import { Button } from '@/components/ui/button'
 import {
@@ -65,13 +64,11 @@ export default function AdminArticlesPage() {
   const fetchArticles = async () => {
     setLoading(true)
     try {
-      const { data, error } = await supabase
-        .from('articles')
-        .select('*')
-        .order('published_at', { ascending: false })
-
-      if (error) throw error
-
+      const response = await fetch('/api/admin/articles')
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`)
+      }
+      const data = await response.json()
       setArticles(data || [])
     } catch (error) {
       console.error('Error fetching articles:', error)
@@ -125,23 +122,27 @@ export default function AdminArticlesPage() {
     setFormLoading(true)
 
     try {
-      const { data, error } = await supabase
-        .from('articles')
-        .insert([
-          {
-            title: formData.title,
-            content: formData.content,
-            image_url: formData.image_url || null,
-            author: formData.author || null,
-            slug: formData.slug,
-            is_featured: formData.is_featured,
-          },
-        ])
-        .select()
+      const newArticle = {
+        title: formData.title,
+        content: formData.content,
+        image_url: formData.image_url || null,
+        author: formData.author || null,
+        slug: formData.slug,
+        is_featured: formData.is_featured,
+      }
 
-      if (error) throw error
+      const response = await fetch('/api/admin/articles', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newArticle),
+      })
 
-      setArticles([...(data || []), ...articles])
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`)
+      }
+
       setShowAddDialog(false)
       setFormData(emptyFormState)
       await fetchArticles()
@@ -173,20 +174,28 @@ export default function AdminArticlesPage() {
     setFormLoading(true)
 
     try {
-      const { error } = await supabase
-        .from('articles')
-        .update({
-          title: formData.title,
-          content: formData.content,
-          image_url: formData.image_url || null,
-          author: formData.author || null,
-          slug: formData.slug,
-          is_featured: formData.is_featured,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', currentArticleId)
+      const articleUpdate = {
+        id: currentArticleId,
+        title: formData.title,
+        content: formData.content,
+        image_url: formData.image_url || null,
+        author: formData.author || null,
+        slug: formData.slug,
+        is_featured: formData.is_featured,
+        updated_at: new Date().toISOString(),
+      }
 
-      if (error) throw error
+      const response = await fetch('/api/admin/articles', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(articleUpdate),
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`)
+      }
 
       setShowEditDialog(false)
       setFormData(emptyFormState)
@@ -204,9 +213,17 @@ export default function AdminArticlesPage() {
     if (!articleToDelete) return
 
     try {
-      const { error } = await supabase.from('articles').delete().eq('id', articleToDelete.id)
+      const response = await fetch('/api/admin/articles', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: articleToDelete.id }),
+      })
 
-      if (error) throw error
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`)
+      }
 
       setArticles(articles.filter((article) => article.id !== articleToDelete.id))
       setArticleToDelete(null)
