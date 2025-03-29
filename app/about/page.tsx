@@ -20,7 +20,7 @@ export default function AboutPage() {
           title={aboutUsData.title.split(' ')[0]} // First word
           titleHighlight={aboutUsData.title.split(' ').slice(1).join(' ')} // Rest of the words
           subtitle={aboutUsData.introduction}
-          backgroundImage="/placeholder.svg?height=1080&width=1920&text=Rugby Team"
+          backgroundImage="/AboutUs/parallax.jpg"
         />
 
         {/* History & Mission Section */}

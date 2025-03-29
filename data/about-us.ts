@@ -58,7 +58,7 @@ export const aboutUsData = {
       "Interested in joining Riverside Rugby Club? Whether you're an experienced player or new to the sport, we welcome players of all abilities. Contact us to find out more about training sessions and membership options.",
     buttonText: 'Contact Us',
   },
-  imageUrl: '/placeholder.svg?height=600&width=800&text=Rugby Club Team Photo',
+  imageUrl: '/AboutUs/team.jpg',
   galleryImages: [
     '/placeholder.svg?height=400&width=600&text=Training Session',
     '/placeholder.svg?height=400&width=600&text=Club House',

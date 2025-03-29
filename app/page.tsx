@@ -181,18 +181,6 @@ export default function HomePage() {
       <main className="flex-1">
         {/* Hero Section with News Carousel and Shapes */}
         <section className="relative h-[80vh] overflow-hidden">
-          {/* Decorative Shapes */}
-          <div className="absolute right-[10%] top-20 z-0 h-32 w-32 rounded-full bg-teal-500/20 blur-xl"></div>
-          <div className="absolute bottom-20 left-[5%] z-0 h-64 w-64 rounded-full bg-teal-700/10 blur-xl"></div>
-          <div className="absolute left-[20%] top-[30%] z-0 h-16 w-16 rotate-45 transform border-4 border-teal-500/30"></div>
-          <div className="absolute bottom-[40%] right-[15%] z-0 h-24 w-24 rounded-full border-8 border-teal-800/20"></div>
-          <div className="absolute right-[30%] top-[20%] z-0 h-20 w-20 rotate-12 transform border-r-4 border-t-4 border-teal-600/30 bg-transparent"></div>
-
-          {/* Sharp diagonal line */}
-          <div className="absolute right-0 top-0 z-0 h-[150px] w-[150px] overflow-hidden">
-            <div className="absolute right-0 top-0 h-[50px] w-[300px] translate-x-[25%] translate-y-[-50%] rotate-45 transform bg-teal-800/20"></div>
-          </div>
-
           <div className="absolute inset-0 z-0">
             {articles.length > 0
               ? // Display real articles
@@ -309,9 +297,9 @@ export default function HomePage() {
         {/* Team Section with Parallax */}
         <SectionContainer className="overflow-hidden">
           <div
-            className="absolute inset-0 z-0"
+            className="absolute inset-0 top-[-40%] z-0 h-[180%]"
             style={{
-              backgroundImage: "url('/placeholder.svg?height=1080&width=1920&text=Rugby Team')",
+              backgroundImage: "url('/AboutUs/parallax.jpg')",
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               transform: `translateY(${scrollY * 0.3}px)`,
@@ -321,25 +309,6 @@ export default function HomePage() {
           <div className="absolute inset-0 z-0 bg-white/85" />
 
           {/* Additional parallax elements */}
-          <div
-            className="absolute right-0 top-[30%] z-0 h-64 w-64 rounded-full bg-teal-500/5"
-            style={{
-              transform: `translateY(${scrollY * -0.2}px)`,
-              transition: 'transform 0.1s linear',
-            }}
-          />
-          <div
-            className="absolute bottom-[20%] left-[5%] z-0 h-32 w-32 rotate-45 transform border-2 border-teal-700/10"
-            style={{
-              transform: `translateY(${scrollY * -0.15}px) rotate(45deg)`,
-              transition: 'transform 0.1s linear',
-            }}
-          />
-
-          {/* Sharp diagonal divider at top */}
-          <div className="absolute left-0 right-0 top-0 z-10 h-16 overflow-hidden">
-            <div className="absolute left-0 right-0 top-0 h-32 -skew-y-3 transform bg-white"></div>
-          </div>
 
           <div className="relative z-10">
             <div className="mx-auto mb-12 max-w-2xl text-center">
