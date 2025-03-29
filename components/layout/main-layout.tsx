@@ -35,7 +35,7 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
             </div>
             <nav className="hidden md:flex">
               <ul className="flex items-center">
-                {['HOME', 'TEAM', 'FIXTURES', 'GALLERY', 'CONTACT'].map((item, index) => (
+                {['HOME', 'TEAM', 'FIXTURES', 'NEWS', 'GALLERY', 'CONTACT'].map((item, index) => (
                   <li key={item}>
                     <Link
                       href={item === 'HOME' ? '/' : `/${item.toLowerCase()}`}
@@ -113,7 +113,7 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
             </div>
             <nav className="mt-12">
               <ul className="flex flex-col space-y-6">
-                {['HOME', 'TEAM', 'FIXTURES', 'GALLERY', 'CONTACT'].map((item, index) => (
+                {['HOME', 'TEAM', 'FIXTURES', 'NEWS', 'GALLERY', 'CONTACT'].map((item, index) => (
                   <li
                     key={item}
                     className="animate-slide-in-right opacity-100"
@@ -221,6 +221,14 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
                     className="inline-block transform font-medium tracking-wide transition-transform hover:translate-x-1 hover:text-teal-700"
                   >
                     FIXTURES
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/news"
+                    className="inline-block transform font-medium tracking-wide transition-transform hover:translate-x-1 hover:text-teal-700"
+                  >
+                    NEWS
                   </Link>
                 </li>
                 <li>

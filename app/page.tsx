@@ -3,7 +3,7 @@
 import { default as NextImage } from 'next/image'
 import { useState, useEffect } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
-import { CalendarDays, ChevronLeft, ChevronRight, Clock, MapPin } from 'lucide-react'
+import { CalendarDays, ChevronLeft, ChevronRight, Clock, MapPin, ArrowRight } from 'lucide-react'
 import MainLayout from '@/components/layout/main-layout'
 import { GridContainer } from '@/components/ui/grid-container'
 import { SectionContainer } from '@/components/shared/section-container'
@@ -248,6 +248,77 @@ export default function HomePage() {
                 </button>
               </div>
             </GridContainer>
+          </div>
+        </SectionContainer>
+
+        {/* Latest News Section */}
+        <SectionContainer className="bg-gray-50">
+          <div className="relative z-10">
+            <div className="mx-auto mb-12 max-w-2xl text-center">
+              <SectionTitle title="LATEST" titleHighlight="NEWS" />
+            </div>
+
+            <div className="mb-10 grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+              {newsItems.slice(0, 3).map((item, index) => (
+                <Link href={`/news/${index + 1}`} key={index} className="group block">
+                  <div
+                    className="flex h-full flex-col overflow-hidden bg-white shadow-md transition-all duration-300 hover:shadow-xl"
+                    style={{ clipPath: 'polygon(0 0, 100% 0, 100% 96%, 96% 100%, 0 100%)' }}
+                  >
+                    <div className="relative h-48 overflow-hidden">
+                      <NextImage
+                        src={item.image}
+                        alt={item.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    </div>
+
+                    <div className="flex flex-1 flex-col p-6">
+                      <div className="flex items-center gap-2 text-sm text-zinc-500">
+                        <CalendarDays className="h-4 w-4" />
+                        <span>April 15, 2023</span>
+                      </div>
+
+                      <h3 className="mt-2 text-xl font-bold uppercase tracking-tight text-teal-900 group-hover:text-teal-700">
+                        {item.title}
+                      </h3>
+
+                      <p className="mt-2 flex-1 text-sm text-zinc-600">{item.description}</p>
+
+                      <div className="mt-4">
+                        <span className="inline-flex items-center text-sm font-medium text-teal-800 group-hover:text-teal-600">
+                          READ MORE
+                          <svg
+                            className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            <div className="flex justify-center">
+              <Link href="/news" className="group">
+                <button className="skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
+                  <span className="inline-flex skew-x-[12deg] transform items-center">
+                    VIEW ALL NEWS
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  </span>
+                </button>
+              </Link>
+            </div>
           </div>
         </SectionContainer>
 
