@@ -384,3 +384,23 @@ export async function deleteMedia(path: string) {
   if (error) throw error
   return true
 }
+
+// Get the first image of a gallery (for thumbnail)
+export async function getGalleryFirstImage(galleryId: string) {
+  const { data, error } = await supabase
+    .from('gallery_images')
+    .select('*')
+    .eq('gallery_id', galleryId)
+    .order('display_order', { ascending: true })
+    .limit(1)
+    .single()
+
+  if (error) {
+    // If no images found, return null instead of throwing error
+    if (error.code === 'PGRST116') {
+      return null
+    }
+    throw error
+  }
+  return data
+}

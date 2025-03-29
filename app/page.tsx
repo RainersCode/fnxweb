@@ -3,7 +3,16 @@
 import { default as NextImage } from 'next/image'
 import { useState, useEffect } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
-import { CalendarDays, ChevronLeft, ChevronRight, Clock, MapPin, ArrowRight } from 'lucide-react'
+import {
+  CalendarDays,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  MapPin,
+  ArrowRight,
+  Camera,
+  ImageIcon,
+} from 'lucide-react'
 import MainLayout from '@/components/layout/main-layout'
 import { GridContainer } from '@/components/ui/grid-container'
 import { SectionContainer } from '@/components/shared/section-container'
@@ -13,7 +22,7 @@ import { ParallaxHeroSection } from '@/components/features/parallax-hero-section
 import { MapSection } from '@/components/features/map-section'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
-import { Article } from '@/types/supabase'
+import { Article, Gallery, GalleryImage } from '@/types/supabase'
 
 // Define a type for our fallback news items
 interface FallbackNewsItem {
@@ -25,11 +34,18 @@ interface FallbackNewsItem {
 // Define a type for the combined news items (either Article or FallbackNewsItem)
 type NewsItem = Article | FallbackNewsItem
 
+// Add a type for galleries with thumbnails
+interface GalleryWithThumbnail extends Gallery {
+  thumbnailUrl: string | null
+}
+
 export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [scrollY, setScrollY] = useState(0)
   const [articles, setArticles] = useState<Article[]>([])
   const [loading, setLoading] = useState(true)
+  const [galleries, setGalleries] = useState<GalleryWithThumbnail[]>([])
+  const [loadingGallery, setLoadingGallery] = useState(true)
 
   // Fallback news items if no articles are loaded
   const fallbackNewsItems: FallbackNewsItem[] = [
@@ -48,29 +64,6 @@ export default function HomePage() {
       title: 'COMMUNITY FUNDRAISER SUCCESS',
       description: 'Our recent community fundraiser raised over £2,000 for new training equipment.',
       image: '/placeholder.svg?height=1080&width=1920&text=Fundraiser',
-    },
-  ]
-
-  const galleryImages = [
-    {
-      src: '/placeholder.svg?height=600&width=800&text=Match Day',
-      alt: 'Match Day Action',
-      category: 'matches',
-    },
-    {
-      src: '/placeholder.svg?height=600&width=800&text=Training',
-      alt: 'Team Training',
-      category: 'training',
-    },
-    {
-      src: '/placeholder.svg?height=600&width=800&text=Community',
-      alt: 'Community Event',
-      category: 'community',
-    },
-    {
-      src: '/placeholder.svg?height=600&width=800&text=Celebration',
-      alt: 'Victory Celebration',
-      category: 'matches',
     },
   ]
 
@@ -95,6 +88,30 @@ export default function HomePage() {
     }
 
     fetchArticles()
+  }, [])
+
+  // Fetch galleries from Supabase
+  useEffect(() => {
+    const fetchGalleries = async () => {
+      setLoadingGallery(true)
+      try {
+        const response = await fetch('/api/galleries')
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`)
+        }
+        const data = await response.json()
+
+        // Get up to 4 most recent galleries
+        const recentGalleries = data.slice(0, 4)
+        setGalleries(recentGalleries)
+      } catch (error) {
+        console.error('Error fetching galleries:', error)
+      } finally {
+        setLoadingGallery(false)
+      }
+    }
+
+    fetchGalleries()
   }, [])
 
   useEffect(() => {
@@ -497,47 +514,73 @@ export default function HomePage() {
         </SectionContainer>
 
         {/* Gallery Section */}
-        <SectionContainer className="bg-white">
-          <div className="mx-auto mb-12 max-w-2xl text-center">
-            <SectionTitle title="LATEST" titleHighlight="PHOTOS" />
-            <p className="mt-4 text-lg text-zinc-600">
-              Capturing the spirit and energy of our club through memorable moments.
-            </p>
-          </div>
+        <section className="bg-white py-16">
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="mx-auto mb-8 max-w-3xl text-center">
+              <SectionTitle title="PHOTO" titleHighlight="GALLERY" />
+              <p className="mt-4 text-lg text-zinc-600">
+                Explore our collections capturing the spirit and passion of our rugby club.
+              </p>
+            </div>
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {galleryImages.map((image, index) => (
-              <div
-                key={index}
-                className="group relative transform cursor-pointer overflow-hidden transition-all duration-300 hover:scale-[1.02]"
-                style={{ clipPath: 'polygon(0 0, 100% 0, 95% 100%, 0 95%)' }}
-              >
-                <NextImage
-                  src={image.src}
-                  alt={image.alt}
-                  width={800}
-                  height={600}
-                  className="h-64 w-full object-cover"
-                />
-                <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-teal-900/80 to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                  <h3 className="font-bold text-white">{image.alt}</h3>
-                  <p className="text-sm text-teal-100">{image.category}</p>
+            <div className="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {loadingGallery ? (
+                <div className="col-span-full flex justify-center py-12">
+                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-teal-800 border-t-transparent"></div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ) : galleries.length === 0 ? (
+                <div className="col-span-full rounded-lg bg-teal-50 p-6 text-center">
+                  <p className="text-lg text-teal-800">Check back soon for gallery updates!</p>
+                </div>
+              ) : (
+                galleries.map((gallery) => (
+                  <Link href={`/gallery/${gallery.id}`} key={gallery.id} className="group">
+                    <div
+                      className="relative transform cursor-pointer overflow-hidden transition-all duration-300 hover:scale-[1.02]"
+                      style={{ clipPath: 'polygon(0 0, 100% 0, 95% 100%, 0 95%)' }}
+                    >
+                      {gallery.thumbnailUrl ? (
+                        <NextImage
+                          src={gallery.thumbnailUrl}
+                          alt={gallery.title}
+                          width={400}
+                          height={300}
+                          className="h-64 w-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-64 w-full items-center justify-center bg-teal-100">
+                          <div className="text-center">
+                            <ImageIcon className="mx-auto h-12 w-12 text-teal-800/50" />
+                            <p className="mt-2 text-sm text-teal-800/70">{gallery.title}</p>
+                          </div>
+                        </div>
+                      )}
+                      <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-teal-900/90 to-transparent p-4">
+                        <h3 className="text-lg font-bold text-white">{gallery.title}</h3>
+                        {gallery.description && (
+                          <p className="line-clamp-2 text-sm text-teal-100">
+                            {gallery.description}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </Link>
+                ))
+              )}
+            </div>
 
-          <div className="mt-12 text-center">
-            <Link
-              href="/gallery"
-              className="inline-flex skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900"
-            >
-              <span className="inline-flex skew-x-[12deg] transform items-center">
-                VIEW ALL PHOTOS
-              </span>
-            </Link>
+            <div className="mt-8 text-center">
+              <Link href="/gallery" className="group">
+                <button className="skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
+                  <span className="inline-flex skew-x-[12deg] transform items-center">
+                    VIEW ALL GALLERIES
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  </span>
+                </button>
+              </Link>
+            </div>
           </div>
-        </SectionContainer>
+        </section>
 
         {/* Upcoming Matches Section */}
         <SectionContainer>
