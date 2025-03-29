@@ -19,6 +19,8 @@ export type Fixture = {
   is_home_game: boolean
   result?: 'win' | 'loss' | 'draw'
   description?: string
+  home_logo_url?: string
+  away_logo_url?: string
 }
 
 export type Gallery = {

@@ -22,7 +22,7 @@ import { ParallaxHeroSection } from '@/components/features/parallax-hero-section
 import { MapSection } from '@/components/features/map-section'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
-import { Article, Gallery, GalleryImage } from '@/types/supabase'
+import { Article, Gallery, GalleryImage, Fixture } from '@/types/supabase'
 import { aboutUsData } from '@/data/about-us'
 
 // Define a type for our fallback news items
@@ -47,6 +47,8 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true)
   const [galleries, setGalleries] = useState<GalleryWithThumbnail[]>([])
   const [loadingGallery, setLoadingGallery] = useState(true)
+  const [fixtures, setFixtures] = useState<Fixture[]>([])
+  const [loadingFixtures, setLoadingFixtures] = useState(true)
 
   // Fallback news items if no articles are loaded
   const fallbackNewsItems: FallbackNewsItem[] = [
@@ -115,6 +117,27 @@ export default function HomePage() {
     fetchGalleries()
   }, [])
 
+  // Fetch upcoming fixtures from API
+  useEffect(() => {
+    const fetchFixtures = async () => {
+      setLoadingFixtures(true)
+      try {
+        const response = await fetch('/api/fixtures?type=upcoming&limit=3')
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`)
+        }
+        const data = await response.json()
+        setFixtures(data || [])
+      } catch (error) {
+        console.error('Error fetching fixtures:', error)
+      } finally {
+        setLoadingFixtures(false)
+      }
+    }
+
+    fetchFixtures()
+  }, [])
+
   useEffect(() => {
     const interval = setInterval(() => {
       const itemsLength = articles.length > 0 ? articles.length : fallbackNewsItems.length
@@ -146,14 +169,46 @@ export default function HomePage() {
   // Use real articles or fallback to sample items
   const newsItems: NewsItem[] = articles.length > 0 ? articles : fallbackNewsItems
 
+  // Helper function to check if a URL is an SVG
+  const isSvgUrl = (url: string | null): boolean => {
+    if (!url) return false
+    return url.toLowerCase().endsWith('.svg') || url.includes('/svg')
+  }
+
   // Helper function to get the image URL
-  const getImageUrl = (item: NewsItem): string => {
-    if ('id' in item) {
-      // This is an Article
-      return item.image_url || '/placeholder.svg?height=1080&width=1920&text=Rugby News'
+  const getImageUrl = (item: NewsItem | string | null): string => {
+    // Handle NewsItem type
+    if (item && typeof item === 'object' && ('id' in item || 'image' in item)) {
+      if ('id' in item) {
+        // This is an Article
+        return item.image_url || '/placeholder.svg?height=1080&width=1920&text=Rugby News'
+      }
+      // This is a FallbackNewsItem
+      return item.image
     }
-    // This is a FallbackNewsItem
-    return item.image
+
+    // Handle string URL
+    const url = item as string | null
+    if (!url) return '/placeholder.svg'
+
+    // If it's an SVG, use a placeholder instead
+    if (isSvgUrl(url)) {
+      return '/placeholder.svg?height=300&width=400&text=Gallery'
+    }
+
+    // If it's already a valid HTTP URL, return it
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url
+    }
+
+    // If it's a storage URL from Supabase, ensure it's properly formatted
+    if (url.includes('supabase')) {
+      // Replace any problematic characters
+      return url.replace(/\s/g, '%20')
+    }
+
+    // Default fallback
+    return url
   }
 
   // Helper function to get description or content
@@ -174,6 +229,23 @@ export default function HomePage() {
   // Helper function to check if item is a FallbackNewsItem
   const isFallbackNewsItem = (item: NewsItem): item is FallbackNewsItem => {
     return !('id' in item)
+  }
+
+  // Helper function to format date for fixtures
+  const formatMatchDate = (dateString: string): string => {
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }
+    return new Date(dateString).toLocaleDateString('en-GB', options)
+  }
+
+  // Extract time from date for fixtures
+  const extractTimeFromDate = (dateString: string): string => {
+    const date = new Date(dateString)
+    return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
   }
 
   return (
@@ -513,13 +585,22 @@ export default function HomePage() {
                       style={{ clipPath: 'polygon(0 0, 100% 0, 95% 100%, 0 95%)' }}
                     >
                       {gallery.thumbnailUrl ? (
-                        <NextImage
-                          src={gallery.thumbnailUrl}
-                          alt={gallery.title}
-                          width={400}
-                          height={300}
-                          className="h-64 w-full object-cover"
-                        />
+                        isSvgUrl(gallery.thumbnailUrl) ? (
+                          <div className="flex h-64 w-full items-center justify-center bg-teal-100">
+                            <div className="text-center">
+                              <ImageIcon className="mx-auto h-12 w-12 text-teal-800/50" />
+                              <p className="mt-2 text-sm text-teal-800/70">{gallery.title}</p>
+                            </div>
+                          </div>
+                        ) : (
+                          <NextImage
+                            src={getImageUrl(gallery.thumbnailUrl)}
+                            alt={gallery.title}
+                            width={400}
+                            height={300}
+                            className="h-64 w-full object-cover"
+                          />
+                        )
                       ) : (
                         <div className="flex h-64 w-full items-center justify-center bg-teal-100">
                           <div className="text-center">
@@ -561,32 +642,64 @@ export default function HomePage() {
             <SectionTitle title="UPCOMING" titleHighlight="MATCHES" />
           </div>
 
-          <GridContainer cols={3} gap="md">
-            {[1, 2, 3].map((match) => (
-              <Card key={match} className="relative overflow-hidden">
-                <CardContent className="p-6">
-                  <div className="mb-4 flex items-center gap-2 text-teal-800">
-                    <CalendarDays className="h-5 w-5" />
-                    <span className="text-sm font-medium">Saturday, March 30th, 2024</span>
-                  </div>
-                  <h3 className="mb-2 text-xl font-bold text-teal-900">Riverside vs Eagles</h3>
-                  <div className="mb-2 flex items-center gap-2 text-zinc-600">
-                    <Clock className="h-4 w-4" />
-                    <span className="text-sm">Kick-off: 15:00</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-zinc-600">
-                    <MapPin className="h-4 w-4" />
-                    <span className="text-sm">Home Ground</span>
-                  </div>
-                  <button className="w-full skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
-                    <span className="inline-flex skew-x-[12deg] transform items-center">
-                      MATCH DETAILS
-                    </span>
-                  </button>
-                </CardContent>
-              </Card>
-            ))}
-          </GridContainer>
+          {loadingFixtures ? (
+            <div className="flex justify-center py-12">
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-teal-800 border-t-transparent"></div>
+            </div>
+          ) : fixtures.length === 0 ? (
+            <div className="rounded-lg bg-teal-50 p-6 text-center">
+              <p className="text-lg text-teal-800">No upcoming matches scheduled at the moment.</p>
+            </div>
+          ) : (
+            <GridContainer cols={3} gap="md">
+              {fixtures.map((fixture) => (
+                <Card key={fixture.id} className="relative overflow-hidden">
+                  <CardContent className="p-6">
+                    <div className="mb-4 flex items-center gap-2 text-teal-800">
+                      <CalendarDays className="h-5 w-5" />
+                      <span className="text-sm font-medium">
+                        {formatMatchDate(fixture.match_date)}
+                      </span>
+                    </div>
+                    <h3 className="mb-2 text-xl font-bold text-teal-900">
+                      {fixture.is_home_game ? 'Our Team vs' : 'Away at'} {fixture.opponent}
+                    </h3>
+                    <div className="mb-2 flex items-center gap-2 text-zinc-600">
+                      <Clock className="h-4 w-4" />
+                      <span className="text-sm">
+                        Kick-off: {extractTimeFromDate(fixture.match_date)}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 text-zinc-600">
+                      <MapPin className="h-4 w-4" />
+                      <span className="text-sm">
+                        {fixture.location || (fixture.is_home_game ? 'Home Ground' : 'Away')}
+                      </span>
+                    </div>
+                    <Link href="/fixtures" className="mt-4 block">
+                      <button className="w-full skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
+                        <span className="inline-flex skew-x-[12deg] transform items-center justify-center">
+                          MATCH DETAILS
+                        </span>
+                      </button>
+                    </Link>
+                  </CardContent>
+                </Card>
+              ))}
+            </GridContainer>
+          )}
+          {fixtures.length > 0 && (
+            <div className="mt-8 flex justify-center">
+              <Link href="/fixtures" className="group">
+                <button className="skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
+                  <span className="inline-flex skew-x-[12deg] transform items-center">
+                    VIEW ALL FIXTURES
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  </span>
+                </button>
+              </Link>
+            </div>
+          )}
         </SectionContainer>
       </main>
     </MainLayout>
