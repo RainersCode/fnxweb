@@ -29,7 +29,7 @@ export default function AdminDashboard() {
           <Card className="p-6 transition-shadow hover:shadow-lg">
             <h2 className="mb-4 text-lg font-semibold">Galleries</h2>
             <p className="mb-4 text-gray-600">Upload and manage photo galleries</p>
-            <Link href="/admin/galleries" className="text-blue-600 hover:text-blue-800">
+            <Link href="/admin/gallery" className="text-blue-600 hover:text-blue-800">
               Manage Galleries →
             </Link>
           </Card>
