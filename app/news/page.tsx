@@ -42,6 +42,7 @@ export default function NewsPage() {
         setArticles(data || [])
       } catch (error) {
         console.error('Error fetching articles:', error)
+        setArticles([])
       } finally {
         setLoading(false)
       }
@@ -58,6 +59,13 @@ export default function NewsPage() {
       day: 'numeric',
     }
     return new Date(dateString).toLocaleDateString('en-GB', options)
+  }
+
+  // Strip HTML tags for plain text preview
+  const stripHtml = (html: string): string => {
+    const tmp = document.createElement('DIV')
+    tmp.innerHTML = html
+    return tmp.textContent || tmp.innerText || ''
   }
 
   return (
@@ -145,9 +153,12 @@ export default function NewsPage() {
                         </h3>
 
                         <p className="mt-2 flex-1 text-sm text-zinc-600">
-                          {article.content.length > 120
-                            ? `${article.content.substring(0, 120)}...`
-                            : article.content}
+                          {(() => {
+                            const plainText = stripHtml(article.content)
+                            return plainText.length > 120
+                              ? `${plainText.substring(0, 120)}...`
+                              : plainText
+                          })()}
                         </p>
 
                         <div className="mt-4">

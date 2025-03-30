@@ -169,12 +169,8 @@ export default function NewsDetailPage() {
               </Link>
 
               {/* Article content */}
-              <div className="prose prose-teal mt-8 max-w-none">
-                {article.content.split('\n\n').map((paragraph, index) => (
-                  <p key={index} className="mb-4 text-zinc-700">
-                    {paragraph}
-                  </p>
-                ))}
+              <div className="prose prose-teal mt-8 max-w-none prose-headings:font-bold prose-headings:text-teal-900 prose-p:text-zinc-700 prose-a:text-teal-700 prose-a:no-underline hover:prose-a:underline prose-img:rounded-lg">
+                <div dangerouslySetInnerHTML={{ __html: article.content }} />
               </div>
 
               {/* Share buttons */}

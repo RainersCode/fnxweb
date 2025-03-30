@@ -6,6 +6,7 @@ import { Trash2, Edit, Plus, Search, Loader2, CalendarDays, X } from 'lucide-rea
 import { SectionContainer } from '@/components/shared/section-container'
 import { SectionTitle } from '@/components/shared/section-title'
 import { ImageUploader } from '@/components/shared/image-uploader'
+import { RichTextEditor } from '@/components/shared/rich-text-editor'
 import { Article } from '@/types/supabase'
 import { Button } from '@/components/ui/button'
 import {
@@ -494,13 +495,9 @@ export default function AdminArticlesPage() {
             </div>
             <div className="grid gap-2">
               <Label htmlFor="content">Content</Label>
-              <Textarea
-                id="content"
-                name="content"
-                placeholder="Write your article content here..."
-                value={formData.content}
-                onChange={handleInputChange}
-                className="min-h-[200px]"
+              <RichTextEditor
+                content={formData.content}
+                onChange={(html) => setFormData({ ...formData, content: html })}
               />
             </div>
             <div className="flex items-center space-x-2">
@@ -594,13 +591,9 @@ export default function AdminArticlesPage() {
             </div>
             <div className="grid gap-2">
               <Label htmlFor="edit-content">Content</Label>
-              <Textarea
-                id="edit-content"
-                name="content"
-                placeholder="Write your article content here..."
-                value={formData.content}
-                onChange={handleInputChange}
-                className="min-h-[200px]"
+              <RichTextEditor
+                content={formData.content}
+                onChange={(html) => setFormData({ ...formData, content: html })}
               />
             </div>
             <div className="flex items-center space-x-2">

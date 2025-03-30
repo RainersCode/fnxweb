@@ -215,10 +215,18 @@ export default function HomePage() {
   const getDescription = (item: NewsItem): string => {
     if ('id' in item) {
       // This is an Article
-      return item.content.substring(0, 150) + '...'
+      const plainText = stripHtml(item.content)
+      return plainText.substring(0, 150) + '...'
     }
     // This is a FallbackNewsItem
     return item.description
+  }
+
+  // Helper function to strip HTML tags
+  const stripHtml = (html: string): string => {
+    const tmp = document.createElement('DIV')
+    tmp.innerHTML = html
+    return tmp.textContent || tmp.innerText || ''
   }
 
   // Helper function to check if item is an Article
@@ -425,7 +433,7 @@ export default function HomePage() {
                 
                 <p className="mt-4 max-w-xl text-base font-medium text-zinc-700 sm:text-lg skew-x-[12deg] transform">
                   {articles.length > 0 && currentSlide < articles.length
-                    ? articles[currentSlide].content.substring(0, 150) + '...'
+                    ? stripHtml(articles[currentSlide].content).substring(0, 150) + '...'
                     : fallbackNewsItems[currentSlide % fallbackNewsItems.length].description}
                 </p>
               </div>
@@ -548,9 +556,12 @@ export default function HomePage() {
                           </h3>
 
                           <p className="mt-2 flex-1 text-sm text-zinc-600">
-                            {article.content.length > 120
-                              ? `${article.content.substring(0, 120)}...`
-                              : article.content}
+                            {(() => {
+                              const plainText = stripHtml(article.content)
+                              return plainText.length > 120
+                                ? `${plainText.substring(0, 120)}...`
+                                : plainText
+                            })()}
                           </p>
 
                           <div className="mt-4">
