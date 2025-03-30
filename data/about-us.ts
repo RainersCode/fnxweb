@@ -1,16 +1,16 @@
 export const aboutUsData = {
-  title: 'About Riverside Rugby Club',
+  title: 'About RK \"Fēnikss\"',
   introduction:
-    'Riverside Rugby Club is a community-based amateur rugby team established in 1985 with a proud tradition of bringing together players of all ages and abilities. Located in the heart of Riverside Town, our club has grown from humble beginnings to become an integral part of the local sports community.',
+    'RK \"Fēnikss\" is a community-based amateur rugby team established in 1985 with a proud tradition of bringing together players of all ages and abilities. Located in the heart of Riverside Town, our club has grown from humble beginnings to become an integral part of the local sports community.',
   history: {
     title: 'Our History',
     content:
-      "Founded by a group of rugby enthusiasts in 1985, Riverside Rugby Club started with just 15 players and a single team. Over the decades, we've grown into a thriving club with multiple teams across different age groups. From our first local championship win in 1992 to hosting regional tournaments, our club has a rich history of fostering rugby talent and community spirit. The club's home ground at Riverside Park has been our base since 1990, where we've built our facilities and created countless memories.",
+      "Founded by a group of rugby enthusiasts in 1985, RK \"Fēnikss\" started with just 15 players and a single team. Over the decades, we've grown into a thriving club with multiple teams across different age groups. From our first local championship win in 1992 to hosting regional tournaments, our club has a rich history of fostering rugby talent and community spirit. The club's home ground at Riverside Park has been our base since 1990, where we've built our facilities and created countless memories.",
   },
   mission: {
     title: 'Our Mission',
     content:
-      'At Riverside Rugby Club, our mission is to promote the sport of rugby at grassroots level, fostering physical fitness, teamwork, and sportsmanship among players of all ages and abilities. We aim to provide a welcoming environment where everyone can enjoy the game, develop their skills, and build lasting friendships both on and off the field.',
+      'At RK \"Fēnikss\", our mission is to promote the sport of rugby at grassroots level, fostering physical fitness, teamwork, and sportsmanship among players of all ages and abilities. We aim to provide a welcoming environment where everyone can enjoy the game, develop their skills, and build lasting friendships both on and off the field.',
   },
   values: {
     title: 'Our Values',
@@ -50,12 +50,12 @@ export const aboutUsData = {
   facilities: {
     title: 'Our Facilities',
     content:
-      'Riverside Rugby Club boasts excellent facilities including two full-size pitches, a modern clubhouse with changing rooms, a gym, and a social area for post-match gatherings. Our grounds are maintained to a high standard to ensure optimal playing conditions throughout the season.',
+      'RK \"Fēnikss\" boasts excellent facilities including two full-size pitches, a modern clubhouse with changing rooms, a gym, and a social area for post-match gatherings. Our grounds are maintained to a high standard to ensure optimal playing conditions throughout the season.',
   },
   cta: {
     title: 'Join Our Club',
     content:
-      "Interested in joining Riverside Rugby Club? Whether you're an experienced player or new to the sport, we welcome players of all abilities. Contact us to find out more about training sessions and membership options.",
+      "Interested in joining RK \"Fēnikss\"? Whether you're an experienced player or new to the sport, we welcome players of all abilities. Contact us to find out more about training sessions and membership options.",
     buttonText: 'Contact Us',
   },
   imageUrl: '/AboutUs/team.jpg',

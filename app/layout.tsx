@@ -10,9 +10,14 @@ import { Inter } from 'next/font/google'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
+  title: 'RK "Fēnikss" - Rugby Club',
+  description: 'Official website of RK "Fēnikss" rugby club',
   generator: 'v0.dev',
+  icons: {
+    icon: '/Logo/fēniks_logo-removebg-preview.png',
+    shortcut: '/Logo/fēniks_logo-removebg-preview.png',
+    apple: '/Logo/fēniks_logo-removebg-preview.png',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -3,7 +3,8 @@
 import { useState, type ReactNode, useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Shield, Menu, X, ArrowRight } from 'lucide-react'
+import { Menu, X, ArrowRight } from 'lucide-react'
+import Image from 'next/image'
 import { SignInButton, SignUpButton, UserButton, useAuth, useUser } from '@clerk/nextjs'
 import { isAdmin } from '@/lib/utils'
 
@@ -57,10 +58,18 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="flex h-16 items-center justify-between">
             <div className="flex skew-x-[-12deg] transform items-center gap-2 bg-white px-3 py-1 shadow-md">
-              <Shield className="h-8 w-8 skew-x-[12deg] transform text-teal-800" />
+              <div className="h-8 w-8 skew-x-[12deg] transform overflow-hidden">
+                <Image 
+                  src="/Logo/fēniks_logo-removebg-preview.png" 
+                  alt="RK Fēnikss Logo" 
+                  width={32} 
+                  height={32} 
+                  className="object-contain"
+                />
+              </div>
               <Link href="/">
                 <span className="skew-x-[12deg] transform text-xl font-bold tracking-tighter text-teal-800">
-                  RIVERSIDE RUGBY
+                  RK &quot;FĒNIKSS&quot;
                 </span>
               </Link>
             </div>
@@ -125,9 +134,17 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <div className="flex skew-x-[-12deg] transform items-center gap-2 bg-white px-3 py-1">
-                <Shield className="h-8 w-8 skew-x-[12deg] transform text-teal-800" />
+                <div className="h-8 w-8 skew-x-[12deg] transform overflow-hidden">
+                  <Image 
+                    src="/Logo/fēniks_logo-removebg-preview.png" 
+                    alt="RK Fēnikss Logo" 
+                    width={32} 
+                    height={32} 
+                    className="object-contain"
+                  />
+                </div>
                 <span className="skew-x-[12deg] transform text-xl font-bold tracking-tighter text-teal-800">
-                  RIVERSIDE RUGBY
+                  RK &quot;FĒNIKSS&quot;
                 </span>
               </div>
               <button
@@ -212,9 +229,17 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
           <div className="grid gap-8 md:grid-cols-3">
             <div>
               <div className="flex items-center gap-2">
-                <Shield className="h-8 w-8 text-teal-800" />
+                <div className="h-8 w-8 overflow-hidden">
+                  <Image 
+                    src="/Logo/fēniks_logo-removebg-preview.png" 
+                    alt="RK Fēnikss Logo" 
+                    width={32} 
+                    height={32} 
+                    className="object-contain"
+                  />
+                </div>
                 <span className="text-xl font-bold uppercase tracking-tighter text-teal-800">
-                  RIVERSIDE RUGBY
+                  RK &quot;FĒNIKSS&quot;
                 </span>
               </div>
               <p className="mt-4 text-sm font-medium text-zinc-600">
@@ -286,7 +311,7 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
             <div>
               <h3 className="mb-4 font-bold uppercase tracking-wide text-teal-900">Contact Us</h3>
               <address className="space-y-2 text-sm font-medium not-italic text-zinc-600">
-                <p>Riverside Rugby Club</p>
+                <p>RK &quot;Fēnikss&quot;</p>
                 <p>Riverside Park, Main Street</p>
                 <p>Riverside Town, RT1 2AB</p>
                 <p className="mt-2">
@@ -324,7 +349,7 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
           </div>
           
           <div className="mt-6 border-t border-zinc-200 pt-6 text-center text-sm font-medium tracking-wide text-zinc-500">
-            <p>© 2025 RIVERSIDE RUGBY CLUB. ALL RIGHTS RESERVED.</p>
+            <p>© 2025 RK &quot;FĒNIKSS&quot;. ALL RIGHTS RESERVED.</p>
           </div>
         </div>
       </footer>

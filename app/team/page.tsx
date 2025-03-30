@@ -11,11 +11,11 @@ import CoachesList from './components/coaches-list'
 import Loading from './loading'
 import { ParallaxHeroSection } from '@/components/features/parallax-hero-section'
 
-// Disable caching for this page to ensure fresh data on each visit
-export const revalidate = 0 // Revalidate this page on every request
+// Note: This was previously set to revalidate on every request, but since this is a client component,
+// we rely on client-side data fetching in the child components instead
 
-// This is a server component to fetch initial data
-export default async function TeamPage() {
+// This is a client component
+export default function TeamPage() {
   return (
     <MainLayout currentPage="TEAM">
       <main className="flex-1">
@@ -23,7 +23,7 @@ export default async function TeamPage() {
         <ParallaxHeroSection
           title="OUR"
           titleHighlight="TEAM"
-          subtitle="Meet the dedicated players and coaching staff who make Riverside Rugby Club what it is today."
+          subtitle="Meet the dedicated players and coaching staff who make RK &quot;Fēnikss&quot; what it is today."
           backgroundImage="/AboutUs/parallax.jpg"
         />
 

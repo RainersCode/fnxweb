@@ -43,7 +43,7 @@ export default function ContactPage() {
 
                 <div className="mt-12 space-y-10">
                   <ContactInfoItem icon={MapPin} title="CLUB ADDRESS">
-                    Riverside Rugby Club
+                    RK &quot;Fēnikss&quot;
                     <br />
                     Riverside Park, Main Street
                     <br />
@@ -64,13 +64,13 @@ export default function ContactPage() {
 
                   <ContactInfoItem icon={Mail} title="EMAIL">
                     General Inquiries:{' '}
-                    <a href="mailto:info@riversiderugby.com" className="hover:text-teal-700">
-                      info@riversiderugby.com
+                    <a href="mailto:info@rkfenikss.com" className="hover:text-teal-700">
+                      info@rkfenikss.com
                     </a>
                     <br />
                     Membership:{' '}
-                    <a href="mailto:membership@riversiderugby.com" className="hover:text-teal-700">
-                      membership@riversiderugby.com
+                    <a href="mailto:membership@rkfenikss.com" className="hover:text-teal-700">
+                      membership@rkfenikss.com
                     </a>
                   </ContactInfoItem>
 
@@ -100,7 +100,7 @@ export default function ContactPage() {
 
         <MapSection
           address={{
-            name: 'Riverside Rugby Club',
+            name: 'RK "Fēnikss"',
             street: 'Riverside Park, Main Street',
             city: 'Riverside Town',
             postcode: 'RT1 2AB',
