@@ -657,9 +657,6 @@ export default function HomePage() {
           <div className="container mx-auto px-4 sm:px-6">
             <div className="mx-auto mb-8 max-w-3xl text-center">
               <SectionTitle title="FOTO" titleHighlight="GALERIJA" />
-              <p className="mt-4 text-lg text-zinc-600">
-                Izpētiet mūsu kolekcijas, kas iemūžina mūsu regbija kluba garu un azartu.
-              </p>
             </div>
 
             <div className="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">

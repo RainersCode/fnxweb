@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     siteName: 'RK Fēnikss',
     images: [
       {
-        url: 'https://www.fnx-rugby.lv/AboutUs/team.jpg',
+        url: 'https://www.fnx-rugby.lv/og-image.jpg',
         width: 1200,
         height: 630,
         alt: 'RK Fēnikss - Valmieras Regbija Klubs',
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'RK "Fēnikss" - Valmieras Regbija Klubs',
     description: 'RK "Fēnikss" oficiālā mājaslapa - Valmieras vadošais regbija klubs, dibināts 2005. gadā.',
-    images: ['https://www.fnx-rugby.lv/AboutUs/team.jpg'],
+    images: ['https://www.fnx-rugby.lv/og-image.jpg'],
     creator: '@RKFeniks',
   },
   icons: {

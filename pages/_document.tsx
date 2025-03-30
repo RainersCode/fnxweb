@@ -5,7 +5,7 @@ export default function Document() {
     <Html lang="lv">
       <Head>
         {/* Facebook OpenGraph tags to ensure image display */}
-        <meta property="og:image" content="https://www.fnx-rugby.lv/AboutUs/team.jpg" />
+        <meta property="og:image" content="https://www.fnx-rugby.lv/og-image.jpg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="RK Fēnikss - Valmieras Regbija Klubs" />
