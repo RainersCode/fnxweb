@@ -68,18 +68,27 @@ export default function FixturesPage() {
 
   // Format date for display
   const formatDate = (dateString: string): string => {
+    // Create date object from the ISO string (it will be converted to local time)
+    const date = new Date(dateString)
+    
     const options: Intl.DateTimeFormatOptions = {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
     }
-    return new Date(dateString).toLocaleDateString('en-GB', options)
+    return date.toLocaleDateString('en-GB', options)
   }
 
   // Extract time from date
   const extractTime = (dateString: string): string => {
+    // Create date object from the ISO string (it will be converted to local time)
     const date = new Date(dateString)
-    return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+    
+    return date.toLocaleTimeString('en-GB', { 
+      hour: '2-digit', 
+      minute: '2-digit',
+      hour12: true 
+    })
   }
 
   // Determine club name (using "Our Team" as placeholder)

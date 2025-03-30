@@ -53,6 +53,7 @@ export default function AdminFixturesPage() {
   const emptyFormState = {
     opponent: '',
     match_date: new Date().toISOString().slice(0, 10),
+    match_time: '15:00', // Default time
     location: '',
     score: '',
     is_home_game: true,
@@ -249,9 +250,19 @@ export default function AdminFixturesPage() {
     setFormLoading(true)
 
     try {
+      // Combine date and time and create a Date object
+      const [year, month, day] = formData.match_date.split('-').map(Number)
+      const [hours, minutes] = formData.match_time.split(':').map(Number)
+      
+      // Create date in local timezone
+      const dateObj = new Date(year, month - 1, day, hours, minutes)
+      
+      // Convert to ISO string for database
+      const combinedDateTime = dateObj.toISOString()
+      
       const newFixture = {
         opponent: formData.opponent,
-        match_date: formData.match_date,
+        match_date: combinedDateTime,
         location: formData.location || null,
         score: formData.score || null,
         is_home_game: formData.is_home_game,
@@ -288,9 +299,22 @@ export default function AdminFixturesPage() {
   // Handle edit click
   const handleEditClick = (fixture: Fixture) => {
     setCurrentFixtureId(fixture.id)
+    
+    // Parse the date in the browser's local timezone
+    const fixtureDate = new Date(fixture.match_date)
+    
+    // Format date as YYYY-MM-DD for the date input
+    const dateString = fixtureDate.toISOString().split('T')[0]
+    
+    // Format time as HH:MM for the time input, ensuring we use local time
+    const hours = fixtureDate.getHours().toString().padStart(2, '0')
+    const minutes = fixtureDate.getMinutes().toString().padStart(2, '0')
+    const timeString = `${hours}:${minutes}`
+    
     setFormData({
       opponent: fixture.opponent,
-      match_date: new Date(fixture.match_date).toISOString().slice(0, 10),
+      match_date: dateString,
+      match_time: timeString,
       location: fixture.location || '',
       score: fixture.score || '',
       is_home_game: fixture.is_home_game,
@@ -309,10 +333,20 @@ export default function AdminFixturesPage() {
     setFormLoading(true)
 
     try {
+      // Combine date and time and create a Date object
+      const [year, month, day] = formData.match_date.split('-').map(Number)
+      const [hours, minutes] = formData.match_time.split(':').map(Number)
+      
+      // Create date in local timezone
+      const dateObj = new Date(year, month - 1, day, hours, minutes)
+      
+      // Convert to ISO string for database
+      const combinedDateTime = dateObj.toISOString()
+      
       const updatedFixture = {
         id: currentFixtureId,
         opponent: formData.opponent,
-        match_date: formData.match_date,
+        match_date: combinedDateTime,
         location: formData.location || null,
         score: formData.score || null,
         is_home_game: formData.is_home_game,
@@ -416,12 +450,28 @@ export default function AdminFixturesPage() {
 
   // Format date for display
   const formatDate = (dateString: string): string => {
-    const options: Intl.DateTimeFormatOptions = {
+    // Create date object from the ISO string (it will be converted to local time)
+    const date = new Date(dateString)
+    
+    // Format date
+    const dateOptions: Intl.DateTimeFormatOptions = {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
     }
-    return new Date(dateString).toLocaleDateString('en-GB', options)
+    
+    // Format time
+    const timeOptions: Intl.DateTimeFormatOptions = {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    }
+    
+    const formattedDate = date.toLocaleDateString('en-GB', dateOptions)
+    const formattedTime = date.toLocaleTimeString('en-GB', timeOptions)
+    
+    // Return combined date and time
+    return `${formattedDate} at ${formattedTime}`
   }
 
   return (
@@ -585,6 +635,16 @@ export default function AdminFixturesPage() {
               />
             </div>
             <div className="grid gap-2">
+              <Label htmlFor="match_time">Match Time</Label>
+              <Input
+                id="match_time"
+                name="match_time"
+                type="time"
+                value={formData.match_time}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="grid gap-2">
               <Label htmlFor="location">Location</Label>
               <Input
                 id="location"
@@ -706,6 +766,16 @@ export default function AdminFixturesPage() {
                 name="match_date"
                 type="date"
                 value={formData.match_date}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="edit-match_time">Match Time</Label>
+              <Input
+                id="edit-match_time"
+                name="match_time"
+                type="time"
+                value={formData.match_time}
                 onChange={handleInputChange}
               />
             </div>
