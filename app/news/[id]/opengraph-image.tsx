@@ -119,7 +119,7 @@ export default async function Image({ params }: { params: { id: string } }) {
                 fontWeight: 600,
               }}
             >
-              RK "FĒNIKSS"
+              RK &ldquo;FĒNIKSS&rdquo;
             </div>
           </div>
         

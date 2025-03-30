@@ -77,7 +77,7 @@ export default async function Image() {
             borderRadius: 10,
           }}
         >
-          RK "FĒNIKSS"
+          RK &ldquo;FĒNIKSS&rdquo;
         </div>
         
         <div
