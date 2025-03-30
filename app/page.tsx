@@ -833,6 +833,52 @@ export default function HomePage() {
             </div>
           )}
         </SectionContainer>
+
+        {/* Sponsors Section */}
+        <SectionContainer withBackground={true} className="relative overflow-hidden">
+          {/* Grey Logo Background */}
+          <div className="absolute inset-0 opacity-5 z-0 pointer-events-none">
+            <NextImage
+              src="/Grey Logo.png"
+              alt="Grey Logo Background"
+              fill
+              className="object-contain object-center"
+            />
+          </div>
+          
+          <div className="mb-12 text-center relative z-10">
+            <SectionTitle title="MŪSU" titleHighlight="ATBALSTĪTĀJI" />
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-8 items-center relative z-10">
+            {[1, 2, 3, 4, 5, 6, 7].map((num) => (
+              <div 
+                key={num} 
+                className="relative w-full max-w-[200px] h-[100px] flex items-center justify-center transform transition-transform duration-300 hover:scale-110"
+              >
+                <NextImage
+                  src={`/SponsorsImages/Sponsor${num === 1 ? '' : 'u'}_logo_${num}-removebg-preview.png`}
+                  alt={`Sponsor ${num}`}
+                  width={180}
+                  height={80}
+                  className="object-contain max-h-full"
+                />
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10 text-center relative z-10">
+           
+            <Link href="/contact" className="group">
+              <button className="skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
+                <span className="inline-flex skew-x-[12deg] transform items-center">
+                  KĻŪT PAR ATBALSTĪTĀJU
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </span>
+              </button>
+            </Link>
+          </div>
+        </SectionContainer>
       </main>
     </MainLayout>
   )

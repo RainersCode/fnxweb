@@ -18,7 +18,7 @@ export function SectionContainer({
       className={cn(
         'py-16 md:py-24',
         {
-          'bg-zinc-50': withBackground,
+          'bg-gray-100': withBackground,
         },
         className
       )}

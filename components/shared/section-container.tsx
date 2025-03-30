@@ -18,7 +18,7 @@ export function SectionContainer({
       className={cn(
         "relative w-full",
         withPadding && "py-16",
-        withBackground && "bg-white",
+        withBackground && "bg-gray-300",
         className
       )}
     >
