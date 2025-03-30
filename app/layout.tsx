@@ -44,7 +44,6 @@ export const metadata: Metadata = {
     type: 'website',
   },
   other: {
-    'fb:app_id': '1234567890',
     'og:image:width': '1200',
     'og:image:height': '630',
     'og:image:alt': 'RK Fēnikss - Valmieras Regbija Klubs'
