@@ -857,7 +857,10 @@ export default function HomePage() {
                 className="relative w-full max-w-[200px] h-[100px] flex items-center justify-center transform transition-transform duration-300 hover:scale-110"
               >
                 <NextImage
-                  src={`/SponsorsImages/Sponsor${num === 1 ? '' : 'u'}_logo_${num}-removebg-preview.png`}
+                  src={num === 7 
+                    ? `/SponsorsImages/sponsoru_logo_7-removebg-preview.png`
+                    : `/SponsorsImages/Sponsor${num === 1 ? '' : 'u'}_logo_${num}-removebg-preview.png`
+                  }
                   alt={`Sponsor ${num}`}
                   width={180}
                   height={80}
