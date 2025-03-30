@@ -21,7 +21,7 @@ export function SectionTitle({
         'text-right': align === 'right',
       })}
     >
-      <h2 className="text-4xl font-bold tracking-tight text-zinc-900">
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-zinc-900">
         {title} {titleHighlight && <span className="text-teal-800">{titleHighlight}</span>}
       </h2>
       {subtitle && <p className="mt-4 text-lg text-zinc-600">{subtitle}</p>}

@@ -15,8 +15,8 @@ interface MapSectionProps {
 }
 
 export function MapSection({
-  title = 'FIND',
-  titleHighlight = 'US',
+  title = 'ATRODI',
+  titleHighlight = 'MŪS',
   address,
   mapImage = '/placeholder.svg?height=800&width=1600&text=Map',
 }: MapSectionProps) {
@@ -39,7 +39,7 @@ export function MapSection({
               </p>
               <button className="skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
                 <span className="inline-flex skew-x-[12deg] transform items-center">
-                  GET DIRECTIONS
+                  SAŅEMT NORĀDES
                 </span>
               </button>
             </div>

@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   const limit = searchParams.get('limit') ? parseInt(searchParams.get('limit')!) : undefined
 
   try {
-    let query = supabase.from('fixtures').select('*')
+    let query = supabase.from('fixtures').select('id, opponent, match_date, location, score, is_home_game, result, description, home_logo_url, away_logo_url')
 
     // If type is specified, filter accordingly
     if (type === 'upcoming') {

@@ -204,10 +204,12 @@ export default function FixturesPage() {
                           </div>
                         </div>
                         <div className="p-6">
-                          <div className="flex items-center justify-between">
-                            <div className="flex flex-1 flex-col items-center">
-                              <div className="relative h-24 w-24 rotate-45 transform overflow-hidden bg-zinc-100">
-                                <div className="absolute inset-0 flex -rotate-45 transform items-center justify-center">
+                          {/* Modern team vs team layout */}
+                          <div className="flex items-center justify-between mb-6">
+                            {/* Home team */}
+                            <div className="flex-1">
+                              <div className="flex flex-col items-center">
+                                <div className="h-20 w-20 relative overflow-hidden rounded-md bg-white shadow-md mb-3 border border-gray-100">
                                   {fixture.home_logo_url ? (
                                     shouldUseImageComponent(fixture.home_logo_url) ? (
                                       <Image
@@ -216,39 +218,46 @@ export default function FixturesPage() {
                                           '/placeholder.svg?height=128&width=128&text=Team'
                                         }
                                         alt={fixture.is_home_game ? clubName : fixture.opponent}
-                                        width={128}
-                                        height={128}
-                                        className="h-20 w-20 object-contain"
+                                        fill
+                                        className="object-contain p-1"
                                       />
                                     ) : (
-                                      <div className="flex h-20 w-20 items-center justify-center bg-zinc-200 text-zinc-500">
+                                      <div className="flex h-full w-full items-center justify-center bg-teal-50 text-teal-800 font-bold">
                                         {fixture.is_home_game ? clubName[0] : fixture.opponent[0]}
                                       </div>
                                     )
                                   ) : (
-                                    <span className="text-center text-base font-medium text-zinc-500">
-                                      {fixture.is_home_game ? clubName : fixture.opponent}
-                                    </span>
+                                    <div className="flex h-full w-full items-center justify-center bg-teal-50 text-teal-800 font-bold">
+                                      {fixture.is_home_game ? clubName[0] : fixture.opponent[0]}
+                                    </div>
                                   )}
                                 </div>
-                              </div>
-                              <h4 className="mt-4 text-center text-base font-medium text-zinc-800">
-                                {fixture.is_home_game ? clubName : fixture.opponent}
-                              </h4>
-                            </div>
-
-                            <div className="flex flex-col items-center px-4">
-                              <div className="flex items-baseline space-x-1">
-                                <span className="text-2xl font-bold text-teal-900">VS</span>
-                              </div>
-                              <div className="mt-1 text-xs text-zinc-500">
-                                {fixture.is_home_game ? 'Home' : 'Away'}
+                                <h4 className="text-center font-bold text-teal-900">
+                                  {fixture.is_home_game ? clubName : fixture.opponent}
+                                </h4>
                               </div>
                             </div>
 
-                            <div className="flex flex-1 flex-col items-center">
-                              <div className="relative h-24 w-24 rotate-45 transform overflow-hidden bg-zinc-100">
-                                <div className="absolute inset-0 flex -rotate-45 transform items-center justify-center">
+                            {/* Center score or VS badge */}
+                            <div className="flex-shrink-0 px-4">
+                              {fixture.score ? (
+                                <div className="bg-teal-800 text-white font-bold text-xl py-2 px-6 rounded-md shadow-md">
+                                  {fixture.score}
+                                </div>
+                              ) : (
+                                <div className="bg-teal-100 text-teal-800 font-bold text-lg h-14 w-14 flex items-center justify-center rounded-md shadow-md border border-teal-200">
+                                  VS
+                                </div>
+                              )}
+                              <div className="mt-2 text-xs text-center text-zinc-500">
+                                {fixture.is_home_game ? 'Mājas' : 'Izbraukumā'}
+                              </div>
+                            </div>
+
+                            {/* Away team */}
+                            <div className="flex-1">
+                              <div className="flex flex-col items-center">
+                                <div className="h-20 w-20 relative overflow-hidden rounded-md bg-white shadow-md mb-3 border border-gray-100">
                                   {fixture.away_logo_url ? (
                                     shouldUseImageComponent(fixture.away_logo_url) ? (
                                       <Image
@@ -257,25 +266,24 @@ export default function FixturesPage() {
                                           '/placeholder.svg?height=128&width=128&text=Team'
                                         }
                                         alt={fixture.is_home_game ? fixture.opponent : clubName}
-                                        width={128}
-                                        height={128}
-                                        className="h-20 w-20 object-contain"
+                                        fill
+                                        className="object-contain p-1"
                                       />
                                     ) : (
-                                      <div className="flex h-20 w-20 items-center justify-center bg-zinc-200 text-zinc-500">
+                                      <div className="flex h-full w-full items-center justify-center bg-teal-50 text-teal-800 font-bold">
                                         {fixture.is_home_game ? fixture.opponent[0] : clubName[0]}
                                       </div>
                                     )
                                   ) : (
-                                    <span className="text-center text-base font-medium text-zinc-500">
-                                      {fixture.is_home_game ? fixture.opponent : clubName}
-                                    </span>
+                                    <div className="flex h-full w-full items-center justify-center bg-teal-50 text-teal-800 font-bold">
+                                      {fixture.is_home_game ? fixture.opponent[0] : clubName[0]}
+                                    </div>
                                   )}
                                 </div>
+                                <h4 className="text-center font-bold text-teal-900">
+                                  {fixture.is_home_game ? fixture.opponent : clubName}
+                                </h4>
                               </div>
-                              <h4 className="mt-4 text-center text-base font-medium text-zinc-800">
-                                {fixture.is_home_game ? fixture.opponent : clubName}
-                              </h4>
                             </div>
                           </div>
 
@@ -366,10 +374,12 @@ export default function FixturesPage() {
                           )}
                         </div>
                         <div className="p-6">
-                          <div className="flex items-center justify-between">
-                            <div className="flex flex-1 flex-col items-center">
-                              <div className="relative h-24 w-24 rotate-45 transform overflow-hidden bg-zinc-100">
-                                <div className="absolute inset-0 flex -rotate-45 transform items-center justify-center">
+                          {/* Modern team vs team layout */}
+                          <div className="flex items-center justify-between mb-6">
+                            {/* Home team */}
+                            <div className="flex-1">
+                              <div className="flex flex-col items-center">
+                                <div className="h-20 w-20 relative overflow-hidden rounded-md bg-white shadow-md mb-3 border border-gray-100">
                                   {fixture.home_logo_url ? (
                                     shouldUseImageComponent(fixture.home_logo_url) ? (
                                       <Image
@@ -378,47 +388,46 @@ export default function FixturesPage() {
                                           '/placeholder.svg?height=128&width=128&text=Team'
                                         }
                                         alt={fixture.is_home_game ? clubName : fixture.opponent}
-                                        width={128}
-                                        height={128}
-                                        className="h-20 w-20 object-contain"
+                                        fill
+                                        className="object-contain p-1"
                                       />
                                     ) : (
-                                      <div className="flex h-20 w-20 items-center justify-center bg-zinc-200 text-zinc-500">
+                                      <div className="flex h-full w-full items-center justify-center bg-teal-50 text-teal-800 font-bold">
                                         {fixture.is_home_game ? clubName[0] : fixture.opponent[0]}
                                       </div>
                                     )
                                   ) : (
-                                    <span className="text-center text-base font-medium text-zinc-500">
-                                      {fixture.is_home_game ? clubName : fixture.opponent}
-                                    </span>
+                                    <div className="flex h-full w-full items-center justify-center bg-teal-50 text-teal-800 font-bold">
+                                      {fixture.is_home_game ? clubName[0] : fixture.opponent[0]}
+                                    </div>
                                   )}
                                 </div>
+                                <h4 className="text-center font-bold text-teal-900">
+                                  {fixture.is_home_game ? clubName : fixture.opponent}
+                                </h4>
                               </div>
-                              <h4 className="mt-4 text-center text-base font-medium text-zinc-800">
-                                {fixture.is_home_game ? clubName : fixture.opponent}
-                              </h4>
                             </div>
 
-                            <div className="flex flex-col items-center px-4">
+                            {/* Center score or VS badge */}
+                            <div className="flex-shrink-0 px-4">
                               {fixture.score ? (
-                                <div className="flex items-baseline space-x-1">
-                                  <span className="text-2xl font-bold text-teal-900">
-                                    {fixture.score}
-                                  </span>
+                                <div className="bg-teal-800 text-white font-bold text-xl py-2 px-6 rounded-md shadow-md">
+                                  {fixture.score}
                                 </div>
                               ) : (
-                                <div className="flex items-baseline space-x-1">
-                                  <span className="text-2xl font-bold text-teal-900">PRET</span>
+                                <div className="bg-teal-100 text-teal-800 font-bold text-lg h-14 w-14 flex items-center justify-center rounded-md shadow-md border border-teal-200">
+                                  VS
                                 </div>
                               )}
-                              <div className="mt-1 text-xs text-zinc-500">
-                                {fixture.is_home_game ? 'Mājās' : 'Izbraukumā'}
+                              <div className="mt-2 text-xs text-center text-zinc-500">
+                                {fixture.is_home_game ? 'Mājas' : 'Izbraukumā'}
                               </div>
                             </div>
 
-                            <div className="flex flex-1 flex-col items-center">
-                              <div className="relative h-24 w-24 rotate-45 transform overflow-hidden bg-zinc-100">
-                                <div className="absolute inset-0 flex -rotate-45 transform items-center justify-center">
+                            {/* Away team */}
+                            <div className="flex-1">
+                              <div className="flex flex-col items-center">
+                                <div className="h-20 w-20 relative overflow-hidden rounded-md bg-white shadow-md mb-3 border border-gray-100">
                                   {fixture.away_logo_url ? (
                                     shouldUseImageComponent(fixture.away_logo_url) ? (
                                       <Image
@@ -427,25 +436,24 @@ export default function FixturesPage() {
                                           '/placeholder.svg?height=128&width=128&text=Team'
                                         }
                                         alt={fixture.is_home_game ? fixture.opponent : clubName}
-                                        width={128}
-                                        height={128}
-                                        className="h-20 w-20 object-contain"
+                                        fill
+                                        className="object-contain p-1"
                                       />
                                     ) : (
-                                      <div className="flex h-20 w-20 items-center justify-center bg-zinc-200 text-zinc-500">
+                                      <div className="flex h-full w-full items-center justify-center bg-teal-50 text-teal-800 font-bold">
                                         {fixture.is_home_game ? fixture.opponent[0] : clubName[0]}
                                       </div>
                                     )
                                   ) : (
-                                    <span className="text-center text-base font-medium text-zinc-500">
-                                      {fixture.is_home_game ? fixture.opponent : clubName}
-                                    </span>
+                                    <div className="flex h-full w-full items-center justify-center bg-teal-50 text-teal-800 font-bold">
+                                      {fixture.is_home_game ? fixture.opponent[0] : clubName[0]}
+                                    </div>
                                   )}
                                 </div>
+                                <h4 className="text-center font-bold text-teal-900">
+                                  {fixture.is_home_game ? fixture.opponent : clubName}
+                                </h4>
                               </div>
-                              <h4 className="mt-4 text-center text-base font-medium text-zinc-800">
-                                {fixture.is_home_game ? fixture.opponent : clubName}
-                              </h4>
                             </div>
                           </div>
 

@@ -131,7 +131,7 @@ export default function NewsDetailPage() {
               <Link href="/news" className="mt-8 inline-block">
                 <span className="inline-flex skew-x-[-12deg] transform items-center bg-teal-800 px-4 py-2 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
                   <span className="inline-flex skew-x-[12deg] transform items-center">
-                    <ArrowLeft className="mr-1 h-4 w-4" /> Atpakaļ uz jaunumiem
+                    <ArrowLeft className="mr-1 h-4 w-4" /> Atpakaļ uz ziņām
                   </span>
                 </span>
               </Link>
@@ -222,7 +222,7 @@ export default function NewsDetailPage() {
                 <Link href="/news" className="inline-flex items-center">
                   <span className="inline-flex skew-x-[-12deg] transform items-center bg-teal-800 px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:bg-teal-900">
                     <span className="inline-flex skew-x-[12deg] transform items-center">
-                      <ArrowLeft className="mr-1 h-4 w-4" /> Atpakaļ uz jaunumiem
+                      <ArrowLeft className="mr-1 h-4 w-4" /> Atpakaļ uz ziņām
                     </span>
                   </span>
                 </Link>

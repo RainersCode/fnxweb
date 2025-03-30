@@ -1,4 +1,4 @@
-import { Facebook, Twitter, Instagram, LucideIcon } from "lucide-react"
+import { Facebook, Instagram, LucideIcon } from "lucide-react"
 
 interface SocialLink {
   icon: LucideIcon
@@ -7,9 +7,8 @@ interface SocialLink {
 }
 
 const defaultSocialLinks: SocialLink[] = [
-  { icon: Facebook, href: "https://facebook.com", label: "Facebook" },
-  { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
-  { icon: Instagram, href: "https://instagram.com", label: "Instagram" },
+  { icon: Facebook, href: "https://www.facebook.com/RKFenikss?locale=lv_LV", label: "Facebook" },
+  { icon: Instagram, href: "https://www.instagram.com/rk_fenikss/", label: "Instagram" },
 ]
 
 interface SocialLinksProps {
@@ -17,7 +16,7 @@ interface SocialLinksProps {
   title?: string
 }
 
-export function SocialLinks({ links = defaultSocialLinks, title = "FOLLOW US" }: SocialLinksProps) {
+export function SocialLinks({ links = defaultSocialLinks, title = "SEKOJIET MUMS" }: SocialLinksProps) {
   return (
     <div>
       {title && <h3 className="text-xl font-bold text-teal-900 mt-12 mb-4">{title}</h3>}

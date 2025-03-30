@@ -144,7 +144,7 @@ export default async function Image({ params }: { params: { id: string } }) {
               opacity: 0.7,
             }}
           >
-            feniks-rugby.com • Jaunumi
+            feniks-rugby.com • Ziņas
           </div>
         </div>
       </div>

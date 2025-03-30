@@ -276,7 +276,10 @@ export default function HomePage() {
       linkElement.style.zIndex = '20';
       linkElement.style.backgroundColor = '#115e59';
       linkElement.style.color = 'white';
-      linkElement.style.padding = '12px 24px';
+      // Responsive padding for different screen sizes
+      linkElement.style.padding = window.innerWidth < 640 ? '10px 20px' : '12px 24px';
+      // Responsive font size for different screen sizes
+      linkElement.style.fontSize = window.innerWidth < 640 ? '14px' : '16px';
       linkElement.style.fontWeight = 'bold';
       linkElement.style.textDecoration = 'none';
       linkElement.style.display = 'inline-block';
@@ -424,14 +427,14 @@ export default function HomePage() {
             {/* Content box with same skew as button */}
             <div className="bg-white/80 backdrop-blur-sm max-w-2xl skew-x-[-12deg] transform" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)' }}>
               {/* Header Box */}
-              <div className="relative border-l-4 border-teal-800 p-6">
-                <h1 className="text-3xl font-extrabold uppercase leading-none tracking-tighter text-teal-900 sm:text-4xl md:text-5xl skew-x-[12deg] transform">
+              <div className="relative border-l-4 border-teal-800 p-4 sm:p-6">
+                <h1 className="text-2xl font-extrabold uppercase leading-tight tracking-tighter text-teal-900 sm:text-4xl md:text-5xl skew-x-[12deg] transform">
                   {articles.length > 0 && currentSlide < articles.length
                     ? articles[currentSlide].title
                     : fallbackNewsItems[currentSlide % fallbackNewsItems.length].title}
                 </h1>
                 
-                <p className="mt-4 max-w-xl text-base font-medium text-zinc-700 sm:text-lg skew-x-[12deg] transform">
+                <p className="mt-2 sm:mt-4 max-w-xl text-sm font-medium text-zinc-700 sm:text-lg skew-x-[12deg] transform">
                   {articles.length > 0 && currentSlide < articles.length
                     ? stripHtml(articles[currentSlide].content).substring(0, 150) + '...'
                     : fallbackNewsItems[currentSlide % fallbackNewsItems.length].description}
@@ -515,7 +518,7 @@ export default function HomePage() {
         <SectionContainer className="bg-gray-50">
           <div className="relative z-10">
             <div className="mx-auto mb-12 max-w-2xl text-center">
-              <SectionTitle title="JAUNĀKIE" titleHighlight="JAUNUMI" />
+              <SectionTitle title="JAUNĀKĀS" titleHighlight="ZIŅAS" />
             </div>
 
             <div className="mb-10 grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
@@ -640,7 +643,7 @@ export default function HomePage() {
               <Link href="/news" className="group">
                 <button className="skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
                   <span className="inline-flex skew-x-[12deg] transform items-center">
-                    SKATĪT VISUS JAUNUMUS
+                    SKATĪT VISAS ZIŅAS
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                   </span>
                 </button>
@@ -752,22 +755,63 @@ export default function HomePage() {
                         {formatMatchDate(fixture.match_date)}
                       </span>
                     </div>
-                    <h3 className="mb-2 text-xl font-bold text-teal-900">
-                      {fixture.is_home_game ? 'Mūsu komanda pret' : 'Izbraukumā pie'} {fixture.opponent}
-                    </h3>
-                    <div className="mb-2 flex items-center gap-2 text-zinc-600">
-                      <Clock className="h-4 w-4" />
-                      <span className="text-sm">
-                        Sākums: {extractTimeFromDate(fixture.match_date)}
-                      </span>
+                    
+                    {/* Modern team vs team display */}
+                    <div className="mb-5 flex items-center justify-between">
+                      {/* Home team */}
+                      <div className="flex flex-col items-center gap-2 w-2/5">
+                        <div className="h-16 w-16 relative overflow-hidden rounded-md bg-white shadow-md border border-gray-100">
+                          <NextImage
+                            src={fixture.home_logo_url || "/Logo/fēniks_logo-removebg-preview.png"}
+                            alt="RK Fēnikss"
+                            fill
+                            className="object-contain p-1"
+                          />
+                        </div>
+                        <span className="text-center font-bold text-teal-900 text-sm">
+                          {fixture.is_home_game ? 'RK "Fēnikss"' : fixture.opponent}
+                        </span>
+                      </div>
+                      
+                      {/* VS badge */}
+                      <div className="w-1/5 flex-shrink-0">
+                        <div className="bg-teal-100 text-teal-800 font-bold text-xs rounded-md h-10 w-10 flex items-center justify-center mx-auto shadow-sm border border-teal-200">
+                          VS
+                        </div>
+                      </div>
+                      
+                      {/* Away team */}
+                      <div className="flex flex-col items-center gap-2 w-2/5">
+                        <div className="h-16 w-16 relative overflow-hidden rounded-md bg-white shadow-md border border-gray-100">
+                          <NextImage
+                            src={fixture.away_logo_url || "/placeholder.svg?height=48&width=48&text=Team"}
+                            alt={fixture.opponent}
+                            fill
+                            className="object-contain p-1"
+                          />
+                        </div>
+                        <span className="text-center font-bold text-teal-900 text-sm">
+                          {fixture.is_home_game ? fixture.opponent : 'RK "Fēnikss"'}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2 text-zinc-600">
-                      <MapPin className="h-4 w-4" />
-                      <span className="text-sm">
-                        {fixture.location || (fixture.is_home_game ? 'Mājas laukums' : 'Izbraukumā')}
-                      </span>
+
+                    <div className="mt-4 space-y-3 pt-3 border-t border-gray-100">
+                      <div className="flex items-center gap-2 text-zinc-600">
+                        <Clock className="h-4 w-4 text-teal-700" />
+                        <span className="text-sm">
+                          Sākums: {extractTimeFromDate(fixture.match_date)}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 text-zinc-600">
+                        <MapPin className="h-4 w-4 text-teal-700" />
+                        <span className="text-sm">
+                          {fixture.location || (fixture.is_home_game ? 'Mājas laukums' : 'Izbraukumā')}
+                        </span>
+                      </div>
                     </div>
-                    <Link href="/fixtures" className="mt-4 block">
+                    
+                    <Link href="/fixtures" className="mt-5 block">
                       <button className="w-full skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
                         <span className="inline-flex skew-x-[12deg] transform items-center justify-center">
                           SPĒLES DETAĻAS

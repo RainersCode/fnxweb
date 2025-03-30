@@ -179,7 +179,7 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
                 className="skew-x-[-12deg] transform bg-teal-600 p-2 text-white transition-colors duration-300 hover:bg-teal-500"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <X className="animate-spin-once h-6 w-6 skew-x-[12deg] transform" />
+                <X className="h-6 w-6 skew-x-[12deg] transform" />
                 <span className="sr-only">Aizvērt izvēlni</span>
               </button>
             </div>
@@ -197,8 +197,6 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
                   (item, index) => (
                     <li
                       key={item.key}
-                      className="animate-slide-in-right opacity-100"
-                      style={{ animationDelay: `${index * 150}ms` }}
                     >
                       <Link
                         href={item.key === 'HOME' ? '/' : `/${item.key.toLowerCase()}`}
@@ -223,8 +221,7 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
                   {isAdminUser && (
                     <Link
                       href="/admin"
-                      className="animate-slide-in-up mt-12 block w-full"
-                      style={{ animationDelay: '600ms', animationFillMode: 'forwards' }}
+                      className="mt-12 block w-full"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       <button className="w-full skew-x-[-12deg] transform bg-white px-6 py-3 font-medium tracking-wide text-teal-800 shadow-lg transition-all duration-300 hover:bg-white hover:text-teal-900">
@@ -241,8 +238,7 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
               ) : (
                 <Link
                   href="/contact"
-                  className="animate-slide-in-up mt-12 block w-full"
-                  style={{ animationDelay: '600ms', animationFillMode: 'forwards' }}
+                  className="mt-12 block w-full"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <button className="join-us-button w-full group skew-x-[-12deg] transform bg-white px-6 py-3 font-medium tracking-wide text-teal-800 shadow-lg transition-all duration-300 hover:bg-white hover:text-teal-900">
@@ -254,11 +250,54 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
                 </Link>
               )}
             </nav>
-
-            {/* Decorative elements */}
-            <div className="animate-float absolute right-[10%] top-[20%] z-0 h-32 w-32 rotate-45 transform border-4 border-teal-500/30"></div>
-            <div className="animate-float-delay absolute bottom-[30%] left-[15%] z-0 h-24 w-24 rounded-full border-8 border-teal-800/20"></div>
-            <div className="absolute bottom-[10%] right-[20%] z-0 h-1 w-48 -rotate-12 transform animate-pulse bg-teal-500/40"></div>
+            
+            {/* Contact info and social links in mobile menu */}
+            <div className="mt-8 border-t border-teal-600 pt-8">
+              <h3 className="text-lg font-bold text-white mb-4">Kontaktinformācija</h3>
+              <div className="space-y-3 text-sm text-white">
+                <p className="flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                  </svg>
+                  <a href="tel:+37129113938" className="hover:text-teal-100">+371 29113938</a>
+                </p>
+                <p className="flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
+                    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                  </svg>
+                  <a href="mailto:rkfenikss@gmail.com" className="hover:text-teal-100">rkfenikss@gmail.com</a>
+                </p>
+              </div>
+              
+              {/* Social Media in Mobile Menu */}
+              <div className="mt-6 flex justify-center space-x-6">
+                <a 
+                  href="https://www.facebook.com/RKFenikss?locale=lv_LV" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  aria-label="Facebook"
+                  className="bg-white p-3 rounded-md text-teal-700 hover:bg-teal-50 transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-facebook">
+                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                  </svg>
+                </a>
+                <a 
+                  href="https://www.instagram.com/rk_fenikss/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                  className="bg-white p-3 rounded-md text-teal-700 hover:bg-teal-50 transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram">
+                    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -372,6 +411,34 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
                   Bankas konts: Swedbank<br />
                   Konta nr.: LV86HABA0551035059313
                 </p>
+                
+                {/* Social Media Links */}
+                <div className="mt-4 flex items-center space-x-4">
+                  <a 
+                    href="https://www.facebook.com/RKFenikss?locale=lv_LV" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    aria-label="Facebook"
+                    className="text-zinc-600 hover:text-teal-700 transition-colors"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-facebook">
+                      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                    </svg>
+                  </a>
+                  <a 
+                    href="https://www.instagram.com/rk_fenikss/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                    className="text-zinc-600 hover:text-teal-700 transition-colors"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram">
+                      <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+                    </svg>
+                  </a>
+                </div>
               </address>
             </div>
           </div>

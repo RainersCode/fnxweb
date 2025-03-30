@@ -74,8 +74,8 @@ export default function NewsPage() {
       <main className="flex-1 pb-16">
         {/* Hero Section */}
         <ParallaxHeroSection
-          title="JAUNĀKIE"
-          titleHighlight="JAUNUMI"
+          title="JAUNĀKĀS"
+          titleHighlight="ZIŅAS"
           subtitle="Sekojiet līdzi jaunākajiem notikumiem mūsu klubā"
           backgroundImage="/AboutUs/parallax.jpg"
         />
@@ -84,7 +84,7 @@ export default function NewsPage() {
         <SectionContainer className="bg-white">
           <div className="relative z-10">
             <div className="mx-auto mb-12 max-w-2xl text-center">
-              <SectionTitle title="KLUBA" titleHighlight="JAUNUMI" />
+              <SectionTitle title="KLUBA" titleHighlight="ZIŅAS" />
             </div>
 
             {loading ? (
