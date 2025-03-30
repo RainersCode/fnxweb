@@ -259,7 +259,7 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
                 </span>
               </div>
               <p className="mt-4 text-sm font-medium text-zinc-600">
-                Kopienas regbija klubs, dibināts 1985. gadā, apvieno dažāda vecuma un prasmju spēlētājus.
+                Valmieras novada regbija klubs, dibināts 2005. gadā, apvieno dažāda vecuma un prasmju spēlētājus vienotā komandā.
               </p>
             </div>
             <div>
