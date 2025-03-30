@@ -9,6 +9,8 @@ import MainLayout from '@/components/layout/main-layout'
 import { SectionContainer } from '@/components/shared/section-container'
 import { supabase } from '@/lib/supabase'
 import { Article } from '@/types/supabase'
+import { generateArticleSchema } from '@/lib/structured-data'
+import Head from 'next/head'
 
 export default function NewsDetailPage() {
   const params = useParams()
@@ -16,8 +18,16 @@ export default function NewsDetailPage() {
   const [article, setArticle] = useState<Article | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [scrollY, setScrollY] = useState(0)
+  const [pageUrl, setPageUrl] = useState('')
 
   const id = params.id as string
+
+  // Set page URL for structured data
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setPageUrl(window.location.href)
+    }
+  }, [])
 
   // Handle scroll for parallax effect
   useEffect(() => {
@@ -62,13 +72,31 @@ export default function NewsDetailPage() {
       month: 'long',
       day: 'numeric',
     }
-    return new Date(dateString).toLocaleDateString('en-GB', options)
+    return new Date(dateString).toLocaleDateString('lv-LV', options)
   }
 
   // Handle Facebook sharing
   const handleShareToFacebook = () => {
     const url = window.location.href
     window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank')
+  }
+
+  // Strip HTML for meta description
+  const stripHtml = (html: string): string => {
+    const tmp = document.createElement('DIV')
+    tmp.innerHTML = html
+    return tmp.textContent || tmp.innerText || ''
+  }
+
+  // Generate meta title and description
+  const getMetaTitle = () => {
+    return article ? `${article.title} | RK Fēnikss` : 'Raksts | RK Fēnikss'
+  }
+
+  const getMetaDescription = () => {
+    if (!article) return ''
+    const plainText = stripHtml(article.content)
+    return plainText.length > 160 ? `${plainText.substring(0, 160)}...` : plainText
   }
 
   if (isLoading) {
@@ -91,14 +119,14 @@ export default function NewsDetailPage() {
         <main className="flex-1 pb-16">
           <SectionContainer className="bg-white">
             <div className="py-16 text-center">
-              <h2 className="text-2xl font-bold text-gray-700">News article not found</h2>
+              <h2 className="text-2xl font-bold text-gray-700">Raksts nav atrasts</h2>
               <p className="mt-4 text-gray-600">
-                The article you're looking for doesn't exist or has been removed.
+                Meklētais raksts neeksistē vai ir dzēsts.
               </p>
               <Link href="/news" className="mt-8 inline-block">
                 <span className="inline-flex skew-x-[-12deg] transform items-center bg-teal-800 px-4 py-2 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
                   <span className="inline-flex skew-x-[12deg] transform items-center">
-                    <ArrowLeft className="mr-1 h-4 w-4" /> Back to News
+                    <ArrowLeft className="mr-1 h-4 w-4" /> Atpakaļ uz jaunumiem
                   </span>
                 </span>
               </Link>
@@ -109,85 +137,112 @@ export default function NewsDetailPage() {
     )
   }
 
+  // Generate JSON-LD structured data
+  const articleJsonLd = article ? generateArticleSchema(article, pageUrl) : null
+
   return (
-    <MainLayout currentPage="NEWS">
-      <main className="flex-1 pb-16">
-        {/* Hero Section */}
-        <section className="relative overflow-hidden py-24">
-          <div
-            className="absolute inset-0 z-0"
-            style={{
-              backgroundImage: `url(${article.image_url || '/placeholder.svg?height=600&width=900&text=Rugby News'})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              transform: `translateY(${scrollY * 0.3}px)`,
-              transition: 'transform 0.1s linear',
-            }}
+    <>
+      {article && (
+        <Head>
+          <title>{getMetaTitle()}</title>
+          <meta name="description" content={getMetaDescription()} />
+          <meta property="og:title" content={article.title} />
+          <meta property="og:description" content={getMetaDescription()} />
+          <meta property="og:type" content="article" />
+          <meta property="og:url" content={pageUrl} />
+          {article.image_url && <meta property="og:image" content={article.image_url} />}
+          <meta property="article:published_time" content={article.published_at} />
+          {article.updated_at && <meta property="article:modified_time" content={article.updated_at} />}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={article.title} />
+          <meta name="twitter:description" content={getMetaDescription()} />
+          {article.image_url && <meta name="twitter:image" content={article.image_url} />}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
           />
-          <div className="absolute inset-0 z-0 bg-gradient-to-b from-teal-900/80 to-teal-700/80" />
+        </Head>
+      )}
 
-          {/* Decorative elements */}
-          <div className="absolute right-[10%] top-20 z-0 h-32 w-32 rounded-full bg-teal-500/20 blur-xl"></div>
-          <div className="absolute bottom-20 left-[5%] z-0 h-64 w-64 rounded-full bg-teal-700/10 blur-xl"></div>
-
-          <div className="container relative z-10 mx-auto px-4 sm:px-6">
-            <div className="mx-auto max-w-3xl text-center text-white">
-              <h1 className="mb-4 text-4xl font-extrabold tracking-tighter sm:text-5xl md:text-6xl">
-                <span className="text-white">{article.title}</span>
-              </h1>
-              <div className="mx-auto mb-6 h-1 w-32 skew-x-[-12deg] transform bg-white"></div>
-              <div className="flex justify-center gap-4 text-teal-100">
-                <div className="flex items-center gap-1">
-                  <CalendarDays className="h-5 w-5" />
-                  <span>{formatDate(article.published_at)}</span>
-                </div>
-                {article.author && (
-                  <div className="flex items-center gap-1">
-                    <User className="h-5 w-5" />
-                    <span>{article.author}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Article Content */}
-        <SectionContainer className="bg-white">
-          <div className="relative z-10 -mt-16">
+      <MainLayout currentPage="NEWS">
+        <main className="flex-1 pb-16">
+          {/* Hero Section */}
+          <section className="relative overflow-hidden py-24">
             <div
-              className="mx-auto max-w-3xl overflow-hidden bg-white p-8 shadow-xl"
-              style={{ clipPath: 'polygon(0 0, 100% 0, 100% 96%, 96% 100%, 0 100%)' }}
-            >
-              {/* Back button */}
-              <Link href="/news" className="inline-flex items-center">
-                <span className="inline-flex skew-x-[-12deg] transform items-center bg-teal-800 px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:bg-teal-900">
-                  <span className="inline-flex skew-x-[12deg] transform items-center">
-                    <ArrowLeft className="mr-1 h-4 w-4" /> Back to News
-                  </span>
-                </span>
-              </Link>
+              className="absolute inset-0 z-0"
+              style={{
+                backgroundImage: `url(${article.image_url || '/placeholder.svg?height=600&width=900&text=Rugby News'})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                transform: `translateY(${scrollY * 0.3}px)`,
+                transition: 'transform 0.1s linear',
+              }}
+            />
+            <div className="absolute inset-0 z-0 bg-gradient-to-b from-teal-900/80 to-teal-700/80" />
 
-              {/* Article content */}
-              <div className="prose prose-teal mt-8 max-w-none prose-headings:font-bold prose-headings:text-teal-900 prose-p:text-zinc-700 prose-a:text-teal-700 prose-a:no-underline hover:prose-a:underline prose-img:rounded-lg">
-                <div dangerouslySetInnerHTML={{ __html: article.content }} />
-              </div>
+            {/* Decorative elements */}
+            <div className="absolute right-[10%] top-20 z-0 h-32 w-32 rounded-full bg-teal-500/20 blur-xl"></div>
+            <div className="absolute bottom-20 left-[5%] z-0 h-64 w-64 rounded-full bg-teal-700/10 blur-xl"></div>
 
-              {/* Share buttons */}
-              <div className="mt-8 flex items-center gap-4 border-t border-gray-200 pt-6">
-                <span className="font-medium text-zinc-700">Share this article:</span>
-                <button
-                  onClick={handleShareToFacebook}
-                  className="flex items-center gap-1 rounded-full bg-blue-600 p-2 text-white transition-colors hover:bg-blue-700"
-                  aria-label="Share to Facebook"
-                >
-                  <Facebook className="h-5 w-5" />
-                </button>
+            <div className="container relative z-10 mx-auto px-4 sm:px-6">
+              <div className="mx-auto max-w-3xl text-center text-white">
+                <h1 className="mb-4 text-4xl font-extrabold tracking-tighter sm:text-5xl md:text-6xl">
+                  <span className="text-white">{article.title}</span>
+                </h1>
+                <div className="mx-auto mb-6 h-1 w-32 skew-x-[-12deg] transform bg-white"></div>
+                <div className="flex justify-center gap-4 text-teal-100">
+                  <div className="flex items-center gap-1">
+                    <CalendarDays className="h-5 w-5" />
+                    <span>{formatDate(article.published_at)}</span>
+                  </div>
+                  {article.author && (
+                    <div className="flex items-center gap-1">
+                      <User className="h-5 w-5" />
+                      <span>{article.author}</span>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        </SectionContainer>
-      </main>
-    </MainLayout>
+          </section>
+
+          {/* Article Content */}
+          <SectionContainer className="bg-white">
+            <div className="relative z-10 -mt-16">
+              <div
+                className="mx-auto max-w-3xl overflow-hidden bg-white p-8 shadow-xl"
+                style={{ clipPath: 'polygon(0 0, 100% 0, 100% 96%, 96% 100%, 0 100%)' }}
+              >
+                {/* Back button */}
+                <Link href="/news" className="inline-flex items-center">
+                  <span className="inline-flex skew-x-[-12deg] transform items-center bg-teal-800 px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:bg-teal-900">
+                    <span className="inline-flex skew-x-[12deg] transform items-center">
+                      <ArrowLeft className="mr-1 h-4 w-4" /> Atpakaļ uz jaunumiem
+                    </span>
+                  </span>
+                </Link>
+
+                {/* Article content */}
+                <div className="prose prose-teal mt-8 max-w-none prose-headings:font-bold prose-headings:text-teal-900 prose-p:text-zinc-700 prose-a:text-teal-700 prose-a:no-underline hover:prose-a:underline prose-img:rounded-lg">
+                  <div dangerouslySetInnerHTML={{ __html: article.content }} />
+                </div>
+
+                {/* Share buttons */}
+                <div className="mt-8 flex items-center gap-4 border-t border-gray-200 pt-6">
+                  <span className="font-medium text-zinc-700">Dalīties ar rakstu:</span>
+                  <button
+                    onClick={handleShareToFacebook}
+                    className="flex items-center gap-1 rounded-full bg-blue-600 p-2 text-white transition-colors hover:bg-blue-700"
+                    aria-label="Share to Facebook"
+                  >
+                    <Facebook className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </SectionContainer>
+        </main>
+      </MainLayout>
+    </>
   )
 }

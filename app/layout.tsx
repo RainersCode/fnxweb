@@ -13,12 +13,24 @@ export const metadata: Metadata = {
   title: 'RK "Fēnikss" - Valmieras Regbija Klubs | Dibināts 2005',
   description: 'RK "Fēnikss" oficiālā mājaslapa - Valmieras vadošais regbija klubs, dibināts 2005. gadā. Pievienojieties mums, lai uzzinātu par spēlēm, jaunumiem, fotoattēliem un informāciju par klubu. Apvieno dažāda vecuma un prasmju spēlētājus vienotā komandā.',
   generator: 'v0.dev',
-  keywords: ['regbijs', 'Valmiera', 'Fēnikss', 'sporta klubs', 'Latvijas regbijs', 'regbija spēles', 'regbija komanda'],
+  keywords: ['regbijs', 'Valmiera', 'Fēnikss', 'sporta klubs', 'Latvijas regbijs', 'regbija spēles', 'regbija komanda', 'sports', 'komandas sports', 'rugby club', 'Latvia rugby'],
   authors: [{ name: 'RK Fēnikss' }],
+  applicationName: 'RK Fēnikss Website',
+  creator: 'RK Fēnikss',
+  publisher: 'RK Fēnikss',
+  category: 'Sports',
+  metadataBase: new URL('https://feniks-rugby.com'), // Replace with your actual domain
+  alternates: {
+    canonical: '/',
+    languages: {
+      'lv-LV': '/',
+      'en-US': '/en',
+    },
+  },
   openGraph: {
     title: 'RK "Fēnikss" - Valmieras Regbija Klubs | Dibināts 2005',
     description: 'RK "Fēnikss" oficiālā mājaslapa - Valmieras vadošais regbija klubs, dibināts 2005. gadā. Pievienojieties mums, lai uzzinātu par spēlēm, jaunumiem un informāciju par klubu.',
-    url: 'https://your-domain.com', // Replace with your actual domain when available
+    url: 'https://feniks-rugby.com', // Replace with your actual domain
     siteName: 'RK Fēnikss',
     images: [
       {
@@ -36,11 +48,26 @@ export const metadata: Metadata = {
     title: 'RK "Fēnikss" - Valmieras Regbija Klubs',
     description: 'RK "Fēnikss" oficiālā mājaslapa - Valmieras vadošais regbija klubs, dibināts 2005. gadā.',
     images: ['/Logo/fēniks_logo-removebg-preview.png'],
+    creator: '@RKFeniks',
   },
   icons: {
     icon: '/Logo/fēniks_logo-removebg-preview.png',
     shortcut: '/Logo/fēniks_logo-removebg-preview.png',
     apple: '/Logo/fēniks_logo-removebg-preview.png',
+  },
+  verification: {
+    google: 'google-site-verification-code', // Add your Google verification code
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 }
 
@@ -70,7 +97,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         },
       }}
     >
-      <html lang="en" suppressHydrationWarning>
+      <html lang="lv" suppressHydrationWarning>
         <body
           className={cn(inter.className, 'min-h-screen bg-background')}
           suppressHydrationWarning
