@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   creator: 'RK Fēnikss',
   publisher: 'RK Fēnikss',
   category: 'Sports',
-  metadataBase: new URL('https://feniks-rugby.com'), // Replace with your actual domain
+  metadataBase: new URL('https://www.fnx-rugby.lv'),
   alternates: {
     canonical: '/',
     languages: {
@@ -30,24 +30,30 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'RK "Fēnikss" - Valmieras Regbija Klubs | Dibināts 2005',
     description: 'RK "Fēnikss" oficiālā mājaslapa - Valmieras vadošais regbija klubs, dibināts 2005. gadā. Pievienojieties mums, lai uzzinātu par spēlēm, jaunumiem un informāciju par klubu.',
-    url: 'https://feniks-rugby.com', // Replace with your actual domain
+    url: 'https://www.fnx-rugby.lv',
     siteName: 'RK Fēnikss',
     images: [
       {
-        url: '/Logo/fēniks_logo-removebg-preview.png',
-        width: 800,
-        height: 600,
-        alt: 'RK Fēnikss Logo',
+        url: 'https://www.fnx-rugby.lv/AboutUs/team.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'RK Fēnikss - Valmieras Regbija Klubs',
       }
     ],
     locale: 'lv_LV',
     type: 'website',
   },
+  other: {
+    'fb:app_id': '1234567890',
+    'og:image:width': '1200',
+    'og:image:height': '630',
+    'og:image:alt': 'RK Fēnikss - Valmieras Regbija Klubs'
+  },
   twitter: {
     card: 'summary_large_image',
     title: 'RK "Fēnikss" - Valmieras Regbija Klubs',
     description: 'RK "Fēnikss" oficiālā mājaslapa - Valmieras vadošais regbija klubs, dibināts 2005. gadā.',
-    images: ['/Logo/fēniks_logo-removebg-preview.png'],
+    images: ['https://www.fnx-rugby.lv/AboutUs/team.jpg'],
     creator: '@RKFeniks',
   },
   icons: {

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>RK Fēnikss OpenGraph Image</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      width: 1200px;
+      height: 630px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #115e59; /* Teal background matching your site theme */
+      color: white;
+      font-family: Arial, sans-serif;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('../AboutUs/parallax.jpg');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.3;
+      z-index: 1;
+    }
+    
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(17, 94, 89, 0.9) 0%, rgba(0, 0, 0, 0.8) 100%);
+      z-index: 2;
+    }
+    
+    .content {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 40px;
+    }
+    
+    .logo {
+      width: 200px;
+      height: auto;
+      margin-bottom: 30px;
+    }
+    
+    h1 {
+      font-size: 60px;
+      margin: 0 0 20px 0;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+    
+    h2 {
+      font-size: 32px;
+      margin: 0 0 10px 0;
+      font-weight: 400;
+      max-width: 800px;
+    }
+    
+    .tagline {
+      font-size: 24px;
+      opacity: 0.9;
+      max-width: 80%;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="background"></div>
+  <div class="overlay"></div>
+  <div class="content">
+    <img src="../Logo/fēniks_logo-removebg-preview.png" alt="RK Fēnikss Logo" class="logo">
+    <h1>RK "Fēnikss"</h1>
+    <h2>Valmieras Regbija Klubs</h2>
+    <div class="tagline">Dibināts 2005. gadā • Valmieras vadošais regbija klubs</div>
+  </div>
+</body>
+</html> 
