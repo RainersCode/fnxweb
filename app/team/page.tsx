@@ -8,6 +8,9 @@ import PlayersList from './components/players-list'
 import CoachesList from './components/coaches-list'
 import Loading from './loading'
 
+// Disable caching for this page to ensure fresh data on each visit
+export const revalidate = 0 // Revalidate this page on every request
+
 // This is a server component to fetch initial data
 export default async function TeamPage() {
   return (

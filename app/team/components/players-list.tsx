@@ -1,19 +1,53 @@
+'use client'
+
 import Image from 'next/image'
-import { createClient } from '@/lib/supabase/server'
+import { useEffect, useState } from 'react'
+import { createClient } from '@/lib/supabase/client'
 
-export default async function PlayersList() {
-  const supabase = createClient()
+export default function PlayersList() {
+  const [players, setPlayers] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  // Fetch all active players from the database
-  const { data: players, error } = await supabase
-    .from('team_players')
-    .select('*')
-    .eq('is_active', true)
-    .order('jersey_number', { ascending: true })
-    .order('name')
+  useEffect(() => {
+    // Function to fetch players
+    async function fetchPlayers() {
+      try {
+        setIsLoading(true)
+        const supabase = createClient()
+        const { data, error } = await supabase
+          .from('team_players')
+          .select('*')
+          .eq('is_active', true)
+          .order('jersey_number', { ascending: true })
+          .order('name')
+        
+        if (error) throw error
+        setPlayers(data || [])
+        setError(null)
+      } catch (err) {
+        console.error('Error fetching players:', err)
+        setError(err)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    // Initial fetch
+    fetchPlayers()
+
+    // Set up interval for periodic fetching
+    const intervalId = setInterval(fetchPlayers, 5000) // Refresh every 5 seconds
+
+    // Clean up interval on component unmount
+    return () => clearInterval(intervalId)
+  }, [])
+
+  if (isLoading) {
+    return <div className="p-8 text-center">Loading players...</div>
+  }
 
   if (error) {
-    console.error('Error fetching players:', error)
     return <div className="p-8 text-center">Failed to load players. Please try again later.</div>
   }
 
