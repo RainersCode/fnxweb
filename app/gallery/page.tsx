@@ -97,13 +97,13 @@ export default function GalleryPage() {
                       style={{ clipPath: 'polygon(0 0, 100% 0, 95% 100%, 0 95%)' }}
                     >
                       {gallery.thumbnailUrl ? (
-                        <Image
-                          src={gallery.thumbnailUrl}
-                          alt={gallery.title}
-                          width={800}
-                          height={500}
-                          className="h-64 w-full object-cover"
-                        />
+                        <div className="relative h-64 w-full">
+                          <img
+                            src={gallery.thumbnailUrl}
+                            alt={gallery.title}
+                            className="h-full w-full object-cover"
+                          />
+                        </div>
                       ) : (
                         <div className="flex h-64 w-full items-center justify-center bg-teal-100">
                           <div className="text-center">

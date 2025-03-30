@@ -391,16 +391,33 @@ export async function getGalleryFirstImage(galleryId: string) {
     .from('gallery_images')
     .select('*')
     .eq('gallery_id', galleryId)
-    .order('display_order', { ascending: true })
-    .limit(1)
-    .single()
+    .limit(10)  // Get first 10 images to ensure we have some data to work with
 
   if (error) {
-    // If no images found, return null instead of throwing error
-    if (error.code === 'PGRST116') {
-      return null
-    }
+    console.error(`Error fetching images for gallery ${galleryId}:`, error)
     throw error
   }
-  return data
+  
+  // If no images found, return null
+  if (!data || data.length === 0) {
+    console.log(`No images found for gallery ${galleryId}`)
+    return null
+  }
+
+  console.log(`Found ${data.length} images for gallery ${galleryId}`)
+  
+  // Sort the images by the correct ordering column
+  let sortedData = [...data];
+  if (data[0].hasOwnProperty('order')) {
+    console.log('Using "order" column for sorting')
+    sortedData = sortedData.sort((a, b) => (a.order || 0) - (b.order || 0))
+  } else if (data[0].hasOwnProperty('display_order')) {
+    console.log('Using "display_order" column for sorting')
+    sortedData = sortedData.sort((a, b) => (a.display_order || 0) - (b.display_order || 0))
+  }
+  
+  // Return the first image
+  const firstImage = sortedData[0]
+  console.log(`First image for gallery ${galleryId}:`, firstImage.image_url)
+  return firstImage
 }

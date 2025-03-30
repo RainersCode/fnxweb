@@ -24,6 +24,7 @@ export default function GalleryDetailPage() {
     const fetchGallery = async () => {
       setIsLoading(true)
       try {
+        console.log(`Fetching gallery with ID: ${id}`)
         // Fetch gallery details
         const { data: galleryData, error: galleryError } = await supabase
           .from('galleries')
@@ -31,19 +32,43 @@ export default function GalleryDetailPage() {
           .eq('id', id)
           .single()
 
-        if (galleryError) throw galleryError
+        if (galleryError) {
+          console.error('Error fetching gallery:', galleryError)
+          throw galleryError
+        }
+
+        console.log(`Successfully fetched gallery: ${galleryData.title}`)
 
         // Fetch gallery images
+        console.log(`Fetching images for gallery ${id}`)
         const { data: imagesData, error: imagesError } = await supabase
           .from('gallery_images')
           .select('*')
           .eq('gallery_id', id)
-          .order('order', { ascending: true })
+          
+        if (imagesError) {
+          console.error('Error fetching gallery images:', imagesError)
+          throw imagesError
+        }
 
-        if (imagesError) throw imagesError
-
+        if (imagesData && imagesData.length > 0) {
+          console.log('First image sample:', imagesData[0])
+          // Detect what ordering column the database uses
+          let orderedImagesData = imagesData;
+          if (imagesData[0].hasOwnProperty('order')) {
+            console.log('Database uses "order" column for ordering')
+            orderedImagesData = [...imagesData].sort((a, b) => (a.order || 0) - (b.order || 0))
+          } else if (imagesData[0].hasOwnProperty('display_order')) {
+            console.log('Database uses "display_order" column for ordering')
+            orderedImagesData = [...imagesData].sort((a, b) => (a.display_order || 0) - (b.display_order || 0))
+          }
+          setImages(orderedImagesData)
+        } else {
+          console.log('No images found for gallery')
+          setImages([])
+        }
+        
         setGallery(galleryData)
-        setImages(imagesData || [])
       } catch (error) {
         console.error('Error fetching gallery:', error)
         setGallery(null)
