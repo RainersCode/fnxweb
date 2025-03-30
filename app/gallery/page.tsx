@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import MainLayout from '@/components/layout/main-layout'
+import { MainLayout } from '@/components/layout/main-layout'
 import { Gallery } from '@/types/supabase'
 import { Loader2, ArrowRight, Image as ImageIcon } from 'lucide-react'
 import { ParallaxHeroSection } from '@/components/features/parallax-hero-section'

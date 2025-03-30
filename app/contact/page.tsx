@@ -1,7 +1,7 @@
 'use client'
 
 import { MapPin, Phone, Mail, Clock } from 'lucide-react'
-import MainLayout from '@/components/layout/main-layout'
+import { MainLayout } from '@/components/layout/main-layout'
 import { ParallaxHeroSection } from '@/components/features/parallax-hero-section'
 import { SectionTitle } from '@/components/features/section-title'
 import { ContactInfoItem } from '@/components/features/contact/contact-info-item'

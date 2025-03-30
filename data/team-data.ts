@@ -2,11 +2,11 @@ export const teamData = {
   clubHistory: {
     title: 'Kluba vēsture',
     content:
-      'Dibināts 1985. gadā, Regbija klubs "Valmieras Fēnikss" ir lepns ar vietējo talantu attīstību un sacensībām reģionālā līmenī. Klubs ir izcīnījis 3 reģionālos čempionātus un turpina augt ar katru gadu.',
+      'Dibināts 2005. gadā, Regbija klubs "Valmieras Fēnikss" ir lepns ar vietējo talantu attīstību un sacensībām reģionālā līmenī. Klubs apvieno dažāda vecuma un prasmju spēlētājus vienotā komandā, kuri ar entuziasmu un aizrautību pārstāv Valmieras novadu.',
     icon: 'Trophy',
   },
   trainingSchedule: {
-    title: 'Treniņu grafiks',
+    title: 'Treniņu laiki',
     schedule: [
       {
         day: 'Otrdiena',
@@ -27,7 +27,7 @@ export const teamData = {
     title: 'Mājas laukums',
     address: 'Kaimiņi, Brenguļi\nBrenguļu pagasts, Valmieras novads, LV-4245',
     facilities:
-      'Mūsu aprīkojumā ietilpst pilna izmēra laukums, treniņu zona, kluba ēka ar bāru un ģērbtuves.',
+      'Mūsu aprīkojumā ietilpst pilna izmēra laukums un treniņu zona.',
     icon: 'MapPin',
   },
 }

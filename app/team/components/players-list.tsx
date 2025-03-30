@@ -33,18 +33,21 @@ export default function PlayersList() {
       }
     }
 
-    // Initial fetch
+    // Fetch data only once when component mounts
     fetchPlayers()
-
-    // Set up interval for periodic fetching
-    const intervalId = setInterval(fetchPlayers, 5000) // Refresh every 5 seconds
-
-    // Clean up interval on component unmount
-    return () => clearInterval(intervalId)
+    
+    // No interval refresh needed for static team data
   }, [])
 
-  if (isLoading) {
-    return <div className="p-8 text-center">Loading players...</div>
+  // Use minimal UI changes during loading to prevent layout shifts
+  if (isLoading && players.length === 0) {
+    return (
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 opacity-50">
+        {[1, 2, 3, 4, 5, 6].map((i) => (
+          <div key={i} className="h-96 bg-gray-100 animate-pulse"></div>
+        ))}
+      </div>
+    )
   }
 
   if (error) {

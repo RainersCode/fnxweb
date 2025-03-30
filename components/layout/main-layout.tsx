@@ -7,18 +7,34 @@ import { Menu, X, ArrowRight } from 'lucide-react'
 import Image from 'next/image'
 import { SignInButton, SignUpButton, UserButton, useAuth, useUser } from '@clerk/nextjs'
 import { isAdmin } from '@/lib/utils'
+import { usePathname } from 'next/navigation'
 
 interface MainLayoutProps {
   children: ReactNode
-  currentPage: string
+  currentPage?: string // Make currentPage optional
 }
 
-export default function MainLayout({ children, currentPage }: MainLayoutProps) {
+export function MainLayout({ children, currentPage: propCurrentPage }: MainLayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { isSignedIn } = useAuth()
   const { user } = useUser()
   const userEmail = user?.emailAddresses[0]?.emailAddress
   const isAdminUser = isAdmin(userEmail)
+  const pathname = usePathname()
+  
+  // Auto-detect current page based on pathname if not provided via props
+  const getActivePageKey = (path: string): string => {
+    if (path === '/') return 'HOME'
+    if (path === '/about') return 'ABOUT'
+    if (path === '/team') return 'TEAM'
+    if (path === '/fixtures') return 'FIXTURES'
+    if (path === '/news') return 'NEWS'
+    if (path === '/gallery') return 'GALLERY'
+    if (path === '/contact') return 'CONTACT'
+    return ''
+  }
+  
+  const currentPage = propCurrentPage || getActivePageKey(pathname)
 
   // Add animation styles for the Join Us button
   useEffect(() => {
@@ -88,10 +104,14 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
                     <li key={item.key}>
                       <Link
                         href={item.key === 'HOME' ? '/' : `/${item.key.toLowerCase()}`}
-                        className={`group relative mx-1 overflow-hidden px-4 py-5 text-sm font-medium tracking-wide text-white transition-all duration-300 hover:text-teal-100 ${currentPage === item.key ? 'text-teal-100' : ''}`}
+                        className={`group relative mx-1 overflow-hidden px-4 py-5 text-sm font-medium tracking-wide text-white transition-all duration-300 hover:text-teal-100 ${currentPage === item.key ? 'text-teal-100 font-bold' : ''}`}
                       >
                         <span className="relative z-10">{item.text}</span>
-                        <span className="absolute inset-0 -z-0 skew-x-[-12deg] scale-x-[0.8] scale-y-[0.8] transform bg-teal-600 opacity-0 transition-opacity duration-300 group-hover:scale-100 group-hover:opacity-100"></span>
+                        <span className={`absolute inset-0 -z-0 skew-x-[-12deg] transform bg-teal-600 transition-all duration-300 ${
+                          currentPage === item.key 
+                            ? 'opacity-100 scale-100' 
+                            : 'opacity-0 scale-x-[0.8] scale-y-[0.8] group-hover:scale-100 group-hover:opacity-100'
+                        }`}></span>
                       </Link>
                     </li>
                   )
@@ -182,10 +202,16 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
                     >
                       <Link
                         href={item.key === 'HOME' ? '/' : `/${item.key.toLowerCase()}`}
-                        className="group flex items-center text-lg font-medium tracking-wide text-white hover:text-teal-100"
+                        className={`group flex items-center text-lg font-medium tracking-wide text-white hover:text-teal-100 ${
+                          currentPage === item.key ? 'text-teal-100 font-bold' : ''
+                        }`}
                         onClick={() => setMobileMenuOpen(false)}
                       >
-                        <span className="mr-4 h-0.5 w-8 origin-left scale-x-0 transform bg-white transition-transform duration-300 group-hover:scale-x-100"></span>
+                        <span className={`mr-4 h-0.5 w-8 origin-left bg-white transition-transform duration-300 ${
+                          currentPage === item.key 
+                            ? 'scale-x-100' 
+                            : 'scale-x-0 group-hover:scale-x-100'
+                        }`}></span>
                         {item.text}
                       </Link>
                     </li>
@@ -376,3 +402,5 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
     </div>
   )
 }
+
+export default MainLayout;

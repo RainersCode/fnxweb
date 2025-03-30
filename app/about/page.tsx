@@ -3,7 +3,7 @@
 import { default as NextImage } from 'next/image'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
-import MainLayout from '@/components/layout/main-layout'
+import { MainLayout } from '@/components/layout/main-layout'
 import { SectionContainer } from '@/components/shared/section-container'
 import { SectionTitle } from '@/components/shared/section-title'
 import { Card, CardContent } from '@/components/ui/card'

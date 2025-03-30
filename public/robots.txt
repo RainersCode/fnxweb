@@ -1,0 +1,11 @@
+# RK "Fēnikss" Robots.txt
+# Allow all web crawlers to access all content
+User-agent: *
+Allow: /
+
+# Disallow admin area
+Disallow: /admin/
+Disallow: /sign-in/
+
+# Sitemap location
+Sitemap: https://your-domain.com/sitemap.xml 

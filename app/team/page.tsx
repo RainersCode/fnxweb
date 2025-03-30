@@ -1,10 +1,10 @@
 'use client'
 
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { CalendarDays, MapPin, Trophy, Users } from 'lucide-react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import MainLayout from '@/components/layout/main-layout'
+import { MainLayout } from '@/components/layout/main-layout'
 import { teamData } from '@/data/team-data'
 import PlayersList from './components/players-list'
 import CoachesList from './components/coaches-list'
@@ -16,6 +16,9 @@ import { ParallaxHeroSection } from '@/components/features/parallax-hero-section
 
 // This is a client component
 export default function TeamPage() {
+  // Keep track of which tab is active to avoid unnecessary renders
+  const [activeTab, setActiveTab] = useState('players')
+  
   return (
     <MainLayout currentPage="TEAM">
       <main className="flex-1">
@@ -30,8 +33,8 @@ export default function TeamPage() {
         {/* Team Info Section */}
         <section className="relative bg-white py-16">
           <div className="container mx-auto px-4 sm:px-6">
-            <div className="grid gap-8 md:grid-cols-3">
-              <Card className="transform overflow-hidden border-none shadow-md transition-all duration-300 hover:scale-[1.02] bg-white">
+            <div className="grid gap-8 md:grid-cols-1">
+              <Card className="transform overflow-hidden border-none shadow-md transition-all duration-300 hover:scale-[1.02] bg-white max-w-3xl mx-auto">
                 <CardContent className="p-0">
                   <div className="bg-teal-800 p-4 text-white">
                     <div className="flex items-center gap-3">
@@ -41,49 +44,6 @@ export default function TeamPage() {
                   </div>
                   <div className="p-6">
                     <p className="text-zinc-600">{teamData.clubHistory.content}</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="transform overflow-hidden border-none shadow-md transition-all duration-300 hover:scale-[1.02] bg-white">
-                <CardContent className="p-0">
-                  <div className="bg-teal-800 p-4 text-white">
-                    <div className="flex items-center gap-3">
-                      <CalendarDays className="h-6 w-6" />
-                      <h3 className="text-xl font-bold">{teamData.trainingSchedule.title}</h3>
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <ul className="space-y-2 text-zinc-600">
-                      {teamData.trainingSchedule.schedule.map((item, index) => (
-                        <li key={index} className="flex justify-between">
-                          <span>{item.day}</span>
-                          <span className="font-medium">{item.time}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="transform overflow-hidden border-none shadow-md transition-all duration-300 hover:scale-[1.02] bg-white">
-                <CardContent className="p-0">
-                  <div className="bg-teal-800 p-4 text-white">
-                    <div className="flex items-center gap-3">
-                      <MapPin className="h-6 w-6" />
-                      <h3 className="text-xl font-bold">{teamData.homeGround.title}</h3>
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <p className="mb-4 text-zinc-600">
-                      {teamData.homeGround.address.split('\n').map((line, i) => (
-                        <span key={i}>
-                          {line}
-                          {i < teamData.homeGround.address.split('\n').length - 1 && <br />}
-                        </span>
-                      ))}
-                    </p>
-                    <p className="text-zinc-600">{teamData.homeGround.facilities}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -107,7 +67,11 @@ export default function TeamPage() {
             </div>
 
             {/* Tabs */}
-            <Tabs defaultValue="players" className="mx-auto max-w-5xl">
+            <Tabs 
+              defaultValue="players" 
+              className="mx-auto max-w-5xl"
+              onValueChange={setActiveTab}
+            >
               <TabsList className="mb-10 grid w-full grid-cols-2 bg-transparent">
                 <TabsTrigger
                   value="players"
@@ -129,16 +93,12 @@ export default function TeamPage() {
                 </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="players">
-                <Suspense fallback={<Loading />}>
-                  <PlayersList />
-                </Suspense>
+              <TabsContent value="players" className="min-h-[400px]">
+                {activeTab === 'players' && <PlayersList />}
               </TabsContent>
 
-              <TabsContent value="coaches">
-                <Suspense fallback={<Loading />}>
-                  <CoachesList />
-                </Suspense>
+              <TabsContent value="coaches" className="min-h-[400px]">
+                {activeTab === 'coaches' && <CoachesList />}
               </TabsContent>
             </Tabs>
           </div>

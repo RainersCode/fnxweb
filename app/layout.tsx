@@ -10,9 +10,33 @@ import { Inter } from 'next/font/google'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'RK "Fēnikss" - Rugby Club',
-  description: 'Official website of RK "Fēnikss" rugby club',
+  title: 'RK "Fēnikss" - Valmieras Regbija Klubs | Dibināts 2005',
+  description: 'RK "Fēnikss" oficiālā mājaslapa - Valmieras vadošais regbija klubs, dibināts 2005. gadā. Pievienojieties mums, lai uzzinātu par spēlēm, jaunumiem, fotoattēliem un informāciju par klubu. Apvieno dažāda vecuma un prasmju spēlētājus vienotā komandā.',
   generator: 'v0.dev',
+  keywords: ['regbijs', 'Valmiera', 'Fēnikss', 'sporta klubs', 'Latvijas regbijs', 'regbija spēles', 'regbija komanda'],
+  authors: [{ name: 'RK Fēnikss' }],
+  openGraph: {
+    title: 'RK "Fēnikss" - Valmieras Regbija Klubs | Dibināts 2005',
+    description: 'RK "Fēnikss" oficiālā mājaslapa - Valmieras vadošais regbija klubs, dibināts 2005. gadā. Pievienojieties mums, lai uzzinātu par spēlēm, jaunumiem un informāciju par klubu.',
+    url: 'https://your-domain.com', // Replace with your actual domain when available
+    siteName: 'RK Fēnikss',
+    images: [
+      {
+        url: '/Logo/fēniks_logo-removebg-preview.png',
+        width: 800,
+        height: 600,
+        alt: 'RK Fēnikss Logo',
+      }
+    ],
+    locale: 'lv_LV',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'RK "Fēnikss" - Valmieras Regbija Klubs',
+    description: 'RK "Fēnikss" oficiālā mājaslapa - Valmieras vadošais regbija klubs, dibināts 2005. gadā.',
+    images: ['/Logo/fēniks_logo-removebg-preview.png'],
+  },
   icons: {
     icon: '/Logo/fēniks_logo-removebg-preview.png',
     shortcut: '/Logo/fēniks_logo-removebg-preview.png',

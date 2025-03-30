@@ -32,18 +32,21 @@ export default function CoachesList() {
       }
     }
 
-    // Initial fetch
+    // Fetch data only once when component mounts
     fetchCoaches()
-
-    // Set up interval for periodic fetching
-    const intervalId = setInterval(fetchCoaches, 5000) // Refresh every 5 seconds
-
-    // Clean up interval on component unmount
-    return () => clearInterval(intervalId)
+    
+    // No interval refresh needed for static team data
   }, [])
 
-  if (isLoading) {
-    return <div className="p-8 text-center">Loading coaches...</div>
+  // Use minimal UI changes during loading to prevent layout shifts
+  if (isLoading && coaches.length === 0) {
+    return (
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-3 opacity-50">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="h-96 bg-gray-100 animate-pulse"></div>
+        ))}
+      </div>
+    )
   }
 
   if (error) {

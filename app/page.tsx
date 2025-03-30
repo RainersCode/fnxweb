@@ -13,7 +13,7 @@ import {
   Camera,
   ImageIcon,
 } from 'lucide-react'
-import MainLayout from '@/components/layout/main-layout'
+import { MainLayout } from '@/components/layout/main-layout'
 import { GridContainer } from '@/components/ui/grid-container'
 import { SectionContainer } from '@/components/shared/section-container'
 import { SectionTitle } from '@/components/shared/section-title'
