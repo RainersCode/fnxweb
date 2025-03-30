@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, type ReactNode } from 'react'
+import { useState, type ReactNode, useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Shield, Menu, X } from 'lucide-react'
+import { Shield, Menu, X, ArrowRight } from 'lucide-react'
 import { SignInButton, SignUpButton, UserButton, useAuth, useUser } from '@clerk/nextjs'
 import { isAdmin } from '@/lib/utils'
 
@@ -18,6 +18,37 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
   const { user } = useUser()
   const userEmail = user?.emailAddresses[0]?.emailAddress
   const isAdminUser = isAdmin(userEmail)
+
+  // Add animation styles for the Join Us button
+  useEffect(() => {
+    // Create animation keyframes
+    const styleElement = document.createElement('style');
+    styleElement.id = 'join-us-animation';
+    styleElement.textContent = `
+      @keyframes glow-join-us-border {
+        0% { border-color: rgba(20, 184, 166, 0.2); box-shadow: 0 0 5px rgba(20, 184, 166, 0.2); }
+        50% { border-color: rgba(20, 184, 166, 0.8); box-shadow: 0 0 20px rgba(20, 184, 166, 0.6); }
+        100% { border-color: rgba(20, 184, 166, 0.2); box-shadow: 0 0 5px rgba(20, 184, 166, 0.2); }
+      }
+      .join-us-button {
+        animation: glow-join-us-border 2s infinite;
+        border: 2px solid transparent;
+      }
+    `;
+    
+    // Only add if it doesn't exist yet
+    if (!document.getElementById('join-us-animation')) {
+      document.head.appendChild(styleElement);
+    }
+    
+    // Cleanup on unmount
+    return () => {
+      const existingStyle = document.getElementById('join-us-animation');
+      if (existingStyle) {
+        existingStyle.remove();
+      }
+    };
+  }, []);
 
   return (
     <div className="flex min-h-screen flex-col bg-white font-sans text-zinc-900">
@@ -66,20 +97,14 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
                 </>
               ) : (
                 <>
-                  <SignInButton mode="modal">
-                    <button className="hidden skew-x-[-12deg] transform bg-white px-6 py-3 font-medium tracking-wide text-teal-800 shadow-lg transition-all duration-300 hover:bg-white hover:text-teal-900 md:inline-flex">
+                  <Link href="/contact">
+                    <button className="join-us-button hidden group skew-x-[-12deg] transform bg-white px-6 py-3 font-medium tracking-wide text-teal-800 shadow-lg transition-all duration-300 hover:bg-white hover:text-teal-900 md:inline-flex">
                       <span className="inline-flex skew-x-[12deg] transform items-center">
-                        Sign In
+                        JOIN US
+                        <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                       </span>
                     </button>
-                  </SignInButton>
-                  <SignUpButton mode="modal">
-                    <button className="hidden skew-x-[-12deg] transform border border-white/20 bg-white/10 px-6 py-3 font-medium tracking-wide text-white shadow-lg transition-all duration-300 hover:bg-white/20 md:inline-flex">
-                      <span className="inline-flex skew-x-[12deg] transform items-center">
-                        Sign Up
-                      </span>
-                    </button>
-                  </SignUpButton>
+                  </Link>
                 </>
               )}
               <button
@@ -155,22 +180,19 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
                   </div>
                 </>
               ) : (
-                <>
-                  <SignInButton mode="modal">
-                    <button className="mt-12 w-full skew-x-[-12deg] transform bg-white px-6 py-3 font-medium tracking-wide text-teal-800 shadow-lg transition-all duration-300 hover:bg-white hover:text-teal-900">
-                      <span className="inline-flex skew-x-[12deg] transform items-center">
-                        Sign In
-                      </span>
-                    </button>
-                  </SignInButton>
-                  <SignUpButton mode="modal">
-                    <button className="mt-4 w-full skew-x-[-12deg] transform border border-white/20 bg-white/10 px-6 py-3 font-medium tracking-wide text-white shadow-lg transition-all duration-300 hover:bg-white/20">
-                      <span className="inline-flex skew-x-[12deg] transform items-center">
-                        Sign Up
-                      </span>
-                    </button>
-                  </SignUpButton>
-                </>
+                <Link
+                  href="/contact"
+                  className="animate-slide-in-up mt-12 block w-full"
+                  style={{ animationDelay: '600ms', animationFillMode: 'forwards' }}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <button className="join-us-button w-full group skew-x-[-12deg] transform bg-white px-6 py-3 font-medium tracking-wide text-teal-800 shadow-lg transition-all duration-300 hover:bg-white hover:text-teal-900">
+                    <span className="inline-flex skew-x-[12deg] transform items-center">
+                      JOIN US
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                    </span>
+                  </button>
+                </Link>
               )}
             </nav>
 
@@ -282,7 +304,26 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
               </address>
             </div>
           </div>
-          <div className="mt-12 border-t border-zinc-200 pt-6 text-center text-sm font-medium tracking-wide text-zinc-500">
+          
+          {/* Sign in/Sign up buttons */}
+          <div className="mt-8 mb-4 flex justify-center space-x-6">
+            {!isSignedIn && (
+              <>
+                <SignInButton mode="modal">
+                  <button className="text-xs font-medium text-zinc-500 hover:text-teal-700 transition-colors">
+                    Sign In
+                  </button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <button className="text-xs font-medium text-zinc-500 hover:text-teal-700 transition-colors">
+                    Sign Up
+                  </button>
+                </SignUpButton>
+              </>
+            )}
+          </div>
+          
+          <div className="mt-6 border-t border-zinc-200 pt-6 text-center text-sm font-medium tracking-wide text-zinc-500">
             <p>© 2025 RIVERSIDE RUGBY CLUB. ALL RIGHTS RESERVED.</p>
           </div>
         </div>

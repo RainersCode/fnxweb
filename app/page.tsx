@@ -265,7 +265,7 @@ export default function HomePage() {
       linkElement.style.bottom = '100px';
       linkElement.style.left = '50%';
       linkElement.style.transform = 'translateX(-50%) skew(-12deg)';
-      linkElement.style.zIndex = '9999';
+      linkElement.style.zIndex = '20';
       linkElement.style.backgroundColor = '#115e59';
       linkElement.style.color = 'white';
       linkElement.style.padding = '12px 24px';
