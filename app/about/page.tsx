@@ -81,56 +81,6 @@ export default function AboutPage() {
           </div>
         </SectionContainer>
 
-        {/* Achievements Section */}
-        <SectionContainer className="py-20">
-          <div className="mx-auto max-w-3xl">
-            <SectionTitle title={aboutUsData.achievements.title} />
-            <ul className="mt-6 space-y-4">
-              {aboutUsData.achievements.list.map((achievement, index) => (
-                <li key={index} className="flex items-start">
-                  <div className="mr-4 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-teal-100 text-teal-800">
-                    <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                  <p className="text-lg font-medium text-zinc-700">{achievement}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </SectionContainer>
-
-        {/* Facilities Section */}
-        <SectionContainer className="bg-gray-50 py-20">
-          <div className="mx-auto max-w-3xl">
-            <SectionTitle title={aboutUsData.facilities.title} />
-            <p className="mb-8 text-lg leading-relaxed text-zinc-700">
-              {aboutUsData.facilities.content}
-            </p>
-
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-              {aboutUsData.galleryImages.map((image, index) => (
-                <div
-                  key={index}
-                  className="overflow-hidden rounded-lg transition-all duration-300 hover:shadow-lg"
-                >
-                  <NextImage
-                    src={image}
-                    alt={`Club facility image ${index + 1}`}
-                    width={600}
-                    height={400}
-                    className="h-auto w-full transform transition-transform duration-500 hover:scale-105"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </SectionContainer>
-
         {/* CTA Section */}
         <SectionContainer className="bg-gradient-to-r from-teal-900 to-teal-700 py-16 text-white">
           <div className="mx-auto max-w-3xl text-center">

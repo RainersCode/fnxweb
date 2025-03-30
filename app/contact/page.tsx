@@ -23,6 +23,8 @@ interface FormData {
 export default function ContactPage() {
   const handleFormSubmit = (formData: FormData) => {
     console.log('Form submitted:', formData)
+    // This function is now just for logging purposes. 
+    // The actual submission is handled within the ContactForm component.
   }
 
   return (
@@ -43,43 +45,31 @@ export default function ContactPage() {
 
                 <div className="mt-12 space-y-10">
                   <ContactInfoItem icon={MapPin} title="KLUBA ADRESE">
-                    RK &quot;Fēnikss&quot;
+                    Biedrība "Regbija klubs "Valmieras Fēnikss""
                     <br />
-                    Riverside Park, Main Street
+                    Juridiskā adrese: "Lukstiņi", Bērzaines pagasts, Valmieras novads, LV-4208
                     <br />
-                    Riverside Town, RT1 2AB
+                    Adrese: Kaimiņi, Brenguļi, Brenguļu pagasts, Valmieras novads, LV-4245
+                    <br />
+                    Reģistrācijas nr: 40008126600
                   </ContactInfoItem>
 
                   <ContactInfoItem icon={Phone} title="TĀLRUNIS">
-                    Kluba birojs:{' '}
-                    <a href="tel:+441234567890" className="hover:text-teal-700">
-                      01234 567890
-                    </a>
-                    <br />
-                    Dalība:{' '}
-                    <a href="tel:+441234567891" className="hover:text-teal-700">
-                      01234 567891
+                    <a href="tel:+37129113938" className="hover:text-teal-700">
+                      +371 29113938
                     </a>
                   </ContactInfoItem>
 
                   <ContactInfoItem icon={Mail} title="E-PASTS">
-                    Vispārīgi jautājumi:{' '}
-                    <a href="mailto:info@rkfenikss.com" className="hover:text-teal-700">
-                      info@rkfenikss.com
-                    </a>
-                    <br />
-                    Dalība:{' '}
-                    <a href="mailto:membership@rkfenikss.com" className="hover:text-teal-700">
-                      membership@rkfenikss.com
+                    <a href="mailto:rkfenikss@gmail.com" className="hover:text-teal-700">
+                      rkfenikss@gmail.com
                     </a>
                   </ContactInfoItem>
 
-                  <ContactInfoItem icon={Clock} title="DARBA LAIKS">
-                    Pirmdiena - Piektdiena: 9:00 - 17:00
+                  <ContactInfoItem icon={Clock} title="BANKAS REKVIZĪTI">
+                    Bankas konts: Swedbank
                     <br />
-                    Sestdiena: 9:00 - 19:00 (Spēļu dienās)
-                    <br />
-                    Svētdiena: 10:00 - 16:00
+                    Konta nr.: LV86HABA0551035059313
                   </ContactInfoItem>
                 </div>
 
@@ -100,10 +90,10 @@ export default function ContactPage() {
 
         <MapSection
           address={{
-            name: 'RK "Fēnikss"',
-            street: 'Riverside Park, Main Street',
-            city: 'Riverside Town',
-            postcode: 'RT1 2AB',
+            name: 'Biedrība "Regbija klubs "Valmieras Fēnikss""',
+            street: 'Kaimiņi, Brenguļi',
+            city: 'Brenguļu pagasts, Valmieras novads',
+            postcode: 'LV-4245',
           }}
         />
       </main>

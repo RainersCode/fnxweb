@@ -2,7 +2,7 @@ export const teamData = {
   clubHistory: {
     title: 'Kluba vēsture',
     content:
-      'Dibināts 1985. gadā, Riverside RFC ir lepns ar vietējo talantu attīstību un sacensībām reģionālā līmenī. Klubs ir izcīnījis 3 reģionālos čempionātus un turpina augt ar katru gadu.',
+      'Dibināts 1985. gadā, Regbija klubs "Valmieras Fēnikss" ir lepns ar vietējo talantu attīstību un sacensībām reģionālā līmenī. Klubs ir izcīnījis 3 reģionālos čempionātus un turpina augt ar katru gadu.',
     icon: 'Trophy',
   },
   trainingSchedule: {
@@ -25,7 +25,7 @@ export const teamData = {
   },
   homeGround: {
     title: 'Mājas laukums',
-    address: 'Riverside Park, Main Street\nRiverside Town, RT1 2AB',
+    address: 'Kaimiņi, Brenguļi\nBrenguļu pagasts, Valmieras novads, LV-4245',
     facilities:
       'Mūsu aprīkojumā ietilpst pilna izmēra laukums, treniņu zona, kluba ēka ar bāru un ģērbtuves.',
     icon: 'MapPin',

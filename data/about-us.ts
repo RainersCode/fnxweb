@@ -1,11 +1,11 @@
 export const aboutUsData = {
   title: 'Par RK \"Fēnikss\"',
   introduction:
-    'RK \"Fēnikss\" ir kopienas amatieru regbija komanda, kas dibināta 1985. gadā ar lepnu tradīciju apvienot visu vecumu un prasmju spēlētājus. Atrodas Riversaidas pilsētas centrā, mūsu klubs ir izaudzis no pieticīgiem pirmsākumiem, lai kļūtu par neatņemamu vietējās sporta kopienas daļu.',
+    'RK "Fēnikss" nodarbojas ar regbija komandas veidošanu un veiksmīgi startē Latvijas Regbija Federācijas rīkotajās sacensībās, kā arī starptautiskajos turnīros gan regbijā XV, gan regbijā 7.',
   history: {
     title: 'Mūsu vēsture',
     content:
-      "Regbija entuziastu grupas 1985. gadā dibinātais RK \"Fēnikss\" sāka ar tikai 15 spēlētājiem un vienu komandu. Gadu desmitu laikā mēs esam izauguši par plaukstošu klubu ar vairākām komandām dažādās vecuma grupās. No mūsu pirmās vietējās čempionāta uzvaras 1992. gadā līdz reģionālo turnīru rīkošanai mūsu klubam ir bagāta regbija talantu un kopienas gara veicināšanas vēsture. Kluba mājas vieta Riversaidas parkā ir bijusi mūsu bāze kopš 1990. gada, kur esam izveidojuši savas telpas un radījuši neskaitāmas atmiņas.",
+      'RK"Fēnikss" aizsākumi meklējami 2005. gada janvārī, kad Kristapam Staņam, Raimondam Priedniekam, Armandam Olmanim un Ingaram Burcevam, sanākot kopā bārā Citas Debesis, kas tajā laikā atradās netālu no Valmieras tirgus. Tiek nolemts uzsākt treniņus Valmierā un piesaistīt jauniešus no apkārtējiem pagastiem. Pirmās komandas nosaukums bija "Kocēni".',
   },
   mission: {
     title: 'Mūsu misija',

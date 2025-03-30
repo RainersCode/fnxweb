@@ -326,20 +326,25 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
             <div>
               <h3 className="mb-4 font-bold uppercase tracking-wide text-teal-900">Sazinies ar mums</h3>
               <address className="space-y-2 text-sm font-medium not-italic text-zinc-600">
-                <p>RK &quot;Fēnikss&quot;</p>
-                <p>Riverside Park, Main Street</p>
-                <p>Riverside Town, RT1 2AB</p>
+                <p>Biedrība "Regbija klubs "Valmieras Fēnikss""</p>
+                <p>Juridiskā adrese: "Lukstiņi", Bērzaines pagasts, Valmieras novads, LV-4208</p>
+                <p>Adrese: Kaimiņi, Brenguļi, Brenguļu pagasts, Valmieras novads, LV-4245</p>
+                <p>Reģistrācijas nr: 40008126600</p>
                 <p className="mt-2">
                   E-pasts:{' '}
-                  <a href="mailto:info@riversiderugby.com" className="hover:text-teal-700">
-                    info@riversiderugby.com
+                  <a href="mailto:rkfenikss@gmail.com" className="hover:text-teal-700">
+                    rkfenikss@gmail.com
                   </a>
                 </p>
                 <p>
                   Tālrunis:{' '}
-                  <a href="tel:+441234567890" className="hover:text-teal-700">
-                    01234 567890
+                  <a href="tel:+37129113938" className="hover:text-teal-700">
+                    +371 29113938
                   </a>
+                </p>
+                <p className="mt-2">
+                  Bankas konts: Swedbank<br />
+                  Konta nr.: LV86HABA0551035059313
                 </p>
               </address>
             </div>

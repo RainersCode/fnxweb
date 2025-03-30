@@ -29,20 +29,52 @@ interface ContactFormProps {
 export function ContactForm({ onSubmit }: ContactFormProps) {
   const [formData, setFormData] = useState<FormData>(defaultFormData)
   const [formSubmitted, setFormSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState("")
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    onSubmit?.(formData)
-    setFormSubmitted(true)
-    setTimeout(() => {
-      setFormData(defaultFormData)
-      setFormSubmitted(false)
-    }, 5000)
+    setIsSubmitting(true)
+    setError("")
+    
+    try {
+      // Send data to our API endpoint
+      const response = await fetch('/api/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Kļūda nosūtot ziņu. Lūdzu, mēģiniet vēlreiz.');
+      }
+      
+      // Call the onSubmit prop if provided
+      onSubmit?.(formData)
+      
+      // Show success message
+      setFormSubmitted(true)
+      
+      // Reset form after 5 seconds
+      setTimeout(() => {
+        setFormData(defaultFormData)
+        setFormSubmitted(false)
+      }, 5000)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Kļūda nosūtot ziņu. Lūdzu, mēģiniet vēlreiz.')
+      console.error('Form submission error:', err)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -68,6 +100,12 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
+            {error && (
+              <div className="bg-red-50 text-red-800 p-4 rounded-md mb-4">
+                <p>{error}</p>
+              </div>
+            )}
+            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="name" className="text-zinc-800 font-medium">Jūsu vārds</Label>
@@ -157,9 +195,14 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
             <div className="flex justify-center">
               <button
                 type="submit"
-                className="px-6 py-3 font-medium tracking-wide transform skew-x-[-12deg] transition-all duration-300 bg-teal-800 hover:bg-teal-900 text-white"
+                disabled={isSubmitting}
+                className={`px-6 py-3 font-medium tracking-wide transform skew-x-[-12deg] transition-all duration-300 ${
+                  isSubmitting ? 'bg-teal-600 cursor-not-allowed' : 'bg-teal-800 hover:bg-teal-900'
+                } text-white`}
               >
-                <span className="transform skew-x-[12deg] inline-flex items-center">NOSŪTĪT ZIŅU</span>
+                <span className="transform skew-x-[12deg] inline-flex items-center">
+                  {isSubmitting ? 'NOSŪTA...' : 'NOSŪTĪT ZIŅU'}
+                </span>
               </button>
             </div>
           </form>
