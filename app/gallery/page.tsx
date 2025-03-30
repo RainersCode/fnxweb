@@ -4,9 +4,11 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { MainLayout } from '@/components/layout/main-layout'
-import { Gallery } from '@/types/supabase'
+import { Gallery, GalleryImage } from '@/types/supabase'
 import { Loader2, ArrowRight, Image as ImageIcon } from 'lucide-react'
 import { ParallaxHeroSection } from '@/components/features/parallax-hero-section'
+import { supabase } from '@/lib/supabase'
+import { prepareImagePath } from '@/lib/supabase'
 
 interface GalleryWithThumbnail extends Gallery {
   thumbnailUrl: string | null
@@ -17,19 +19,60 @@ export default function GalleryPage() {
   const [galleries, setGalleries] = useState<GalleryWithThumbnail[]>([])
   const [loading, setLoading] = useState(true)
 
-  // Fetch galleries from Supabase
+  // Fetch galleries directly from Supabase
   useEffect(() => {
     const fetchGalleries = async () => {
       setLoading(true)
       try {
-        const response = await fetch('/api/galleries')
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`)
+        console.log('Fetching galleries directly from Supabase')
+        
+        // Get galleries
+        const { data: galleriesData, error: galleriesError } = await supabase
+          .from('galleries')
+          .select('*')
+          .order('created_at', { ascending: false })
+
+        if (galleriesError) {
+          console.error('Error fetching galleries:', galleriesError)
+          throw galleriesError
         }
-        const data = await response.json()
-        setGalleries(data || [])
+
+        console.log(`Fetched ${galleriesData?.length || 0} galleries`)
+
+        // For each gallery, get the first image
+        const galleriesWithThumbnails = await Promise.all(
+          (galleriesData || []).map(async (gallery) => {
+            // Get first image for this gallery
+            const { data: imagesData, error: imagesError } = await supabase
+              .from('gallery_images')
+              .select('*')
+              .eq('gallery_id', gallery.id)
+              .limit(1)
+
+            if (imagesError) {
+              console.error(`Error fetching images for gallery ${gallery.id}:`, imagesError)
+              return {
+                ...gallery,
+                thumbnailUrl: '/placeholder.svg?height=300&width=400&text=Gallery'
+              }
+            }
+
+            const thumbnailUrl = imagesData && imagesData.length > 0 
+              ? prepareImagePath(imagesData[0].image_url) 
+              : '/placeholder.svg?height=300&width=400&text=Gallery'
+
+            return {
+              ...gallery,
+              thumbnailUrl
+            }
+          })
+        )
+
+        setGalleries(galleriesWithThumbnails)
       } catch (error) {
-        console.error('Error fetching galleries:', error)
+        console.error('Error in gallery fetching process:', error)
+        // Set empty galleries so UI shows "no galleries" message
+        setGalleries([])
       } finally {
         setLoading(false)
       }

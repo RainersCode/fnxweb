@@ -387,37 +387,59 @@ export async function deleteMedia(path: string) {
 
 // Get the first image of a gallery (for thumbnail)
 export async function getGalleryFirstImage(galleryId: string) {
-  const { data, error } = await supabase
-    .from('gallery_images')
-    .select('*')
-    .eq('gallery_id', galleryId)
-    .limit(10)  // Get first 10 images to ensure we have some data to work with
-
-  if (error) {
-    console.error(`Error fetching images for gallery ${galleryId}:`, error)
-    throw error
-  }
+  console.log(`Getting first image for gallery ${galleryId}`)
   
-  // If no images found, return null
-  if (!data || data.length === 0) {
-    console.log(`No images found for gallery ${galleryId}`)
+  try {
+    const { data, error } = await supabase
+      .from('gallery_images')
+      .select('*')
+      .eq('gallery_id', galleryId)
+      .limit(10)  // Get first 10 images to ensure we have some data to work with
+
+    if (error) {
+      console.error(`Error fetching images for gallery ${galleryId}:`, error)
+      throw error
+    }
+    
+    // If no images found, return null
+    if (!data || data.length === 0) {
+      console.log(`No images found for gallery ${galleryId}`)
+      return null
+    }
+
+    console.log(`Found ${data.length} images for gallery ${galleryId}`)
+    console.log('Sample image data:', JSON.stringify(data[0]))
+    
+    // Sort the images by the correct ordering column
+    // First check what columns exist in the data
+    const hasOrder = data[0].hasOwnProperty('order')
+    const hasDisplayOrder = data[0].hasOwnProperty('display_order')
+    
+    console.log(`Column detection: hasOrder=${hasOrder}, hasDisplayOrder=${hasDisplayOrder}`)
+    
+    let sortedData = [...data];
+    if (hasOrder) {
+      console.log('Using "order" column for sorting')
+      sortedData = sortedData.sort((a, b) => (a.order || 0) - (b.order || 0))
+    } else if (hasDisplayOrder) {
+      console.log('Using "display_order" column for sorting')
+      sortedData = sortedData.sort((a, b) => (a.display_order || 0) - (b.display_order || 0))
+    } else {
+      // Fallback to uploaded_at if neither order column is available
+      console.log('No order columns found, using uploaded_at for sorting')
+      sortedData = sortedData.sort((a, b) => {
+        const dateA = a.uploaded_at ? new Date(a.uploaded_at).getTime() : 0
+        const dateB = b.uploaded_at ? new Date(b.uploaded_at).getTime() : 0
+        return dateB - dateA // newest first
+      })
+    }
+    
+    // Return the first image
+    const firstImage = sortedData[0]
+    console.log(`Selected first image for gallery ${galleryId}:`, firstImage ? firstImage.image_url : 'none available')
+    return firstImage
+  } catch (err) {
+    console.error(`Exception in getGalleryFirstImage for gallery ${galleryId}:`, err)
     return null
   }
-
-  console.log(`Found ${data.length} images for gallery ${galleryId}`)
-  
-  // Sort the images by the correct ordering column
-  let sortedData = [...data];
-  if (data[0].hasOwnProperty('order')) {
-    console.log('Using "order" column for sorting')
-    sortedData = sortedData.sort((a, b) => (a.order || 0) - (b.order || 0))
-  } else if (data[0].hasOwnProperty('display_order')) {
-    console.log('Using "display_order" column for sorting')
-    sortedData = sortedData.sort((a, b) => (a.display_order || 0) - (b.display_order || 0))
-  }
-  
-  // Return the first image
-  const firstImage = sortedData[0]
-  console.log(`First image for gallery ${galleryId}:`, firstImage.image_url)
-  return firstImage
 }

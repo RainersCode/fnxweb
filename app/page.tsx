@@ -22,6 +22,7 @@ import { ParallaxHeroSection } from '@/components/features/parallax-hero-section
 import { MapSection } from '@/components/features/map-section'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
+import { prepareImagePath } from '@/lib/supabase'
 import { Article, Gallery, GalleryImage, Fixture } from '@/types/supabase'
 import { aboutUsData } from '@/data/about-us'
 
@@ -98,17 +99,55 @@ export default function HomePage() {
     const fetchGalleries = async () => {
       setLoadingGallery(true)
       try {
-        const response = await fetch('/api/galleries')
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`)
-        }
-        const data = await response.json()
+        console.log('Fetching galleries directly from Supabase in home page')
+        
+        // Get galleries
+        const { data: galleriesData, error: galleriesError } = await supabase
+          .from('galleries')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(4) // Limit to 4 galleries for home page
 
-        // Get up to 4 most recent galleries
-        const recentGalleries = data.slice(0, 4)
-        setGalleries(recentGalleries)
+        if (galleriesError) {
+          console.error('Error fetching galleries in home page:', galleriesError)
+          throw galleriesError
+        }
+
+        console.log(`Home page: Fetched ${galleriesData?.length || 0} galleries`)
+
+        // For each gallery, get the first image
+        const galleriesWithThumbnails = await Promise.all(
+          (galleriesData || []).map(async (gallery) => {
+            // Get first image for this gallery
+            const { data: imagesData, error: imagesError } = await supabase
+              .from('gallery_images')
+              .select('*')
+              .eq('gallery_id', gallery.id)
+              .limit(1)
+
+            if (imagesError) {
+              console.error(`Home page: Error fetching images for gallery ${gallery.id}:`, imagesError)
+              return {
+                ...gallery,
+                thumbnailUrl: '/placeholder.svg?height=300&width=400&text=Gallery'
+              }
+            }
+
+            const thumbnailUrl = imagesData && imagesData.length > 0 
+              ? prepareImagePath(imagesData[0].image_url) 
+              : '/placeholder.svg?height=300&width=400&text=Gallery'
+
+            return {
+              ...gallery,
+              thumbnailUrl
+            }
+          })
+        )
+
+        setGalleries(galleriesWithThumbnails)
       } catch (error) {
-        console.error('Error fetching galleries:', error)
+        console.error('Home page: Error in gallery fetching process:', error)
+        setGalleries([])
       } finally {
         setLoadingGallery(false)
       }

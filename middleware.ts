@@ -10,6 +10,7 @@ const publicPaths = [
   '/contact',
   '/sign-in',
   '/api/webhook/clerk',
+  '/api/galleries',
 ]
 
 const isPublic = (path: string) => {
@@ -30,6 +31,12 @@ export default authMiddleware({
       auth: JSON.stringify(auth),
       isPublicPath: isPublic(path),
     })
+
+    // Special case for galleries API - always allow access
+    if (path.startsWith('/api/galleries')) {
+      console.log('Explicitly allowing galleries API access:', path)
+      return NextResponse.next()
+    }
 
     // Allow public paths and static files
     if (isPublic(path) || path.includes('.')) {
@@ -82,7 +89,7 @@ export default authMiddleware({
 
     return NextResponse.next()
   },
-  publicRoutes: publicPaths,
+  publicRoutes: [...publicPaths, '/api/galleries(.*)'],
 })
 
 // Stop Middleware running on static files and api routes

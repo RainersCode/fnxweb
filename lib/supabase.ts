@@ -35,20 +35,37 @@ export const getImageUrl = (bucket: string, path: string | null): string => {
 
 // Helper function to prepare image paths for Next.js Image component
 export const prepareImagePath = (path: string | null): string => {
-  if (!path) return '/placeholder.svg'
+  console.log('Preparing image path:', path)
+  
+  if (!path) {
+    console.log('No path provided, using placeholder')
+    return '/placeholder.svg'
+  }
+  
+  // Trim the path to remove any whitespace
+  path = path.trim()
   
   // If it's already a URL, return it
   if (path.startsWith('http://') || path.startsWith('https://')) {
+    console.log('Path is already a URL, using as-is')
     return path
   }
   
   // If it's a relative path
   if (path.startsWith('/')) {
+    console.log('Path is relative, using as-is')
     return path
   }
   
+  // Check if path is in a storage bucket format but missing URL
+  if (path.includes('/') && !path.startsWith('http')) {
+    console.log('Converting storage path to full URL')
+    return getImageUrl('media', path)
+  }
+  
   // Otherwise, assume it's a Supabase storage path
-  return getImageUrl('images', path)
+  console.log('Assuming Supabase storage path')
+  return getImageUrl('media', path)
 }
 
 // Create admin client with service role key (only use on the server)
