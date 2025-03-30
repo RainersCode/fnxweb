@@ -14,7 +14,7 @@ export default function CookiesPolicyPage() {
         <div className="prose prose-zinc lg:prose-lg max-w-none">
           <h2 className="text-2xl font-semibold mt-8 mb-4">SĪKDATŅU VEIDI UN IZMANTOŠANAS MĒRĶIS</h2>
           <p>
-            Lai palīdzētu analizēt interneta vietnes <strong>fnx-rugby.lv</strong> izmantošanu, t.sk., lai izprastu apmeklētāju darbības interneta vietnē <strong>fnx-rugby.lv</strong>, un tādējādi ļautu <strong>RK "Fēnikss"</strong> uzlabot un izveidotu lietotājiem ērtāku interneta vietni un uzlabotu tās darbību, <strong>RK "Fēnikss"</strong> izmanto interneta analīzes pakalpojumu, ko nodrošina Google Analytics rīks, un kura lietošanai ir nepieciešama Jūsu piekrišana.
+            Lai palīdzētu analizēt interneta vietnes <strong>fnx-rugby.lv </strong> izmantošanu, t.sk., lai izprastu apmeklētāju darbības interneta vietnē <strong>fnx-rugby.lv</strong>, un tādējādi ļautu <strong>RK "Fēnikss"</strong> uzlabot un izveidotu lietotājiem ērtāku interneta vietni un uzlabotu tās darbību, <strong>RK "Fēnikss"</strong> izmanto interneta analīzes pakalpojumu, ko nodrošina Google Analytics rīks, un kura lietošanai ir nepieciešama Jūsu piekrišana.
           </p>
           <p>
             Sīkdatnēs tiek apkopota informācija par to, kā Jūs izmantojat interneta vietni <strong>fnx-rugby.lv</strong>. Šim nolūkam tiek apkopota standarta žurnāl ierakstu informācija (pieslēguma laiks, ilgums, IP adrese) un anonīma informācija par Jūsu darbībām interneta vietnē.
