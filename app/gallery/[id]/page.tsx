@@ -1,82 +1,109 @@
 'use client'
 
-import { useState, useEffect, useCallback, TouchEvent } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
+import { useState, useEffect, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import MainLayout from '@/components/layout/main-layout'
+import Link from 'next/link'
+import { ArrowLeft, X } from 'lucide-react'
+import { MainLayout } from '@/components/layout/main-layout'
+import { SectionContainer } from '@/components/shared/section-container'
+import { supabase, prepareImagePath } from '@/lib/supabase'
 import { Gallery, GalleryImage } from '@/types/supabase'
-import { Loader2, ChevronLeft, ChevronRight, X } from 'lucide-react'
 
 export default function GalleryDetailPage() {
   const params = useParams()
   const router = useRouter()
-  const galleryId = params.id as string
-
-  const [scrollY, setScrollY] = useState(0)
   const [gallery, setGallery] = useState<Gallery | null>(null)
-  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([])
-  const [loading, setLoading] = useState(true)
-  const [selectedImage, setSelectedImage] = useState<string | null>(null)
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(-1)
+  const [images, setImages] = useState<GalleryImage[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [currentImageIndex, setCurrentImageIndex] = useState<number | null>(null)
 
-  // For touch events
-  const [touchStart, setTouchStart] = useState<number | null>(null)
-  const [touchEnd, setTouchEnd] = useState<number | null>(null)
+  // Get the gallery ID from the URL
+  const id = params.id as string
 
-  // Fetch gallery and its images
   useEffect(() => {
-    const fetchGalleryWithImages = async () => {
-      setLoading(true)
+    const fetchGallery = async () => {
+      setIsLoading(true)
       try {
-        const response = await fetch(`/api/galleries/${galleryId}`)
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`)
-        }
-        const data = await response.json()
-        setGallery(data)
-        setGalleryImages(data.images || [])
+        // Fetch gallery details
+        const { data: galleryData, error: galleryError } = await supabase
+          .from('galleries')
+          .select('*')
+          .eq('id', id)
+          .single()
+
+        if (galleryError) throw galleryError
+
+        // Fetch gallery images
+        const { data: imagesData, error: imagesError } = await supabase
+          .from('gallery_images')
+          .select('*')
+          .eq('gallery_id', id)
+          .order('order', { ascending: true })
+
+        if (imagesError) throw imagesError
+
+        setGallery(galleryData)
+        setImages(imagesData || [])
       } catch (error) {
         console.error('Error fetching gallery:', error)
+        setGallery(null)
+        setImages([])
       } finally {
-        setLoading(false)
+        setIsLoading(false)
       }
     }
 
-    if (galleryId) {
-      fetchGalleryWithImages()
+    if (id) {
+      fetchGallery()
     }
-  }, [galleryId])
+  }, [id])
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY)
-    }
+  const openImageViewer = (index: number) => {
+    setCurrentImageIndex(index)
+    document.body.style.overflow = 'hidden'
+  }
 
-    window.addEventListener('scroll', handleScroll, { passive: true })
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
+  const closeImageViewer = useCallback(() => {
+    setCurrentImageIndex(null)
+    document.body.style.overflow = ''
   }, [])
 
-  // Get the first image URL or use a placeholder
-  const heroImageUrl =
-    galleryImages.length > 0
-      ? galleryImages[0].image_url
-      : '/placeholder.svg?height=1080&width=1920&text=Rugby Gallery'
+  const navigateToNextImage = useCallback(() => {
+    if (currentImageIndex === null || !images.length) return
+    setCurrentImageIndex((currentImageIndex + 1) % images.length)
+  }, [currentImageIndex, images.length])
 
-  // Handle keyboard events for navigation
+  const navigateToPreviousImage = useCallback(() => {
+    if (currentImageIndex === null || !images.length) return
+    setCurrentImageIndex((currentImageIndex - 1 + images.length) % images.length)
+  }, [currentImageIndex, images.length])
+
+  // Format date
+  const formatDate = (dateString: string): string => {
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }
+    return new Date(dateString).toLocaleDateString('lv-LV', options)
+  }
+
+  // Get properly formatted image URL
+  const getImageUrl = (url: string | null) => {
+    return prepareImagePath(url)
+  }
+
+  // Handle keyboard events for image viewer
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!selectedImage) return
+      if (currentImageIndex === null) return
 
-      if (e.key === 'ArrowLeft') {
-        navigateToPreviousImage()
+      if (e.key === 'Escape') {
+        closeImageViewer()
       } else if (e.key === 'ArrowRight') {
         navigateToNextImage()
-      } else if (e.key === 'Escape') {
-        closeImageViewer()
+      } else if (e.key === 'ArrowLeft') {
+        navigateToPreviousImage()
       }
     }
 
@@ -84,224 +111,149 @@ export default function GalleryDetailPage() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [selectedImage, selectedImageIndex, galleryImages])
+  }, [currentImageIndex, closeImageViewer, navigateToNextImage, navigateToPreviousImage])
 
-  // Function to open the lightbox with a specific image
-  const openImageViewer = useCallback((imageUrl: string, index: number) => {
-    setSelectedImage(imageUrl)
-    setSelectedImageIndex(index)
-    // Prevent scrolling when lightbox is open
-    document.body.style.overflow = 'hidden'
-  }, [])
-
-  // Function to close the lightbox
-  const closeImageViewer = useCallback(() => {
-    setSelectedImage(null)
-    setSelectedImageIndex(-1)
-    // Restore scrolling
-    document.body.style.overflow = 'auto'
-  }, [])
-
-  // Function to navigate to the next image
-  const navigateToNextImage = useCallback(() => {
-    if (galleryImages.length === 0 || selectedImageIndex === -1) return
-
-    const nextIndex = (selectedImageIndex + 1) % galleryImages.length
-    setSelectedImageIndex(nextIndex)
-    setSelectedImage(galleryImages[nextIndex].image_url)
-  }, [selectedImageIndex, galleryImages])
-
-  // Function to navigate to the previous image
-  const navigateToPreviousImage = useCallback(() => {
-    if (galleryImages.length === 0 || selectedImageIndex === -1) return
-
-    const prevIndex = (selectedImageIndex - 1 + galleryImages.length) % galleryImages.length
-    setSelectedImageIndex(prevIndex)
-    setSelectedImage(galleryImages[prevIndex].image_url)
-  }, [selectedImageIndex, galleryImages])
-
-  // Touch event handlers for swipe functionality
-  const handleTouchStart = (e: TouchEvent) => {
-    setTouchEnd(null) // Reset touchEnd
-    setTouchStart(e.targetTouches[0].clientX)
+  // Loading state
+  if (isLoading) {
+    return (
+      <MainLayout currentPage="GALLERY">
+        <main className="flex-1 pb-16">
+          <SectionContainer className="bg-white">
+            <div className="flex items-center justify-center py-16">
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-teal-800 border-t-transparent"></div>
+            </div>
+          </SectionContainer>
+        </main>
+      </MainLayout>
+    )
   }
 
-  const handleTouchMove = (e: TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX)
-  }
-
-  const handleTouchEnd = () => {
-    if (!touchStart || !touchEnd) return
-
-    const distance = touchStart - touchEnd
-    const isLeftSwipe = distance > 50
-    const isRightSwipe = distance < -50
-
-    if (isLeftSwipe) {
-      navigateToNextImage()
-    } else if (isRightSwipe) {
-      navigateToPreviousImage()
-    }
+  // Error state (gallery not found)
+  if (!gallery) {
+    return (
+      <MainLayout currentPage="GALLERY">
+        <main className="flex-1 pb-16">
+          <SectionContainer className="bg-white">
+            <div className="py-16 text-center">
+              <h2 className="text-2xl font-bold text-gray-700">Galerija nav atrasta</h2>
+              <p className="mt-4 text-gray-600">
+                Meklētā galerija neeksistē vai ir dzēsta.
+              </p>
+              <Link href="/gallery" className="mt-8 inline-block">
+                <span className="inline-flex skew-x-[-12deg] transform items-center bg-teal-800 px-4 py-2 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
+                  <span className="inline-flex skew-x-[12deg] transform items-center">
+                    <ArrowLeft className="mr-1 h-4 w-4" /> Atpakaļ uz galerijām
+                  </span>
+                </span>
+              </Link>
+            </div>
+          </SectionContainer>
+        </main>
+      </MainLayout>
+    )
   }
 
   return (
     <MainLayout currentPage="GALLERY">
-      <main className="flex-1">
-        {/* Hero Section with Parallax Effect */}
-        <section className="relative overflow-hidden py-24">
-          <div
-            className="absolute inset-0 z-0"
-            style={{
-              backgroundImage: `url('${heroImageUrl}')`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              transform: `translateY(${scrollY * 0.3}px)`,
-              transition: 'transform 0.1s linear',
-            }}
-          />
-          <div className="absolute inset-0 z-0 bg-gradient-to-b from-teal-900/80 to-teal-700/80" />
-
-          <div className="container relative z-10 mx-auto px-4 sm:px-6">
-            <div className="mx-auto max-w-3xl text-center text-white">
-              {loading ? (
-                <div className="flex justify-center">
-                  <Loader2 className="h-8 w-8 animate-spin text-white" />
-                </div>
-              ) : (
-                <>
-                  <h1 className="mb-4 text-4xl font-extrabold tracking-tighter sm:text-5xl md:text-6xl">
-                    {gallery?.title || 'Gallery'}
-                  </h1>
-                  <div className="mx-auto mb-6 h-1 w-32 skew-x-[-12deg] transform bg-white"></div>
-                  {gallery?.description && (
-                    <p className="text-xl text-teal-100">{gallery.description}</p>
-                  )}
-                </>
-              )}
-            </div>
-          </div>
-        </section>
-
-        {/* Gallery Section */}
-        <section className="bg-white py-16">
-          <div className="container mx-auto px-4 sm:px-6">
+      <main className="flex-1 pb-16">
+        {/* Gallery detail */}
+        <SectionContainer className="bg-white">
+          <div className="mx-auto max-w-7xl">
             {/* Back button */}
-            <Link
-              href="/gallery"
-              className="mb-8 inline-flex items-center text-teal-800 hover:text-teal-600"
-            >
-              <ChevronLeft className="h-5 w-5" />
-              <span className="ml-1">Back to Galleries</span>
+            <Link href="/gallery" className="inline-flex items-center">
+              <span className="inline-flex skew-x-[-12deg] transform items-center bg-teal-800 px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:bg-teal-900">
+                <span className="inline-flex skew-x-[12deg] transform items-center">
+                  <ArrowLeft className="mr-1 h-4 w-4" /> Atpakaļ uz galerijām
+                </span>
+              </span>
             </Link>
 
-            {loading && (
-              <div className="flex justify-center py-12">
-                <Loader2 className="h-8 w-8 animate-spin text-teal-800" />
-              </div>
-            )}
+            {/* Gallery details */}
+            <div className="mt-8">
+              <h1 className="text-3xl font-bold text-teal-900">{gallery.title}</h1>
+              <p className="mt-2 text-zinc-500">
+                {formatDate(gallery.created_at || new Date().toISOString())}
+              </p>
+              {gallery.description && (
+                <p className="mt-4 text-zinc-700">{gallery.description}</p>
+              )}
+            </div>
 
-            {!loading && galleryImages.length === 0 && (
-              <div className="rounded-lg bg-teal-50 p-6 text-center">
-                <p className="text-lg text-teal-800">
-                  No images have been added to this gallery yet.
-                </p>
-              </div>
-            )}
-
-            {!loading && galleryImages.length > 0 && (
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {galleryImages.map((image, index) => (
-                  <div
-                    key={image.id}
-                    className="group relative transform cursor-pointer overflow-hidden transition-all duration-300 hover:scale-[1.02]"
-                    style={{ clipPath: 'polygon(0 0, 100% 0, 95% 100%, 0 95%)' }}
-                    onClick={() => openImageViewer(image.image_url, index)}
-                  >
-                    <Image
-                      src={image.image_url || '/placeholder.svg'}
-                      alt={image.caption || 'Gallery image'}
-                      width={800}
-                      height={600}
-                      className="h-64 w-full object-cover"
+            {/* Gallery grid */}
+            <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+              {images.map((image, index) => (
+                <div
+                  key={image.id}
+                  className="group overflow-hidden rounded-lg shadow-md transition-all duration-300 hover:shadow-xl"
+                  onClick={() => openImageViewer(index)}
+                >
+                  <div className="relative aspect-square cursor-pointer overflow-hidden">
+                    <img
+                      src={getImageUrl(image.image_url)}
+                      alt={image.caption || `Image ${index + 1}`}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-teal-900/80 to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                      {image.caption && <h3 className="font-bold text-white">{image.caption}</h3>}
-                    </div>
                   </div>
-                ))}
+                  {image.caption && (
+                    <div className="p-2 text-sm text-zinc-700">{image.caption}</div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Message when no images */}
+            {images.length === 0 && (
+              <div className="mt-16 rounded-lg bg-gray-50 py-16 text-center">
+                <p className="text-gray-500">Šajā galerijā pašlaik nav attēlu.</p>
               </div>
             )}
           </div>
-        </section>
+        </SectionContainer>
 
-        {/* Lightbox for selected image with navigation */}
-        {selectedImage && (
-          <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
-            onClick={closeImageViewer}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-          >
-            {/* Previous button */}
-            <button
-              className="absolute left-4 z-10 rounded-full bg-teal-800/80 p-2 text-white opacity-70 transition-opacity hover:opacity-100 focus:outline-none md:left-6 md:p-3"
-              onClick={(e) => {
-                e.stopPropagation()
-                navigateToPreviousImage()
-              }}
-              aria-label="Previous image"
-            >
-              <ChevronLeft className="h-6 w-6" />
-            </button>
-
-            {/* Next button */}
-            <button
-              className="absolute right-4 z-10 rounded-full bg-teal-800/80 p-2 text-white opacity-70 transition-opacity hover:opacity-100 focus:outline-none md:right-6 md:p-3"
-              onClick={(e) => {
-                e.stopPropagation()
-                navigateToNextImage()
-              }}
-              aria-label="Next image"
-            >
-              <ChevronRight className="h-6 w-6" />
-            </button>
-
+        {/* Image viewer overlay */}
+        {currentImageIndex !== null && images.length > 0 && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90">
             {/* Close button */}
             <button
-              className="absolute right-4 top-4 z-10 rounded-full bg-teal-800 p-2 text-white opacity-70 transition-opacity hover:opacity-100 focus:outline-none"
-              onClick={(e) => {
-                e.stopPropagation()
-                closeImageViewer()
-              }}
-              aria-label="Close lightbox"
+              onClick={closeImageViewer}
+              className="absolute right-4 top-4 z-10 rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20"
+              aria-label="Close image viewer"
             >
               <X className="h-6 w-6" />
             </button>
 
-            <div
-              className="relative max-h-[90vh] max-w-[90vw]"
-              onClick={(e) => e.stopPropagation()}
+            {/* Previous image button */}
+            <button
+              onClick={navigateToPreviousImage}
+              className="absolute left-4 z-10 rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20 md:left-8"
+              aria-label="Previous image"
             >
-              <Image
-                src={selectedImage}
-                alt={galleryImages[selectedImageIndex]?.caption || 'Gallery image'}
-                width={1200}
-                height={800}
-                className="max-h-[90vh] max-w-[90vw] object-contain"
+              <ArrowLeft className="h-6 w-6" />
+            </button>
+
+            {/* Next image button */}
+            <button
+              onClick={navigateToNextImage}
+              className="absolute right-4 z-10 rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20 md:right-8"
+              aria-label="Next image"
+            >
+              <ArrowLeft className="h-6 w-6 rotate-180" />
+            </button>
+
+            {/* Image */}
+            <div className="relative h-full w-full">
+              <img
+                src={getImageUrl(images[currentImageIndex].image_url)}
+                alt={images[currentImageIndex].caption || `Image ${currentImageIndex + 1}`}
+                className="mx-auto h-full max-h-screen object-contain p-4"
               />
 
-              {/* Image caption */}
-              {galleryImages[selectedImageIndex]?.caption && (
-                <div className="absolute bottom-0 left-0 right-0 bg-black/60 p-4 text-center text-white">
-                  <p>{galleryImages[selectedImageIndex].caption}</p>
+              {/* Caption */}
+              {images[currentImageIndex].caption && (
+                <div className="absolute bottom-0 left-0 w-full bg-black/50 p-4 text-center text-white">
+                  {images[currentImageIndex].caption}
                 </div>
               )}
-
-              {/* Image counter */}
-              <div className="absolute left-0 top-0 bg-black/60 px-4 py-2 text-sm text-white">
-                {selectedImageIndex + 1} / {galleryImages.length}
-              </div>
             </div>
           </div>
         )}

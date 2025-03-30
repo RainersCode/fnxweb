@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { ArrowLeft, CalendarDays, Facebook, Share2, User } from 'lucide-react'
 import MainLayout from '@/components/layout/main-layout'
 import { SectionContainer } from '@/components/shared/section-container'
-import { supabase } from '@/lib/supabase'
+import { supabase, prepareImagePath } from '@/lib/supabase'
 import { Article } from '@/types/supabase'
 import { generateArticleSchema } from '@/lib/structured-data'
 import Head from 'next/head'
@@ -99,6 +99,11 @@ export default function NewsDetailPage() {
     return plainText.length > 160 ? `${plainText.substring(0, 160)}...` : plainText
   }
 
+  // Get properly formatted image URL
+  const getImageUrl = (url: string | null) => {
+    return prepareImagePath(url)
+  }
+
   if (isLoading) {
     return (
       <MainLayout currentPage="NEWS">
@@ -150,13 +155,13 @@ export default function NewsDetailPage() {
           <meta property="og:description" content={getMetaDescription()} />
           <meta property="og:type" content="article" />
           <meta property="og:url" content={pageUrl} />
-          {article.image_url && <meta property="og:image" content={article.image_url} />}
+          {article.image_url && <meta property="og:image" content={getImageUrl(article.image_url)} />}
           <meta property="article:published_time" content={article.published_at} />
           {article.updated_at && <meta property="article:modified_time" content={article.updated_at} />}
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content={article.title} />
           <meta name="twitter:description" content={getMetaDescription()} />
-          {article.image_url && <meta name="twitter:image" content={article.image_url} />}
+          {article.image_url && <meta name="twitter:image" content={getImageUrl(article.image_url)} />}
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
@@ -171,7 +176,7 @@ export default function NewsDetailPage() {
             <div
               className="absolute inset-0 z-0"
               style={{
-                backgroundImage: `url(${article.image_url || '/placeholder.svg?height=600&width=900&text=Rugby News'})`,
+                backgroundImage: `url(${getImageUrl(article.image_url) || '/placeholder.svg?height=600&width=900&text=Rugby News'})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 transform: `translateY(${scrollY * 0.3}px)`,
