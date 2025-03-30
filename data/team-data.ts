@@ -1,33 +1,33 @@
 export const teamData = {
   clubHistory: {
-    title: 'Club History',
+    title: 'Kluba vēsture',
     content:
-      'Founded in 1985, Riverside RFC has a proud history of developing local talent and competing at the regional level. The club has won 3 regional championships and continues to grow year on year.',
+      'Dibināts 1985. gadā, Riverside RFC ir lepns ar vietējo talantu attīstību un sacensībām reģionālā līmenī. Klubs ir izcīnījis 3 reģionālos čempionātus un turpina augt ar katru gadu.',
     icon: 'Trophy',
   },
   trainingSchedule: {
-    title: 'Training Schedule',
+    title: 'Treniņu grafiks',
     schedule: [
       {
-        day: 'Tuesday',
-        time: '7:00 PM - 9:00 PM',
+        day: 'Otrdiena',
+        time: '19:00 - 21:00',
       },
       {
-        day: 'Thursday',
-        time: '7:00 PM - 9:00 PM',
+        day: 'Ceturtdiena',
+        time: '19:00 - 21:00',
       },
       {
-        day: 'Saturday (Match Day)',
-        time: '2:30 PM Kickoff',
+        day: 'Sestdiena (Spēļu diena)',
+        time: '14:30 Sākums',
       },
     ],
     icon: 'CalendarDays',
   },
   homeGround: {
-    title: 'Home Ground',
+    title: 'Mājas laukums',
     address: 'Riverside Park, Main Street\nRiverside Town, RT1 2AB',
     facilities:
-      'Our facilities include a full-size pitch, training area, clubhouse with bar, and changing rooms.',
+      'Mūsu aprīkojumā ietilpst pilna izmēra laukums, treniņu zona, kluba ēka ar bāru un ģērbtuves.',
     icon: 'MapPin',
   },
 }

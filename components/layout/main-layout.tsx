@@ -75,14 +75,22 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
             </div>
             <nav className="hidden md:flex">
               <ul className="flex items-center">
-                {['HOME', 'ABOUT', 'TEAM', 'FIXTURES', 'NEWS', 'GALLERY', 'CONTACT'].map(
-                  (item, index) => (
-                    <li key={item}>
+                {[
+                  { key: 'HOME', text: 'SĀKUMS' },
+                  { key: 'ABOUT', text: 'PAR MUMS' },
+                  { key: 'TEAM', text: 'KOMANDA' },
+                  { key: 'FIXTURES', text: 'SPĒLES' },
+                  { key: 'NEWS', text: 'ZIŅAS' },
+                  { key: 'GALLERY', text: 'GALERIJA' },
+                  { key: 'CONTACT', text: 'KONTAKTI' }
+                ].map(
+                  (item) => (
+                    <li key={item.key}>
                       <Link
-                        href={item === 'HOME' ? '/' : `/${item.toLowerCase()}`}
-                        className={`group relative mx-1 overflow-hidden px-4 py-5 text-sm font-medium tracking-wide text-white transition-all duration-300 hover:text-teal-100 ${currentPage === item ? 'text-teal-100' : ''}`}
+                        href={item.key === 'HOME' ? '/' : `/${item.key.toLowerCase()}`}
+                        className={`group relative mx-1 overflow-hidden px-4 py-5 text-sm font-medium tracking-wide text-white transition-all duration-300 hover:text-teal-100 ${currentPage === item.key ? 'text-teal-100' : ''}`}
                       >
-                        <span className="relative z-10">{item}</span>
+                        <span className="relative z-10">{item.text}</span>
                         <span className="absolute inset-0 -z-0 skew-x-[-12deg] scale-x-[0.8] scale-y-[0.8] transform bg-teal-600 opacity-0 transition-opacity duration-300 group-hover:scale-100 group-hover:opacity-100"></span>
                       </Link>
                     </li>
@@ -97,7 +105,7 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
                     <Link href="/admin">
                       <button className="hidden skew-x-[-12deg] transform bg-white px-6 py-3 font-medium tracking-wide text-teal-800 shadow-lg transition-all duration-300 hover:bg-white hover:text-teal-900 md:inline-flex">
                         <span className="inline-flex skew-x-[12deg] transform items-center">
-                          Dashboard
+                          Vadības panelis
                         </span>
                       </button>
                     </Link>
@@ -109,7 +117,7 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
                   <Link href="/contact">
                     <button className="join-us-button hidden group skew-x-[-12deg] transform bg-white px-6 py-3 font-medium tracking-wide text-teal-800 shadow-lg transition-all duration-300 hover:bg-white hover:text-teal-900 md:inline-flex">
                       <span className="inline-flex skew-x-[12deg] transform items-center">
-                        JOIN US
+                        PIEVIENOJIES MUMS
                         <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                       </span>
                     </button>
@@ -121,7 +129,7 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
                 onClick={() => setMobileMenuOpen(true)}
               >
                 <Menu className="h-6 w-6 skew-x-[12deg] transform transition-transform duration-300 hover:rotate-90" />
-                <span className="sr-only">Open menu</span>
+                <span className="sr-only">Atvērt izvēlni</span>
               </button>
             </div>
           </div>
@@ -152,25 +160,33 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <X className="animate-spin-once h-6 w-6 skew-x-[12deg] transform" />
-                <span className="sr-only">Close menu</span>
+                <span className="sr-only">Aizvērt izvēlni</span>
               </button>
             </div>
             <nav className="mt-12">
               <ul className="flex flex-col space-y-6">
-                {['HOME', 'ABOUT', 'TEAM', 'FIXTURES', 'NEWS', 'GALLERY', 'CONTACT'].map(
+                {[
+                  { key: 'HOME', text: 'SĀKUMS' },
+                  { key: 'ABOUT', text: 'PAR MUMS' },
+                  { key: 'TEAM', text: 'KOMANDA' },
+                  { key: 'FIXTURES', text: 'SPĒLES' },
+                  { key: 'NEWS', text: 'ZIŅAS' },
+                  { key: 'GALLERY', text: 'GALERIJA' },
+                  { key: 'CONTACT', text: 'KONTAKTI' }
+                ].map(
                   (item, index) => (
                     <li
-                      key={item}
+                      key={item.key}
                       className="animate-slide-in-right opacity-100"
                       style={{ animationDelay: `${index * 150}ms` }}
                     >
                       <Link
-                        href={item === 'HOME' ? '/' : `/${item.toLowerCase()}`}
+                        href={item.key === 'HOME' ? '/' : `/${item.key.toLowerCase()}`}
                         className="group flex items-center text-lg font-medium tracking-wide text-white hover:text-teal-100"
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         <span className="mr-4 h-0.5 w-8 origin-left scale-x-0 transform bg-white transition-transform duration-300 group-hover:scale-x-100"></span>
-                        {item}
+                        {item.text}
                       </Link>
                     </li>
                   )
@@ -187,7 +203,7 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
                     >
                       <button className="w-full skew-x-[-12deg] transform bg-white px-6 py-3 font-medium tracking-wide text-teal-800 shadow-lg transition-all duration-300 hover:bg-white hover:text-teal-900">
                         <span className="inline-flex skew-x-[12deg] transform items-center">
-                          Dashboard
+                          Vadības panelis
                         </span>
                       </button>
                     </Link>
@@ -205,7 +221,7 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
                 >
                   <button className="join-us-button w-full group skew-x-[-12deg] transform bg-white px-6 py-3 font-medium tracking-wide text-teal-800 shadow-lg transition-all duration-300 hover:bg-white hover:text-teal-900">
                     <span className="inline-flex skew-x-[12deg] transform items-center">
-                      JOIN US
+                      PIEVIENOJIES MUMS
                       <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                     </span>
                   </button>
@@ -243,19 +259,18 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
                 </span>
               </div>
               <p className="mt-4 text-sm font-medium text-zinc-600">
-                A community rugby club established in 1985, bringing together players of all ages
-                and abilities.
+                Kopienas regbija klubs, dibināts 1985. gadā, apvieno dažāda vecuma un prasmju spēlētājus.
               </p>
             </div>
             <div>
-              <h3 className="mb-4 font-bold uppercase tracking-wide text-teal-900">Quick Links</h3>
+              <h3 className="mb-4 font-bold uppercase tracking-wide text-teal-900">Ātrās saites</h3>
               <ul className="space-y-2 text-sm text-zinc-600">
                 <li>
                   <Link
                     href="/"
                     className="inline-block transform font-medium tracking-wide transition-transform hover:translate-x-1 hover:text-teal-700"
                   >
-                    HOME
+                    SĀKUMS
                   </Link>
                 </li>
                 <li>
@@ -263,7 +278,7 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
                     href="/about"
                     className="inline-block transform font-medium tracking-wide transition-transform hover:translate-x-1 hover:text-teal-700"
                   >
-                    ABOUT
+                    PAR MUMS
                   </Link>
                 </li>
                 <li>
@@ -271,7 +286,7 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
                     href="/team"
                     className="inline-block transform font-medium tracking-wide transition-transform hover:translate-x-1 hover:text-teal-700"
                   >
-                    TEAM
+                    KOMANDA
                   </Link>
                 </li>
                 <li>
@@ -279,7 +294,7 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
                     href="/fixtures"
                     className="inline-block transform font-medium tracking-wide transition-transform hover:translate-x-1 hover:text-teal-700"
                   >
-                    FIXTURES
+                    SPĒLES
                   </Link>
                 </li>
                 <li>
@@ -287,7 +302,7 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
                     href="/news"
                     className="inline-block transform font-medium tracking-wide transition-transform hover:translate-x-1 hover:text-teal-700"
                   >
-                    NEWS
+                    ZIŅAS
                   </Link>
                 </li>
                 <li>
@@ -295,7 +310,7 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
                     href="/gallery"
                     className="inline-block transform font-medium tracking-wide transition-transform hover:translate-x-1 hover:text-teal-700"
                   >
-                    GALLERY
+                    GALERIJA
                   </Link>
                 </li>
                 <li>
@@ -303,25 +318,25 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
                     href="/contact"
                     className="inline-block transform font-medium tracking-wide transition-transform hover:translate-x-1 hover:text-teal-700"
                   >
-                    CONTACT
+                    KONTAKTI
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="mb-4 font-bold uppercase tracking-wide text-teal-900">Contact Us</h3>
+              <h3 className="mb-4 font-bold uppercase tracking-wide text-teal-900">Sazinies ar mums</h3>
               <address className="space-y-2 text-sm font-medium not-italic text-zinc-600">
                 <p>RK &quot;Fēnikss&quot;</p>
                 <p>Riverside Park, Main Street</p>
                 <p>Riverside Town, RT1 2AB</p>
                 <p className="mt-2">
-                  Email:{' '}
+                  E-pasts:{' '}
                   <a href="mailto:info@riversiderugby.com" className="hover:text-teal-700">
                     info@riversiderugby.com
                   </a>
                 </p>
                 <p>
-                  Phone:{' '}
+                  Tālrunis:{' '}
                   <a href="tel:+441234567890" className="hover:text-teal-700">
                     01234 567890
                   </a>
@@ -336,12 +351,12 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
               <>
                 <SignInButton mode="modal">
                   <button className="text-xs font-medium text-zinc-500 hover:text-teal-700 transition-colors">
-                    Sign In
+                    Ieiet
                   </button>
                 </SignInButton>
                 <SignUpButton mode="modal">
                   <button className="text-xs font-medium text-zinc-500 hover:text-teal-700 transition-colors">
-                    Sign Up
+                    Reģistrēties
                   </button>
                 </SignUpButton>
               </>
@@ -349,7 +364,7 @@ export default function MainLayout({ children, currentPage }: MainLayoutProps) {
           </div>
           
           <div className="mt-6 border-t border-zinc-200 pt-6 text-center text-sm font-medium tracking-wide text-zinc-500">
-            <p>© 2025 RK &quot;FĒNIKSS&quot;. ALL RIGHTS RESERVED.</p>
+            <p>© 2025 RK &quot;FĒNIKSS&quot;. VISAS TIESĪBAS AIZSARGĀTAS.</p>
           </div>
         </div>
       </footer>

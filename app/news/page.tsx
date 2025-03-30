@@ -59,7 +59,7 @@ export default function NewsPage() {
       month: 'long',
       day: 'numeric',
     }
-    return new Date(dateString).toLocaleDateString('en-GB', options)
+    return new Date(dateString).toLocaleDateString('lv-LV', options)
   }
 
   // Strip HTML tags for plain text preview
@@ -74,9 +74,9 @@ export default function NewsPage() {
       <main className="flex-1 pb-16">
         {/* Hero Section */}
         <ParallaxHeroSection
-          title="LATEST"
-          titleHighlight="NEWS"
-          subtitle="Stay up to date with the latest happenings from our club"
+          title="JAUNĀKIE"
+          titleHighlight="JAUNUMI"
+          subtitle="Sekojiet līdzi jaunākajiem notikumiem mūsu klubā"
           backgroundImage="/AboutUs/parallax.jpg"
         />
 
@@ -84,7 +84,7 @@ export default function NewsPage() {
         <SectionContainer className="bg-white">
           <div className="relative z-10">
             <div className="mx-auto mb-12 max-w-2xl text-center">
-              <SectionTitle title="CLUB" titleHighlight="NEWS" />
+              <SectionTitle title="KLUBA" titleHighlight="JAUNUMI" />
             </div>
 
             {loading ? (
@@ -93,7 +93,7 @@ export default function NewsPage() {
               </div>
             ) : articles.length === 0 ? (
               <div className="py-16 text-center">
-                <p className="text-gray-600">No articles found</p>
+                <p className="text-gray-600">Nav atrasti raksti</p>
               </div>
             ) : (
               <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
@@ -141,7 +141,7 @@ export default function NewsPage() {
                         <div className="mt-4">
                           <span className="inline-flex skew-x-[-12deg] transform items-center bg-teal-800 px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:bg-teal-900">
                             <span className="inline-flex skew-x-[12deg] transform items-center">
-                              READ MORE
+                              LASĪT VAIRĀK
                             </span>
                           </span>
                         </div>

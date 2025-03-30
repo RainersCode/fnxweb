@@ -29,9 +29,9 @@ export default function ContactPage() {
     <MainLayout currentPage="CONTACT">
       <main className="flex-1">
         <ParallaxHeroSection
-          title="GET IN"
-          titleHighlight="TOUCH"
-          subtitle="Have a question or want to join our club? We'd love to hear from you."
+          title="SAZINIES"
+          titleHighlight="AR MUMS"
+          subtitle="Vai jums ir jautājums vai vēlaties pievienoties mūsu klubam? Mēs labprāt no jums dzirdētu."
           backgroundImage="/AboutUs/parallax.jpg"
         />
 
@@ -39,10 +39,10 @@ export default function ContactPage() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <GridContainer cols={2} gap="lg" className="items-start">
               <div className="w-full max-w-xl">
-                <SectionTitle title="CONTACT INFORMATION" />
+                <SectionTitle title="KONTAKTINFORMĀCIJA" />
 
                 <div className="mt-12 space-y-10">
-                  <ContactInfoItem icon={MapPin} title="CLUB ADDRESS">
+                  <ContactInfoItem icon={MapPin} title="KLUBA ADRESE">
                     RK &quot;Fēnikss&quot;
                     <br />
                     Riverside Park, Main Street
@@ -50,36 +50,36 @@ export default function ContactPage() {
                     Riverside Town, RT1 2AB
                   </ContactInfoItem>
 
-                  <ContactInfoItem icon={Phone} title="PHONE">
-                    Club Office:{' '}
+                  <ContactInfoItem icon={Phone} title="TĀLRUNIS">
+                    Kluba birojs:{' '}
                     <a href="tel:+441234567890" className="hover:text-teal-700">
                       01234 567890
                     </a>
                     <br />
-                    Membership:{' '}
+                    Dalība:{' '}
                     <a href="tel:+441234567891" className="hover:text-teal-700">
                       01234 567891
                     </a>
                   </ContactInfoItem>
 
-                  <ContactInfoItem icon={Mail} title="EMAIL">
-                    General Inquiries:{' '}
+                  <ContactInfoItem icon={Mail} title="E-PASTS">
+                    Vispārīgi jautājumi:{' '}
                     <a href="mailto:info@rkfenikss.com" className="hover:text-teal-700">
                       info@rkfenikss.com
                     </a>
                     <br />
-                    Membership:{' '}
+                    Dalība:{' '}
                     <a href="mailto:membership@rkfenikss.com" className="hover:text-teal-700">
                       membership@rkfenikss.com
                     </a>
                   </ContactInfoItem>
 
-                  <ContactInfoItem icon={Clock} title="OPENING HOURS">
-                    Monday - Friday: 9:00 AM - 5:00 PM
+                  <ContactInfoItem icon={Clock} title="DARBA LAIKS">
+                    Pirmdiena - Piektdiena: 9:00 - 17:00
                     <br />
-                    Saturday: 9:00 AM - 7:00 PM (Match days)
+                    Sestdiena: 9:00 - 19:00 (Spēļu dienās)
                     <br />
-                    Sunday: 10:00 AM - 4:00 PM
+                    Svētdiena: 10:00 - 16:00
                   </ContactInfoItem>
                 </div>
 
@@ -89,7 +89,7 @@ export default function ContactPage() {
               </div>
 
               <div className="w-full max-w-xl">
-                <SectionTitle title="SEND US A MESSAGE" />
+                <SectionTitle title="SŪTIET MUMS ZIŅU" />
                 <div className="mt-12">
                   <ContactForm onSubmit={handleFormSubmit} />
                 </div>

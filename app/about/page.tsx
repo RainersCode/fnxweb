@@ -62,7 +62,7 @@ export default function AboutPage() {
           <div className="mx-auto max-w-3xl text-center">
             <SectionTitle title={aboutUsData.values.title} align="center" className="text-center" />
             <p className="mb-12 text-lg leading-relaxed text-zinc-700">
-              These core values guide everything we do at RK &quot;Fēnikss&quot;:
+              Šīs pamatvērtības vada visu, ko mēs darām RK &quot;Fēnikss&quot;:
             </p>
           </div>
 

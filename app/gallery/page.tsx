@@ -55,9 +55,9 @@ export default function GalleryPage() {
       <main className="flex-1">
         {/* Hero Section */}
         <ParallaxHeroSection
-          title="CLUB"
-          titleHighlight="GALLERY"
-          subtitle="Explore our photo collections capturing the moments that define our club."
+          title="KLUBA"
+          titleHighlight="GALERIJA"
+          subtitle="Izpētiet mūsu foto kolekcijas, kas iemūžina mūsu kluba īpašos mirkļus."
           backgroundImage="/AboutUs/parallax.jpg"
         />
 
@@ -66,7 +66,7 @@ export default function GalleryPage() {
           <div className="container mx-auto px-4 sm:px-6">
             <h2 className="mb-8 text-3xl font-bold tracking-tight text-teal-900">
               <span className="relative">
-                Photo Collections
+                Foto kolekcijas
                 <span className="absolute -bottom-2 left-0 right-0 h-1 w-32 skew-x-[-12deg] bg-gradient-to-r from-teal-500 to-teal-800"></span>
               </span>
             </h2>
@@ -82,7 +82,7 @@ export default function GalleryPage() {
             {!loading && galleries.length === 0 && (
               <div className="rounded-lg bg-teal-50 p-6 text-center">
                 <p className="text-lg text-teal-800">
-                  No photo galleries have been added yet. Check back soon!
+                  Pagaidām nav pievienotas fotogalerijas. Lūdzu, pārbaudiet vēlāk!
                 </p>
               </div>
             )}
@@ -121,7 +121,7 @@ export default function GalleryPage() {
                         )}
                         <div className="mt-4 flex items-center text-white/90">
                           <span className="text-sm font-medium group-hover:underline">
-                            View Gallery
+                            Skatīt galeriju
                           </span>
                           <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                         </div>

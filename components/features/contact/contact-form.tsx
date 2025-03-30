@@ -63,14 +63,14 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h3 className="text-xl font-bold text-teal-900 mb-2">Message Sent!</h3>
-            <p className="text-zinc-600">Thank you for contacting us. We&apos;ll get back to you shortly.</p>
+            <h3 className="text-xl font-bold text-teal-900 mb-2">Ziņa nosūtīta!</h3>
+            <p className="text-zinc-600">Paldies, ka sazinājāties ar mums. Mēs jums drīzumā atbildēsim.</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="name" className="text-zinc-800 font-medium">Your Name</Label>
+                <Label htmlFor="name" className="text-zinc-800 font-medium">Jūsu vārds</Label>
                 <Input
                   id="name"
                   name="name"
@@ -78,12 +78,12 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
                   onChange={handleChange}
                   required
                   className="border-zinc-300 bg-white text-zinc-800 focus:border-teal-500 focus:ring-teal-500"
-                  placeholder="Enter your name"
+                  placeholder="Ievadiet savu vārdu"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-zinc-800 font-medium">Email Address</Label>
+                <Label htmlFor="email" className="text-zinc-800 font-medium">E-pasta adrese</Label>
                 <Input
                   id="email"
                   name="email"
@@ -92,26 +92,26 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
                   onChange={handleChange}
                   required
                   className="border-zinc-300 bg-white text-zinc-800 focus:border-teal-500 focus:ring-teal-500"
-                  placeholder="Enter your email"
+                  placeholder="Ievadiet savu e-pastu"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="phone" className="text-zinc-800 font-medium">Phone Number</Label>
+                <Label htmlFor="phone" className="text-zinc-800 font-medium">Tālruņa numurs</Label>
                 <Input
                   id="phone"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
                   className="border-zinc-300 bg-white text-zinc-800 focus:border-teal-500 focus:ring-teal-500"
-                  placeholder="Enter your phone number"
+                  placeholder="Ievadiet savu tālruņa numuru"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="interest" className="text-zinc-800 font-medium">I&apos;m interested in</Label>
+                <Label htmlFor="interest" className="text-zinc-800 font-medium">Mani interesē</Label>
                 <select
                   id="interest"
                   name="interest"
@@ -119,16 +119,16 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
                   onChange={handleChange}
                   className="w-full rounded-md border border-zinc-300 bg-white text-zinc-800 focus:border-teal-500 focus:ring-teal-500 p-2"
                 >
-                  <option value="general">General Inquiry</option>
-                  <option value="membership">Membership</option>
-                  <option value="sponsorship">Sponsorship</option>
-                  <option value="volunteer">Volunteering</option>
+                  <option value="general">Vispārīgs jautājums</option>
+                  <option value="membership">Dalība</option>
+                  <option value="sponsorship">Sponsorēšana</option>
+                  <option value="volunteer">Brīvprātīgais darbs</option>
                 </select>
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="subject" className="text-zinc-800 font-medium">Subject</Label>
+              <Label htmlFor="subject" className="text-zinc-800 font-medium">Tēma</Label>
               <Input
                 id="subject"
                 name="subject"
@@ -136,12 +136,12 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
                 onChange={handleChange}
                 required
                 className="border-zinc-300 bg-white text-zinc-800 focus:border-teal-500 focus:ring-teal-500"
-                placeholder="Enter subject"
+                placeholder="Ievadiet tēmu"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="message" className="text-zinc-800 font-medium">Your Message</Label>
+              <Label htmlFor="message" className="text-zinc-800 font-medium">Jūsu ziņa</Label>
               <Textarea
                 id="message"
                 name="message"
@@ -150,7 +150,7 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
                 onChange={handleChange}
                 required
                 className="border-zinc-300 bg-white text-zinc-800 focus:border-teal-500 focus:ring-teal-500"
-                placeholder="Type your message here..."
+                placeholder="Šeit ievadiet savu ziņu..."
               />
             </div>
 
@@ -159,7 +159,7 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
                 type="submit"
                 className="px-6 py-3 font-medium tracking-wide transform skew-x-[-12deg] transition-all duration-300 bg-teal-800 hover:bg-teal-900 text-white"
               >
-                <span className="transform skew-x-[12deg] inline-flex items-center">SEND MESSAGE</span>
+                <span className="transform skew-x-[12deg] inline-flex items-center">NOSŪTĪT ZIŅU</span>
               </button>
             </div>
           </form>

@@ -21,9 +21,9 @@ export default function TeamPage() {
       <main className="flex-1">
         {/* Hero Section */}
         <ParallaxHeroSection
-          title="OUR"
-          titleHighlight="TEAM"
-          subtitle="Meet the dedicated players and coaching staff who make RK &quot;Fēnikss&quot; what it is today."
+          title="MŪSU"
+          titleHighlight="KOMANDA"
+          subtitle="Iepazīsti spēlētājus un treneru sastāvu, kas veido RK &quot;Fēnikss&quot; šodien."
           backgroundImage="/AboutUs/parallax.jpg"
         />
 
@@ -97,10 +97,10 @@ export default function TeamPage() {
             <div className="mx-auto mb-12 max-w-2xl text-center">
               <h2 className="relative inline-block">
                 <span className="text-4xl font-black uppercase tracking-tighter text-teal-900">
-                  MEET
+                  IEPAZĪSTI
                 </span>
                 <span className="ml-2 text-4xl font-light uppercase italic tracking-wide text-teal-700">
-                  THE SQUAD
+                  SASTĀVU
                 </span>
                 <span className="absolute -bottom-2 left-0 right-0 h-1 skew-x-[-12deg] bg-gradient-to-r from-teal-500 to-teal-800"></span>
               </h2>
@@ -115,7 +115,7 @@ export default function TeamPage() {
                 >
                   <span className="inline-flex items-center gap-2">
                     <Users className="h-5 w-5" />
-                    Players
+                    Spēlētāji
                   </span>
                 </TabsTrigger>
                 <TabsTrigger
@@ -124,7 +124,7 @@ export default function TeamPage() {
                 >
                   <span className="inline-flex items-center gap-2">
                     <Users className="h-5 w-5" />
-                    Coaching Staff
+                    Treneru sastāvs
                   </span>
                 </TabsTrigger>
               </TabsList>

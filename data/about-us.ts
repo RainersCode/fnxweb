@@ -1,62 +1,62 @@
 export const aboutUsData = {
-  title: 'About RK \"Fēnikss\"',
+  title: 'Par RK \"Fēnikss\"',
   introduction:
-    'RK \"Fēnikss\" is a community-based amateur rugby team established in 1985 with a proud tradition of bringing together players of all ages and abilities. Located in the heart of Riverside Town, our club has grown from humble beginnings to become an integral part of the local sports community.',
+    'RK \"Fēnikss\" ir kopienas amatieru regbija komanda, kas dibināta 1985. gadā ar lepnu tradīciju apvienot visu vecumu un prasmju spēlētājus. Atrodas Riversaidas pilsētas centrā, mūsu klubs ir izaudzis no pieticīgiem pirmsākumiem, lai kļūtu par neatņemamu vietējās sporta kopienas daļu.',
   history: {
-    title: 'Our History',
+    title: 'Mūsu vēsture',
     content:
-      "Founded by a group of rugby enthusiasts in 1985, RK \"Fēnikss\" started with just 15 players and a single team. Over the decades, we've grown into a thriving club with multiple teams across different age groups. From our first local championship win in 1992 to hosting regional tournaments, our club has a rich history of fostering rugby talent and community spirit. The club's home ground at Riverside Park has been our base since 1990, where we've built our facilities and created countless memories.",
+      "Regbija entuziastu grupas 1985. gadā dibinātais RK \"Fēnikss\" sāka ar tikai 15 spēlētājiem un vienu komandu. Gadu desmitu laikā mēs esam izauguši par plaukstošu klubu ar vairākām komandām dažādās vecuma grupās. No mūsu pirmās vietējās čempionāta uzvaras 1992. gadā līdz reģionālo turnīru rīkošanai mūsu klubam ir bagāta regbija talantu un kopienas gara veicināšanas vēsture. Kluba mājas vieta Riversaidas parkā ir bijusi mūsu bāze kopš 1990. gada, kur esam izveidojuši savas telpas un radījuši neskaitāmas atmiņas.",
   },
   mission: {
-    title: 'Our Mission',
+    title: 'Mūsu misija',
     content:
-      'At RK \"Fēnikss\", our mission is to promote the sport of rugby at grassroots level, fostering physical fitness, teamwork, and sportsmanship among players of all ages and abilities. We aim to provide a welcoming environment where everyone can enjoy the game, develop their skills, and build lasting friendships both on and off the field.',
+      'RK \"Fēnikss\" mūsu misija ir veicināt regbija sportu pamatlīmenī, veicinot fizisko sagatavotību, komandas darbu un sportisku garu visu vecumu un spēju spēlētāju vidū. Mūsu mērķis ir nodrošināt viesmīlīgu vidi, kur ikviens var baudīt spēli, attīstīt savas prasmes un veidot ilgstošas draudzības gan laukumā, gan ārpus tā.',
   },
   values: {
-    title: 'Our Values',
+    title: 'Mūsu vērtības',
     list: [
       {
-        title: 'Respect',
-        description: 'We value and respect all players, officials, supporters and opponents.',
+        title: 'Cieņa',
+        description: 'Mēs cienām visus spēlētājus, amatpersonas, atbalstītājus un pretiniekus.',
       },
       {
-        title: 'Teamwork',
-        description: 'We believe in the power of working together toward common goals.',
+        title: 'Komandas darbs',
+        description: 'Mēs ticam kopīga darba spēkam kopīgu mērķu sasniegšanai.',
       },
       {
-        title: 'Integrity',
-        description: 'We play hard but fair, on and off the field.',
+        title: 'Godprātība',
+        description: 'Mēs spēlējam smagi, bet godīgi, gan laukumā, gan ārpus tā.',
       },
       {
-        title: 'Community',
-        description: 'We are committed to making a positive impact in our local community.',
+        title: 'Kopiena',
+        description: 'Mēs esam apņēmušies radīt pozitīvu ietekmi mūsu vietējā kopienā.',
       },
       {
-        title: 'Enjoyment',
-        description: 'We believe rugby should be fun and accessible to all.',
+        title: 'Prieks',
+        description: 'Mēs ticam, ka regbijam jābūt jautram un pieejamam visiem.',
       },
     ],
   },
   achievements: {
-    title: 'Club Achievements',
+    title: 'Kluba sasniegumi',
     list: [
-      'Regional Champions 2019',
-      'County Cup Winners 2017, 2020',
-      'Youth Development Award 2021',
-      'Community Club of the Year 2018',
-      'Over 500 active members across all age groups',
+      'Reģionālie čempioni 2019',
+      'Apgabala kausa ieguvēji 2017, 2020',
+      'Jaunatnes attīstības balva 2021',
+      'Gada kopienas klubs 2018',
+      'Vairāk nekā 500 aktīvu biedru visās vecuma grupās',
     ],
   },
   facilities: {
-    title: 'Our Facilities',
+    title: 'Mūsu telpas',
     content:
-      'RK \"Fēnikss\" boasts excellent facilities including two full-size pitches, a modern clubhouse with changing rooms, a gym, and a social area for post-match gatherings. Our grounds are maintained to a high standard to ensure optimal playing conditions throughout the season.',
+      'RK \"Fēnikss\" lepojas ar izcilām telpām, tostarp diviem pilna izmēra laukumiem, modernu kluba māju ar ģērbtuvēm, sporta zāli un sabiedrisko zonu pēcspēles sanāksmēm. Mūsu teritorija tiek uzturēta augstā līmenī, lai nodrošinātu optimālus spēles apstākļus visā sezonā.',
   },
   cta: {
-    title: 'Join Our Club',
+    title: 'Pievienojies mūsu klubam',
     content:
-      "Interested in joining RK \"Fēnikss\"? Whether you're an experienced player or new to the sport, we welcome players of all abilities. Contact us to find out more about training sessions and membership options.",
-    buttonText: 'Contact Us',
+      "Vai interesē pievienoties RK \"Fēnikss\"? Vai jūs esat pieredzējis spēlētājs vai jauns šajā sportā, mēs uzņemam visu spēju spēlētājus. Sazinieties ar mums, lai uzzinātu vairāk par treniņnodarbībām un dalības iespējām.",
+    buttonText: 'Sazinies ar mums',
   },
   imageUrl: '/AboutUs/team.jpg',
   galleryImages: [

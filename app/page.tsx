@@ -53,19 +53,19 @@ export default function HomePage() {
   // Fallback news items if no articles are loaded
   const fallbackNewsItems: FallbackNewsItem[] = [
     {
-      title: 'SEASON OPENER THIS SATURDAY',
-      description: 'Join us for our first match of the season against local rivals.',
+      title: 'SEZONAS ATKLĀŠANA ŠO SESTDIEN',
+      description: 'Pievienojieties mums sezonas pirmajā spēlē pret vietējiem sāncenšiem.',
       image: '/placeholder.svg?height=1080&width=1920&text=Season Opener',
     },
     {
-      title: 'NEW TRAINING SCHEDULE',
+      title: 'JAUNS TRENIŅU GRAFIKS',
       description:
-        'Coach Williams has announced the new training schedule for the upcoming season.',
+        'Treneris Viljams ir paziņojis jauno treniņu grafiku gaidāmajai sezonai.',
       image: '/placeholder.svg?height=1080&width=1920&text=Training Schedule',
     },
     {
-      title: 'COMMUNITY FUNDRAISER SUCCESS',
-      description: 'Our recent community fundraiser raised over £2,000 for new training equipment.',
+      title: 'KOPIENAS LĪDZEKĻU VĀKŠANAS PANĀKUMI',
+      description: 'Mūsu nesenā kopienas līdzekļu vākšana ienesa vairāk nekā 2000 mārciņu jaunam treniņu aprīkojumam.',
       image: '/placeholder.svg?height=1080&width=1920&text=Fundraiser',
     },
   ]
@@ -247,7 +247,7 @@ export default function HomePage() {
       month: 'long',
       day: 'numeric',
     }
-    return new Date(dateString).toLocaleDateString('en-GB', options)
+    return new Date(dateString).toLocaleDateString('lv-LV', options)
   }
 
   // Helper function to extract time from date for fixtures
@@ -298,7 +298,7 @@ export default function HomePage() {
       spanElement.style.display = 'inline-flex';
       spanElement.style.transform = 'skew(12deg)';
       spanElement.style.alignItems = 'center';
-      spanElement.textContent = 'READ MORE';
+      spanElement.textContent = 'LASĪT VAIRĀK';
       linkElement.appendChild(spanElement);
       
       // Create and append animation keyframes
@@ -472,7 +472,7 @@ export default function HomePage() {
 
           <div className="relative z-10">
             <div className="mx-auto mb-12 max-w-2xl text-center">
-              <SectionTitle title="ABOUT" titleHighlight="US" />
+              <SectionTitle title="PAR" titleHighlight="MUMS" />
             </div>
 
             <GridContainer cols={2} gap="lg" className="items-center">
@@ -500,7 +500,7 @@ export default function HomePage() {
                   <Link href="/about">
                     <button className="group skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
                       <span className="inline-flex skew-x-[12deg] transform items-center">
-                        LEARN MORE
+                        UZZINĀT VAIRĀK
                         <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                       </span>
                     </button>
@@ -515,7 +515,7 @@ export default function HomePage() {
         <SectionContainer className="bg-gray-50">
           <div className="relative z-10">
             <div className="mx-auto mb-12 max-w-2xl text-center">
-              <SectionTitle title="LATEST" titleHighlight="NEWS" />
+              <SectionTitle title="JAUNĀKIE" titleHighlight="JAUNUMI" />
             </div>
 
             <div className="mb-10 grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
@@ -566,7 +566,7 @@ export default function HomePage() {
 
                           <div className="mt-4">
                             <span className="inline-flex items-center text-sm font-medium text-teal-800 group-hover:text-teal-600">
-                              READ MORE
+                              LASĪT VAIRĀK
                               <svg
                                 className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
                                 xmlns="http://www.w3.org/2000/svg"
@@ -615,7 +615,7 @@ export default function HomePage() {
 
                           <div className="mt-4">
                             <span className="inline-flex items-center text-sm font-medium text-teal-800 group-hover:text-teal-600">
-                              READ MORE
+                              LASĪT VAIRĀK
                               <svg
                                 className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
                                 xmlns="http://www.w3.org/2000/svg"
@@ -640,7 +640,7 @@ export default function HomePage() {
               <Link href="/news" className="group">
                 <button className="skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
                   <span className="inline-flex skew-x-[12deg] transform items-center">
-                    VIEW ALL NEWS
+                    SKATĪT VISUS JAUNUMUS
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                   </span>
                 </button>
@@ -653,9 +653,9 @@ export default function HomePage() {
         <section className="bg-white py-16">
           <div className="container mx-auto px-4 sm:px-6">
             <div className="mx-auto mb-8 max-w-3xl text-center">
-              <SectionTitle title="PHOTO" titleHighlight="GALLERY" />
+              <SectionTitle title="FOTO" titleHighlight="GALERIJA" />
               <p className="mt-4 text-lg text-zinc-600">
-                Explore our collections capturing the spirit and passion of our rugby club.
+                Izpētiet mūsu kolekcijas, kas iemūžina mūsu regbija kluba garu un azartu.
               </p>
             </div>
 
@@ -666,7 +666,7 @@ export default function HomePage() {
                 </div>
               ) : galleries.length === 0 ? (
                 <div className="col-span-full rounded-lg bg-teal-50 p-6 text-center">
-                  <p className="text-lg text-teal-800">Check back soon for gallery updates!</p>
+                  <p className="text-lg text-teal-800">Drīzumā sekojiet galerijas atjauninājumiem!</p>
                 </div>
               ) : (
                 galleries.map((gallery) => (
@@ -718,7 +718,7 @@ export default function HomePage() {
               <Link href="/gallery" className="group">
                 <button className="skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
                   <span className="inline-flex skew-x-[12deg] transform items-center">
-                    VIEW ALL GALLERIES
+                    SKATĪT VISAS GALERIJAS
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                   </span>
                 </button>
@@ -730,7 +730,7 @@ export default function HomePage() {
         {/* Upcoming Matches Section */}
         <SectionContainer>
           <div className="mb-12 text-center">
-            <SectionTitle title="UPCOMING" titleHighlight="MATCHES" />
+            <SectionTitle title="GAIDĀMĀS" titleHighlight="SPĒLES" />
           </div>
 
           {loadingFixtures ? (
@@ -739,7 +739,7 @@ export default function HomePage() {
             </div>
           ) : fixtures.length === 0 ? (
             <div className="rounded-lg bg-teal-50 p-6 text-center">
-              <p className="text-lg text-teal-800">No upcoming matches scheduled at the moment.</p>
+              <p className="text-lg text-teal-800">Šobrīd nav plānotas gaidāmās spēles.</p>
             </div>
           ) : (
             <GridContainer cols={3} gap="md">
@@ -753,24 +753,24 @@ export default function HomePage() {
                       </span>
                     </div>
                     <h3 className="mb-2 text-xl font-bold text-teal-900">
-                      {fixture.is_home_game ? 'Our Team vs' : 'Away at'} {fixture.opponent}
+                      {fixture.is_home_game ? 'Mūsu komanda pret' : 'Izbraukumā pie'} {fixture.opponent}
                     </h3>
                     <div className="mb-2 flex items-center gap-2 text-zinc-600">
                       <Clock className="h-4 w-4" />
                       <span className="text-sm">
-                        Kick-off: {extractTimeFromDate(fixture.match_date)}
+                        Sākums: {extractTimeFromDate(fixture.match_date)}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-zinc-600">
                       <MapPin className="h-4 w-4" />
                       <span className="text-sm">
-                        {fixture.location || (fixture.is_home_game ? 'Home Ground' : 'Away')}
+                        {fixture.location || (fixture.is_home_game ? 'Mājas laukums' : 'Izbraukumā')}
                       </span>
                     </div>
                     <Link href="/fixtures" className="mt-4 block">
                       <button className="w-full skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
                         <span className="inline-flex skew-x-[12deg] transform items-center justify-center">
-                          MATCH DETAILS
+                          SPĒLES DETAĻAS
                         </span>
                       </button>
                     </Link>
@@ -784,7 +784,7 @@ export default function HomePage() {
               <Link href="/fixtures" className="group">
                 <button className="skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
                   <span className="inline-flex skew-x-[12deg] transform items-center">
-                    VIEW ALL FIXTURES
+                    SKATĪT VISAS SPĒLES
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                   </span>
                 </button>

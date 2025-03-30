@@ -76,7 +76,7 @@ export default function FixturesPage() {
       month: 'long',
       day: 'numeric',
     }
-    return date.toLocaleDateString('en-GB', options)
+    return date.toLocaleDateString('lv-LV', options)
   }
 
   // Extract time from date
@@ -84,10 +84,10 @@ export default function FixturesPage() {
     // Create date object from the ISO string (it will be converted to local time)
     const date = new Date(dateString)
     
-    return date.toLocaleTimeString('en-GB', { 
+    return date.toLocaleTimeString('lv-LV', { 
       hour: '2-digit', 
       minute: '2-digit',
-      hour12: true 
+      hour12: false 
     })
   }
 
@@ -129,9 +129,9 @@ export default function FixturesPage() {
     <MainLayout currentPage="FIXTURES">
       <main className="flex-1">
         <ParallaxHeroSection
-          title="FIXTURES"
-          titleHighlight="& RESULTS"
-          subtitle="Stay up to date with all our upcoming matches and recent results."
+          title="SPĒLES"
+          titleHighlight="& REZULTĀTI"
+          subtitle="Sekojiet līdzi visām mūsu gaidāmajām spēlēm un nesenajiem rezultātiem."
           backgroundImage="/AboutUs/parallax.jpg"
         />
 
@@ -150,7 +150,7 @@ export default function FixturesPage() {
               >
                 <span className="inline-flex skew-x-[12deg] transform items-center gap-2">
                   <CalendarDays className="h-5 w-5" />
-                  Upcoming Matches
+                  Gaidāmās spēles
                 </span>
               </button>
               <button
@@ -163,7 +163,7 @@ export default function FixturesPage() {
               >
                 <span className="inline-flex skew-x-[12deg] transform items-center gap-2">
                   <Trophy className="h-5 w-5" />
-                  Past Results
+                  Iepriekšējie rezultāti
                 </span>
               </button>
             </div>
@@ -174,12 +174,12 @@ export default function FixturesPage() {
                 {loadingUpcoming ? (
                   <div className="flex min-h-[300px] items-center justify-center">
                     <Loader2 className="mr-2 h-6 w-6 animate-spin" />
-                    <span>Loading fixtures...</span>
+                    <span>Ielāde...</span>
                   </div>
                 ) : upcomingFixtures.length === 0 ? (
                   <div className="min-h-[300px] rounded-lg bg-teal-50 p-6 text-center">
                     <p className="text-lg text-teal-800">
-                      No upcoming matches scheduled at the moment.
+                      Šobrīd nav ieplānotu gaidāmo spēļu.
                     </p>
                   </div>
                 ) : (
@@ -293,7 +293,7 @@ export default function FixturesPage() {
                             onClick={() => toggleMatchDetails(fixture.id)}
                             className="mt-4 flex w-full items-center justify-center gap-2 rounded-md bg-teal-50 py-2 text-sm font-medium text-teal-800 transition-colors hover:bg-teal-100"
                           >
-                            {expandedMatch === fixture.id ? 'Hide Details' : 'Show Details'}
+                            {expandedMatch === fixture.id ? 'Slēpt detaļas' : 'Rādīt detaļas'}
                             <ChevronDown
                               className={`h-4 w-4 transition-transform ${
                                 expandedMatch === fixture.id ? 'rotate-180 transform' : ''
@@ -306,7 +306,7 @@ export default function FixturesPage() {
                               {fixture.description && (
                                 <div className="mb-3">
                                   <h5 className="mb-1 text-sm font-medium text-zinc-800">
-                                    Match Notes:
+                                    Spēles piezīmes:
                                   </h5>
                                   <p className="text-sm text-zinc-600">{fixture.description}</p>
                                 </div>
@@ -327,11 +327,11 @@ export default function FixturesPage() {
                 {loadingPast ? (
                   <div className="flex min-h-[300px] items-center justify-center">
                     <Loader2 className="mr-2 h-6 w-6 animate-spin" />
-                    <span>Loading results...</span>
+                    <span>Ielāde rezultātu...</span>
                   </div>
                 ) : pastFixtures.length === 0 ? (
                   <div className="min-h-[300px] rounded-lg bg-teal-50 p-6 text-center">
-                    <p className="text-lg text-teal-800">No past matches to display.</p>
+                    <p className="text-lg text-teal-800">Nav iepriekšējo spēļu, ko parādīt.</p>
                   </div>
                 ) : (
                   pastFixtures.map((fixture) => (
@@ -358,10 +358,10 @@ export default function FixturesPage() {
                               }`}
                             >
                               {fixture.result === 'win'
-                                ? 'WIN'
+                                ? 'UZVARA'
                                 : fixture.result === 'loss'
-                                  ? 'LOSS'
-                                  : 'DRAW'}
+                                  ? 'ZAUDĒJUMS'
+                                  : 'NEIZŠĶIRTS'}
                             </div>
                           )}
                         </div>
@@ -408,11 +408,11 @@ export default function FixturesPage() {
                                 </div>
                               ) : (
                                 <div className="flex items-baseline space-x-1">
-                                  <span className="text-2xl font-bold text-teal-900">VS</span>
+                                  <span className="text-2xl font-bold text-teal-900">PRET</span>
                                 </div>
                               )}
                               <div className="mt-1 text-xs text-zinc-500">
-                                {fixture.is_home_game ? 'Home' : 'Away'}
+                                {fixture.is_home_game ? 'Mājās' : 'Izbraukumā'}
                               </div>
                             </div>
 
@@ -454,7 +454,7 @@ export default function FixturesPage() {
                               <MapPin className="h-4 w-4" />
                               <span>
                                 {fixture.location ||
-                                  (fixture.is_home_game ? 'Home Ground' : 'Away')}
+                                  (fixture.is_home_game ? 'Mājas laukums' : 'Izbraukumā')}
                               </span>
                             </div>
                           </div>
@@ -463,7 +463,7 @@ export default function FixturesPage() {
                             onClick={() => toggleMatchDetails(fixture.id)}
                             className="mt-4 flex w-full items-center justify-center gap-2 rounded-md bg-teal-50 py-2 text-sm font-medium text-teal-800 transition-colors hover:bg-teal-100"
                           >
-                            {expandedMatch === fixture.id ? 'Hide Details' : 'Show Details'}
+                            {expandedMatch === fixture.id ? 'Slēpt detaļas' : 'Rādīt detaļas'}
                             <ChevronDown
                               className={`h-4 w-4 transition-transform ${
                                 expandedMatch === fixture.id ? 'rotate-180 transform' : ''
@@ -476,7 +476,7 @@ export default function FixturesPage() {
                               {fixture.description && (
                                 <div className="mb-3">
                                   <h5 className="mb-1 text-sm font-medium text-zinc-800">
-                                    Match Notes:
+                                    Spēles piezīmes:
                                   </h5>
                                   <p className="text-sm text-zinc-600">{fixture.description}</p>
                                 </div>
