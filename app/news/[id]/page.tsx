@@ -4,7 +4,7 @@ import { default as NextImage } from 'next/image'
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, CalendarDays, Facebook, Share2, User } from 'lucide-react'
+import { ArrowLeft, CalendarDays, User } from 'lucide-react'
 import MainLayout from '@/components/layout/main-layout'
 import { SectionContainer } from '@/components/shared/section-container'
 import { supabase, prepareImagePath } from '@/lib/supabase'
@@ -73,12 +73,6 @@ export default function NewsDetailPage() {
       day: 'numeric',
     }
     return new Date(dateString).toLocaleDateString('lv-LV', options)
-  }
-
-  // Handle Facebook sharing
-  const handleShareToFacebook = () => {
-    const url = window.location.href
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank')
   }
 
   // Strip HTML for meta description
@@ -230,18 +224,6 @@ export default function NewsDetailPage() {
                 {/* Article content */}
                 <div className="prose prose-teal mt-8 max-w-none prose-headings:font-bold prose-headings:text-teal-900 prose-p:text-zinc-700 prose-a:text-teal-700 prose-a:no-underline hover:prose-a:underline prose-img:rounded-lg">
                   <div dangerouslySetInnerHTML={{ __html: article.content }} />
-                </div>
-
-                {/* Share buttons */}
-                <div className="mt-8 flex items-center gap-4 border-t border-gray-200 pt-6">
-                  <span className="font-medium text-zinc-700">Dalīties ar rakstu:</span>
-                  <button
-                    onClick={handleShareToFacebook}
-                    className="flex items-center gap-1 rounded-full bg-blue-600 p-2 text-white transition-colors hover:bg-blue-700"
-                    aria-label="Share to Facebook"
-                  >
-                    <Facebook className="h-5 w-5" />
-                  </button>
                 </div>
               </div>
             </div>
