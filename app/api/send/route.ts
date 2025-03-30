@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
 
     // Send email
     const data = await resend.emails.send({
-      from: 'RK Fēnikss Kontaktforma <noreply@rkfenikss.lv>', // Update this with your verified domain
+      from: 'RK Fēnikss Kontaktforma <noreply@fnx-rugby.lv>', // Updated to use verified domain
       to: 'rainerslovkins@gmail.com', // Recipient email address
       subject: emailSubject,
       html: htmlContent,
