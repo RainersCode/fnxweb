@@ -10,7 +10,7 @@ export const aboutUsData = {
   mission: {
     title: 'Mūsu misija',
     content:
-      'RK \"Fēnikss\" mūsu misija ir veicināt regbija sportu pamatlīmenī, veicinot fizisko sagatavotību, komandas darbu un sportisku garu visu vecumu un spēju spēlētāju vidū. Mūsu mērķis ir nodrošināt viesmīlīgu vidi, kur ikviens var baudīt spēli, attīstīt savas prasmes un veidot ilgstošas draudzības gan laukumā, gan ārpus tā.',
+      'RK \"Fēnikss\" mūsu misija ir veicināt regbija attīstību Latvijā, veicinot fizisko sagatavotību, komandas darbu un sportisku garu visu vecumu un spēju spēlētāju vidū. Mūsu mērķis ir nodrošināt viesmīlīgu vidi, kur ikviens var baudīt spēli, attīstīt savas prasmes un veidot ilgstošas draudzības gan laukumā, gan ārpus tā.',
   },
   values: {
     title: 'Mūsu vērtības',

@@ -31,6 +31,8 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
     if (path === '/news') return 'NEWS'
     if (path === '/gallery') return 'GALLERY'
     if (path === '/contact') return 'CONTACT'
+    if (path === '/privacy-policy') return 'PRIVACY_POLICY'
+    if (path === '/cookies-policy') return 'COOKIES_POLICY'
     return ''
   }
   
@@ -462,6 +464,14 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
           </div>
           
           <div className="mt-6 border-t border-zinc-200 pt-6 text-center text-sm font-medium tracking-wide text-zinc-500">
+            <div className="mb-4 flex justify-center space-x-6">
+              <Link href="/privacy-policy" className="text-zinc-500 hover:text-teal-700 transition-colors">
+                Privātuma Politika
+              </Link>
+              <Link href="/cookies-policy" className="text-zinc-500 hover:text-teal-700 transition-colors">
+                Sīkdatņu Politika
+              </Link>
+            </div>
             <p>© 2025 RK &quot;FĒNIKSS&quot;. VISAS TIESĪBAS AIZSARGĀTAS.</p>
           </div>
         </div>
