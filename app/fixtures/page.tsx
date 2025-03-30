@@ -132,7 +132,7 @@ export default function FixturesPage() {
           title="FIXTURES"
           titleHighlight="& RESULTS"
           subtitle="Stay up to date with all our upcoming matches and recent results."
-          backgroundImage="/placeholder.svg?height=1080&width=1920&text=Rugby Match"
+          backgroundImage="/AboutUs/parallax.jpg"
         />
 
         {/* Fixtures Section */}

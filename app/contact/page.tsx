@@ -32,7 +32,7 @@ export default function ContactPage() {
           title="GET IN"
           titleHighlight="TOUCH"
           subtitle="Have a question or want to join our club? We'd love to hear from you."
-          backgroundImage="/placeholder.svg?height=1080&width=1920&text=Rugby Club"
+          backgroundImage="/AboutUs/parallax.jpg"
         />
 
         <SectionContainer withBackground maxWidth="full">

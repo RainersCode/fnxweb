@@ -1,3 +1,5 @@
+'use client'
+
 import { Suspense } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { CalendarDays, MapPin, Trophy, Users } from 'lucide-react'
@@ -7,6 +9,7 @@ import { teamData } from '@/data/team-data'
 import PlayersList from './components/players-list'
 import CoachesList from './components/coaches-list'
 import Loading from './loading'
+import { ParallaxHeroSection } from '@/components/features/parallax-hero-section'
 
 // Disable caching for this page to ensure fresh data on each visit
 export const revalidate = 0 // Revalidate this page on every request
@@ -17,35 +20,12 @@ export default async function TeamPage() {
     <MainLayout currentPage="TEAM">
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative overflow-hidden py-24">
-          <div
-            className="absolute inset-0 z-0"
-            style={{
-              backgroundImage: "url('/placeholder.svg?height=1080&width=1920&text=Team Photo')",
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
-          />
-          <div className="absolute inset-0 z-0 bg-gradient-to-b from-teal-900/80 to-teal-700/80" />
-
-          {/* Decorative elements */}
-          <div className="absolute right-[10%] top-20 z-0 h-32 w-32 rounded-full bg-teal-500/20 blur-xl"></div>
-          <div className="absolute bottom-20 left-[5%] z-0 h-64 w-64 rounded-full bg-teal-700/10 blur-xl"></div>
-
-          <div className="container relative z-10 mx-auto px-4 sm:px-6">
-            <div className="mx-auto max-w-3xl text-center text-white">
-              <h1 className="mb-4 text-4xl font-extrabold tracking-tighter sm:text-5xl md:text-6xl">
-                <span className="text-white">OUR</span>
-                <span className="ml-2 font-light italic text-white">TEAM</span>
-              </h1>
-              <div className="mx-auto mb-6 h-1 w-32 skew-x-[-12deg] transform bg-white"></div>
-              <p className="text-xl text-teal-100">
-                Meet the dedicated players and coaching staff who make Riverside Rugby Club what it
-                is today.
-              </p>
-            </div>
-          </div>
-        </section>
+        <ParallaxHeroSection
+          title="OUR"
+          titleHighlight="TEAM"
+          subtitle="Meet the dedicated players and coaching staff who make Riverside Rugby Club what it is today."
+          backgroundImage="/AboutUs/parallax.jpg"
+        />
 
         {/* Team Info Section */}
         <section className="relative bg-white py-16">

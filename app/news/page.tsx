@@ -9,6 +9,7 @@ import { SectionContainer } from '@/components/shared/section-container'
 import { SectionTitle } from '@/components/shared/section-title'
 import { supabase } from '@/lib/supabase'
 import { Article } from '@/types/supabase'
+import { ParallaxHeroSection } from '@/components/features/parallax-hero-section'
 
 export default function NewsPage() {
   const [scrollY, setScrollY] = useState(0)
@@ -72,36 +73,12 @@ export default function NewsPage() {
     <MainLayout currentPage="NEWS">
       <main className="flex-1 pb-16">
         {/* Hero Section */}
-        <section className="relative overflow-hidden py-24">
-          <div
-            className="absolute inset-0 z-0"
-            style={{
-              backgroundImage: "url('/placeholder.svg?height=1080&width=1920&text=Rugby News')",
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              transform: `translateY(${scrollY * 0.3}px)`,
-              transition: 'transform 0.1s linear',
-            }}
-          />
-          <div className="absolute inset-0 z-0 bg-gradient-to-b from-teal-900/80 to-teal-700/80" />
-
-          {/* Decorative elements */}
-          <div className="absolute right-[10%] top-20 z-0 h-32 w-32 rounded-full bg-teal-500/20 blur-xl"></div>
-          <div className="absolute bottom-20 left-[5%] z-0 h-64 w-64 rounded-full bg-teal-700/10 blur-xl"></div>
-
-          <div className="container relative z-10 mx-auto px-4 sm:px-6">
-            <div className="mx-auto max-w-3xl text-center text-white">
-              <h1 className="mb-4 text-4xl font-extrabold tracking-tighter sm:text-5xl md:text-6xl">
-                <span className="text-white">LATEST</span>
-                <span className="ml-2 font-light italic text-white">NEWS</span>
-              </h1>
-              <div className="mx-auto mb-6 h-1 w-32 skew-x-[-12deg] transform bg-white"></div>
-              <p className="text-xl text-teal-100">
-                Stay up to date with the latest happenings from our club
-              </p>
-            </div>
-          </div>
-        </section>
+        <ParallaxHeroSection
+          title="LATEST"
+          titleHighlight="NEWS"
+          subtitle="Stay up to date with the latest happenings from our club"
+          backgroundImage="/AboutUs/parallax.jpg"
+        />
 
         {/* News Articles Section */}
         <SectionContainer className="bg-white">
