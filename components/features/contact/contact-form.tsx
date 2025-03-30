@@ -47,10 +47,9 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
 
   return (
     <Card
-      className="mt-8 overflow-hidden border-none shadow-md"
-      style={{ clipPath: "polygon(0 0, 100% 0, 95% 100%, 0 95%)" }}
+      className="mt-8 overflow-hidden border-none shadow-md bg-white"
     >
-      <CardContent className="p-6">
+      <CardContent className="p-6 bg-white text-zinc-800">
         {formSubmitted ? (
           <div className="text-center py-8">
             <div className="h-16 w-16 bg-teal-100 text-teal-800 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -71,19 +70,20 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="name">Your Name</Label>
+                <Label htmlFor="name" className="text-zinc-800 font-medium">Your Name</Label>
                 <Input
                   id="name"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="border-zinc-300 focus:border-teal-500 focus:ring-teal-500"
+                  className="border-zinc-300 bg-white text-zinc-800 focus:border-teal-500 focus:ring-teal-500"
+                  placeholder="Enter your name"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email">Email Address</Label>
+                <Label htmlFor="email" className="text-zinc-800 font-medium">Email Address</Label>
                 <Input
                   id="email"
                   name="email"
@@ -91,31 +91,33 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="border-zinc-300 focus:border-teal-500 focus:ring-teal-500"
+                  className="border-zinc-300 bg-white text-zinc-800 focus:border-teal-500 focus:ring-teal-500"
+                  placeholder="Enter your email"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="phone">Phone Number</Label>
+                <Label htmlFor="phone" className="text-zinc-800 font-medium">Phone Number</Label>
                 <Input
                   id="phone"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="border-zinc-300 focus:border-teal-500 focus:ring-teal-500"
+                  className="border-zinc-300 bg-white text-zinc-800 focus:border-teal-500 focus:ring-teal-500"
+                  placeholder="Enter your phone number"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="interest">I&apos;m interested in</Label>
+                <Label htmlFor="interest" className="text-zinc-800 font-medium">I&apos;m interested in</Label>
                 <select
                   id="interest"
                   name="interest"
                   value={formData.interest}
                   onChange={handleChange}
-                  className="w-full rounded-md border-zinc-300 focus:border-teal-500 focus:ring-teal-500"
+                  className="w-full rounded-md border border-zinc-300 bg-white text-zinc-800 focus:border-teal-500 focus:ring-teal-500 p-2"
                 >
                   <option value="general">General Inquiry</option>
                   <option value="membership">Membership</option>
@@ -126,19 +128,20 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="subject">Subject</Label>
+              <Label htmlFor="subject" className="text-zinc-800 font-medium">Subject</Label>
               <Input
                 id="subject"
                 name="subject"
                 value={formData.subject}
                 onChange={handleChange}
                 required
-                className="border-zinc-300 focus:border-teal-500 focus:ring-teal-500"
+                className="border-zinc-300 bg-white text-zinc-800 focus:border-teal-500 focus:ring-teal-500"
+                placeholder="Enter subject"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="message">Your Message</Label>
+              <Label htmlFor="message" className="text-zinc-800 font-medium">Your Message</Label>
               <Textarea
                 id="message"
                 name="message"
@@ -146,7 +149,8 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
                 value={formData.message}
                 onChange={handleChange}
                 required
-                className="border-zinc-300 focus:border-teal-500 focus:ring-teal-500"
+                className="border-zinc-300 bg-white text-zinc-800 focus:border-teal-500 focus:ring-teal-500"
+                placeholder="Type your message here..."
               />
             </div>
 

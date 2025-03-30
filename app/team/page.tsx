@@ -48,7 +48,7 @@ export default async function TeamPage() {
         <section className="relative bg-white py-16">
           <div className="container mx-auto px-4 sm:px-6">
             <div className="grid gap-8 md:grid-cols-3">
-              <Card className="transform overflow-hidden border-none shadow-md transition-all duration-300 hover:scale-[1.02]">
+              <Card className="transform overflow-hidden border-none shadow-md transition-all duration-300 hover:scale-[1.02] bg-white">
                 <CardContent className="p-0">
                   <div className="bg-teal-800 p-4 text-white">
                     <div className="flex items-center gap-3">
@@ -62,7 +62,7 @@ export default async function TeamPage() {
                 </CardContent>
               </Card>
 
-              <Card className="transform overflow-hidden border-none shadow-md transition-all duration-300 hover:scale-[1.02]">
+              <Card className="transform overflow-hidden border-none shadow-md transition-all duration-300 hover:scale-[1.02] bg-white">
                 <CardContent className="p-0">
                   <div className="bg-teal-800 p-4 text-white">
                     <div className="flex items-center gap-3">
@@ -83,7 +83,7 @@ export default async function TeamPage() {
                 </CardContent>
               </Card>
 
-              <Card className="transform overflow-hidden border-none shadow-md transition-all duration-300 hover:scale-[1.02]">
+              <Card className="transform overflow-hidden border-none shadow-md transition-all duration-300 hover:scale-[1.02] bg-white">
                 <CardContent className="p-0">
                   <div className="bg-teal-800 p-4 text-white">
                     <div className="flex items-center gap-3">

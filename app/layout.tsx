@@ -46,7 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           className={cn(inter.className, 'min-h-screen bg-background')}
           suppressHydrationWarning
         >
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
             {children}
             <Toaster />
             <SonnerToaster />

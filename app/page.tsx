@@ -242,11 +242,106 @@ export default function HomePage() {
     return new Date(dateString).toLocaleDateString('en-GB', options)
   }
 
-  // Extract time from date for fixtures
+  // Helper function to extract time from date for fixtures
   const extractTimeFromDate = (dateString: string): string => {
     const date = new Date(dateString)
     return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
   }
+
+  // Setup direct DOM access for the link button
+  useEffect(() => {
+    // Create a hidden link element that we can trigger programmatically
+    const createDirectLink = () => {
+      // Remove any existing link first
+      const existingLink = document.getElementById('direct-read-more-link');
+      if (existingLink) {
+        existingLink.remove();
+      }
+      
+      // Create new link
+      const linkElement = document.createElement('a');
+      linkElement.id = 'direct-read-more-link';
+      linkElement.style.position = 'absolute';
+      linkElement.style.bottom = '100px';
+      linkElement.style.left = '50%';
+      linkElement.style.transform = 'translateX(-50%) skew(-12deg)';
+      linkElement.style.zIndex = '9999';
+      linkElement.style.backgroundColor = '#115e59';
+      linkElement.style.color = 'white';
+      linkElement.style.padding = '12px 24px';
+      linkElement.style.fontWeight = 'bold';
+      linkElement.style.textDecoration = 'none';
+      linkElement.style.display = 'inline-block';
+      linkElement.style.cursor = 'pointer';
+      linkElement.style.boxShadow = '0 0 10px rgba(20, 184, 166, 0.5)';
+      linkElement.style.border = '2px solid transparent';
+      linkElement.style.transition = 'all 0.3s ease';
+      linkElement.style.animation = 'glow-border 2s infinite';
+      
+      // Set the link destination
+      if (articles.length > 0 && currentSlide < articles.length) {
+        linkElement.href = `/news/${articles[currentSlide].id}`;
+      } else {
+        linkElement.href = `/news/${currentSlide + 1}`;
+      }
+      
+      // Create and append the inner span
+      const spanElement = document.createElement('span');
+      spanElement.style.display = 'inline-flex';
+      spanElement.style.transform = 'skew(12deg)';
+      spanElement.style.alignItems = 'center';
+      spanElement.textContent = 'READ MORE';
+      linkElement.appendChild(spanElement);
+      
+      // Create and append animation keyframes
+      const styleElement = document.createElement('style');
+      styleElement.textContent = `
+        @keyframes glow-border {
+          0% { border-color: rgba(20, 184, 166, 0.2); box-shadow: 0 0 5px rgba(20, 184, 166, 0.2); }
+          50% { border-color: rgba(20, 184, 166, 0.8); box-shadow: 0 0 20px rgba(20, 184, 166, 0.6); }
+          100% { border-color: rgba(20, 184, 166, 0.2); box-shadow: 0 0 5px rgba(20, 184, 166, 0.2); }
+        }
+      `;
+      document.head.appendChild(styleElement);
+      
+      // Add hover effects
+      linkElement.onmouseover = function() {
+        this.style.backgroundColor = '#134e4a';
+        this.style.boxShadow = '0 0 15px rgba(20, 184, 166, 0.8)';
+        this.style.transform = 'translateX(-50%) skew(-12deg) scale(1.05)';
+      };
+      
+      linkElement.onmouseout = function() {
+        this.style.backgroundColor = '#115e59';
+        this.style.boxShadow = '0 0 10px rgba(20, 184, 166, 0.5)';
+        this.style.transform = 'translateX(-50%) skew(-12deg)';
+      };
+      
+      // Append to the hero section
+      const heroSection = document.querySelector('.relative.h-\\[80vh\\]');
+      if (heroSection) {
+        heroSection.appendChild(linkElement);
+      } else {
+        document.body.appendChild(linkElement);
+      }
+    };
+    
+    // Call immediately
+    createDirectLink();
+    
+    // Update whenever the slide changes
+    return () => {
+      const existingLink = document.getElementById('direct-read-more-link');
+      if (existingLink) {
+        existingLink.remove();
+      }
+      // Remove animation style
+      const styleElement = document.querySelector('style');
+      if (styleElement && styleElement.textContent.includes('glow-border')) {
+        styleElement.remove();
+      }
+    };
+  }, [currentSlide, articles.length, articles]);
 
   return (
     <MainLayout currentPage="HOME">
@@ -318,51 +413,36 @@ export default function HomePage() {
           </div>
 
           <div className="container relative z-10 mx-auto flex h-full flex-col items-start justify-center px-4 sm:px-6">
-            <div className="clip-path-polygon relative rounded-none bg-white/80 p-6 backdrop-blur-sm sm:p-8">
-              {/* Accent line */}
-              <div className="absolute left-0 top-0 h-full w-1 bg-teal-800"></div>
-
-              <h1 className="text-3xl font-extrabold uppercase leading-none tracking-tighter text-teal-900 sm:text-4xl md:text-5xl">
-                {articles.length > 0 && currentSlide < articles.length
-                  ? articles[currentSlide].title
-                  : fallbackNewsItems[currentSlide % fallbackNewsItems.length].title}
-              </h1>
-              <p className="mt-4 max-w-xl text-base font-medium text-zinc-700 sm:text-lg">
-                {articles.length > 0 && currentSlide < articles.length
-                  ? articles[currentSlide].content.substring(0, 150) + '...'
-                  : fallbackNewsItems[currentSlide % fallbackNewsItems.length].description}
-              </p>
-              <div className="mt-6">
-                {articles.length > 0 && currentSlide < articles.length ? (
-                  <Link href={`/news/${articles[currentSlide].id}`}>
-                    <button className="skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
-                      <span className="inline-flex skew-x-[12deg] transform items-center">
-                        READ MORE
-                      </span>
-                    </button>
-                  </Link>
-                ) : (
-                  <button className="skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
-                    <span className="inline-flex skew-x-[12deg] transform items-center">
-                      READ MORE
-                    </span>
-                  </button>
-                )}
+            {/* Content box with same skew as button */}
+            <div className="bg-white/80 backdrop-blur-sm max-w-2xl skew-x-[-12deg] transform" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)' }}>
+              {/* Header Box */}
+              <div className="relative border-l-4 border-teal-800 p-6">
+                <h1 className="text-3xl font-extrabold uppercase leading-none tracking-tighter text-teal-900 sm:text-4xl md:text-5xl skew-x-[12deg] transform">
+                  {articles.length > 0 && currentSlide < articles.length
+                    ? articles[currentSlide].title
+                    : fallbackNewsItems[currentSlide % fallbackNewsItems.length].title}
+                </h1>
+                
+                <p className="mt-4 max-w-xl text-base font-medium text-zinc-700 sm:text-lg skew-x-[12deg] transform">
+                  {articles.length > 0 && currentSlide < articles.length
+                    ? articles[currentSlide].content.substring(0, 150) + '...'
+                    : fallbackNewsItems[currentSlide % fallbackNewsItems.length].description}
+                </p>
               </div>
             </div>
-
-            <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-2">
-              {(articles.length > 0 ? articles : fallbackNewsItems).map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentSlide(index)}
-                  className={`h-2 w-8 skew-x-[-12deg] transform transition-all duration-300 ${
-                    index === currentSlide ? 'w-12 bg-teal-800' : 'bg-white/60 hover:bg-teal-50'
-                  }`}
-                  aria-label={`Go to slide ${index + 1}`}
-                />
-              ))}
-            </div>
+          </div>
+          
+          <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-2">
+            {(articles.length > 0 ? articles : fallbackNewsItems).map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={`h-2 w-8 skew-x-[-12deg] transform transition-all duration-300 ${
+                  index === currentSlide ? 'w-12 bg-teal-800' : 'bg-white/60 hover:bg-teal-50'
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
           </div>
         </section>
 
@@ -653,7 +733,7 @@ export default function HomePage() {
           ) : (
             <GridContainer cols={3} gap="md">
               {fixtures.map((fixture) => (
-                <Card key={fixture.id} className="relative overflow-hidden">
+                <Card key={fixture.id} className="relative overflow-hidden bg-white">
                   <CardContent className="p-6">
                     <div className="mb-4 flex items-center gap-2 text-teal-800">
                       <CalendarDays className="h-5 w-5" />

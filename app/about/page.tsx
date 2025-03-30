@@ -70,7 +70,7 @@ export default function AboutPage() {
             {aboutUsData.values.list.map((value, index) => (
               <Card
                 key={index}
-                className="transform transition-all duration-300 hover:scale-[1.02]"
+                className="transform transition-all duration-300 hover:scale-[1.02] bg-white"
               >
                 <CardContent className="p-6">
                   <h3 className="mb-3 text-xl font-bold text-teal-900">{value.title}</h3>
