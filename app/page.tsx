@@ -394,7 +394,7 @@ export default function HomePage() {
           <div className="absolute inset-0 z-20 flex items-center justify-between px-4 sm:px-8">
             <button
               onClick={prevSlide}
-              className="skew-x-[-12deg] transform bg-white/90 px-4 py-4 font-medium tracking-wide text-teal-800 shadow-lg transition-all duration-300 hover:bg-white hover:text-teal-900"
+              className="skew-x-[-12deg] transform bg-white/30 px-4 py-4 font-medium tracking-wide text-teal-800 shadow-lg transition-all duration-300 hover:bg-white/50 hover:text-teal-900"
               aria-label="Previous slide"
             >
               <span className="inline-flex skew-x-[12deg] transform items-center">
@@ -403,7 +403,7 @@ export default function HomePage() {
             </button>
             <button
               onClick={nextSlide}
-              className="skew-x-[-12deg] transform bg-white/90 px-4 py-4 font-medium tracking-wide text-teal-800 shadow-lg transition-all duration-300 hover:bg-white hover:text-teal-900"
+              className="skew-x-[-12deg] transform bg-white/30 px-4 py-4 font-medium tracking-wide text-teal-800 shadow-lg transition-all duration-300 hover:bg-white/50 hover:text-teal-900"
               aria-label="Next slide"
             >
               <span className="inline-flex skew-x-[12deg] transform items-center">
