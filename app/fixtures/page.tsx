@@ -7,6 +7,7 @@ import { CalendarDays, Clock, MapPin, Trophy, ChevronDown, Loader2 } from 'lucid
 import { MainLayout } from '@/components/layout/main-layout'
 import { ParallaxHeroSection } from '@/components/features/parallax-hero-section'
 import { Fixture } from '@/types/supabase'
+import { supabase } from '@/lib/supabase'
 
 export default function FixturesPage() {
   const [activeTab, setActiveTab] = useState('upcoming')
@@ -16,46 +17,110 @@ export default function FixturesPage() {
   const [loadingUpcoming, setLoadingUpcoming] = useState(true)
   const [loadingPast, setLoadingPast] = useState(true)
 
-  // Fetch upcoming fixtures
+  // Fetch upcoming fixtures directly from Supabase
   useEffect(() => {
     const fetchUpcomingFixtures = async () => {
       setLoadingUpcoming(true)
       try {
-        const response = await fetch('/api/fixtures?type=upcoming')
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`)
+        // Get today's date at midnight UTC
+        const today = new Date()
+        today.setUTCHours(0, 0, 0, 0)
+
+        const { data, error } = await supabase
+          .from('fixtures')
+          .select('*')
+          .gte('match_date', today.toISOString())
+          .order('match_date', { ascending: true })
+
+        if (error) {
+          console.error('Error fetching upcoming fixtures:', error)
+          throw error
         }
-        const data = await response.json()
+
         setUpcomingFixtures(data || [])
       } catch (error) {
         console.error('Error fetching upcoming fixtures:', error)
+        setUpcomingFixtures([])
       } finally {
         setLoadingUpcoming(false)
       }
     }
 
     fetchUpcomingFixtures()
+
+    // Set up real-time subscription for upcoming fixtures
+    const upcomingSubscription = supabase
+      .channel('upcoming-fixtures')
+      .on('postgres_changes', 
+        {
+          event: '*',
+          schema: 'public',
+          table: 'fixtures',
+          filter: `match_date.gte.${new Date().toISOString()}`
+        },
+        () => {
+          console.log('Upcoming fixtures changed, refreshing...')
+          fetchUpcomingFixtures()
+        }
+      )
+      .subscribe()
+
+    return () => {
+      upcomingSubscription.unsubscribe()
+    }
   }, [])
 
-  // Fetch past fixtures
+  // Fetch past fixtures directly from Supabase
   useEffect(() => {
     const fetchPastFixtures = async () => {
       setLoadingPast(true)
       try {
-        const response = await fetch('/api/fixtures?type=past')
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`)
+        // Get today's date at midnight UTC
+        const today = new Date()
+        today.setUTCHours(0, 0, 0, 0)
+
+        const { data, error } = await supabase
+          .from('fixtures')
+          .select('*')
+          .lt('match_date', today.toISOString())
+          .order('match_date', { ascending: false })
+
+        if (error) {
+          console.error('Error fetching past fixtures:', error)
+          throw error
         }
-        const data = await response.json()
+
         setPastFixtures(data || [])
       } catch (error) {
         console.error('Error fetching past fixtures:', error)
+        setPastFixtures([])
       } finally {
         setLoadingPast(false)
       }
     }
 
     fetchPastFixtures()
+
+    // Set up real-time subscription for past fixtures
+    const pastSubscription = supabase
+      .channel('past-fixtures')
+      .on('postgres_changes', 
+        {
+          event: '*',
+          schema: 'public',
+          table: 'fixtures',
+          filter: `match_date.lt.${new Date().toISOString()}`
+        },
+        () => {
+          console.log('Past fixtures changed, refreshing...')
+          fetchPastFixtures()
+        }
+      )
+      .subscribe()
+
+    return () => {
+      pastSubscription.unsubscribe()
+    }
   }, [])
 
   const toggleMatchDetails = (id: string) => {

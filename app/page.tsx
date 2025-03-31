@@ -156,25 +156,57 @@ export default function HomePage() {
     fetchGalleries()
   }, [])
 
-  // Fetch upcoming fixtures from API
+  // Fetch upcoming fixtures from Supabase
   useEffect(() => {
     const fetchFixtures = async () => {
       setLoadingFixtures(true)
       try {
-        const response = await fetch('/api/fixtures?type=upcoming&limit=3')
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`)
+        // Get today's date at midnight UTC
+        const today = new Date()
+        today.setUTCHours(0, 0, 0, 0)
+
+        const { data, error } = await supabase
+          .from('fixtures')
+          .select('*')
+          .gte('match_date', today.toISOString())
+          .order('match_date', { ascending: true })
+          .limit(3)
+
+        if (error) {
+          console.error('Error fetching fixtures:', error)
+          throw error
         }
-        const data = await response.json()
+
         setFixtures(data || [])
       } catch (error) {
         console.error('Error fetching fixtures:', error)
+        setFixtures([])
       } finally {
         setLoadingFixtures(false)
       }
     }
 
     fetchFixtures()
+
+    // Set up real-time subscription for fixtures
+    const fixturesSubscription = supabase
+      .channel('home-fixtures')
+      .on('postgres_changes', 
+        {
+          event: '*',
+          schema: 'public',
+          table: 'fixtures'
+        },
+        () => {
+          console.log('Fixtures changed, refreshing...')
+          fetchFixtures()
+        }
+      )
+      .subscribe()
+
+    return () => {
+      fixturesSubscription.unsubscribe()
+    }
   }, [])
 
   useEffect(() => {
