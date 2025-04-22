@@ -3,6 +3,15 @@ import { auth } from '@clerk/nextjs'
 import { uploadMedia } from '@/lib/api'
 import sharp from 'sharp'
 
+// Increase the bodyParser size limit for this specific route
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '12mb', // Set higher than MAX_FILE_SIZE to allow processing
+    },
+  },
+}
+
 // Maximum file size (10MB, increased to allow larger originals for optimization)
 const MAX_FILE_SIZE = 10 * 1024 * 1024
 // Optimization settings
