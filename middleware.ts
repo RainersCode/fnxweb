@@ -94,5 +94,17 @@ export default authMiddleware({
 
 // Stop Middleware running on static files and api routes
 export const config = {
-  matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - api/webhook/clerk (Clerk webhook)
+     * - api/galleries (public API)
+     * Match paths starting with /admin (protected routes)
+     */
+    '/((?!_next/static|_next/image|favicon.ico|api/webhook/clerk|api/galleries).*)',
+    '/admin/:path*', // Explicitly match admin routes
+  ],
 }
