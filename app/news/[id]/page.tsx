@@ -20,7 +20,7 @@ export default function NewsDetailPage() {
   const [scrollY, setScrollY] = useState(0)
   const [pageUrl, setPageUrl] = useState('')
 
-  const id = params.id as string
+  const id = params?.id as string
 
   // Set page URL for structured data
   useEffect(() => {
@@ -149,13 +149,13 @@ export default function NewsDetailPage() {
           <meta property="og:description" content={getMetaDescription()} />
           <meta property="og:type" content="article" />
           <meta property="og:url" content={pageUrl} />
-          {article.image_url && <meta property="og:image" content={getImageUrl(article.image_url)} />}
+          {article.image_url && <meta property="og:image" content={getImageUrl(article.image_url ?? null)} />}
           <meta property="article:published_time" content={article.published_at} />
           {article.updated_at && <meta property="article:modified_time" content={article.updated_at} />}
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content={article.title} />
           <meta name="twitter:description" content={getMetaDescription()} />
-          {article.image_url && <meta name="twitter:image" content={getImageUrl(article.image_url)} />}
+          {article.image_url && <meta name="twitter:image" content={getImageUrl(article.image_url ?? null)} />}
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
@@ -170,7 +170,7 @@ export default function NewsDetailPage() {
             <div
               className="absolute inset-0 z-0"
               style={{
-                backgroundImage: `url(${getImageUrl(article.image_url) || '/placeholder.svg?height=600&width=900&text=Rugby News'})`,
+                backgroundImage: `url(${getImageUrl(article.image_url ?? null) || '/placeholder.svg?height=600&width=900&text=Rugby News'})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 transform: `translateY(${scrollY * 0.3}px)`,
@@ -209,7 +209,7 @@ export default function NewsDetailPage() {
           <SectionContainer className="bg-white">
             <div className="relative z-10 -mt-16">
               <div
-                className="mx-auto max-w-3xl overflow-hidden bg-white p-8 shadow-xl"
+                className="mx-auto w-full sm:max-w-3xl md:max-w-4xl lg:max-w-5xl overflow-hidden bg-white p-4 sm:p-8 shadow-xl"
                 style={{ clipPath: 'polygon(0 0, 100% 0, 100% 96%, 96% 100%, 0 100%)' }}
               >
                 {/* Back button */}
