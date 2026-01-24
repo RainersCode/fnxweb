@@ -43,7 +43,6 @@ interface GalleryWithThumbnail extends Gallery {
 
 export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0)
-  const [scrollY, setScrollY] = useState(0)
   const [articles, setArticles] = useState<Article[]>([])
   const [loading, setLoading] = useState(true)
   const [galleries, setGalleries] = useState<GalleryWithThumbnail[]>([])
@@ -215,15 +214,8 @@ export default function HomePage() {
       setCurrentSlide((prev) => (prev === itemsLength - 1 ? 0 : prev + 1))
     }, 5000)
 
-    const handleScroll = () => {
-      setScrollY(window.scrollY)
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-
     return () => {
       clearInterval(interval)
-      window.removeEventListener('scroll', handleScroll)
     }
   }, [articles.length])
 
@@ -327,113 +319,15 @@ export default function HomePage() {
     return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
   }
 
-  // Setup direct DOM access for the link button
-  useEffect(() => {
-    // Create a hidden link element that we can trigger programmatically
-    const createDirectLink = () => {
-      // Remove any existing link first
-      const existingLink = document.getElementById('direct-read-more-link');
-      if (existingLink) {
-        existingLink.remove();
-      }
-      
-      // Create new link
-      const linkElement = document.createElement('a');
-      linkElement.id = 'direct-read-more-link';
-      linkElement.style.position = 'absolute';
-      linkElement.style.bottom = '100px';
-      linkElement.style.left = '50%';
-      linkElement.style.transform = 'translateX(-50%) skew(-12deg)';
-      linkElement.style.zIndex = '20';
-      linkElement.style.backgroundColor = '#115e59';
-      linkElement.style.color = 'white';
-      // Responsive padding for different screen sizes
-      linkElement.style.padding = window.innerWidth < 640 ? '10px 20px' : '12px 24px';
-      // Responsive font size for different screen sizes
-      linkElement.style.fontSize = window.innerWidth < 640 ? '14px' : '16px';
-      linkElement.style.fontWeight = 'bold';
-      linkElement.style.textDecoration = 'none';
-      linkElement.style.display = 'inline-block';
-      linkElement.style.cursor = 'pointer';
-      linkElement.style.boxShadow = '0 0 10px rgba(20, 184, 166, 0.5)';
-      linkElement.style.border = '2px solid transparent';
-      linkElement.style.transition = 'all 0.3s ease';
-      linkElement.style.animation = 'glow-border 2s infinite';
-      
-      // Set the link destination
-      if (articles.length > 0 && currentSlide < articles.length) {
-        linkElement.href = `/news/${articles[currentSlide].id}`;
-      } else {
-        linkElement.href = `/news/${currentSlide + 1}`;
-      }
-      
-      // Create and append the inner span
-      const spanElement = document.createElement('span');
-      spanElement.style.display = 'inline-flex';
-      spanElement.style.transform = 'skew(12deg)';
-      spanElement.style.alignItems = 'center';
-      spanElement.textContent = 'LASĪT VAIRĀK';
-      linkElement.appendChild(spanElement);
-      
-      // Create and append animation keyframes
-      const styleElement = document.createElement('style');
-      styleElement.textContent = `
-        @keyframes glow-border {
-          0% { border-color: rgba(20, 184, 166, 0.2); box-shadow: 0 0 5px rgba(20, 184, 166, 0.2); }
-          50% { border-color: rgba(20, 184, 166, 0.8); box-shadow: 0 0 20px rgba(20, 184, 166, 0.6); }
-          100% { border-color: rgba(20, 184, 166, 0.2); box-shadow: 0 0 5px rgba(20, 184, 166, 0.2); }
-        }
-      `;
-      document.head.appendChild(styleElement);
-      
-      // Add hover effects
-      linkElement.onmouseover = function() {
-        this.style.backgroundColor = '#134e4a';
-        this.style.boxShadow = '0 0 15px rgba(20, 184, 166, 0.8)';
-        this.style.transform = 'translateX(-50%) skew(-12deg) scale(1.05)';
-      };
-      
-      linkElement.onmouseout = function() {
-        this.style.backgroundColor = '#115e59';
-        this.style.boxShadow = '0 0 10px rgba(20, 184, 166, 0.5)';
-        this.style.transform = 'translateX(-50%) skew(-12deg)';
-      };
-      
-      // Append to the hero section
-      const heroSection = document.querySelector('.relative.h-\\[80vh\\]');
-      if (heroSection) {
-        heroSection.appendChild(linkElement);
-      } else {
-        document.body.appendChild(linkElement);
-      }
-    };
-    
-    // Call immediately
-    createDirectLink();
-    
-    // Update whenever the slide changes
-    return () => {
-      const existingLink = document.getElementById('direct-read-more-link');
-      if (existingLink) {
-        existingLink.remove();
-      }
-      // Remove animation style
-      const styleElement = document.querySelector('style');
-      if (styleElement && styleElement.textContent.includes('glow-border')) {
-        styleElement.remove();
-      }
-    };
-  }, [currentSlide, articles.length, articles]);
-
   return (
     <MainLayout currentPage="HOME">
       <main className="flex-1">
-        {/* Hero Section with News Carousel and Shapes */}
-        <section className="relative h-[80vh] overflow-hidden">
+        {/* Hero Section - Modern Split Layout */}
+        <section className="relative min-h-[85vh] bg-gradient-to-br from-teal-900 via-teal-800 to-teal-900 overflow-hidden">
+          {/* Blurred article image background */}
           <div className="absolute inset-0 z-0">
             {articles.length > 0
-              ? // Display real articles
-                articles.map((article, index) => (
+              ? articles.map((article, index) => (
                   <div
                     key={article.id}
                     className={`absolute inset-0 transition-opacity duration-1000 ${
@@ -441,19 +335,15 @@ export default function HomePage() {
                     }`}
                   >
                     <NextImage
-                      src={
-                        article.image_url ||
-                        '/placeholder.svg?height=1080&width=1920&text=Rugby News'
-                      }
-                      alt={article.title}
+                      src={article.image_url || '/placeholder.svg?height=1080&width=1920&text=Rugby'}
+                      alt=""
                       fill
-                      className="object-cover brightness-90"
+                      className="object-cover blur-2xl scale-110"
                       priority={index === 0}
                     />
                   </div>
                 ))
-              : // Display fallback news items
-                fallbackNewsItems.map((item, index) => (
+              : fallbackNewsItems.map((item, index) => (
                   <div
                     key={index}
                     className={`absolute inset-0 transition-opacity duration-1000 ${
@@ -462,247 +352,392 @@ export default function HomePage() {
                   >
                     <NextImage
                       src={item.image}
-                      alt={item.title}
+                      alt=""
                       fill
-                      className="object-cover brightness-90"
+                      className="object-cover blur-2xl scale-110"
                       priority={index === 0}
                     />
                   </div>
                 ))}
+            {/* Overlay to make it light and blend with teal */}
+            <div className="absolute inset-0 bg-gradient-to-br from-teal-900/70 via-teal-800/60 to-teal-900/70" />
           </div>
 
-          <div className="absolute inset-0 z-[1] bg-gradient-to-b from-black/30 to-transparent" />
+          {/* Decorative skewed lines */}
+          <div className="absolute top-20 left-0 w-64 h-1 bg-teal-400/20 skew-x-[-12deg] z-10" />
+          <div className="absolute top-28 left-0 w-32 h-1 bg-teal-400/10 skew-x-[-12deg] z-10" />
+          <div className="absolute bottom-32 right-0 w-48 h-1 bg-teal-400/20 skew-x-[-12deg] z-10" />
 
-          <div className="absolute inset-0 z-20 flex items-center justify-between px-4 sm:px-8">
-            <button
-              onClick={prevSlide}
-              className="skew-x-[-12deg] transform bg-white/30 px-4 py-4 font-medium tracking-wide text-teal-800 shadow-lg transition-all duration-300 hover:bg-white/50 hover:text-teal-900"
-              aria-label="Previous slide"
-            >
-              <span className="inline-flex skew-x-[12deg] transform items-center">
-                <ChevronLeft className="h-6 w-6" />
-              </span>
-            </button>
-            <button
-              onClick={nextSlide}
-              className="skew-x-[-12deg] transform bg-white/30 px-4 py-4 font-medium tracking-wide text-teal-800 shadow-lg transition-all duration-300 hover:bg-white/50 hover:text-teal-900"
-              aria-label="Next slide"
-            >
-              <span className="inline-flex skew-x-[12deg] transform items-center">
-                <ChevronRight className="h-6 w-6" />
-              </span>
-            </button>
-          </div>
+          <div className="container mx-auto px-4 sm:px-6 relative z-10">
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[85vh] py-12">
 
-          <div className="container relative z-10 mx-auto flex h-full flex-col items-start justify-center px-4 sm:px-6">
-            {/* Content box with same skew as button */}
-            <div className="bg-white/80 backdrop-blur-sm max-w-2xl skew-x-[-12deg] transform" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)' }}>
-              {/* Header Box */}
-              <div className="relative border-l-4 border-teal-800 p-4 sm:p-6">
-                <h1 className="text-2xl font-extrabold uppercase leading-tight tracking-tighter text-teal-900 sm:text-4xl md:text-5xl skew-x-[12deg] transform">
+              {/* Left Content */}
+              <div className="order-2 lg:order-1 flex flex-col justify-center">
+                {/* Label */}
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-0.5 bg-teal-400 skew-x-[-12deg]" />
+                  <span className="text-sm font-bold uppercase tracking-widest text-teal-300">Jaunākās Ziņas</span>
+                </div>
+
+                {/* Title */}
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold uppercase leading-tight tracking-tighter text-white mb-6">
                   {articles.length > 0 && currentSlide < articles.length
                     ? articles[currentSlide].title
                     : fallbackNewsItems[currentSlide % fallbackNewsItems.length].title}
                 </h1>
-                
-                <p className="mt-2 sm:mt-4 max-w-xl text-sm font-medium text-zinc-700 sm:text-lg skew-x-[12deg] transform">
+
+                {/* Description */}
+                <p className="text-lg text-teal-100/80 leading-relaxed mb-8 max-w-lg">
                   {articles.length > 0 && currentSlide < articles.length
-                    ? stripHtml(articles[currentSlide].content).substring(0, 150) + '...'
+                    ? stripHtml(articles[currentSlide].content).substring(0, 180) + '...'
                     : fallbackNewsItems[currentSlide % fallbackNewsItems.length].description}
                 </p>
+
+                {/* CTA Button */}
+                <div className="flex items-center gap-6">
+                  <Link
+                    href={articles.length > 0 && currentSlide < articles.length
+                      ? `/news/${articles[currentSlide].id}`
+                      : `/news/${currentSlide + 1}`}
+                    className="group"
+                  >
+                    <button className="animate-glow-border skew-x-[-12deg] transform bg-white px-8 py-4 font-bold tracking-wide text-teal-900 shadow-xl transition-all duration-300 hover:bg-teal-50 hover:scale-105">
+                      <span className="inline-flex skew-x-[12deg] transform items-center">
+                        LASĪT VAIRĀK
+                        <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                      </span>
+                    </button>
+                  </Link>
+
+                  {/* Slide indicators */}
+                  <div className="hidden sm:flex items-center gap-2">
+                    {(articles.length > 0 ? articles : fallbackNewsItems).map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentSlide(index)}
+                        className={`h-2 skew-x-[-12deg] transform transition-all duration-300 ${
+                          index === currentSlide
+                            ? 'w-10 bg-teal-400'
+                            : 'w-6 bg-white/30 hover:bg-white/50'
+                        }`}
+                        aria-label={`Go to slide ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Navigation arrows */}
+                <div className="flex items-center gap-3 mt-8">
+                  <button
+                    onClick={prevSlide}
+                    className="skew-x-[-12deg] transform bg-white/10 border border-white/20 p-3 text-white transition-all duration-300 hover:bg-white/20"
+                    aria-label="Previous slide"
+                  >
+                    <ChevronLeft className="h-5 w-5 skew-x-[12deg] transform" />
+                  </button>
+                  <button
+                    onClick={nextSlide}
+                    className="skew-x-[-12deg] transform bg-white/10 border border-white/20 p-3 text-white transition-all duration-300 hover:bg-white/20"
+                    aria-label="Next slide"
+                  >
+                    <ChevronRight className="h-5 w-5 skew-x-[12deg] transform" />
+                  </button>
+                  <span className="ml-2 text-sm text-teal-300/70">
+                    {String(currentSlide + 1).padStart(2, '0')} / {String((articles.length > 0 ? articles : fallbackNewsItems).length).padStart(2, '0')}
+                  </span>
+                </div>
+              </div>
+
+              {/* Right Image */}
+              <div className="order-1 lg:order-2">
+                {/* Simple image frame */}
+                <div className="relative overflow-hidden shadow-2xl border-b-4 border-teal-400">
+                  {/* Image carousel */}
+                  <div className="relative aspect-[4/3] bg-teal-800">
+                    {articles.length > 0
+                      ? articles.map((article, index) => (
+                          <div
+                            key={article.id}
+                            className={`absolute inset-0 transition-all duration-700 ${
+                              index === currentSlide
+                                ? 'opacity-100 scale-100'
+                                : 'opacity-0 scale-105'
+                            }`}
+                          >
+                            <NextImage
+                              src={article.image_url || '/placeholder.svg?height=600&width=800&text=Rugby News'}
+                              alt={article.title}
+                              fill
+                              className="object-cover"
+                              priority={index === 0}
+                            />
+                          </div>
+                        ))
+                      : fallbackNewsItems.map((item, index) => (
+                          <div
+                            key={index}
+                            className={`absolute inset-0 transition-all duration-700 ${
+                              index === currentSlide
+                                ? 'opacity-100 scale-100'
+                                : 'opacity-0 scale-105'
+                            }`}
+                          >
+                            <NextImage
+                              src={item.image}
+                              alt={item.title}
+                              fill
+                              className="object-cover"
+                              priority={index === 0}
+                            />
+                          </div>
+                        ))}
+                  </div>
+
+                  {/* Date badge */}
+                  {articles.length > 0 && currentSlide < articles.length && (
+                    <div className="absolute top-4 right-4 z-20">
+                      <div className="skew-x-[-12deg] transform bg-teal-700/90 backdrop-blur-sm px-4 py-2">
+                        <div className="skew-x-[12deg] transform flex items-center gap-2 text-white">
+                          <CalendarDays className="h-4 w-4" />
+                          <span className="text-sm font-medium">
+                            {new Date(articles[currentSlide].published_at).toLocaleDateString('lv-LV', {
+                              day: 'numeric',
+                              month: 'short',
+                              year: 'numeric'
+                            })}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Mobile slide indicators */}
+                <div className="flex sm:hidden items-center justify-center gap-2 mt-6">
+                  {(articles.length > 0 ? articles : fallbackNewsItems).map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentSlide(index)}
+                      className={`h-2 skew-x-[-12deg] transform transition-all duration-300 ${
+                        index === currentSlide
+                          ? 'w-10 bg-teal-400'
+                          : 'w-6 bg-white/30 hover:bg-white/50'
+                      }`}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-          
-          <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-2">
-            {(articles.length > 0 ? articles : fallbackNewsItems).map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentSlide(index)}
-                className={`h-2 w-8 skew-x-[-12deg] transform transition-all duration-300 ${
-                  index === currentSlide ? 'w-12 bg-teal-800' : 'bg-white/60 hover:bg-teal-50'
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
-          </div>
+
         </section>
 
-        {/* Team Section with Parallax */}
-        <SectionContainer className="overflow-hidden">
+        {/* About Us Section with Parallax */}
+        <section className="relative py-24 overflow-hidden">
+          {/* Parallax Background */}
           <div
-            className="absolute inset-0 top-[-40%] z-0 h-[180%]"
+            className="absolute inset-0 z-0"
             style={{
               backgroundImage: "url('/AboutUs/parallax.jpg')",
               backgroundSize: 'cover',
               backgroundPosition: 'center',
-              transform: `translateY(${scrollY * 0.3}px)`,
-              transition: 'transform 0.1s linear',
+              backgroundAttachment: 'fixed',
             }}
           />
-          <div className="absolute inset-0 z-0 bg-white/85" />
+          <div className="absolute inset-0 z-0 bg-gradient-to-br from-white/[0.97] via-white/[0.95] to-white/[0.97]" />
 
-          {/* Additional parallax elements */}
+          {/* Decorative elements */}
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-teal-300/50 to-transparent" />
+          <div className="absolute top-16 left-0 w-48 h-0.5 bg-teal-700/20 skew-x-[-12deg]" />
+          <div className="absolute top-20 left-0 w-32 h-0.5 bg-teal-700/10 skew-x-[-12deg]" />
+          <div className="absolute bottom-16 right-0 w-48 h-0.5 bg-teal-700/20 skew-x-[-12deg]" />
+          <div className="absolute bottom-20 right-0 w-32 h-0.5 bg-teal-700/10 skew-x-[-12deg]" />
 
-          <div className="relative z-10">
-            <div className="mx-auto mb-12 max-w-2xl text-center">
-              <SectionTitle title="PAR" titleHighlight="MUMS" />
+          <div className="container mx-auto px-4 sm:px-6 relative z-10">
+            {/* Section Header */}
+            <div className="mx-auto mb-16 max-w-2xl text-center">
+              <div className="inline-flex items-center gap-3 mb-4">
+                <div className="w-10 h-0.5 bg-teal-700 skew-x-[-12deg]" />
+                <span className="text-sm font-bold uppercase tracking-widest text-teal-600">Iepazīsti mūs</span>
+                <div className="w-10 h-0.5 bg-teal-700 skew-x-[-12deg]" />
+              </div>
+              <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tighter">
+                <span className="text-teal-900">PAR </span>
+                <span className="text-teal-600 italic font-light">MUMS</span>
+              </h2>
+              <div className="mx-auto mt-4 h-1 w-20 bg-teal-700 skew-x-[-12deg]" />
             </div>
 
-            <GridContainer cols={2} gap="lg" className="items-center">
-              <div
-                className="transform overflow-hidden bg-white shadow-md transition-transform duration-300 hover:scale-[1.02]"
-                style={{ clipPath: 'polygon(0 0, 100% 0, 100% 92%, 95% 100%, 0 100%)' }}
-              >
-                <NextImage
-                  src={aboutUsData.imageUrl}
-                  alt="Rugby Club Team"
-                  width={800}
-                  height={600}
-                  className="h-auto w-full"
-                />
-              </div>
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+              {/* Image */}
+              <div className="relative group">
+                {/* Main image container */}
+                <div className="relative overflow-hidden shadow-2xl">
+                  <NextImage
+                    src={aboutUsData.imageUrl}
+                    alt="Rugby Club Team"
+                    width={800}
+                    height={600}
+                    className="h-auto w-full transition-transform duration-700 group-hover:scale-105"
+                  />
 
-              <div className="space-y-6">
-                <h3 className="text-2xl font-bold uppercase tracking-tight text-teal-900">
-                  {aboutUsData.mission.title}
-                </h3>
-                <p className="mb-6 text-zinc-700">
-                  {aboutUsData.mission.content.substring(0, 200)}...
-                </p>
-                <div className="mt-8">
-                  <Link href="/about">
-                    <button className="group skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
-                      <span className="inline-flex skew-x-[12deg] transform items-center">
-                        UZZINĀT VAIRĀK
-                        <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                      </span>
-                    </button>
-                  </Link>
+                  {/* Overlay gradient on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-teal-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                  {/* Bottom accent bar */}
+                  <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-teal-600" />
+                </div>
+
+                {/* Floating stats card */}
+                <div className="absolute -bottom-8 -right-4 lg:-right-8 bg-white shadow-xl p-6 skew-x-[-6deg] transform border-l-4 border-teal-600">
+                  <div className="skew-x-[6deg] transform text-center">
+                    <div className="text-4xl font-extrabold text-teal-700">2005</div>
+                    <div className="text-xs uppercase tracking-widest text-zinc-500 mt-1">Dibināts</div>
+                  </div>
                 </div>
               </div>
-            </GridContainer>
+
+              {/* Content */}
+              <div className="space-y-6 lg:pl-4">
+                {/* Label */}
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-0.5 bg-teal-600 skew-x-[-12deg]" />
+                  <span className="text-sm font-bold uppercase tracking-widest text-teal-600">Mūsu Misija</span>
+                </div>
+
+                <h3 className="text-3xl lg:text-4xl font-bold uppercase tracking-tight text-teal-900 leading-tight">
+                  {aboutUsData.mission.title}
+                </h3>
+
+                <p className="text-lg text-zinc-600 leading-relaxed">
+                  {aboutUsData.mission.content.substring(0, 250)}...
+                </p>
+
+                {/* CTA */}
+                <Link href="/about" className="inline-block group">
+                  <button className="skew-x-[-12deg] transform bg-teal-700 px-8 py-4 font-bold tracking-wide text-white shadow-lg transition-all duration-300 hover:bg-teal-800 hover:shadow-xl">
+                    <span className="inline-flex skew-x-[12deg] transform items-center">
+                      UZZINĀT VAIRĀK
+                      <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                    </span>
+                  </button>
+                </Link>
+              </div>
+            </div>
           </div>
-        </SectionContainer>
+        </section>
 
         {/* Latest News Section */}
-        <SectionContainer className="bg-gray-50">
-          <div className="relative z-10">
-            <div className="mx-auto mb-12 max-w-2xl text-center">
-              <SectionTitle title="JAUNĀKĀS" titleHighlight="ZIŅAS" />
+        <section className="relative py-20 bg-gradient-to-b from-gray-50 to-white overflow-hidden">
+          {/* Decorative elements */}
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-teal-200 to-transparent" />
+          <div className="absolute top-16 right-0 w-48 h-0.5 bg-teal-700/10 skew-x-[-12deg]" />
+          <div className="absolute bottom-16 left-0 w-32 h-0.5 bg-teal-700/10 skew-x-[-12deg]" />
+
+          <div className="container mx-auto px-4 sm:px-6 relative z-10">
+            {/* Section Header */}
+            <div className="mx-auto mb-14 max-w-2xl text-center">
+              <div className="inline-flex items-center gap-3 mb-4">
+                <div className="w-10 h-0.5 bg-teal-700 skew-x-[-12deg]" />
+                <span className="text-sm font-bold uppercase tracking-widest text-teal-600">Aktualitātes</span>
+                <div className="w-10 h-0.5 bg-teal-700 skew-x-[-12deg]" />
+              </div>
+              <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tighter">
+                <span className="text-teal-900">JAUNĀKĀS </span>
+                <span className="text-teal-600 italic font-light">ZIŅAS</span>
+              </h2>
+              <div className="mx-auto mt-4 h-1 w-20 bg-teal-700 skew-x-[-12deg]" />
             </div>
 
-            <div className="mb-10 grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            {/* News Grid */}
+            <div className="mb-12 grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
               {articles.length > 0
-                ? // Display real articles
-                  articles.slice(0, 3).map((article) => (
+                ? articles.slice(0, 3).map((article, index) => (
                     <Link href={`/news/${article.id}`} key={article.id} className="group block">
-                      <div
-                        className="flex h-full flex-col overflow-hidden bg-white shadow-md transition-all duration-300 hover:shadow-xl"
-                        style={{ clipPath: 'polygon(0 0, 100% 0, 100% 96%, 96% 100%, 0 100%)' }}
-                      >
-                        <div className="relative h-48 overflow-hidden">
+                      <div className="relative h-full bg-white shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border-b-4 border-teal-700">
+                        {/* Featured badge for first article */}
+                        {index === 0 && (
+                          <div className="absolute top-4 left-0 z-20 bg-teal-700 px-4 py-1 skew-x-[-12deg] -translate-x-1">
+                            <span className="skew-x-[12deg] inline-block text-xs font-bold text-white uppercase tracking-wider">Jaunākais</span>
+                          </div>
+                        )}
+
+                        {/* Image */}
+                        <div className="relative h-56 overflow-hidden">
                           <NextImage
-                            src={
-                              article.image_url ||
-                              '/placeholder.svg?height=600&width=900&text=Rugby News'
-                            }
+                            src={article.image_url || '/placeholder.svg?height=600&width=900&text=Rugby News'}
                             alt={article.title}
                             fill
-                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            className="object-cover transition-transform duration-700 group-hover:scale-110"
                           />
-                        </div>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-                        <div className="flex flex-1 flex-col p-6">
-                          <div className="flex items-center gap-2 text-sm text-zinc-500">
+                          {/* Date overlay */}
+                          <div className="absolute bottom-4 left-4 flex items-center gap-2 text-white/90">
                             <CalendarDays className="h-4 w-4" />
-                            <span>
-                              {new Date(article.published_at).toLocaleDateString('en-GB', {
+                            <span className="text-sm font-medium">
+                              {new Date(article.published_at).toLocaleDateString('lv-LV', {
                                 year: 'numeric',
-                                month: 'long',
+                                month: 'short',
                                 day: 'numeric',
                               })}
                             </span>
                           </div>
+                        </div>
 
-                          <h3 className="mt-2 text-xl font-bold uppercase tracking-tight text-teal-900 group-hover:text-teal-700">
+                        {/* Content */}
+                        <div className="p-6">
+                          <h3 className="text-xl font-bold uppercase tracking-tight text-teal-900 group-hover:text-teal-700 transition-colors line-clamp-2">
                             {article.title}
                           </h3>
 
-                          <p className="mt-2 flex-1 text-sm text-zinc-600">
+                          <p className="mt-3 text-sm text-zinc-600 line-clamp-3">
                             {(() => {
                               const plainText = stripHtml(article.content)
-                              return plainText.length > 120
-                                ? `${plainText.substring(0, 120)}...`
-                                : plainText
+                              return plainText.length > 120 ? `${plainText.substring(0, 120)}...` : plainText
                             })()}
                           </p>
 
-                          <div className="mt-4">
-                            <span className="inline-flex items-center text-sm font-medium text-teal-800 group-hover:text-teal-600">
-                              LASĪT VAIRĀK
-                              <svg
-                                className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
-                            </span>
+                          <div className="mt-5 flex items-center text-teal-700 font-semibold text-sm group-hover:text-teal-600 transition-colors">
+                            <span>LASĪT VAIRĀK</span>
+                            <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-2" />
                           </div>
                         </div>
                       </div>
                     </Link>
                   ))
-                : // Display fallback news items
-                  fallbackNewsItems.slice(0, 3).map((item, index) => (
+                : fallbackNewsItems.slice(0, 3).map((item, index) => (
                     <Link href={`/news/${index + 1}`} key={index} className="group block">
-                      <div
-                        className="flex h-full flex-col overflow-hidden bg-white shadow-md transition-all duration-300 hover:shadow-xl"
-                        style={{ clipPath: 'polygon(0 0, 100% 0, 100% 96%, 96% 100%, 0 100%)' }}
-                      >
-                        <div className="relative h-48 overflow-hidden">
+                      <div className="relative h-full bg-white shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border-b-4 border-teal-700">
+                        {index === 0 && (
+                          <div className="absolute top-4 left-0 z-20 bg-teal-700 px-4 py-1 skew-x-[-12deg] -translate-x-1">
+                            <span className="skew-x-[12deg] inline-block text-xs font-bold text-white uppercase tracking-wider">Jaunākais</span>
+                          </div>
+                        )}
+
+                        <div className="relative h-56 overflow-hidden">
                           <NextImage
                             src={item.image}
                             alt={item.title}
                             fill
-                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            className="object-cover transition-transform duration-700 group-hover:scale-110"
                           />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                          <div className="absolute bottom-4 left-4 flex items-center gap-2 text-white/90">
+                            <CalendarDays className="h-4 w-4" />
+                            <span className="text-sm font-medium">2023. gada 15. apr.</span>
+                          </div>
                         </div>
 
-                        <div className="flex flex-1 flex-col p-6">
-                          <div className="flex items-center gap-2 text-sm text-zinc-500">
-                            <CalendarDays className="h-4 w-4" />
-                            <span>April 15, 2023</span>
-                          </div>
-
-                          <h3 className="mt-2 text-xl font-bold uppercase tracking-tight text-teal-900 group-hover:text-teal-700">
+                        <div className="p-6">
+                          <h3 className="text-xl font-bold uppercase tracking-tight text-teal-900 group-hover:text-teal-700 transition-colors line-clamp-2">
                             {item.title}
                           </h3>
-
-                          <p className="mt-2 flex-1 text-sm text-zinc-600">{item.description}</p>
-
-                          <div className="mt-4">
-                            <span className="inline-flex items-center text-sm font-medium text-teal-800 group-hover:text-teal-600">
-                              LASĪT VAIRĀK
-                              <svg
-                                className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
-                            </span>
+                          <p className="mt-3 text-sm text-zinc-600 line-clamp-3">{item.description}</p>
+                          <div className="mt-5 flex items-center text-teal-700 font-semibold text-sm group-hover:text-teal-600 transition-colors">
+                            <span>LASĪT VAIRĀK</span>
+                            <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-2" />
                           </div>
                         </div>
                       </div>
@@ -710,9 +745,10 @@ export default function HomePage() {
                   ))}
             </div>
 
+            {/* CTA Button */}
             <div className="flex justify-center">
               <Link href="/news" className="group">
-                <button className="skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
+                <button className="skew-x-[-12deg] transform bg-teal-800 px-8 py-4 font-bold tracking-wide text-white shadow-lg transition-all duration-300 hover:bg-teal-900 hover:shadow-xl">
                   <span className="inline-flex skew-x-[12deg] transform items-center">
                     SKATĪT VISAS ZIŅAS
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -721,63 +757,103 @@ export default function HomePage() {
               </Link>
             </div>
           </div>
-        </SectionContainer>
+        </section>
 
         {/* Gallery Section */}
-        <section className="bg-white py-16">
-          <div className="container mx-auto px-4 sm:px-6">
-            <div className="mx-auto mb-8 max-w-3xl text-center">
-              <SectionTitle title="FOTO" titleHighlight="GALERIJA" />
+        <section className="relative py-20 bg-gradient-to-b from-white via-teal-50/30 to-white overflow-hidden">
+          {/* Decorative elements */}
+          <div className="absolute top-16 left-0 w-40 h-0.5 bg-teal-700/10 skew-x-[-12deg]" />
+          <div className="absolute top-20 left-0 w-24 h-0.5 bg-teal-700/5 skew-x-[-12deg]" />
+          <div className="absolute bottom-16 right-0 w-48 h-0.5 bg-teal-700/10 skew-x-[-12deg]" />
+
+          <div className="container mx-auto px-4 sm:px-6 relative z-10">
+            {/* Section Header */}
+            <div className="mx-auto mb-14 max-w-3xl text-center">
+              <div className="inline-flex items-center gap-3 mb-4">
+                <div className="w-10 h-0.5 bg-teal-700 skew-x-[-12deg]" />
+                <Camera className="h-5 w-5 text-teal-600" />
+                <div className="w-10 h-0.5 bg-teal-700 skew-x-[-12deg]" />
+              </div>
+              <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tighter">
+                <span className="text-teal-900">FOTO </span>
+                <span className="text-teal-600 italic font-light">GALERIJA</span>
+              </h2>
+              <p className="mt-4 text-zinc-600 max-w-md mx-auto">
+                Iemūžināti mirkļi no mūsu spēlēm, treniņiem un pasākumiem
+              </p>
+              <div className="mx-auto mt-4 h-1 w-20 bg-teal-700 skew-x-[-12deg]" />
             </div>
 
-            <div className="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {/* Gallery Grid */}
+            <div className="mb-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {loadingGallery ? (
                 <div className="col-span-full flex justify-center py-12">
-                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-teal-800 border-t-transparent"></div>
+                  <div className="h-10 w-10 animate-spin rounded-full border-4 border-teal-700 border-t-transparent"></div>
                 </div>
               ) : galleries.length === 0 ? (
-                <div className="col-span-full rounded-lg bg-teal-50 p-6 text-center">
-                  <p className="text-lg text-teal-800">Drīzumā sekojiet galerijas atjauninājumiem!</p>
+                <div className="col-span-full bg-teal-50 border border-teal-100 p-8 text-center">
+                  <Camera className="mx-auto h-12 w-12 text-teal-300 mb-3" />
+                  <p className="text-lg font-medium text-teal-800">Drīzumā sekojiet galerijas atjauninājumiem!</p>
                 </div>
               ) : (
-                galleries.map((gallery) => (
+                galleries.map((gallery, index) => (
                   <Link href={`/gallery/${gallery.id}`} key={gallery.id} className="group">
-                    <div
-                      className="relative transform cursor-pointer overflow-hidden transition-all duration-300 hover:scale-[1.02]"
-                      style={{ clipPath: 'polygon(0 0, 100% 0, 95% 100%, 0 95%)' }}
-                    >
+                    <div className={`relative overflow-hidden shadow-lg transition-all duration-500 hover:shadow-2xl ${
+                      index === 0 ? 'sm:col-span-2 sm:row-span-2 h-80 sm:h-full' : 'h-72'
+                    }`}>
+                      {/* Image */}
                       {gallery.thumbnailUrl ? (
                         isSvgUrl(gallery.thumbnailUrl) ? (
-                          <div className="flex h-64 w-full items-center justify-center bg-teal-100">
+                          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-teal-50 to-teal-100">
                             <div className="text-center">
-                              <ImageIcon className="mx-auto h-12 w-12 text-teal-800/50" />
-                              <p className="mt-2 text-sm text-teal-800/70">{gallery.title}</p>
+                              <ImageIcon className="mx-auto h-16 w-16 text-teal-800/30" />
+                              <p className="mt-2 text-sm font-medium text-teal-800/50">{gallery.title}</p>
                             </div>
                           </div>
                         ) : (
                           <NextImage
                             src={getImageUrl(gallery.thumbnailUrl)}
                             alt={gallery.title}
-                            width={400}
-                            height={300}
-                            className="h-64 w-full object-cover"
+                            fill
+                            className="object-cover transition-transform duration-700 group-hover:scale-110"
                           />
                         )
                       ) : (
-                        <div className="flex h-64 w-full items-center justify-center bg-teal-100">
+                        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-teal-50 to-teal-100">
                           <div className="text-center">
-                            <ImageIcon className="mx-auto h-12 w-12 text-teal-800/50" />
-                            <p className="mt-2 text-sm text-teal-800/70">{gallery.title}</p>
+                            <ImageIcon className="mx-auto h-16 w-16 text-teal-800/30" />
+                            <p className="mt-2 text-sm font-medium text-teal-800/50">{gallery.title}</p>
                           </div>
                         </div>
                       )}
-                      <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-teal-900/90 to-transparent p-4">
-                        <h3 className="text-lg font-bold text-white">{gallery.title}</h3>
-                        {gallery.description && (
-                          <p className="line-clamp-2 text-sm text-teal-100">
-                            {gallery.description}
-                          </p>
-                        )}
+
+                      {/* Gradient overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-teal-900/90 via-teal-900/30 to-transparent opacity-70 transition-opacity duration-300 group-hover:opacity-90" />
+
+                      {/* Corner accent */}
+                      <div className="absolute top-0 left-0 w-12 h-12 border-l-4 border-t-4 border-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <div className="absolute bottom-0 right-0 w-12 h-12 border-r-4 border-b-4 border-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                      {/* Content */}
+                      <div className="absolute inset-0 flex flex-col justify-end p-5">
+                        <div className="transform transition-all duration-300 group-hover:translate-y-0 translate-y-2">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Camera className="h-4 w-4 text-teal-300" />
+                            <span className="text-xs font-bold text-teal-300 uppercase tracking-wider">Galerija</span>
+                          </div>
+                          <h3 className={`font-bold text-white tracking-tight ${index === 0 ? 'text-2xl' : 'text-lg'}`}>
+                            {gallery.title}
+                          </h3>
+                          {gallery.description && (
+                            <p className="line-clamp-2 text-sm text-teal-100/80 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                              {gallery.description}
+                            </p>
+                          )}
+                          <div className="mt-3 flex items-center gap-2 text-white opacity-0 group-hover:opacity-100 transition-all duration-300">
+                            <span className="text-sm font-semibold">Skatīt galeriju</span>
+                            <ArrowRight className="h-4 w-4" />
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </Link>
@@ -785,9 +861,10 @@ export default function HomePage() {
               )}
             </div>
 
-            <div className="mt-8 text-center">
-              <Link href="/gallery" className="group">
-                <button className="skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
+            {/* CTA Button */}
+            <div className="text-center">
+              <Link href="/gallery" className="group inline-block">
+                <button className="skew-x-[-12deg] transform bg-teal-800 px-8 py-4 font-bold tracking-wide text-white shadow-lg transition-all duration-300 hover:bg-teal-900 hover:shadow-xl">
                   <span className="inline-flex skew-x-[12deg] transform items-center">
                     SKATĪT VISAS GALERIJAS
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -799,114 +876,173 @@ export default function HomePage() {
         </section>
 
         {/* Upcoming Matches Section */}
-        <SectionContainer>
-          <div className="mb-12 text-center">
-            <SectionTitle title="GAIDĀMĀS" titleHighlight="SPĒLES" />
-          </div>
+        <section className="relative py-20 bg-gradient-to-b from-gray-50 via-white to-gray-50 overflow-hidden">
+          {/* Decorative elements */}
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-teal-200 to-transparent" />
+          <div className="absolute top-16 right-0 w-40 h-0.5 bg-teal-700/10 skew-x-[-12deg]" />
+          <div className="absolute bottom-16 left-0 w-32 h-0.5 bg-teal-700/10 skew-x-[-12deg]" />
 
-          {loadingFixtures ? (
-            <div className="flex justify-center py-12">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-teal-800 border-t-transparent"></div>
+          <div className="container mx-auto px-4 sm:px-6 relative z-10">
+            {/* Section Header */}
+            <div className="mx-auto mb-14 max-w-2xl text-center">
+              <div className="inline-flex items-center gap-3 mb-4">
+                <div className="w-10 h-0.5 bg-teal-700 skew-x-[-12deg]" />
+                <CalendarDays className="h-5 w-5 text-teal-600" />
+                <div className="w-10 h-0.5 bg-teal-700 skew-x-[-12deg]" />
+              </div>
+              <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tighter">
+                <span className="text-teal-900">GAIDĀMĀS </span>
+                <span className="text-teal-600 italic font-light">SPĒLES</span>
+              </h2>
+              <p className="mt-4 text-zinc-600 max-w-md mx-auto">
+                Nākamās spēles un pasākumi, kuros varat mūs atbalstīt
+              </p>
+              <div className="mx-auto mt-4 h-1 w-20 bg-teal-700 skew-x-[-12deg]" />
             </div>
-          ) : fixtures.length === 0 ? (
-            <div className="rounded-lg bg-teal-50 p-6 text-center">
-              <p className="text-lg text-teal-800">Šobrīd nav plānotas gaidāmās spēles.</p>
-            </div>
-          ) : (
-            <GridContainer cols={3} gap="md">
-              {fixtures.map((fixture) => (
-                <Card key={fixture.id} className="relative overflow-hidden bg-white">
-                  <CardContent className="p-6">
-                    <div className="mb-4 flex items-center gap-2 text-teal-800">
-                      <CalendarDays className="h-5 w-5" />
-                      <span className="text-sm font-medium">
-                        {formatMatchDate(fixture.match_date)}
-                      </span>
-                    </div>
-                    
-                    {/* Modern team vs team display */}
-                    <div className="mb-5 flex items-center justify-between">
-                      {/* Home team */}
-                      <div className="flex flex-col items-center gap-2 w-2/5">
-                        <div className="h-16 w-16 relative overflow-hidden rounded-md bg-white shadow-md border border-gray-100">
-                          <NextImage
-                            src={fixture.home_logo_url || "/Logo/fēniks_logo-removebg-preview.png"}
-                            alt="RK Fēnikss"
-                            fill
-                            className="object-contain p-1"
-                          />
-                        </div>
-                        <span className="text-center font-bold text-teal-900 text-sm">
-                          {fixture.is_home_game ? 'RK "Fēnikss"' : fixture.opponent}
-                        </span>
-                      </div>
-                      
-                      {/* VS badge */}
-                      <div className="w-1/5 flex-shrink-0">
-                        <div className="bg-teal-100 text-teal-800 font-bold text-xs rounded-md h-10 w-10 flex items-center justify-center mx-auto shadow-sm border border-teal-200">
-                          VS
-                        </div>
-                      </div>
-                      
-                      {/* Away team */}
-                      <div className="flex flex-col items-center gap-2 w-2/5">
-                        <div className="h-16 w-16 relative overflow-hidden rounded-md bg-white shadow-md border border-gray-100">
-                          <NextImage
-                            src={fixture.away_logo_url || "/placeholder.svg?height=48&width=48&text=Team"}
-                            alt={fixture.opponent}
-                            fill
-                            className="object-contain p-1"
-                          />
-                        </div>
-                        <span className="text-center font-bold text-teal-900 text-sm">
-                          {fixture.is_home_game ? fixture.opponent : 'RK "Fēnikss"'}
-                        </span>
-                      </div>
-                    </div>
 
-                    <div className="mt-4 space-y-3 pt-3 border-t border-gray-100">
-                      <div className="flex items-center gap-2 text-zinc-600">
-                        <Clock className="h-4 w-4 text-teal-700" />
-                        <span className="text-sm">
-                          Sākums: {extractTimeFromDate(fixture.match_date)}
-                        </span>
+            {loadingFixtures ? (
+              <div className="flex justify-center py-12">
+                <div className="h-10 w-10 animate-spin rounded-full border-4 border-teal-700 border-t-transparent"></div>
+              </div>
+            ) : fixtures.length === 0 ? (
+              <div className="bg-teal-50 border border-teal-100 p-8 text-center max-w-md mx-auto">
+                <CalendarDays className="mx-auto h-12 w-12 text-teal-300 mb-3" />
+                <p className="text-lg font-medium text-teal-800">Šobrīd nav plānotas gaidāmās spēles.</p>
+              </div>
+            ) : (
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {fixtures.map((fixture, index) => (
+                  <div
+                    key={fixture.id}
+                    className={`group relative bg-white shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden ${
+                      index === 0 ? 'md:col-span-2 lg:col-span-1' : ''
+                    }`}
+                  >
+                    {/* Top accent */}
+                    <div className="h-1.5 bg-gradient-to-r from-teal-600 via-teal-500 to-teal-600" />
+
+                    {/* Next match badge for first fixture */}
+                    {index === 0 && (
+                      <div className="absolute top-4 right-0 bg-teal-600 px-4 py-1 skew-x-[-12deg] translate-x-1">
+                        <span className="skew-x-[12deg] inline-block text-xs font-bold text-white uppercase tracking-wider">Nākamā</span>
                       </div>
-                      <div className="flex items-center gap-2 text-zinc-600">
-                        <MapPin className="h-4 w-4 text-teal-700" />
+                    )}
+
+                    <div className="p-6">
+                      {/* Date */}
+                      <div className="flex items-center gap-2 text-teal-700 mb-6">
+                        <div className="w-10 h-10 bg-teal-50 flex items-center justify-center skew-x-[-6deg]">
+                          <CalendarDays className="h-5 w-5 skew-x-[6deg]" />
+                        </div>
+                        <div>
+                          <div className="text-sm font-bold text-teal-900">
+                            {formatMatchDate(fixture.match_date)}
+                          </div>
+                          <div className="text-xs text-zinc-500">
+                            {extractTimeFromDate(fixture.match_date)}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Teams */}
+                      <div className="flex items-center justify-between mb-6">
+                        {/* Home team */}
+                        <div className="flex flex-col items-center gap-3 w-2/5">
+                          <div className="h-20 w-20 relative overflow-hidden bg-white shadow-md border-2 border-gray-100 p-2 group-hover:border-teal-200 transition-colors">
+                            <NextImage
+                              src={fixture.home_logo_url || "/Logo/fēniks_logo-removebg-preview.png"}
+                              alt="RK Fēnikss"
+                              fill
+                              className="object-contain"
+                            />
+                          </div>
+                          <span className="text-center font-bold text-teal-900 text-sm leading-tight">
+                            {fixture.is_home_game ? 'RK "Fēnikss"' : fixture.opponent}
+                          </span>
+                        </div>
+
+                        {/* VS badge */}
+                        <div className="w-1/5 flex-shrink-0">
+                          <div className="bg-teal-700 text-white font-bold text-sm skew-x-[-12deg] h-12 w-12 flex items-center justify-center mx-auto shadow-lg">
+                            <span className="skew-x-[12deg]">VS</span>
+                          </div>
+                        </div>
+
+                        {/* Away team */}
+                        <div className="flex flex-col items-center gap-3 w-2/5">
+                          <div className="h-20 w-20 relative overflow-hidden bg-white shadow-md border-2 border-gray-100 p-2 group-hover:border-teal-200 transition-colors">
+                            <NextImage
+                              src={fixture.away_logo_url || "/placeholder.svg?height=48&width=48&text=Team"}
+                              alt={fixture.opponent}
+                              fill
+                              className="object-contain"
+                            />
+                          </div>
+                          <span className="text-center font-bold text-teal-900 text-sm leading-tight">
+                            {fixture.is_home_game ? fixture.opponent : 'RK "Fēnikss"'}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Location */}
+                      <div className="flex items-center gap-2 text-zinc-600 py-4 border-t border-gray-100">
+                        <MapPin className="h-4 w-4 text-teal-600" />
                         <span className="text-sm">
                           {fixture.location || (fixture.is_home_game ? 'Mājas laukums' : 'Izbraukumā')}
                         </span>
                       </div>
-                    </div>
-                    
-                    <Link href="/fixtures" className="mt-5 block">
-                      <button className="w-full skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
-                        <span className="inline-flex skew-x-[12deg] transform items-center justify-center">
-                          SPĒLES DETAĻAS
-                        </span>
-                      </button>
-                    </Link>
-                  </CardContent>
-                </Card>
-              ))}
-            </GridContainer>
-          )}
-          {fixtures.length > 0 && (
-            <div className="mt-8 flex justify-center">
-              <Link href="/fixtures" className="group">
-                <button className="skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
-                  <span className="inline-flex skew-x-[12deg] transform items-center">
-                    SKATĪT VISAS SPĒLES
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                  </span>
-                </button>
-              </Link>
-            </div>
-          )}
-        </SectionContainer>
 
-        {/* Sponsors Section */}
-        <SectionContainer withBackground={true} className="relative overflow-hidden">
+                      {/* CTA */}
+                      <Link href="/fixtures" className="block">
+                        <button className="w-full skew-x-[-12deg] transform bg-teal-700 px-6 py-3.5 font-bold tracking-wide text-white transition-all duration-300 hover:bg-teal-800 group-hover:shadow-lg">
+                          <span className="inline-flex skew-x-[12deg] transform items-center justify-center">
+                            SPĒLES DETAĻAS
+                            <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                          </span>
+                        </button>
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {fixtures.length > 0 && (
+              <div className="mt-12 flex justify-center">
+                <Link href="/fixtures" className="group inline-block">
+                  <button className="skew-x-[-12deg] transform bg-teal-800 px-8 py-4 font-bold tracking-wide text-white shadow-lg transition-all duration-300 hover:bg-teal-900 hover:shadow-xl">
+                    <span className="inline-flex skew-x-[12deg] transform items-center">
+                      SKATĪT VISAS SPĒLES
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                    </span>
+                  </button>
+                </Link>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Sponsors Section with Parallax */}
+        <section className="relative py-20 overflow-hidden">
+          {/* Parallax Background */}
+          <div
+            className="absolute inset-0 z-0"
+            style={{
+              backgroundImage: "url('/AboutUs/parallax.jpg')",
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundAttachment: 'fixed',
+            }}
+          />
+          {/* Dark overlay for contrast with logos */}
+          <div className="absolute inset-0 z-0 bg-gradient-to-br from-teal-900/95 via-teal-800/90 to-teal-900/95" />
+
+          {/* Decorative elements */}
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-teal-400/50 to-transparent" />
+          <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-teal-400/50 to-transparent" />
+          <div className="absolute top-10 left-10 w-24 h-0.5 bg-teal-400/30 skew-x-[-12deg]" />
+          <div className="absolute bottom-10 right-10 w-24 h-0.5 bg-teal-400/30 skew-x-[-12deg]" />
+
           {/* Grey Logo Background */}
           <div className="absolute inset-0 opacity-5 z-0 pointer-events-none">
             <NextImage
@@ -916,43 +1052,59 @@ export default function HomePage() {
               className="object-contain object-center"
             />
           </div>
-          
-          <div className="mb-12 text-center relative z-10">
-            <SectionTitle title="MŪSU" titleHighlight="ATBALSTĪTĀJI" />
-          </div>
 
-          <div className="flex flex-wrap justify-center gap-8 items-center relative z-10">
-            {[1, 2, 3, 4, 5, 6, 7].map((num) => (
-              <div 
-                key={num} 
-                className="relative w-full max-w-[200px] h-[100px] flex items-center justify-center transform transition-transform duration-300 hover:scale-110"
-              >
-                <NextImage
-                  src={num === 7 
-                    ? `/SponsorsImages/sponsoru_logo_7-removebg-preview.png`
-                    : `/SponsorsImages/Sponsor${num === 1 ? '' : 'u'}_logo_${num}-removebg-preview.png`
-                  }
-                  alt={`Sponsor ${num}`}
-                  width={180}
-                  height={80}
-                  className="object-contain max-h-full"
-                />
+          <div className="container mx-auto px-4 sm:px-6 relative z-10">
+            {/* Section Header */}
+            <div className="mb-12 text-center">
+              <div className="inline-flex items-center gap-3 mb-4">
+                <div className="w-12 h-0.5 bg-teal-400 skew-x-[-12deg]" />
+                <span className="text-sm font-bold uppercase tracking-widest text-teal-300">Partneri</span>
+                <div className="w-12 h-0.5 bg-teal-400 skew-x-[-12deg]" />
               </div>
-            ))}
-          </div>
+              <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tighter">
+                <span className="text-white">MŪSU </span>
+                <span className="text-teal-400 italic font-light">ATBALSTĪTĀJI</span>
+              </h2>
+              <div className="mx-auto mt-4 h-1 w-24 bg-teal-400 skew-x-[-12deg]" />
+            </div>
 
-          <div className="mt-10 text-center relative z-10">
-           
-            <Link href="/contact" className="group">
-              <button className="skew-x-[-12deg] transform bg-teal-800 px-6 py-3 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-900">
-                <span className="inline-flex skew-x-[12deg] transform items-center">
-                  KĻŪT PAR ATBALSTĪTĀJU
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </span>
-              </button>
-            </Link>
+            {/* Sponsor logos */}
+            <div className="flex flex-wrap justify-center gap-6 sm:gap-10 items-center py-8">
+              {[1, 2, 3, 4, 5, 6, 7].map((num) => (
+                <div
+                  key={num}
+                  className="group relative w-full max-w-[180px] h-[90px] flex items-center justify-center bg-white/10 backdrop-blur-sm rounded-lg p-4 transition-all duration-300 hover:bg-white/20 hover:scale-105 border border-white/10 hover:border-teal-400/50"
+                >
+                  <NextImage
+                    src={num === 7
+                      ? `/SponsorsImages/sponsoru_logo_7-removebg-preview.png`
+                      : `/SponsorsImages/Sponsor${num === 1 ? '' : 'u'}_logo_${num}-removebg-preview.png`
+                    }
+                    alt={`Sponsor ${num}`}
+                    width={160}
+                    height={70}
+                    className="object-contain max-h-full brightness-0 invert opacity-80 group-hover:opacity-100 transition-all duration-300"
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* CTA */}
+            <div className="mt-12 text-center">
+              <p className="text-teal-100/80 mb-6 max-w-md mx-auto">
+                Vēlies atbalstīt mūsu komandu un kļūt par partneri?
+              </p>
+              <Link href="/contact" className="group inline-block">
+                <button className="skew-x-[-12deg] transform bg-teal-400 px-8 py-4 font-bold tracking-wide text-teal-900 transition-all duration-300 hover:bg-white hover:shadow-lg hover:shadow-teal-400/25">
+                  <span className="inline-flex skew-x-[12deg] transform items-center">
+                    KĻŪT PAR ATBALSTĪTĀJU
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  </span>
+                </button>
+              </Link>
+            </div>
           </div>
-        </SectionContainer>
+        </section>
       </main>
     </MainLayout>
   )

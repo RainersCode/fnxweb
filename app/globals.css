@@ -66,6 +66,95 @@ body {
   .animate-float-delay {
     /* Animation removed */
   }
+
+  /* Hero button glow animation */
+  @keyframes glow-border {
+    0% {
+      border-color: rgba(20, 184, 166, 0.2);
+      box-shadow: 0 0 5px rgba(20, 184, 166, 0.2);
+    }
+    50% {
+      border-color: rgba(20, 184, 166, 0.8);
+      box-shadow: 0 0 20px rgba(20, 184, 166, 0.6);
+    }
+    100% {
+      border-color: rgba(20, 184, 166, 0.2);
+      box-shadow: 0 0 5px rgba(20, 184, 166, 0.2);
+    }
+  }
+
+  .animate-glow-border {
+    animation: glow-border 2s infinite;
+  }
+
+  /* Navigation button glow animation */
+  @keyframes nav-glow {
+    0% {
+      border-color: rgba(20, 184, 166, 0.2);
+      box-shadow: 0 0 5px rgba(20, 184, 166, 0.2);
+    }
+    50% {
+      border-color: rgba(20, 184, 166, 0.8);
+      box-shadow: 0 0 20px rgba(20, 184, 166, 0.6);
+    }
+    100% {
+      border-color: rgba(20, 184, 166, 0.2);
+      box-shadow: 0 0 5px rgba(20, 184, 166, 0.2);
+    }
+  }
+
+  .animate-nav-glow {
+    animation: nav-glow 2s infinite;
+    border: 2px solid transparent;
+  }
+
+  /* Mobile menu slide animation */
+  @keyframes slideInRight {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideOutRight {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+
+  .mobile-menu-enter {
+    animation: slideInRight 0.3s ease-out forwards;
+  }
+
+  .mobile-menu-exit {
+    animation: slideOutRight 0.3s ease-in forwards;
+  }
+
+  /* Staggered menu items */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .menu-item-animate {
+    animation: fadeInUp 0.4s ease-out forwards;
+    opacity: 0;
+  }
 }
 
 @layer base {
