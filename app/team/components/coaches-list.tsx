@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { UserCog } from 'lucide-react'
 
 export default function CoachesList() {
   const [coaches, setCoaches] = useState([])
@@ -10,7 +11,6 @@ export default function CoachesList() {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    // Function to fetch coaches
     async function fetchCoaches() {
       try {
         setIsLoading(true)
@@ -20,7 +20,7 @@ export default function CoachesList() {
           .select('*')
           .eq('is_active', true)
           .order('name')
-        
+
         if (error) throw error
         setCoaches(data || [])
         setError(null)
@@ -32,51 +32,94 @@ export default function CoachesList() {
       }
     }
 
-    // Fetch data only once when component mounts
     fetchCoaches()
-    
-    // No interval refresh needed for static team data
   }, [])
 
-  // Use minimal UI changes during loading to prevent layout shifts
   if (isLoading && coaches.length === 0) {
     return (
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-3 opacity-50">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="h-96 bg-gray-100 animate-pulse"></div>
+          <div key={i} className="bg-white shadow-lg overflow-hidden">
+            <div className="h-80 bg-gradient-to-br from-gray-100 to-gray-200 animate-pulse" />
+            <div className="p-6 space-y-3">
+              <div className="h-6 bg-gray-200 rounded animate-pulse w-3/4" />
+              <div className="h-4 bg-gray-200 rounded animate-pulse w-1/2" />
+              <div className="h-16 bg-gray-100 rounded animate-pulse" />
+            </div>
+          </div>
         ))}
       </div>
     )
   }
 
   if (error) {
-    return <div className="p-8 text-center">Failed to load coaches. Please try again later.</div>
+    return (
+      <div className="bg-red-50 border border-red-200 p-8 text-center">
+        <p className="text-red-700 font-medium">Neizdevās ielādēt trenerus. Lūdzu, mēģiniet vēlreiz.</p>
+      </div>
+    )
   }
 
   if (!coaches || coaches.length === 0) {
-    return <div className="p-8 text-center">No coaches found.</div>
+    return (
+      <div className="bg-teal-50 border border-teal-100 p-8 text-center">
+        <UserCog className="mx-auto h-12 w-12 text-teal-300 mb-3" />
+        <p className="text-lg font-medium text-teal-800">Nav atrasti treneri.</p>
+      </div>
+    )
   }
 
   return (
-    <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {coaches.map((coach) => (
         <div
           key={coach.id}
-          className="transform overflow-hidden bg-white shadow-md transition-all duration-300 hover:scale-[1.02]"
+          className="group relative bg-white shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
         >
-          <div className="relative h-80">
+          {/* Image container */}
+          <div className="relative h-80 overflow-hidden">
             <Image
               src={coach.image_url || '/placeholder.svg?height=400&width=300&text=Coach'}
               alt={coach.name}
               fill
-              className="object-cover"
+              className="object-cover transition-transform duration-700 group-hover:scale-110"
             />
+
+            {/* Gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-teal-900/80 via-teal-900/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
+
+            {/* Role badge */}
+            <div className="absolute top-4 right-0 z-10">
+              <div className="skew-x-[-12deg] transform bg-teal-700 px-4 py-2 shadow-lg translate-x-1">
+                <span className="skew-x-[12deg] inline-block text-xs font-bold text-white uppercase tracking-wider">
+                  Treneris
+                </span>
+              </div>
+            </div>
+
+            {/* Name overlay on image */}
+            <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
+              <h3 className="text-xl font-bold text-white tracking-tight uppercase">
+                {coach.name}
+              </h3>
+              <div className="flex items-center gap-2 mt-1">
+                <div className="w-6 h-0.5 bg-teal-400 skew-x-[-12deg]" />
+                <p className="text-sm font-semibold text-teal-300 uppercase tracking-wider">
+                  {coach.role || 'Treneru sastāvs'}
+                </p>
+              </div>
+            </div>
           </div>
-          <div className="p-6">
-            <h3 className="text-xl font-bold text-teal-900">{coach.name}</h3>
-            <p className="mb-4 font-medium text-teal-700">{coach.role || 'Coaching Staff'}</p>
-            <p className="text-sm text-zinc-600">{coach.bio || 'No biography available.'}</p>
+
+          {/* Content */}
+          <div className="p-5">
+            <p className="text-sm text-zinc-600 leading-relaxed line-clamp-3">
+              {coach.bio || 'Biogrāfija nav pieejama.'}
+            </p>
           </div>
+
+          {/* Bottom accent bar */}
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-teal-700 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
         </div>
       ))}
     </div>

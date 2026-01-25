@@ -3,7 +3,7 @@
 import { useState, type ReactNode, useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Menu, X, ArrowRight, ChevronUp } from 'lucide-react'
+import { Menu, X, ArrowRight, ChevronUp, Settings } from 'lucide-react'
 import Image from 'next/image'
 import { SignInButton, SignUpButton, UserButton, useAuth, useUser } from '@clerk/nextjs'
 import { isAdmin } from '@/lib/utils'
@@ -73,7 +73,7 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
     }
   }, [mobileMenuOpen])
 
-  const navItems = [
+  const baseNavItems = [
     { key: 'HOME', text: 'SĀKUMS' },
     { key: 'ABOUT', text: 'PAR MUMS' },
     { key: 'TEAM', text: 'KOMANDA' },
@@ -82,6 +82,11 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
     { key: 'GALLERY', text: 'GALERIJA' },
     { key: 'CONTACT', text: 'KONTAKTI' }
   ]
+
+  // Add admin link to nav items if user is admin
+  const navItems = isAdminUser
+    ? [...baseNavItems, { key: 'ADMIN', text: 'ADMIN', isAdmin: true }]
+    : baseNavItems
 
   return (
     <div className="flex min-h-screen flex-col bg-white font-sans text-zinc-900">
@@ -121,34 +126,52 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
               <ul className="flex items-center">
                 {navItems.map((item) => (
                   <li key={item.key}>
-                    <Link
-                      href={item.key === 'HOME' ? '/' : `/${item.key.toLowerCase()}`}
-                      className="group relative mx-0.5 px-4 py-5 text-sm font-medium tracking-wide text-white transition-all duration-300"
-                    >
-                      <span className={`relative z-10 transition-colors duration-300 ${
-                        currentPage === item.key ? 'text-teal-300' : 'group-hover:text-teal-200'
-                      }`}>
-                        {item.text}
-                      </span>
+                    {item.key === 'ADMIN' ? (
+                      <Link
+                        href="/admin"
+                        className="group relative mx-0.5 px-4 py-5 text-sm font-medium tracking-wide text-white transition-all duration-300"
+                      >
+                        <span className="relative z-10 flex items-center gap-1.5 text-amber-300 group-hover:text-amber-200 transition-colors duration-300">
+                          <Settings className="h-4 w-4" />
+                          {item.text}
+                        </span>
 
-                      {/* Skewed background on hover/active */}
-                      <span
-                        className={`absolute inset-0 -z-0 skew-x-[-12deg] transform bg-white/10 transition-all duration-300 ${
-                          currentPage === item.key
-                            ? 'opacity-100 scale-100'
-                            : 'opacity-0 scale-x-75 group-hover:scale-100 group-hover:opacity-100'
-                        }`}
-                      />
+                        {/* Special admin background */}
+                        <span className="absolute inset-0 -z-0 skew-x-[-12deg] transform bg-amber-500/20 opacity-0 scale-x-75 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300" />
 
-                      {/* Bottom indicator line */}
-                      <span
-                        className={`absolute bottom-2 left-1/2 h-0.5 -translate-x-1/2 skew-x-[-12deg] transform bg-teal-400 transition-all duration-300 ${
-                          currentPage === item.key
-                            ? 'w-8 opacity-100'
-                            : 'w-0 opacity-0 group-hover:w-6 group-hover:opacity-100'
-                        }`}
-                      />
-                    </Link>
+                        {/* Bottom indicator line - amber for admin */}
+                        <span className="absolute bottom-2 left-1/2 h-0.5 -translate-x-1/2 skew-x-[-12deg] transform bg-amber-400 w-0 opacity-0 group-hover:w-6 group-hover:opacity-100 transition-all duration-300" />
+                      </Link>
+                    ) : (
+                      <Link
+                        href={item.key === 'HOME' ? '/' : `/${item.key.toLowerCase()}`}
+                        className="group relative mx-0.5 px-4 py-5 text-sm font-medium tracking-wide text-white transition-all duration-300"
+                      >
+                        <span className={`relative z-10 transition-colors duration-300 ${
+                          currentPage === item.key ? 'text-teal-300' : 'group-hover:text-teal-200'
+                        }`}>
+                          {item.text}
+                        </span>
+
+                        {/* Skewed background on hover/active */}
+                        <span
+                          className={`absolute inset-0 -z-0 skew-x-[-12deg] transform bg-white/10 transition-all duration-300 ${
+                            currentPage === item.key
+                              ? 'opacity-100 scale-100'
+                              : 'opacity-0 scale-x-75 group-hover:scale-100 group-hover:opacity-100'
+                          }`}
+                        />
+
+                        {/* Bottom indicator line */}
+                        <span
+                          className={`absolute bottom-2 left-1/2 h-0.5 -translate-x-1/2 skew-x-[-12deg] transform bg-teal-400 transition-all duration-300 ${
+                            currentPage === item.key
+                              ? 'w-8 opacity-100'
+                              : 'w-0 opacity-0 group-hover:w-6 group-hover:opacity-100'
+                          }`}
+                        />
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -157,18 +180,7 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
             {/* Right side buttons */}
             <div className="flex items-center gap-3">
               {isSignedIn ? (
-                <>
-                  {isAdminUser && (
-                    <Link href="/admin" className="hidden md:block">
-                      <button className="skew-x-[-12deg] transform bg-white/10 backdrop-blur-sm border border-white/20 px-5 py-2.5 font-medium tracking-wide text-white shadow-lg transition-all duration-300 hover:bg-white hover:text-teal-900">
-                        <span className="inline-flex skew-x-[12deg] transform items-center text-sm">
-                          Vadības panelis
-                        </span>
-                      </button>
-                    </Link>
-                  )}
-                  <UserButton afterSignOutUrl="/" />
-                </>
+                <UserButton afterSignOutUrl="/" />
               ) : (
                 <Link href="/contact" className="hidden md:block">
                   <button className="animate-nav-glow group skew-x-[-12deg] transform bg-white px-5 py-2.5 font-medium tracking-wide text-teal-800 shadow-lg transition-all duration-300 hover:bg-teal-50 hover:scale-105">
@@ -246,33 +258,47 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
                   className="menu-item-animate"
                   style={{ animationDelay: `${index * 0.05}s` }}
                 >
-                  <Link
-                    href={item.key === 'HOME' ? '/' : `/${item.key.toLowerCase()}`}
-                    className={`group flex items-center py-3 px-4 rounded-lg transition-all duration-300 ${
-                      currentPage === item.key
-                        ? 'bg-white/15 text-teal-300'
-                        : 'text-white hover:bg-white/10 hover:text-teal-200'
-                    }`}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {/* Active indicator */}
-                    <span
-                      className={`mr-3 h-6 w-1 skew-x-[-12deg] transform rounded-full transition-all duration-300 ${
+                  {item.key === 'ADMIN' ? (
+                    <Link
+                      href="/admin"
+                      className="group flex items-center py-3 px-4 rounded-lg transition-all duration-300 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 hover:text-amber-200 border border-amber-500/30"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {/* Admin indicator */}
+                      <span className="mr-3 h-6 w-1 skew-x-[-12deg] transform rounded-full bg-amber-400 transition-all duration-300" />
+                      <Settings className="h-4 w-4 mr-2" />
+                      <span className="text-base font-medium tracking-wide">{item.text}</span>
+                      <ArrowRight className="ml-auto h-4 w-4 opacity-100" />
+                    </Link>
+                  ) : (
+                    <Link
+                      href={item.key === 'HOME' ? '/' : `/${item.key.toLowerCase()}`}
+                      className={`group flex items-center py-3 px-4 rounded-lg transition-all duration-300 ${
                         currentPage === item.key
-                          ? 'bg-teal-400'
-                          : 'bg-white/20 group-hover:bg-teal-400/50'
+                          ? 'bg-white/15 text-teal-300'
+                          : 'text-white hover:bg-white/10 hover:text-teal-200'
                       }`}
-                    />
-                    <span className="text-base font-medium tracking-wide">{item.text}</span>
-                    {/* Arrow on hover */}
-                    <ArrowRight
-                      className={`ml-auto h-4 w-4 transition-all duration-300 ${
-                        currentPage === item.key
-                          ? 'opacity-100 translate-x-0'
-                          : 'opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0'
-                      }`}
-                    />
-                  </Link>
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {/* Active indicator */}
+                      <span
+                        className={`mr-3 h-6 w-1 skew-x-[-12deg] transform rounded-full transition-all duration-300 ${
+                          currentPage === item.key
+                            ? 'bg-teal-400'
+                            : 'bg-white/20 group-hover:bg-teal-400/50'
+                        }`}
+                      />
+                      <span className="text-base font-medium tracking-wide">{item.text}</span>
+                      {/* Arrow on hover */}
+                      <ArrowRight
+                        className={`ml-auto h-4 w-4 transition-all duration-300 ${
+                          currentPage === item.key
+                            ? 'opacity-100 translate-x-0'
+                            : 'opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0'
+                        }`}
+                      />
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -280,24 +306,9 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
             {/* CTA Button */}
             <div className="mt-8">
               {isSignedIn ? (
-                <>
-                  {isAdminUser && (
-                    <Link
-                      href="/admin"
-                      className="block w-full mb-4"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      <button className="w-full skew-x-[-12deg] transform bg-white/10 border border-white/20 px-6 py-3.5 font-medium tracking-wide text-white transition-all duration-300 hover:bg-white/20">
-                        <span className="inline-flex skew-x-[12deg] transform items-center">
-                          Vadības panelis
-                        </span>
-                      </button>
-                    </Link>
-                  )}
-                  <div className="flex justify-center">
-                    <UserButton afterSignOutUrl="/" />
-                  </div>
-                </>
+                <div className="flex justify-center">
+                  <UserButton afterSignOutUrl="/" />
+                </div>
               ) : (
                 <Link
                   href="/contact"

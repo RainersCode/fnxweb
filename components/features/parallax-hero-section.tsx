@@ -1,7 +1,3 @@
-'use client'
-
-import { useState, useEffect } from 'react'
-
 interface ParallaxHeroSectionProps {
   title: string
   titleHighlight?: string
@@ -15,30 +11,16 @@ export function ParallaxHeroSection({
   subtitle,
   backgroundImage,
 }: ParallaxHeroSectionProps) {
-  const [scrollY, setScrollY] = useState(0)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY)
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [])
-
   return (
     <section className="relative overflow-hidden py-24">
+      {/* CSS-based parallax - GPU accelerated, no JS lag */}
       <div
-        className="absolute inset-0 top-[-40%] z-0 h-[180%]"
+        className="absolute inset-0 z-0"
         style={{
           backgroundImage: `url('${backgroundImage}')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          transform: `translateY(${scrollY * 0.3}px)`,
-          transition: 'transform 0.1s linear',
+          backgroundAttachment: 'fixed',
         }}
       />
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-teal-900/80 to-teal-700/80" />

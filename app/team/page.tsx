@@ -1,24 +1,17 @@
 'use client'
 
-import { Suspense, useState } from 'react'
-import { Card, CardContent } from '@/components/ui/card'
-import { CalendarDays, MapPin, Trophy, Users } from 'lucide-react'
+import { useState } from 'react'
+import { Trophy, Users, UserCog } from 'lucide-react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { MainLayout } from '@/components/layout/main-layout'
 import { teamData } from '@/data/team-data'
 import PlayersList from './components/players-list'
 import CoachesList from './components/coaches-list'
-import Loading from './loading'
 import { ParallaxHeroSection } from '@/components/features/parallax-hero-section'
 
-// Note: This was previously set to revalidate on every request, but since this is a client component,
-// we rely on client-side data fetching in the child components instead
-
-// This is a client component
 export default function TeamPage() {
-  // Keep track of which tab is active to avoid unnecessary renders
   const [activeTab, setActiveTab] = useState('players')
-  
+
   return (
     <MainLayout currentPage="TEAM">
       <main className="flex-1">
@@ -31,64 +24,89 @@ export default function TeamPage() {
         />
 
         {/* Team Info Section */}
-        <section className="relative bg-white py-16">
-          <div className="container mx-auto px-4 sm:px-6">
-            <div className="grid gap-8 md:grid-cols-1">
-              <Card className="transform overflow-hidden border-none shadow-md transition-all duration-300 hover:scale-[1.02] bg-white max-w-3xl mx-auto">
-                <CardContent className="p-0">
-                  <div className="bg-teal-800 p-4 text-white">
-                    <div className="flex items-center gap-3">
-                      <Trophy className="h-6 w-6" />
-                      <h3 className="text-xl font-bold">{teamData.clubHistory.title}</h3>
+        <section className="relative py-20 overflow-hidden">
+          {/* Decorative elements */}
+          <div className="absolute top-16 left-0 w-48 h-0.5 bg-teal-700/20 skew-x-[-12deg]" />
+          <div className="absolute top-20 left-0 w-32 h-0.5 bg-teal-700/10 skew-x-[-12deg]" />
+          <div className="absolute bottom-16 right-0 w-48 h-0.5 bg-teal-700/20 skew-x-[-12deg]" />
+
+          <div className="container mx-auto px-4 sm:px-6 relative z-10">
+            <div className="max-w-4xl mx-auto">
+              <div className="group relative bg-white shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden">
+                {/* Top accent */}
+                <div className="h-1.5 bg-gradient-to-r from-teal-600 via-teal-500 to-teal-600" />
+
+                <div className="p-8 md:p-10">
+                  <div className="flex items-start gap-6">
+                    {/* Icon */}
+                    <div className="flex-shrink-0 w-16 h-16 bg-teal-50 flex items-center justify-center skew-x-[-6deg] group-hover:bg-teal-600 transition-colors duration-300">
+                      <Trophy className="h-8 w-8 text-teal-600 skew-x-[6deg] group-hover:text-white transition-colors duration-300" />
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1">
+                      <h3 className="text-2xl md:text-3xl font-bold uppercase tracking-tight text-teal-900 mb-4">
+                        {teamData.clubHistory.title}
+                      </h3>
+                      <p className="text-lg text-zinc-600 leading-relaxed">
+                        {teamData.clubHistory.content}
+                      </p>
                     </div>
                   </div>
-                  <div className="p-6">
-                    <p className="text-zinc-600">{teamData.clubHistory.content}</p>
-                  </div>
-                </CardContent>
-              </Card>
+                </div>
+
+                {/* Bottom accent on hover */}
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-teal-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+              </div>
             </div>
           </div>
         </section>
 
         {/* Team Members Section */}
-        <section className="bg-zinc-50 py-16">
-          <div className="container mx-auto px-4 sm:px-6">
-            <div className="mx-auto mb-12 max-w-2xl text-center">
-              <h2 className="relative inline-block">
-                <span className="text-4xl font-black uppercase tracking-tighter text-teal-900">
-                  IEPAZĪSTI
-                </span>
-                <span className="ml-2 text-4xl font-light uppercase italic tracking-wide text-teal-700">
-                  SASTĀVU
-                </span>
-                <span className="absolute -bottom-2 left-0 right-0 h-1 skew-x-[-12deg] bg-gradient-to-r from-teal-500 to-teal-800"></span>
+        <section className="relative py-20 bg-gradient-to-b from-gray-50 to-white overflow-hidden">
+          {/* Decorative elements */}
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-teal-200 to-transparent" />
+          <div className="absolute top-16 right-0 w-48 h-0.5 bg-teal-700/10 skew-x-[-12deg]" />
+          <div className="absolute bottom-16 left-0 w-32 h-0.5 bg-teal-700/10 skew-x-[-12deg]" />
+
+          <div className="container mx-auto px-4 sm:px-6 relative z-10">
+            {/* Section Header */}
+            <div className="mx-auto mb-14 max-w-2xl text-center">
+              <div className="inline-flex items-center gap-3 mb-4">
+                <div className="w-10 h-0.5 bg-teal-700 skew-x-[-12deg]" />
+                <Users className="h-5 w-5 text-teal-600" />
+                <div className="w-10 h-0.5 bg-teal-700 skew-x-[-12deg]" />
+              </div>
+              <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tighter">
+                <span className="text-teal-900">IEPAZĪSTI </span>
+                <span className="text-teal-600 italic font-light">SASTĀVU</span>
               </h2>
+              <div className="mx-auto mt-4 h-1 w-20 bg-teal-700 skew-x-[-12deg]" />
             </div>
 
             {/* Tabs */}
-            <Tabs 
-              defaultValue="players" 
-              className="mx-auto max-w-5xl"
+            <Tabs
+              defaultValue="players"
+              className="mx-auto max-w-6xl"
               onValueChange={setActiveTab}
             >
-              <TabsList className="mb-10 grid w-full grid-cols-2 bg-transparent">
+              <TabsList className="mb-12 grid w-full max-w-md mx-auto grid-cols-2 bg-transparent gap-4 h-auto p-0">
                 <TabsTrigger
                   value="players"
-                  className="data-[state=active]:bg-teal-800 data-[state=active]:text-white"
+                  className="relative h-14 bg-white shadow-md border-b-4 border-transparent data-[state=active]:border-teal-600 data-[state=active]:bg-teal-800 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-300 skew-x-[-6deg]"
                 >
-                  <span className="inline-flex items-center gap-2">
+                  <span className="inline-flex skew-x-[6deg] items-center gap-2 font-bold tracking-wide">
                     <Users className="h-5 w-5" />
-                    Spēlētāji
+                    SPĒLĒTĀJI
                   </span>
                 </TabsTrigger>
                 <TabsTrigger
                   value="coaches"
-                  className="data-[state=active]:bg-teal-800 data-[state=active]:text-white"
+                  className="relative h-14 bg-white shadow-md border-b-4 border-transparent data-[state=active]:border-teal-600 data-[state=active]:bg-teal-800 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-300 skew-x-[-6deg]"
                 >
-                  <span className="inline-flex items-center gap-2">
-                    <Users className="h-5 w-5" />
-                    Treneru sastāvs
+                  <span className="inline-flex skew-x-[6deg] items-center gap-2 font-bold tracking-wide">
+                    <UserCog className="h-5 w-5" />
+                    TRENERI
                   </span>
                 </TabsTrigger>
               </TabsList>
