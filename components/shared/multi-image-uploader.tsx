@@ -29,6 +29,8 @@ export function MultiImageUploader({
 }: MultiImageUploaderProps) {
   const [isUploading, setIsUploading] = useState(false)
   const [uploadingImages, setUploadingImages] = useState<UploadingImage[]>([])
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [totalImages, setTotalImages] = useState(0)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,31 +49,35 @@ export function MultiImageUploader({
     }))
 
     setUploadingImages(newUploadingImages)
+    setTotalImages(newUploadingImages.length)
+    setCurrentIndex(0)
 
-    // Upload each file individually
-    const uploadPromises = newUploadingImages.map((image) => uploadFile(image))
+    // Upload files ONE AT A TIME to prevent server overload
+    const successfulUploads: (UploadingImage & { url: string; path: string })[] = []
 
-    try {
-      const results = await Promise.all(uploadPromises)
-
-      // Filter out any failed uploads
-      const successfulUploads = results.filter(
-        (result) => result.status === 'success'
-      ) as (UploadingImage & { url: string; path: string })[]
-
-      if (successfulUploads.length > 0) {
-        // Call the callback with the new URLs and paths
-        onImagesUploaded(successfulUploads.map((img) => ({ url: img.url, path: img.path })))
+    for (let i = 0; i < newUploadingImages.length; i++) {
+      const image = newUploadingImages[i]
+      setCurrentIndex(i + 1)
+      try {
+        const result = await uploadFile(image)
+        if (result.status === 'success' && result.url && result.path) {
+          successfulUploads.push(result as UploadingImage & { url: string; path: string })
+        }
+      } catch (error) {
+        console.error(`Error uploading ${image.name}:`, error)
       }
-    } catch (error) {
-      console.error('Error uploading images:', error)
-    } finally {
-      setIsUploading(false)
+    }
 
-      // Reset the file input
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ''
-      }
+    if (successfulUploads.length > 0) {
+      // Call the callback with the new URLs and paths
+      onImagesUploaded(successfulUploads.map((img) => ({ url: img.url, path: img.path })))
+    }
+
+    setIsUploading(false)
+
+    // Reset the file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
     }
   }
 
@@ -247,12 +253,17 @@ export function MultiImageUploader({
       )}
 
       {isUploading && (
-        <div className="flex flex-col items-center justify-center gap-1 rounded-md bg-blue-50 p-3">
+        <div className="flex flex-col items-center justify-center gap-2 rounded-md bg-blue-50 p-4">
           <div className="flex items-center">
             <Loader2 className="mr-2 h-4 w-4 animate-spin text-blue-600" />
-            <span className="text-sm font-medium text-blue-700">Processing images...</span>
+            <span className="text-sm font-medium text-blue-700">
+              Uploading image {currentIndex} of {totalImages}
+            </span>
           </div>
-          <p className="text-xs text-blue-600">Images are being optimized for web (this may take a moment for large files)</p>
+          <div className="w-full max-w-xs">
+            <Progress value={(currentIndex / totalImages) * 100} className="h-2" />
+          </div>
+          <p className="text-xs text-blue-600">Images are optimized one at a time for best results</p>
         </div>
       )}
     </div>
