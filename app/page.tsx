@@ -326,6 +326,12 @@ export default function HomePage() {
         <section className="relative min-h-[85vh] bg-gradient-to-br from-teal-900 via-teal-800 to-teal-900 overflow-hidden">
           {/* Blurred article image background */}
           <div className="absolute inset-0 z-0">
+            {/* Loading shimmer for background */}
+            {loading && (
+              <div className="absolute inset-0 bg-gradient-to-br from-teal-900 via-teal-800 to-teal-900">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" />
+              </div>
+            )}
             {articles.length > 0
               ? articles.map((article, index) => (
                   <div
@@ -462,6 +468,12 @@ export default function HomePage() {
                 <div className="relative overflow-hidden shadow-2xl border-b-4 border-teal-400">
                   {/* Image carousel */}
                   <div className="relative aspect-[4/3] bg-teal-800 hero-image-container">
+                    {/* Loading shimmer */}
+                    {loading && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-teal-800 via-teal-700 to-teal-800 animate-pulse">
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer" />
+                      </div>
+                    )}
                     {articles.length > 0
                       ? articles.map((article, index) => (
                           <div
