@@ -16,7 +16,7 @@ type UploadingImage = {
   file: File
   name: string
   progress: number
-  status: 'uploading' | 'success' | 'error'
+  status: 'uploading' | 'processing' | 'success' | 'error'
   url?: string
   path?: string
   error?: string
@@ -87,11 +87,20 @@ export function MultiImageUploader({
 
       // Simulate progress updates (since fetch doesn't provide progress)
       const progressInterval = setInterval(() => {
-        updateImageProgress(image.id, (prev) => {
-          const nextProgress = prev + Math.random() * 10
-          return nextProgress < 90 ? nextProgress : prev
-        })
-      }, 300)
+        setUploadingImages((prev) =>
+          prev.map((img) => {
+            if (img.id === image.id) {
+              const nextProgress = img.progress + Math.random() * 15
+              if (nextProgress >= 70 && img.status === 'uploading') {
+                // Switch to "processing" status when upload is mostly done
+                return { ...img, progress: 70, status: 'processing' as const }
+              }
+              return nextProgress < 70 ? { ...img, progress: nextProgress } : img
+            }
+            return img
+          })
+        )
+      }, 200)
 
       // Upload the file
       const response = await fetch('/api/admin/upload', {
@@ -209,9 +218,12 @@ export function MultiImageUploader({
                     <p className="truncate text-xs">{img.name}</p>
                     <Progress value={img.progress} className="mt-1 h-1" />
                   </div>
-                  <div className="w-12 flex-shrink-0 text-right">
+                  <div className="w-20 flex-shrink-0 text-right">
                     {img.status === 'uploading' && (
                       <span className="text-xs text-blue-500">{Math.round(img.progress)}%</span>
+                    )}
+                    {img.status === 'processing' && (
+                      <span className="text-xs text-orange-500 animate-pulse">Optimizing...</span>
                     )}
                     {img.status === 'success' && (
                       <span className="text-xs text-green-500">Done</span>
@@ -235,9 +247,12 @@ export function MultiImageUploader({
       )}
 
       {isUploading && (
-        <div className="flex items-center justify-center">
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          <span className="text-sm">Uploading images...</span>
+        <div className="flex flex-col items-center justify-center gap-1 rounded-md bg-blue-50 p-3">
+          <div className="flex items-center">
+            <Loader2 className="mr-2 h-4 w-4 animate-spin text-blue-600" />
+            <span className="text-sm font-medium text-blue-700">Processing images...</span>
+          </div>
+          <p className="text-xs text-blue-600">Images are being optimized for web (this may take a moment for large files)</p>
         </div>
       )}
     </div>
