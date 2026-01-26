@@ -28,6 +28,7 @@ export type Gallery = {
   title: string
   description?: string
   created_at: string
+  cover_image?: string | null
 }
 
 export type GalleryImage = {

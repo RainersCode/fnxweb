@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs'
-import { createGallery, getGalleries } from '@/lib/api'
+import { createGallery, getGalleriesWithCovers } from '@/lib/api'
 import { Gallery } from '@/types/supabase'
 
 export async function GET() {
@@ -11,8 +11,8 @@ export async function GET() {
   }
 
   try {
-    // Fetch all galleries from Supabase
-    const galleries = await getGalleries()
+    // Fetch all galleries with cover images from Supabase
+    const galleries = await getGalleriesWithCovers()
     return NextResponse.json(galleries)
   } catch (error) {
     console.error('Error fetching galleries:', error)

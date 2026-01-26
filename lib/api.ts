@@ -29,6 +29,7 @@ export type Gallery = {
   title: string
   description?: string
   created_at?: string
+  cover_image?: string | null
 }
 
 export type GalleryImage = {
@@ -163,6 +164,36 @@ export async function getGalleries() {
 
   if (error) throw error
   return data
+}
+
+// Get galleries with cover images (first image of each gallery)
+export async function getGalleriesWithCovers() {
+  const { data: galleries, error } = await supabase
+    .from('galleries')
+    .select('*')
+    .order('created_at', { ascending: false })
+
+  if (error) throw error
+  if (!galleries) return []
+
+  // Fetch first image for each gallery
+  const galleriesWithCovers = await Promise.all(
+    galleries.map(async (gallery) => {
+      const { data: images } = await supabase
+        .from('gallery_images')
+        .select('image_url')
+        .eq('gallery_id', gallery.id)
+        .order('display_order', { ascending: true })
+        .limit(1)
+
+      return {
+        ...gallery,
+        cover_image: images && images.length > 0 ? images[0].image_url : null,
+      }
+    })
+  )
+
+  return galleriesWithCovers
 }
 
 export async function getGalleryWithImages(id: string) {

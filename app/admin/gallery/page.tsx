@@ -429,10 +429,18 @@ export default function AdminGalleryPage() {
                   className="group overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-lg"
                 >
                   {/* Gallery Preview Header */}
-                  <div className="relative h-32 bg-gradient-to-br from-gray-100 to-gray-50">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <Images className="h-12 w-12 text-gray-300" />
-                    </div>
+                  <div className="relative h-40 bg-gradient-to-br from-gray-100 to-gray-50 overflow-hidden">
+                    {gallery.cover_image ? (
+                      <img
+                        src={gallery.cover_image}
+                        alt={gallery.title}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <Images className="h-12 w-12 text-gray-300" />
+                      </div>
+                    )}
                     <div className="absolute bottom-3 right-3">
                       <Button
                         size="sm"
