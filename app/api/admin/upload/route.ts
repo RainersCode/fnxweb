@@ -3,7 +3,11 @@ import { auth } from '@clerk/nextjs'
 import { uploadMedia } from '@/lib/api'
 import sharp from 'sharp'
 
-// Maximum file size (10MB, increased to allow larger originals for optimization)
+// App Router config - increase timeout for large image processing
+export const maxDuration = 60 // 60 seconds max (Vercel Pro) or 10 seconds (Hobby)
+export const dynamic = 'force-dynamic'
+
+// Maximum file size (10MB)
 const MAX_FILE_SIZE = 10 * 1024 * 1024
 // Optimization settings
 const MAX_WIDTH = 1920 // Max width in pixels
@@ -45,20 +49,30 @@ export async function POST(request: NextRequest) {
     // Check if the file is an image and optimize
     if (file.type.startsWith('image/')) {
         try {
+            console.log(`Processing image: ${file.name}, Size: ${Math.round(file.size / 1024)} KB`)
             const originalBuffer = Buffer.from(await file.arrayBuffer())
-            fileBuffer = await sharp(originalBuffer)
-              .resize({ width: MAX_WIDTH, withoutEnlargement: true }) // Resize if wider than MAX_WIDTH, don't enlarge smaller images
-              .toFormat(TARGET_FORMAT, { quality: QUALITY }) // Convert to target format (e.g., webp)
-              .toBuffer() // Get the processed image as a buffer
+
+            // Use sharp with memory-efficient settings for large images
+            fileBuffer = await sharp(originalBuffer, {
+              limitInputPixels: 50000000, // Allow up to 50 megapixels
+              sequentialRead: true, // More memory efficient
+            })
+              .resize({
+                width: MAX_WIDTH,
+                withoutEnlargement: true,
+                fastShrinkOnLoad: true, // Faster processing
+              })
+              .toFormat(TARGET_FORMAT, { quality: QUALITY })
+              .toBuffer()
 
             // Construct filename with new extension
             optimizedFileName = `${folder}/${timestamp}-${randomString}-${originalName}.${TARGET_FORMAT}`
-            console.log(`Optimized image: ${optimizedFileName}, Size: ${Math.round(fileBuffer.length / 1024)} KB`)
+            console.log(`Optimized image: ${optimizedFileName}, Size: ${Math.round(fileBuffer.length / 1024)} KB (saved ${Math.round((1 - fileBuffer.length / file.size) * 100)}%)`)
         } catch (optimizationError) {
             console.error('Error optimizing image:', optimizationError);
             // Fallback: Upload original if optimization fails
             fileBuffer = Buffer.from(await file.arrayBuffer())
-            const fileExt = file.name.split('.').pop() || 'bin'; // Get original extension or use 'bin'
+            const fileExt = file.name.split('.').pop() || 'bin';
             optimizedFileName = `${folder}/${timestamp}-${randomString}-${originalName}.${fileExt}`
             console.log(`Uploading original due to optimization error: ${optimizedFileName}`)
         }
