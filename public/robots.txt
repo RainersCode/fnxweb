@@ -2,19 +2,11 @@
 # Allow all web crawlers to access all content
 User-agent: *
 Allow: /
-Allow: /news/
-Allow: /team/
-Allow: /fixtures/
-Allow: /gallery/
-Allow: /about/
-Allow: /contact/
 
-# Disallow admin area
+# Disallow admin and auth areas
 Disallow: /admin/
 Disallow: /sign-in/
-
-# Crawl delay for good measure
-Crawl-delay: 10
+Disallow: /api/
 
 # Sitemap location
-Sitemap: https://feniks-rugby.com/sitemap.xml 
+Sitemap: https://www.fnx-rugby.lv/sitemap.xml

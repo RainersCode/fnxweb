@@ -129,18 +129,12 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
                     {item.key === 'ADMIN' ? (
                       <Link
                         href="/admin"
-                        className="group relative mx-0.5 px-4 py-5 text-sm font-medium tracking-wide text-white transition-all duration-300"
+                        className="group relative mx-0.5 px-4 py-5 text-sm font-medium tracking-wide transition-colors duration-200"
                       >
-                        <span className="relative z-10 flex items-center gap-1.5 text-amber-300 group-hover:text-amber-200 transition-colors duration-300">
+                        <span className="flex items-center gap-1.5 text-amber-300 group-hover:text-white">
                           <Settings className="h-4 w-4" />
                           {item.text}
                         </span>
-
-                        {/* Special admin background */}
-                        <span className="absolute inset-0 -z-0 skew-x-[-12deg] transform bg-amber-500/20 opacity-0 scale-x-75 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300" />
-
-                        {/* Bottom indicator line - amber for admin */}
-                        <span className="absolute bottom-2 left-1/2 h-0.5 -translate-x-1/2 skew-x-[-12deg] transform bg-amber-400 w-0 opacity-0 group-hover:w-6 group-hover:opacity-100 transition-all duration-300" />
                       </Link>
                     ) : (
                       <Link
@@ -261,14 +255,12 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
                   {item.key === 'ADMIN' ? (
                     <Link
                       href="/admin"
-                      className="group flex items-center py-3 px-4 rounded-lg transition-all duration-300 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 hover:text-amber-200 border border-amber-500/30"
+                      className="group flex items-center py-3 px-4 rounded-lg transition-colors duration-200 text-amber-300 hover:text-white hover:bg-white/10"
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      {/* Admin indicator */}
-                      <span className="mr-3 h-6 w-1 skew-x-[-12deg] transform rounded-full bg-amber-400 transition-all duration-300" />
+                      <span className="mr-3 h-6 w-1 skew-x-[-12deg] transform rounded-full bg-amber-400" />
                       <Settings className="h-4 w-4 mr-2" />
                       <span className="text-base font-medium tracking-wide">{item.text}</span>
-                      <ArrowRight className="ml-auto h-4 w-4 opacity-100" />
                     </Link>
                   ) : (
                     <Link

@@ -338,8 +338,12 @@ export default function HomePage() {
                       src={article.image_url || '/placeholder.svg?height=1080&width=1920&text=Rugby'}
                       alt=""
                       fill
+                      sizes="100vw"
                       className="object-cover blur-2xl scale-110"
                       priority={index === 0}
+                      loading={index === 0 ? 'eager' : 'lazy'}
+                      placeholder="blur"
+                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIhAAAgEDBAMBAAAAAAAAAAAAAQIDAAQRBRIhMQYTQWH/xAAVAQEBAAAAAAAAAAAAAAAAAAADBP/EABkRAAIDAQAAAAAAAAAAAAAAAAECAAMRIf/aAAwDAQACEQMRAD8AzLTtRuLC8iu7WVo54W3I6nkGtDg+RXOr6Xp9ze3E00NuiTSBmKIOc5ycY71SlTiqUWU7M51kXaij/9k="
                     />
                   </div>
                 ))
@@ -354,8 +358,12 @@ export default function HomePage() {
                       src={item.image}
                       alt=""
                       fill
+                      sizes="100vw"
                       className="object-cover blur-2xl scale-110"
                       priority={index === 0}
+                      loading={index === 0 ? 'eager' : 'lazy'}
+                      placeholder="blur"
+                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIhAAAgEDBAMBAAAAAAAAAAAAAQIDAAQRBRIhMQYTQWH/xAAVAQEBAAAAAAAAAAAAAAAAAAADBP/EABkRAAIDAQAAAAAAAAAAAAAAAAECAAMRIf/aAAwDAQACEQMRAD8AzLTtRuLC8iu7WVo54W3I6nkGtDg+RXOr6Xp9ze3E00NuiTSBmKIOc5ycY71SlTiqUWU7M51kXaij/9k="
                     />
                   </div>
                 ))}
@@ -453,7 +461,7 @@ export default function HomePage() {
                 {/* Simple image frame */}
                 <div className="relative overflow-hidden shadow-2xl border-b-4 border-teal-400">
                   {/* Image carousel */}
-                  <div className="relative aspect-[4/3] bg-teal-800">
+                  <div className="relative aspect-[4/3] bg-teal-800 hero-image-container">
                     {articles.length > 0
                       ? articles.map((article, index) => (
                           <div
@@ -468,8 +476,12 @@ export default function HomePage() {
                               src={article.image_url || '/placeholder.svg?height=600&width=800&text=Rugby News'}
                               alt={article.title}
                               fill
+                              sizes="(max-width: 1024px) 100vw, 50vw"
                               className="object-cover"
                               priority={index === 0}
+                              loading={index === 0 ? 'eager' : 'lazy'}
+                              placeholder="blur"
+                              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIhAAAgEDBAMBAAAAAAAAAAAAAQIDAAQRBRIhMQYTQWH/xAAVAQEBAAAAAAAAAAAAAAAAAAADBP/EABkRAAIDAQAAAAAAAAAAAAAAAAECAAMRIf/aAAwDAQACEQMRAD8AzLTtRuLC8iu7WVo54W3I6nkGtDg+RXOr6Xp9ze3E00NuiTSBmKIOc5ycY71SlTiqUWU7M51kXaij/9k="
                             />
                           </div>
                         ))
@@ -486,8 +498,12 @@ export default function HomePage() {
                               src={item.image}
                               alt={item.title}
                               fill
+                              sizes="(max-width: 1024px) 100vw, 50vw"
                               className="object-cover"
                               priority={index === 0}
+                              loading={index === 0 ? 'eager' : 'lazy'}
+                              placeholder="blur"
+                              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/wAARCAAIAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIhAAAgEDBAMBAAAAAAAAAAAAAQIDAAQRBRIhMQYTQWH/xAAVAQEBAAAAAAAAAAAAAAAAAAADBP/EABkRAAIDAQAAAAAAAAAAAAAAAAECAAMRIf/aAAwDAQACEQMRAD8AzLTtRuLC8iu7WVo54W3I6nkGtDg+RXOr6Xp9ze3E00NuiTSBmKIOc5ycY71SlTiqUWU7M51kXaij/9k="
                             />
                           </div>
                         ))}
@@ -914,94 +930,107 @@ export default function HomePage() {
                 {fixtures.map((fixture, index) => (
                   <div
                     key={fixture.id}
-                    className={`group relative bg-white shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden ${
+                    className={`group relative bg-white rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 ${
                       index === 0 ? 'md:col-span-2 lg:col-span-1' : ''
                     }`}
                   >
-                    {/* Top accent */}
-                    <div className="h-1.5 bg-gradient-to-r from-teal-600 via-teal-500 to-teal-600" />
+                    {/* Top gradient bar */}
+                    <div className="h-1 bg-gradient-to-r from-teal-500 via-teal-400 to-teal-500" />
 
                     {/* Next match badge for first fixture */}
                     {index === 0 && (
-                      <div className="absolute top-4 right-0 bg-teal-600 px-4 py-1 skew-x-[-12deg] translate-x-1">
-                        <span className="skew-x-[12deg] inline-block text-xs font-bold text-white uppercase tracking-wider">Nākamā</span>
+                      <div className="absolute top-3 right-3 z-10">
+                        <div className="bg-gradient-to-r from-amber-500 to-amber-400 px-3 py-1 rounded-full shadow-md">
+                          <span className="text-[10px] font-bold text-white uppercase tracking-wider">Nākamā</span>
+                        </div>
                       </div>
                     )}
 
-                    <div className="p-6">
-                      {/* Date */}
-                      <div className="flex items-center gap-2 text-teal-700 mb-6">
-                        <div className="w-10 h-10 bg-teal-50 flex items-center justify-center skew-x-[-6deg]">
-                          <CalendarDays className="h-5 w-5 skew-x-[6deg]" />
-                        </div>
-                        <div>
-                          <div className="text-sm font-bold text-teal-900">
+                    {/* Compact header with date and time */}
+                    <div className="bg-gradient-to-r from-slate-50 to-gray-50 px-4 py-2.5 border-b border-gray-100">
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 text-slate-700">
+                          <CalendarDays className="h-4 w-4 text-teal-600" />
+                          <span className="font-semibold text-sm">
                             {formatMatchDate(fixture.match_date)}
-                          </div>
-                          <div className="text-xs text-zinc-500">
-                            {extractTimeFromDate(fixture.match_date)}
-                          </div>
+                          </span>
                         </div>
+                        <div className="w-px h-4 bg-gray-300" />
+                        <span className="text-sm text-slate-500 font-medium">
+                          {extractTimeFromDate(fixture.match_date)}
+                        </span>
                       </div>
+                    </div>
 
+                    <div className="p-5">
                       {/* Teams */}
-                      <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center justify-between gap-3">
                         {/* Home team */}
-                        <div className="flex flex-col items-center gap-3 w-2/5">
-                          <div className="h-20 w-20 relative overflow-hidden bg-white shadow-md border-2 border-gray-100 p-2 group-hover:border-teal-200 transition-colors">
-                            <NextImage
-                              src={fixture.home_logo_url || "/Logo/fēniks_logo-removebg-preview.png"}
-                              alt="RK Fēnikss"
-                              fill
-                              className="object-contain"
-                            />
+                        <div className="flex-1 flex flex-col items-center text-center">
+                          <div className="h-16 w-16 rounded-full bg-white shadow-md border-2 border-gray-100 p-1.5 overflow-hidden group-hover:border-teal-300 group-hover:shadow-lg transition-all duration-300 mb-2">
+                            <div className="relative w-full h-full rounded-full overflow-hidden">
+                              <NextImage
+                                src={fixture.home_logo_url || "/Logo/fēniks_logo-removebg-preview.png"}
+                                alt="RK Fēnikss"
+                                fill
+                                className="object-contain"
+                              />
+                            </div>
                           </div>
-                          <span className="text-center font-bold text-teal-900 text-sm leading-tight">
+                          <span className="font-bold text-slate-800 text-xs leading-tight mb-0.5">
                             {fixture.is_home_game ? 'RK "Fēnikss"' : fixture.opponent}
                           </span>
+                          <span className="text-[9px] font-semibold uppercase tracking-wider text-slate-400">Mājas</span>
                         </div>
 
                         {/* VS badge */}
-                        <div className="w-1/5 flex-shrink-0">
-                          <div className="bg-teal-700 text-white font-bold text-sm skew-x-[-12deg] h-12 w-12 flex items-center justify-center mx-auto shadow-lg">
-                            <span className="skew-x-[12deg]">VS</span>
+                        <div className="flex-shrink-0">
+                          <div className="relative">
+                            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-teal-600 to-teal-700 flex items-center justify-center shadow-lg">
+                              <span className="text-white font-bold text-xs">VS</span>
+                            </div>
+                            <div className="absolute -inset-0.5 rounded-full border-2 border-teal-200 opacity-50" />
                           </div>
                         </div>
 
                         {/* Away team */}
-                        <div className="flex flex-col items-center gap-3 w-2/5">
-                          <div className="h-20 w-20 relative overflow-hidden bg-white shadow-md border-2 border-gray-100 p-2 group-hover:border-teal-200 transition-colors">
-                            <NextImage
-                              src={fixture.away_logo_url || "/placeholder.svg?height=48&width=48&text=Team"}
-                              alt={fixture.opponent}
-                              fill
-                              className="object-contain"
-                            />
+                        <div className="flex-1 flex flex-col items-center text-center">
+                          <div className="h-16 w-16 rounded-full bg-white shadow-md border-2 border-gray-100 p-1.5 overflow-hidden group-hover:border-teal-300 group-hover:shadow-lg transition-all duration-300 mb-2">
+                            <div className="relative w-full h-full rounded-full overflow-hidden">
+                              <NextImage
+                                src={fixture.away_logo_url || "/placeholder.svg?height=48&width=48&text=Team"}
+                                alt={fixture.opponent}
+                                fill
+                                className="object-contain"
+                              />
+                            </div>
                           </div>
-                          <span className="text-center font-bold text-teal-900 text-sm leading-tight">
+                          <span className="font-bold text-slate-800 text-xs leading-tight mb-0.5">
                             {fixture.is_home_game ? fixture.opponent : 'RK "Fēnikss"'}
                           </span>
+                          <span className="text-[9px] font-semibold uppercase tracking-wider text-slate-400">Viesi</span>
                         </div>
                       </div>
 
                       {/* Location */}
-                      <div className="flex items-center gap-2 text-zinc-600 py-4 border-t border-gray-100">
-                        <MapPin className="h-4 w-4 text-teal-600" />
-                        <span className="text-sm">
+                      <div className="flex items-center justify-center gap-2 text-slate-500 mt-4 pt-3 border-t border-gray-100">
+                        <MapPin className="h-3.5 w-3.5 text-teal-600" />
+                        <span className="text-xs font-medium">
                           {fixture.location || (fixture.is_home_game ? 'Mājas laukums' : 'Izbraukumā')}
                         </span>
                       </div>
 
                       {/* CTA */}
-                      <Link href="/fixtures" className="block">
-                        <button className="w-full skew-x-[-12deg] transform bg-teal-700 px-6 py-3.5 font-bold tracking-wide text-white transition-all duration-300 hover:bg-teal-800 group-hover:shadow-lg">
-                          <span className="inline-flex skew-x-[12deg] transform items-center justify-center">
-                            SPĒLES DETAĻAS
-                            <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                          </span>
+                      <Link href="/fixtures" className="block mt-4">
+                        <button className="w-full rounded-md bg-gradient-to-r from-teal-600 to-teal-700 px-4 py-2.5 text-xs font-bold tracking-wide text-white transition-all duration-300 hover:from-teal-700 hover:to-teal-800 hover:shadow-md flex items-center justify-center gap-2">
+                          SPĒLES DETAĻAS
+                          <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
                         </button>
                       </Link>
                     </div>
+
+                    {/* Subtle bottom accent on hover */}
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-teal-500 to-teal-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                   </div>
                 ))}
               </div>

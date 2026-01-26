@@ -440,78 +440,105 @@ export default function AdminArticlesPage() {
 
       {/* Add Article Dialog */}
       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Add New Article</DialogTitle>
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
+          <DialogHeader className="pb-4 border-b">
+            <DialogTitle className="text-xl">Add New Article</DialogTitle>
             <DialogDescription>
               Create a new article to be displayed on the website.
             </DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="title">Title</Label>
-              <Input
-                id="title"
-                name="title"
-                placeholder="Enter article title"
-                value={formData.title}
-                onChange={handleInputChange}
-                onBlur={generateSlug}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="slug">Slug</Label>
-              <div className="flex items-center gap-2">
-                <Input
-                  id="slug"
-                  name="slug"
-                  placeholder="article-url-slug"
-                  value={formData.slug}
-                  onChange={handleInputChange}
-                  className="flex-1"
-                />
-                <Button type="button" variant="outline" onClick={generateSlug}>
-                  Generate
-                </Button>
+          <div className="grid gap-6 py-6">
+            {/* Basic Info Section */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Basic Information</h3>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-2 sm:col-span-2">
+                  <Label htmlFor="title">Title <span className="text-destructive">*</span></Label>
+                  <Input
+                    id="title"
+                    name="title"
+                    placeholder="Enter a compelling article title"
+                    value={formData.title}
+                    onChange={handleInputChange}
+                    onBlur={generateSlug}
+                    className="text-base"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="slug">URL Slug <span className="text-destructive">*</span></Label>
+                  <div className="flex items-center gap-2">
+                    <Input
+                      id="slug"
+                      name="slug"
+                      placeholder="article-url-slug"
+                      value={formData.slug}
+                      onChange={handleInputChange}
+                      className="flex-1"
+                    />
+                    <Button type="button" variant="outline" size="sm" onClick={generateSlug}>
+                      Generate
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground">This will be used in the article URL</p>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="author">Author</Label>
+                  <Input
+                    id="author"
+                    name="author"
+                    placeholder="Enter author name"
+                    value={formData.author}
+                    onChange={handleInputChange}
+                  />
+                </div>
               </div>
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="author">Author (optional)</Label>
-              <Input
-                id="author"
-                name="author"
-                placeholder="Enter author name"
-                value={formData.author}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label>Featured Image</Label>
+
+            <Separator />
+
+            {/* Featured Image Section */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Featured Image</h3>
               <ImageUploader
                 imageUrl={formData.image_url}
                 onImageUploaded={handleImageUploaded}
                 onImageRemoved={handleImageRemoved}
               />
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="content">Content</Label>
+
+            <Separator />
+
+            {/* Content Section */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Article Content <span className="text-destructive">*</span></h3>
               <RichTextEditor
                 content={formData.content}
                 onChange={(html) => setFormData({ ...formData, content: html })}
+                placeholder="Start writing your article content here. Use the toolbar above to format text, add headings, lists, and links..."
               />
             </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="is_featured"
-                checked={formData.is_featured}
-                onCheckedChange={handleCheckboxChange}
-              />
-              <Label htmlFor="is_featured" className="cursor-pointer">
-                Feature this article on homepage
-              </Label>
+
+            <Separator />
+
+            {/* Settings Section */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Settings</h3>
+              <div className="flex items-center space-x-3 p-3 bg-muted/30 rounded-lg">
+                <Checkbox
+                  id="is_featured"
+                  checked={formData.is_featured}
+                  onCheckedChange={handleCheckboxChange}
+                />
+                <div>
+                  <Label htmlFor="is_featured" className="cursor-pointer font-medium">
+                    Feature this article
+                  </Label>
+                  <p className="text-xs text-muted-foreground">Featured articles appear prominently on the homepage</p>
+                </div>
+              </div>
             </div>
           </div>
-          <DialogFooter>
+          <DialogFooter className="border-t pt-4 gap-2 sm:gap-0">
             <Button
               type="button"
               variant="outline"
@@ -529,7 +556,7 @@ export default function AdminArticlesPage() {
                   Saving...
                 </>
               ) : (
-                'Save Article'
+                'Publish Article'
               )}
             </Button>
           </DialogFooter>
@@ -538,76 +565,103 @@ export default function AdminArticlesPage() {
 
       {/* Edit Article Dialog */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Edit Article</DialogTitle>
-            <DialogDescription>Make changes to the article.</DialogDescription>
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
+          <DialogHeader className="pb-4 border-b">
+            <DialogTitle className="text-xl">Edit Article</DialogTitle>
+            <DialogDescription>Make changes to the article and save when done.</DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="edit-title">Title</Label>
-              <Input
-                id="edit-title"
-                name="title"
-                placeholder="Enter article title"
-                value={formData.title}
-                onChange={handleInputChange}
-                onBlur={generateSlug}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="edit-slug">Slug</Label>
-              <div className="flex items-center gap-2">
-                <Input
-                  id="edit-slug"
-                  name="slug"
-                  placeholder="article-url-slug"
-                  value={formData.slug}
-                  onChange={handleInputChange}
-                  className="flex-1"
-                />
-                <Button type="button" variant="outline" onClick={generateSlug}>
-                  Generate
-                </Button>
+          <div className="grid gap-6 py-6">
+            {/* Basic Info Section */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Basic Information</h3>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-2 sm:col-span-2">
+                  <Label htmlFor="edit-title">Title <span className="text-destructive">*</span></Label>
+                  <Input
+                    id="edit-title"
+                    name="title"
+                    placeholder="Enter a compelling article title"
+                    value={formData.title}
+                    onChange={handleInputChange}
+                    onBlur={generateSlug}
+                    className="text-base"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="edit-slug">URL Slug <span className="text-destructive">*</span></Label>
+                  <div className="flex items-center gap-2">
+                    <Input
+                      id="edit-slug"
+                      name="slug"
+                      placeholder="article-url-slug"
+                      value={formData.slug}
+                      onChange={handleInputChange}
+                      className="flex-1"
+                    />
+                    <Button type="button" variant="outline" size="sm" onClick={generateSlug}>
+                      Generate
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground">This will be used in the article URL</p>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="edit-author">Author</Label>
+                  <Input
+                    id="edit-author"
+                    name="author"
+                    placeholder="Enter author name"
+                    value={formData.author || ''}
+                    onChange={handleInputChange}
+                  />
+                </div>
               </div>
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="edit-author">Author (optional)</Label>
-              <Input
-                id="edit-author"
-                name="author"
-                placeholder="Enter author name"
-                value={formData.author || ''}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label>Featured Image</Label>
+
+            <Separator />
+
+            {/* Featured Image Section */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Featured Image</h3>
               <ImageUploader
                 imageUrl={formData.image_url}
                 onImageUploaded={handleImageUploaded}
                 onImageRemoved={handleImageRemoved}
               />
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="edit-content">Content</Label>
+
+            <Separator />
+
+            {/* Content Section */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Article Content <span className="text-destructive">*</span></h3>
               <RichTextEditor
                 content={formData.content}
                 onChange={(html) => setFormData({ ...formData, content: html })}
+                placeholder="Start writing your article content here. Use the toolbar above to format text, add headings, lists, and links..."
               />
             </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="edit-is_featured"
-                checked={formData.is_featured}
-                onCheckedChange={handleCheckboxChange}
-              />
-              <Label htmlFor="edit-is_featured" className="cursor-pointer">
-                Feature this article on homepage
-              </Label>
+
+            <Separator />
+
+            {/* Settings Section */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Settings</h3>
+              <div className="flex items-center space-x-3 p-3 bg-muted/30 rounded-lg">
+                <Checkbox
+                  id="edit-is_featured"
+                  checked={formData.is_featured}
+                  onCheckedChange={handleCheckboxChange}
+                />
+                <div>
+                  <Label htmlFor="edit-is_featured" className="cursor-pointer font-medium">
+                    Feature this article
+                  </Label>
+                  <p className="text-xs text-muted-foreground">Featured articles appear prominently on the homepage</p>
+                </div>
+              </div>
             </div>
           </div>
-          <DialogFooter>
+          <DialogFooter className="border-t pt-4 gap-2 sm:gap-0">
             <Button
               type="button"
               variant="outline"

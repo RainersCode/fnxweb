@@ -7,7 +7,7 @@ const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://feniks-rugby.com'; // Replace with your actual domain
+  const baseUrl = 'https://www.fnx-rugby.lv';
 
   // Get all articles
   const { data: articles } = await supabase

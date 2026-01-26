@@ -56,12 +56,12 @@ export const metadata: Metadata = {
     creator: '@RKFeniks',
   },
   icons: {
-    icon: '/Logo/fēniks_logo-removebg-preview.png',
-    shortcut: '/Logo/fēniks_logo-removebg-preview.png',
-    apple: '/Logo/fēniks_logo-removebg-preview.png',
+    icon: '/logo.png',
+    shortcut: '/logo.png',
+    apple: '/logo.png',
   },
   verification: {
-    google: 'google-site-verification-code', // Add your Google verification code
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
   },
   robots: {
     index: true,

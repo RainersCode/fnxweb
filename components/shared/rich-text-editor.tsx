@@ -6,6 +6,7 @@ import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
 import TextAlign from '@tiptap/extension-text-align'
 import Underline from '@tiptap/extension-underline'
+import Placeholder from '@tiptap/extension-placeholder'
 import { 
   Bold, 
   Italic, 
@@ -27,9 +28,10 @@ interface RichTextEditorProps {
   content: string
   onChange: (content: string) => void
   className?: string
+  placeholder?: string
 }
 
-export function RichTextEditor({ content, onChange, className }: RichTextEditorProps) {
+export function RichTextEditor({ content, onChange, className, placeholder = 'Start writing your article content here...' }: RichTextEditorProps) {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -45,10 +47,18 @@ export function RichTextEditor({ content, onChange, className }: RichTextEditorP
         defaultAlignment: 'left',
       }),
       Underline,
+      Placeholder.configure({
+        placeholder,
+      }),
     ],
     content,
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML())
+    },
+    editorProps: {
+      attributes: {
+        class: 'focus:outline-none',
+      },
     },
   })
 
@@ -85,8 +95,8 @@ export function RichTextEditor({ content, onChange, className }: RichTextEditorP
   }
 
   return (
-    <div className={cn('border rounded-md', className)}>
-      <div className="flex flex-wrap gap-1 border-b p-2 bg-muted/20">
+    <div className={cn('border rounded-md overflow-hidden', className)}>
+      <div className="flex flex-wrap gap-1 border-b p-2 bg-muted/30">
         <Button
           type="button"
           variant="ghost"
@@ -208,10 +218,15 @@ export function RichTextEditor({ content, onChange, className }: RichTextEditorP
           <AlignJustify className="h-4 w-4" />
         </Button>
       </div>
-      <EditorContent 
-        editor={editor} 
-        className="min-h-[200px] p-4 prose prose-sm max-w-none focus:outline-none"
-      />
+      <div
+        className="min-h-[250px] p-4 bg-white cursor-text"
+        onClick={() => editor?.chain().focus().run()}
+      >
+        <EditorContent
+          editor={editor}
+          className="prose prose-sm max-w-none h-full [&_.ProseMirror]:min-h-[218px]"
+        />
+      </div>
     </div>
   )
 } 

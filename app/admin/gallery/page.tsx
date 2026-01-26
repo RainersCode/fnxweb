@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Trash2, Edit, Plus, Search, Loader2, CalendarDays, ImagePlus } from 'lucide-react'
+import { Trash2, Edit, Plus, Search, Loader2, CalendarDays, ImagePlus, Images, FolderOpen } from 'lucide-react'
 import { SectionContainer } from '@/components/shared/section-container'
 import { SectionTitle } from '@/components/shared/section-title'
 import { ImageUploader } from '@/components/shared/image-uploader'
@@ -378,121 +378,154 @@ export default function AdminGalleryPage() {
   }
 
   return (
-    <div className="container py-6">
-      <SectionContainer>
-        <div className="mb-6 flex items-center justify-between">
-          <SectionTitle title="Manage Galleries" />
-          <Button onClick={() => setShowAddDialog(true)}>
-            <Plus size={16} className="mr-2" /> Add Gallery
-          </Button>
-        </div>
+    <main className="flex-1 pb-16">
+      <SectionContainer className="bg-white">
+        <div className="relative z-10">
+          <div className="mx-auto mb-8 max-w-2xl text-center">
+            <SectionTitle title="MANAGE" titleHighlight="GALLERIES" />
+            <p className="mt-4 text-muted-foreground">
+              Create and manage photo galleries for the club website.
+            </p>
+          </div>
 
-        <div className="mb-6">
-          <div className="relative">
-            <Search
-              className="absolute left-3 top-1/2 -translate-y-1/2 transform text-muted-foreground"
-              size={18}
-            />
-            <Input
-              placeholder="Search galleries..."
-              className="pl-10"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+          <div className="mb-8 flex items-center justify-between gap-4">
+            <div className="relative w-full max-w-sm">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <Input
+                type="search"
+                placeholder="Search galleries..."
+                className="pl-10"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+            <Button onClick={() => setShowAddDialog(true)}>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Gallery
+            </Button>
           </div>
-        </div>
 
-        {loading ? (
-          <div className="flex items-center justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          </div>
-        ) : filteredGalleries.length === 0 ? (
-          <div className="py-12 text-center">
-            <p className="text-muted-foreground">No galleries found. Create your first gallery!</p>
-          </div>
-        ) : (
-          <div className="space-y-6">
-            {filteredGalleries.map((gallery) => (
-              <div
-                key={gallery.id}
-                className="overflow-hidden rounded-lg border shadow-sm transition-shadow hover:shadow-md"
-              >
-                <div className="p-4">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="mb-2 text-lg font-semibold">{gallery.title}</h3>
-                      {gallery.description && (
-                        <p className="mb-2 text-muted-foreground">{gallery.description}</p>
-                      )}
-                      <div className="flex items-center text-xs text-muted-foreground">
-                        <CalendarDays size={14} className="mr-1" />
-                        <span>Created: {formatDate(gallery.created_at)}</span>
-                      </div>
+          {loading ? (
+            <div className="flex min-h-[400px] items-center justify-center">
+              <Loader2 className="mr-2 h-6 w-6 animate-spin" />
+              <span>Loading galleries...</span>
+            </div>
+          ) : filteredGalleries.length === 0 ? (
+            <div className="flex min-h-[400px] flex-col items-center justify-center">
+              <div className="mb-4 rounded-full bg-muted p-4">
+                <FolderOpen className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <p className="mb-4 text-lg font-medium">No galleries found</p>
+              <Button variant="outline" onClick={() => setShowAddDialog(true)}>
+                <Plus className="mr-2 h-4 w-4" />
+                Create your first gallery
+              </Button>
+            </div>
+          ) : (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {filteredGalleries.map((gallery) => (
+                <div
+                  key={gallery.id}
+                  className="group overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-lg"
+                >
+                  {/* Gallery Preview Header */}
+                  <div className="relative h-32 bg-gradient-to-br from-gray-100 to-gray-50">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <Images className="h-12 w-12 text-gray-300" />
                     </div>
-                    <div className="flex space-x-2">
+                    <div className="absolute bottom-3 right-3">
                       <Button
-                        variant="outline"
                         size="sm"
+                        className="shadow-md"
                         onClick={() => handleManageImages(gallery)}
                       >
-                        <ImagePlus size={16} className="mr-2" /> Images
-                      </Button>
-                      <Button variant="outline" size="sm" onClick={() => handleEditClick(gallery)}>
-                        <Edit size={16} className="mr-2" /> Edit
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setGalleryToDelete(gallery)}
-                      >
-                        <Trash2 size={16} className="mr-2" /> Delete
+                        <ImagePlus className="mr-1.5 h-3.5 w-3.5" />
+                        Manage Images
                       </Button>
                     </div>
                   </div>
+
+                  {/* Gallery Info */}
+                  <div className="p-4">
+                    <h3 className="mb-1 text-lg font-semibold text-gray-800 line-clamp-1">
+                      {gallery.title}
+                    </h3>
+                    {gallery.description && (
+                      <p className="mb-3 text-sm text-muted-foreground line-clamp-2">
+                        {gallery.description}
+                      </p>
+                    )}
+                    <div className="flex items-center text-xs text-muted-foreground">
+                      <CalendarDays className="mr-1.5 h-3.5 w-3.5" />
+                      <span>{formatDate(gallery.created_at)}</span>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex border-t border-gray-100 bg-gray-50/50">
+                    <button
+                      className="flex flex-1 items-center justify-center gap-1.5 py-2.5 text-sm text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
+                      onClick={() => handleEditClick(gallery)}
+                    >
+                      <Edit className="h-3.5 w-3.5" />
+                      Edit
+                    </button>
+                    <div className="w-px bg-gray-200" />
+                    <button
+                      className="flex flex-1 items-center justify-center gap-1.5 py-2.5 text-sm text-red-600 transition-colors hover:bg-red-50 hover:text-red-700"
+                      onClick={() => setGalleryToDelete(gallery)}
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                      Delete
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
+        </div>
       </SectionContainer>
 
       {/* Add Gallery Dialog */}
       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
         <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>Add New Gallery</DialogTitle>
-            <DialogDescription>Create a new gallery for your images</DialogDescription>
+          <DialogHeader className="pb-4 border-b">
+            <DialogTitle className="text-xl">Create New Gallery</DialogTitle>
+            <DialogDescription>Add a new photo gallery to showcase images</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-4">
+          <div className="space-y-5 py-5">
             <div className="space-y-2">
-              <Label htmlFor="title">Gallery Title</Label>
+              <Label htmlFor="title">Gallery Title <span className="text-destructive">*</span></Label>
               <Input
                 id="title"
                 name="title"
-                placeholder="Enter gallery title"
+                placeholder="e.g., Season 2024 Highlights"
                 value={formData.title}
                 onChange={handleInputChange}
+                className="text-base"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="description">Description (Optional)</Label>
+              <Label htmlFor="description">Description</Label>
               <Textarea
                 id="description"
                 name="description"
-                placeholder="Enter gallery description"
+                placeholder="Add a brief description of this gallery..."
                 value={formData.description}
                 onChange={handleInputChange}
-                rows={4}
+                rows={3}
+                className="resize-none"
               />
+              <p className="text-xs text-muted-foreground">Optional - helps visitors understand the gallery content</p>
             </div>
           </div>
-          <DialogFooter>
+          <DialogFooter className="border-t pt-4 gap-2 sm:gap-0">
             <Button variant="outline" onClick={() => setShowAddDialog(false)}>
               Cancel
             </Button>
             <Button onClick={handleAddGallery} disabled={formLoading || !formData.title}>
-              {formLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-              Add Gallery
+              {formLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2 h-4 w-4" />}
+              Create Gallery
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -501,40 +534,43 @@ export default function AdminGalleryPage() {
       {/* Edit Gallery Dialog */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
         <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>Edit Gallery</DialogTitle>
-            <DialogDescription>Update gallery details</DialogDescription>
+          <DialogHeader className="pb-4 border-b">
+            <DialogTitle className="text-xl">Edit Gallery</DialogTitle>
+            <DialogDescription>Update the gallery details</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-4">
+          <div className="space-y-5 py-5">
             <div className="space-y-2">
-              <Label htmlFor="edit-title">Gallery Title</Label>
+              <Label htmlFor="edit-title">Gallery Title <span className="text-destructive">*</span></Label>
               <Input
                 id="edit-title"
                 name="title"
-                placeholder="Enter gallery title"
+                placeholder="e.g., Season 2024 Highlights"
                 value={formData.title}
                 onChange={handleInputChange}
+                className="text-base"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="edit-description">Description (Optional)</Label>
+              <Label htmlFor="edit-description">Description</Label>
               <Textarea
                 id="edit-description"
                 name="description"
-                placeholder="Enter gallery description"
+                placeholder="Add a brief description of this gallery..."
                 value={formData.description}
                 onChange={handleInputChange}
-                rows={4}
+                rows={3}
+                className="resize-none"
               />
+              <p className="text-xs text-muted-foreground">Optional - helps visitors understand the gallery content</p>
             </div>
           </div>
-          <DialogFooter>
+          <DialogFooter className="border-t pt-4 gap-2 sm:gap-0">
             <Button variant="outline" onClick={() => setShowEditDialog(false)}>
               Cancel
             </Button>
             <Button onClick={handleUpdateGallery} disabled={formLoading || !formData.title}>
               {formLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-              Update Gallery
+              Save Changes
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -542,93 +578,116 @@ export default function AdminGalleryPage() {
 
       {/* Manage Gallery Images Dialog */}
       <Dialog open={showImagesDialog} onOpenChange={setShowImagesDialog}>
-        <DialogContent className="flex max-h-[90vh] flex-col overflow-hidden p-5 sm:max-w-[85vw] lg:max-w-[800px]">
-          <DialogHeader className="mb-2">
-            <DialogTitle>Manage Gallery Images</DialogTitle>
-            <DialogDescription>Add, edit, or remove images from this gallery</DialogDescription>
+        <DialogContent className="flex max-h-[90vh] flex-col overflow-hidden sm:max-w-[900px]">
+          <DialogHeader className="pb-4 border-b">
+            <DialogTitle className="text-xl">Manage Gallery Images</DialogTitle>
+            <DialogDescription>Upload and organize images for this gallery</DialogDescription>
           </DialogHeader>
-          <div className="flex-1 space-y-3 overflow-y-auto pr-1">
-            <Tabs defaultValue="single" className="w-full">
-              <TabsList className="mb-3">
-                <TabsTrigger value="single">Single Upload</TabsTrigger>
-                <TabsTrigger value="multiple">Multiple Upload</TabsTrigger>
-              </TabsList>
 
-              <TabsContent value="single" className="rounded-lg border p-3">
-                <h4 className="mb-2 font-medium">Add New Image</h4>
-                <div className="space-y-2">
-                  <div>
-                    <Label htmlFor="new-image-caption">Image Caption (Optional)</Label>
-                    <Input
-                      id="new-image-caption"
-                      placeholder="Enter image caption"
-                      value={newImageCaption}
-                      onChange={(e) => setNewImageCaption(e.target.value)}
+          <div className="flex-1 overflow-y-auto py-4">
+            {/* Upload Section */}
+            <div className="mb-6">
+              <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-4">Upload Images</h3>
+              <Tabs defaultValue="multiple" className="w-full">
+                <TabsList className="mb-4 grid w-full max-w-md grid-cols-2">
+                  <TabsTrigger value="multiple">Bulk Upload</TabsTrigger>
+                  <TabsTrigger value="single">Single Upload</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="multiple" className="mt-0">
+                  <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50/50 p-6">
+                    <div className="text-center mb-4">
+                      <Images className="mx-auto h-10 w-10 text-gray-400 mb-2" />
+                      <p className="text-sm text-muted-foreground">
+                        Drag and drop multiple images or click to select
+                      </p>
+                    </div>
+                    <MultiImageUploader
+                      folder="galleries"
+                      onImagesUploaded={handleMultipleImagesUploaded}
                     />
+                    {uploadingMultiple && (
+                      <div className="mt-4 flex items-center justify-center p-4 bg-white rounded-lg border">
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin text-primary" />
+                        <span className="text-sm font-medium">Uploading images...</span>
+                      </div>
+                    )}
                   </div>
-                  <ImageUploader
-                    folder="galleries"
-                    onImageUploaded={handleImageUploaded}
-                    onImageRemoved={handleImageRemoved}
-                    imageUrl={tempImageUrl}
-                  />
-                </div>
-              </TabsContent>
+                </TabsContent>
 
-              <TabsContent value="multiple" className="rounded-lg border p-3">
-                <h4 className="mb-2 font-medium">Upload Multiple Images</h4>
-                <p className="mb-3 text-sm text-muted-foreground">
-                  Select multiple images to upload at once. Captions can be added after upload.
-                </p>
-                <MultiImageUploader
-                  folder="galleries"
-                  onImagesUploaded={handleMultipleImagesUploaded}
-                />
-                {uploadingMultiple && (
-                  <div className="mt-3 flex items-center justify-center">
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    <span className="text-sm">Processing images...</span>
+                <TabsContent value="single" className="mt-0">
+                  <div className="rounded-lg border bg-white p-4">
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="new-image-caption">Caption</Label>
+                        <Input
+                          id="new-image-caption"
+                          placeholder="Optional image caption"
+                          value={newImageCaption}
+                          onChange={(e) => setNewImageCaption(e.target.value)}
+                        />
+                        <p className="text-xs text-muted-foreground">Add a description for this image</p>
+                      </div>
+                      <div>
+                        <Label className="mb-2 block">Image</Label>
+                        <ImageUploader
+                          folder="galleries"
+                          onImageUploaded={handleImageUploaded}
+                          onImageRemoved={handleImageRemoved}
+                          imageUrl={tempImageUrl}
+                        />
+                      </div>
+                    </div>
                   </div>
-                )}
-              </TabsContent>
-            </Tabs>
+                </TabsContent>
+              </Tabs>
+            </div>
 
-            <Separator className="my-3" />
+            <Separator />
 
-            <div>
-              <div className="mb-3 flex items-center justify-between">
-                <h4 className="font-medium">Gallery Images</h4>
-                <p className="text-sm text-muted-foreground">{galleryImages.length} images</p>
+            {/* Gallery Images Section */}
+            <div className="mt-6">
+              <div className="mb-4 flex items-center justify-between">
+                <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Gallery Images</h3>
+                <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">
+                  {galleryImages.length} {galleryImages.length === 1 ? 'image' : 'images'}
+                </span>
               </div>
 
               {galleryImages.length === 0 ? (
-                <p className="text-muted-foreground">No images in this gallery yet.</p>
+                <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 bg-gray-50/50 py-12">
+                  <Images className="h-12 w-12 text-gray-300 mb-3" />
+                  <p className="text-muted-foreground font-medium">No images yet</p>
+                  <p className="text-sm text-muted-foreground">Upload images using the options above</p>
+                </div>
               ) : (
-                <div className="grid max-h-[40vh] grid-cols-1 gap-3 overflow-y-auto p-1 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
                   {galleryImages.map((image) => (
-                    <div key={image.id} className="overflow-hidden rounded-lg border shadow-sm">
-                      <div className="relative aspect-square">
+                    <div
+                      key={image.id}
+                      className="group relative overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md"
+                    >
+                      <div className="relative aspect-square overflow-hidden bg-gray-100">
                         <img
                           src={image.image_url}
                           alt={image.caption || 'Gallery image'}
-                          className="h-full w-full object-cover"
+                          className="h-full w-full object-cover transition-transform group-hover:scale-105"
                         />
-                      </div>
-                      <div className="space-y-2 p-2">
-                        <Input
-                          placeholder="Image caption"
-                          value={image.caption || ''}
-                          onChange={(e) => handleUpdateImageCaption(image, e.target.value)}
-                          className="text-sm"
-                        />
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          className="h-8 w-full text-xs"
+                        {/* Delete button overlay */}
+                        <button
+                          className="absolute top-2 right-2 rounded-full bg-red-500 p-1.5 text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 hover:bg-red-600"
                           onClick={() => setImageToDelete(image)}
                         >
-                          <Trash2 size={12} className="mr-1" /> Delete
-                        </Button>
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                      <div className="p-2">
+                        <Input
+                          placeholder="Add caption..."
+                          value={image.caption || ''}
+                          onChange={(e) => handleUpdateImageCaption(image, e.target.value)}
+                          className="h-8 text-xs border-gray-200 focus:border-gray-300"
+                        />
                       </div>
                     </div>
                   ))}
@@ -646,15 +705,16 @@ export default function AdminGalleryPage() {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogTitle>Delete Gallery</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete the gallery &quot;{galleryToDelete?.title}&quot; and all
-              its images. This action cannot be undone.
+              Are you sure you want to delete &quot;{galleryToDelete?.title}&quot;? This will permanently remove the gallery and all its images. This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={deleteGallery}>Delete</AlertDialogAction>
+            <AlertDialogAction onClick={deleteGallery} className="bg-red-600 hover:bg-red-700">
+              Delete Gallery
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -663,18 +723,19 @@ export default function AdminGalleryPage() {
       <AlertDialog open={!!imageToDelete} onOpenChange={(open) => !open && setImageToDelete(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this image?</AlertDialogTitle>
+            <AlertDialogTitle>Delete Image</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete this image from the gallery. This action cannot be
-              undone.
+              Are you sure you want to delete this image? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={deleteGalleryImage}>Delete</AlertDialogAction>
+            <AlertDialogAction onClick={deleteGalleryImage} className="bg-red-600 hover:bg-red-700">
+              Delete Image
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>
+    </main>
   )
 }
