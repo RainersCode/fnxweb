@@ -1110,11 +1110,11 @@ export default function HomePage() {
             </div>
 
             {/* Sponsor logos */}
-            <div className="flex flex-wrap justify-center gap-6 sm:gap-10 items-center py-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4 sm:gap-6 py-8">
               {[1, 2, 3, 4, 5, 6, 7].map((num) => (
                 <div
                   key={num}
-                  className="group relative w-full max-w-[180px] h-[90px] flex items-center justify-center bg-white/10 backdrop-blur-sm rounded-lg p-4 transition-all duration-300 hover:bg-white/20 hover:scale-105 border border-white/10 hover:border-teal-400/50"
+                  className="group relative h-[80px] sm:h-[90px] flex items-center justify-center bg-white/10 backdrop-blur-sm rounded-lg p-3 sm:p-4 transition-all duration-300 hover:bg-white/20 hover:scale-105 border border-white/10 hover:border-teal-400/50"
                 >
                   <NextImage
                     src={num === 7
