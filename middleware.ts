@@ -2,22 +2,33 @@ import { authMiddleware, clerkClient } from '@clerk/nextjs'
 import { NextResponse } from 'next/server'
 
 
+// All public paths that should be accessible without authentication
 const publicPaths = [
-  '/articles',
-  '/fixtures',
-  '/galleries',
+  '/',
+  '/news',
+  '/about',
   '/team',
+  '/fixtures',
+  '/gallery',
   '/contact',
   '/sign-in',
+  '/sign-up',
+  '/articles',
+  '/galleries',
   '/api/webhook/clerk',
   '/api/galleries',
+  '/api/fixtures',
+  '/robots.txt',
+  '/sitemap.xml',
 ]
 
 const isPublic = (path: string) => {
   // Exact match for homepage
   if (path === '/') return true
-  // Check other public paths
-  return publicPaths.some((publicPath) => path.startsWith(publicPath))
+  // Check other public paths (startsWith to handle dynamic routes like /news/[id])
+  return publicPaths.some((publicPath) =>
+    path === publicPath || path.startsWith(publicPath + '/')
+  )
 }
 
 export default authMiddleware({
@@ -65,7 +76,24 @@ export default authMiddleware({
 
     return NextResponse.next()
   },
-  publicRoutes: [...publicPaths, '/api/galleries(.*)'],
+  publicRoutes: [
+    '/',
+    '/news(.*)',
+    '/about(.*)',
+    '/team(.*)',
+    '/fixtures(.*)',
+    '/gallery(.*)',
+    '/contact(.*)',
+    '/sign-in(.*)',
+    '/sign-up(.*)',
+    '/articles(.*)',
+    '/galleries(.*)',
+    '/api/webhook/clerk',
+    '/api/galleries(.*)',
+    '/api/fixtures(.*)',
+    '/robots.txt',
+    '/sitemap.xml',
+  ],
 })
 
 // Stop Middleware running on static files and api routes
