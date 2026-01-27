@@ -125,12 +125,12 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
             <Link href="/" className="group">
-              <div className="h-10 w-10 overflow-hidden transition-all duration-300 group-hover:scale-105">
+              <div className="h-12 w-12 lg:h-14 lg:w-14 overflow-hidden transition-all duration-300 group-hover:scale-105">
                 <Image
                   src="/Logo/fēniks_logo-removebg-preview.png"
                   alt="RK Fēnikss Logo"
-                  width={40}
-                  height={40}
+                  width={56}
+                  height={56}
                   className="object-contain"
                 />
               </div>
@@ -235,12 +235,12 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
         <div className="flex flex-col h-full px-6 py-4 overflow-y-auto">
           {/* Header */}
           <div className="flex items-center justify-between">
-            <div className="h-10 w-10 overflow-hidden">
+            <div className="h-12 w-12 overflow-hidden">
               <Image
                 src="/Logo/fēniks_logo-removebg-preview.png"
                 alt="RK Fēnikss Logo"
-                width={40}
-                height={40}
+                width={48}
+                height={48}
                 className="object-contain"
               />
             </div>
