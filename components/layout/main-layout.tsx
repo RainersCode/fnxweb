@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, type ReactNode, useEffect } from 'react'
+import { useState, type ReactNode, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Menu, X, ArrowRight, ChevronUp, Settings } from 'lucide-react'
@@ -18,6 +18,8 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [showScrollTop, setShowScrollTop] = useState(false)
+  const [isHeaderHidden, setIsHeaderHidden] = useState(false)
+  const lastScrollY = useRef(0)
   const { isSignedIn } = useAuth()
   const { user } = useUser()
   const userEmail = user?.emailAddresses[0]?.emailAddress
@@ -40,11 +42,29 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
 
   const currentPage = propCurrentPage || getActivePageKey(pathname)
 
-  // Scroll detection for header background and scroll-to-top button
+  // Scroll detection for header visibility, background, and scroll-to-top button
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
-      setShowScrollTop(window.scrollY > 400)
+      const currentScrollY = window.scrollY
+
+      setIsScrolled(currentScrollY > 50)
+      setShowScrollTop(currentScrollY > 400)
+
+      // Hide header on scroll down, show on scroll up
+      if (currentScrollY > 100) {
+        if (currentScrollY > lastScrollY.current) {
+          // Scrolling down
+          setIsHeaderHidden(true)
+        } else {
+          // Scrolling up
+          setIsHeaderHidden(false)
+        }
+      } else {
+        // Always show header near top of page
+        setIsHeaderHidden(false)
+      }
+
+      lastScrollY.current = currentScrollY
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -92,11 +112,11 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
     <div className="flex min-h-screen flex-col bg-white font-sans text-zinc-900">
       {/* Header */}
       <header
-        className={`sticky top-0 z-50 transition-all duration-500 ${
+        className={`sticky top-0 z-50 transition-all duration-300 ${
           isScrolled
             ? 'bg-teal-900/95 backdrop-blur-md shadow-lg'
             : 'bg-gradient-to-r from-teal-900 to-teal-700'
-        }`}
+        } ${isHeaderHidden ? '-translate-y-full' : 'translate-y-0'}`}
       >
         {/* Top accent line */}
         <div className="h-1 bg-gradient-to-r from-teal-400 via-teal-300 to-teal-400" />
@@ -105,19 +125,14 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
             <Link href="/" className="group">
-              <div className="flex skew-x-[-12deg] transform items-center gap-2 bg-white px-3 py-1.5 shadow-md transition-all duration-300 group-hover:shadow-lg group-hover:scale-105">
-                <div className="h-8 w-8 skew-x-[12deg] transform overflow-hidden">
-                  <Image
-                    src="/Logo/fēniks_logo-removebg-preview.png"
-                    alt="RK Fēnikss Logo"
-                    width={32}
-                    height={32}
-                    className="object-contain"
-                  />
-                </div>
-                <span className="skew-x-[12deg] transform text-xl font-bold tracking-tighter text-teal-800">
-                  RK &quot;FĒNIKSS&quot;
-                </span>
+              <div className="h-10 w-10 overflow-hidden transition-all duration-300 group-hover:scale-105">
+                <Image
+                  src="/Logo/fēniks_logo-removebg-preview.png"
+                  alt="RK Fēnikss Logo"
+                  width={40}
+                  height={40}
+                  className="object-contain"
+                />
               </div>
             </Link>
 
@@ -220,19 +235,14 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
         <div className="flex flex-col h-full px-6 py-4 overflow-y-auto">
           {/* Header */}
           <div className="flex items-center justify-between">
-            <div className="flex skew-x-[-12deg] transform items-center gap-2 bg-white px-3 py-1.5 shadow-md">
-              <div className="h-8 w-8 skew-x-[12deg] transform overflow-hidden">
-                <Image
-                  src="/Logo/fēniks_logo-removebg-preview.png"
-                  alt="RK Fēnikss Logo"
-                  width={32}
-                  height={32}
-                  className="object-contain"
-                />
-              </div>
-              <span className="skew-x-[12deg] transform text-lg font-bold tracking-tighter text-teal-800">
-                RK &quot;FĒNIKSS&quot;
-              </span>
+            <div className="h-10 w-10 overflow-hidden">
+              <Image
+                src="/Logo/fēniks_logo-removebg-preview.png"
+                alt="RK Fēnikss Logo"
+                width={40}
+                height={40}
+                className="object-contain"
+              />
             </div>
             <button
               className="skew-x-[-12deg] transform bg-white/10 border border-white/20 p-2.5 text-white transition-all duration-300 hover:bg-white/20"
@@ -394,19 +404,14 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
           <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
             {/* Logo & Description */}
             <div className="lg:col-span-1">
-              <div className="flex skew-x-[-12deg] transform items-center gap-2 bg-white px-4 py-2 shadow-lg w-fit mb-6">
-                <div className="h-10 w-10 skew-x-[12deg] transform overflow-hidden">
-                  <Image
-                    src="/Logo/fēniks_logo-removebg-preview.png"
-                    alt="RK Fēnikss Logo"
-                    width={40}
-                    height={40}
-                    className="object-contain"
-                  />
-                </div>
-                <span className="skew-x-[12deg] transform text-xl font-bold tracking-tighter text-teal-800">
-                  RK &quot;FĒNIKSS&quot;
-                </span>
+              <div className="h-12 w-12 overflow-hidden mb-6">
+                <Image
+                  src="/Logo/fēniks_logo-removebg-preview.png"
+                  alt="RK Fēnikss Logo"
+                  width={48}
+                  height={48}
+                  className="object-contain"
+                />
               </div>
               <p className="text-teal-100/80 text-sm leading-relaxed mb-6">
                 Valmieras novada regbija klubs, dibināts 2005. gadā, apvieno dažāda vecuma un prasmju spēlētājus vienotā komandā.
