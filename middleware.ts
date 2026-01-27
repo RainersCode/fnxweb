@@ -1,108 +1,86 @@
-import { authMiddleware, clerkClient } from '@clerk/nextjs'
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 
-
-// All public paths that should be accessible without authentication
-const publicPaths = [
+// Define public routes that don't require authentication
+const isPublicRoute = createRouteMatcher([
   '/',
-  '/news',
-  '/about',
-  '/team',
-  '/fixtures',
-  '/gallery',
-  '/contact',
-  '/sign-in',
-  '/sign-up',
-  '/articles',
-  '/galleries',
+  '/news(.*)',
+  '/about(.*)',
+  '/team(.*)',
+  '/fixtures(.*)',
+  '/gallery(.*)',
+  '/contact(.*)',
+  '/sign-in(.*)',
+  '/sign-up(.*)',
+  '/articles(.*)',
+  '/galleries(.*)',
+  '/blog(.*)',
+  '/privacy-policy(.*)',
+  '/cookies-policy(.*)',
   '/api/webhook/clerk',
-  '/api/galleries',
-  '/api/fixtures',
+  '/api/galleries(.*)',
+  '/api/fixtures(.*)',
+  '/api/send(.*)',
   '/robots.txt',
   '/sitemap.xml',
-]
+  '/opengraph-image(.*)',
+  '/icon.png',
+  '/apple-icon.png',
+  '/favicon.ico',
+])
 
-const isPublic = (path: string) => {
-  // Exact match for homepage
-  if (path === '/') return true
-  // Check other public paths (startsWith to handle dynamic routes like /news/[id])
-  return publicPaths.some((publicPath) =>
-    path === publicPath || path.startsWith(publicPath + '/')
-  )
-}
+// Define admin routes that require special authorization
+const isAdminRoute = createRouteMatcher(['/admin(.*)'])
 
-export default authMiddleware({
-  async afterAuth(auth, req) {
-    const { userId } = auth
-    const path = req.nextUrl.pathname
+export default clerkMiddleware(async (auth, req) => {
+  const path = req.nextUrl.pathname
 
-    // Special case for galleries API - always allow access
-    if (path.startsWith('/api/galleries')) {
-      return NextResponse.next()
+  // Always allow public routes without any auth check
+  if (isPublicRoute(req)) {
+    return NextResponse.next()
+  }
+
+  // Handle admin routes
+  if (isAdminRoute(req)) {
+    const { userId } = await auth()
+    const allowedEmails = process.env.ALLOWED_EMAILS || ''
+
+    // If not authenticated, redirect to sign-in
+    if (!userId) {
+      const signInUrl = new URL('/sign-in', req.url)
+      signInUrl.searchParams.set('redirect_url', req.url)
+      return NextResponse.redirect(signInUrl)
     }
 
-    // Allow public paths and static files
-    if (isPublic(path) || path.includes('.')) {
-      return NextResponse.next()
-    }
+    try {
+      // Import clerkClient dynamically to avoid issues
+      const { clerkClient } = await import('@clerk/nextjs/server')
+      const client = await clerkClient()
+      const user = await client.users.getUser(userId)
+      const userEmail = user.emailAddresses[0]?.emailAddress
 
-    // If trying to access admin routes
-    if (path.startsWith('/admin')) {
-      const allowedEmails = process.env.ALLOWED_EMAILS
-
-      // If not authenticated, redirect to sign-in
-      if (!userId) {
-        const signInUrl = new URL('/sign-in', req.url)
-        signInUrl.searchParams.set('redirect_url', req.url)
-        return NextResponse.redirect(signInUrl)
-      }
-
-      try {
-        // Get the user's email directly from Clerk
-        const user = await clerkClient.users.getUser(userId)
-        const userEmail = user.emailAddresses[0]?.emailAddress
-
-        // If no email or not authorized
-        if (!userEmail || !allowedEmails.includes(userEmail)) {
-          return NextResponse.redirect(new URL('/', req.url))
-        }
-
-        return NextResponse.next()
-      } catch (error) {
-        console.error('Error in auth process:', error)
+      // If no email or not authorized
+      if (!userEmail || !allowedEmails.includes(userEmail)) {
         return NextResponse.redirect(new URL('/', req.url))
       }
-    }
 
-    return NextResponse.next()
-  },
-  publicRoutes: [
-    '/',
-    '/news(.*)',
-    '/about(.*)',
-    '/team(.*)',
-    '/fixtures(.*)',
-    '/gallery(.*)',
-    '/contact(.*)',
-    '/sign-in(.*)',
-    '/sign-up(.*)',
-    '/articles(.*)',
-    '/galleries(.*)',
-    '/api/webhook/clerk',
-    '/api/galleries(.*)',
-    '/api/fixtures(.*)',
-    '/robots.txt',
-    '/sitemap.xml',
-  ],
+      return NextResponse.next()
+    } catch (error) {
+      console.error('Error in auth process:', error)
+      return NextResponse.redirect(new URL('/', req.url))
+    }
+  }
+
+  // For any other routes, allow access
+  return NextResponse.next()
 })
 
-// Stop Middleware running on static files and api routes
+// Configure which routes the middleware runs on
 export const config = {
   matcher: [
-    // Skip all static files (files with extensions like .png, .jpg, .css, .js)
-    // Skip _next folder
-    '/((?!.+\\.[\\w]+$|_next).*)',
-    '/',
+    // Skip static files and Next.js internals
+    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    // Always run for API routes
     '/(api|trpc)(.*)',
   ],
 }
