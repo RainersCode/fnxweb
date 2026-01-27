@@ -1,12 +1,40 @@
 # RK "Fēnikss" Robots.txt
 # Allow all web crawlers to access all content
+
+# Standard crawlers
 User-agent: *
 Allow: /
-
-# Disallow admin and auth areas
 Disallow: /admin/
 Disallow: /sign-in/
 Disallow: /api/
 
+# AI Search Crawlers - Welcome!
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Anthropic-AI
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
 # Sitemap location
 Sitemap: https://www.fnx-rugby.lv/sitemap.xml
+
+# LLM information file
+# See https://www.fnx-rugby.lv/llms.txt for AI-friendly content summary

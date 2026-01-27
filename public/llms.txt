@@ -1,0 +1,45 @@
+# RK Fēnikss - Valmieras Regbija Klubs
+
+> RK "Fēnikss" ir Valmieras vadošais regbija klubs, dibināts 2005. gadā. Klubs apvieno dažāda vecuma un prasmju spēlētājus vienotā komandā.
+
+## Par Klubu
+
+RK "Fēnikss" ir regbija klubs no Valmieras, Latvija. Klubs dibināts 2005. gadā un ir viens no aktīvākajiem regbija klubiem Latvijā. Mēs piedāvājam treniņus gan pieaugušajiem, gan jauniešiem.
+
+## Kontaktinformācija
+
+- **Adrese**: Valmiera, Latvija
+- **E-pasts**: info@fnx-rugby.lv
+- **Facebook**: https://www.facebook.com/RKFenikss
+- **Instagram**: https://www.instagram.com/rk_fenikss/
+
+## Mājas lapas sadaļas
+
+- `/` - Sākumlapa ar jaunākajām ziņām, galerijām un spēļu grafiku
+- `/news` - Kluba jaunumi un raksti
+- `/gallery` - Foto galerijas no spēlēm un pasākumiem
+- `/team` - Komandas sastāvs - spēlētāji un treneri
+- `/fixtures` - Spēļu grafiks un rezultāti
+- `/about` - Par klubu, vēsture un misija
+- `/contact` - Kontaktforma un informācija
+- `/noteikumi` - Regbija noteikumi iesācējiem
+
+## Galvenās funkcijas
+
+1. **Ziņas** - Regulāri atjauninātas kluba ziņas un raksti
+2. **Galerijas** - Foto galerijas no spēlēm, treniņiem un pasākumiem
+3. **Spēļu grafiks** - Gaidāmās spēles ar datumiem, laikiem un vietām
+4. **Treniņu laiki** - Nedēļas treniņu grafiks ar atrašanās vietām
+5. **Komanda** - Spēlētāju un treneru profili
+
+## Tehnoloģijas
+
+Mājas lapa izveidota ar Next.js, React un Tailwind CSS. Datu bāze - Supabase.
+
+## Valoda
+
+Mājas lapas galvenā valoda ir latviešu (lv-LV).
+
+## Atjaunināšana
+
+Saturs tiek regulāri atjaunināts ar jaunākajām ziņām, spēļu rezultātiem un foto galerijām.

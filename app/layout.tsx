@@ -20,6 +20,7 @@ export const metadata: Metadata = {
   creator: 'RK Fēnikss',
   publisher: 'RK Fēnikss',
   category: 'Sports',
+  referrer: 'origin-when-cross-origin',
   metadataBase: new URL('https://www.fnx-rugby.lv'),
   alternates: {
     canonical: '/',
@@ -80,6 +81,55 @@ export const metadata: Metadata = {
   },
 }
 
+// Organization JSON-LD structured data for AI and search engines
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SportsOrganization',
+  '@id': 'https://www.fnx-rugby.lv/#organization',
+  name: 'RK Fēnikss',
+  alternateName: ['Regbija Klubs Fēnikss', 'RK Feniks', 'Fēnikss Rugby Club'],
+  description: 'RK "Fēnikss" ir Valmieras vadošais regbija klubs, dibināts 2005. gadā. Klubs apvieno dažāda vecuma un prasmju spēlētājus vienotā komandā.',
+  url: 'https://www.fnx-rugby.lv',
+  logo: {
+    '@type': 'ImageObject',
+    url: 'https://www.fnx-rugby.lv/logo.png',
+    width: 512,
+    height: 512,
+  },
+  image: 'https://www.fnx-rugby.lv/og-image.jpg',
+  foundingDate: '2005',
+  sport: 'Rugby',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Valmiera',
+    addressCountry: 'LV',
+  },
+  sameAs: [
+    'https://www.facebook.com/RKFenikss',
+    'https://www.instagram.com/rk_fenikss/',
+  ],
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'customer service',
+    email: 'info@fnx-rugby.lv',
+    availableLanguage: ['Latvian', 'English'],
+  },
+}
+
+// WebSite JSON-LD for search features
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': 'https://www.fnx-rugby.lv/#website',
+  name: 'RK Fēnikss',
+  url: 'https://www.fnx-rugby.lv',
+  description: 'RK "Fēnikss" oficiālā mājaslapa - Valmieras regbija klubs',
+  publisher: {
+    '@id': 'https://www.fnx-rugby.lv/#organization',
+  },
+  inLanguage: 'lv-LV',
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <ClerkProvider
@@ -107,6 +157,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       }}
     >
       <html lang="lv" suppressHydrationWarning>
+        <head>
+          {/* JSON-LD Structured Data for AI and Search Engines */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(organizationJsonLd),
+            }}
+          />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(websiteJsonLd),
+            }}
+          />
+          {/* AI Search Tool hints */}
+          <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM Information" />
+        </head>
         <body
           className={cn(inter.className, 'min-h-screen bg-background')}
           suppressHydrationWarning
