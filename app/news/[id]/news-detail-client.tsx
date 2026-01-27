@@ -2,18 +2,30 @@
 
 import { default as NextImage } from 'next/image'
 import Link from 'next/link'
-import { ArrowLeft, CalendarDays, User, Clock, Share2, Facebook, Twitter, Newspaper } from 'lucide-react'
+import { ArrowLeft, CalendarDays, User, Clock, Share2, Facebook, Newspaper } from 'lucide-react'
+
+// X (Twitter) icon component
+const XIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="currentColor">
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+)
 import MainLayout from '@/components/layout/main-layout'
 import { prepareImagePath } from '@/lib/supabase'
-import { Article } from '@/types/supabase'
+import { Article, Gallery } from '@/types/supabase'
+
+interface GalleryWithThumbnail extends Gallery {
+  thumbnailUrl: string
+}
 
 interface NewsDetailClientProps {
   article: Article | null
   relatedArticles: Article[]
+  latestGalleries: GalleryWithThumbnail[]
   pageUrl: string
 }
 
-export function NewsDetailClient({ article, relatedArticles, pageUrl }: NewsDetailClientProps) {
+export function NewsDetailClient({ article, relatedArticles, latestGalleries, pageUrl }: NewsDetailClientProps) {
   const formatDate = (dateString: string): string => {
     const options: Intl.DateTimeFormatOptions = {
       year: 'numeric',
@@ -126,7 +138,9 @@ export function NewsDetailClient({ article, relatedArticles, pageUrl }: NewsDeta
         {/* Article Content */}
         <section className="relative py-8 sm:py-12 md:py-16 bg-gray-50 overflow-hidden">
           <div className="container mx-auto px-4 sm:px-6">
-            <div className="max-w-3xl mx-auto">
+            <div className="max-w-6xl mx-auto lg:grid lg:grid-cols-[1fr_300px] lg:gap-8">
+              {/* Main Article Column */}
+              <div>
               {/* Article card */}
               <div className="relative bg-white rounded-lg shadow-lg sm:shadow-xl -mt-12 sm:-mt-16 md:-mt-20 z-10 overflow-hidden">
                 {/* Top accent */}
@@ -173,10 +187,10 @@ export function NewsDetailClient({ article, relatedArticles, pageUrl }: NewsDeta
                           href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(pageUrl)}&text=${encodeURIComponent(article.title)}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-10 h-10 flex items-center justify-center bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors"
-                          aria-label="Share on Twitter"
+                          className="w-10 h-10 flex items-center justify-center bg-black text-white rounded-lg hover:bg-zinc-800 transition-colors"
+                          aria-label="Share on X"
                         >
-                          <Twitter className="h-5 w-5" />
+                          <XIcon className="h-5 w-5" />
                         </a>
                       </div>
                     </div>
@@ -197,6 +211,99 @@ export function NewsDetailClient({ article, relatedArticles, pageUrl }: NewsDeta
                     </div>
                   </div>
                 </div>
+              )}
+
+              {/* Mobile Gallery Section - Below article */}
+              {latestGalleries.length > 0 && (
+                <div className="mt-8 lg:hidden">
+                  <div className="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div className="bg-teal-700 px-5 py-3">
+                      <h3 className="text-lg font-bold text-white">Jaunākās galerijas</h3>
+                    </div>
+                    <div className="p-4 grid grid-cols-2 gap-3">
+                      {latestGalleries.map((gallery) => (
+                        <Link
+                          key={gallery.id}
+                          href={`/gallery/${gallery.id}`}
+                          className="group block"
+                        >
+                          <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
+                            <NextImage
+                              src={gallery.thumbnailUrl}
+                              alt={gallery.title}
+                              fill
+                              className="object-cover transition-transform duration-300 group-hover:scale-105"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                            <div className="absolute bottom-2 left-2 right-2">
+                              <p className="text-white text-sm font-medium line-clamp-2">{gallery.title}</p>
+                            </div>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                    <div className="px-4 pb-4">
+                      <Link
+                        href="/gallery"
+                        className="block text-center text-teal-700 hover:text-teal-800 font-medium text-sm py-2 border border-teal-200 rounded-lg hover:bg-teal-50 transition-colors"
+                      >
+                        Skatīt visas galerijas
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
+              </div>
+
+              {/* Desktop Sidebar - Gallery Column */}
+              {latestGalleries.length > 0 && (
+                <aside className="hidden lg:block">
+                  <div className="sticky top-24">
+                    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+                      {/* Sidebar Header */}
+                      <div className="bg-teal-700 px-4 py-3">
+                        <h3 className="text-lg font-bold text-white">Jaunākās galerijas</h3>
+                      </div>
+
+                      {/* Gallery Items */}
+                      <div className="p-4 space-y-4">
+                        {latestGalleries.map((gallery) => (
+                          <Link
+                            key={gallery.id}
+                            href={`/gallery/${gallery.id}`}
+                            className="group block"
+                          >
+                            <div className="relative aspect-[4/3] rounded-lg overflow-hidden mb-2">
+                              <NextImage
+                                src={gallery.thumbnailUrl}
+                                alt={gallery.title}
+                                fill
+                                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            </div>
+                            <h4 className="text-sm font-semibold text-zinc-800 group-hover:text-teal-700 transition-colors line-clamp-2">
+                              {gallery.title}
+                            </h4>
+                            {gallery.description && (
+                              <p className="text-xs text-zinc-500 mt-1 line-clamp-2">{gallery.description}</p>
+                            )}
+                          </Link>
+                        ))}
+                      </div>
+
+                      {/* View All Link */}
+                      <div className="px-4 pb-4">
+                        <Link
+                          href="/gallery"
+                          className="block text-center text-teal-700 hover:text-teal-800 font-medium text-sm py-2 border border-teal-200 rounded-lg hover:bg-teal-50 transition-colors"
+                        >
+                          Skatīt visas galerijas
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </aside>
               )}
             </div>
           </div>

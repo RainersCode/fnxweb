@@ -10,6 +10,7 @@ import { HomeNewsSection } from '@/components/features/home-news-section'
 import { HomeGallerySection } from '@/components/features/home-gallery-section'
 import { HomeFixturesSection } from '@/components/features/home-fixtures-section'
 import { HomeTrainingSection } from '@/components/features/home-training-section'
+import { HomeSocialSection } from '@/components/features/home-social-section'
 
 // Revalidate data every 60 seconds
 export const revalidate = 60
@@ -238,6 +239,9 @@ export default async function HomePage() {
 
         {/* Training Schedule Section */}
         <HomeTrainingSection sessions={trainingSessions} />
+
+        {/* Social Media Section */}
+        <HomeSocialSection />
 
         {/* Sponsors Section with Parallax */}
         <section className="relative py-20 overflow-hidden">

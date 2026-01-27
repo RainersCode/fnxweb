@@ -1,7 +1,12 @@
 import { Metadata } from 'next'
 import { supabase, prepareImagePath } from '@/lib/supabase'
-import { Article } from '@/types/supabase'
+import { Article, Gallery } from '@/types/supabase'
 import { NewsDetailClient } from './news-detail-client'
+
+// Type for gallery with thumbnail
+interface GalleryWithThumbnail extends Gallery {
+  thumbnailUrl: string
+}
 
 // Helper function to strip HTML (server-safe version)
 function stripHtml(html: string): string {
@@ -38,6 +43,45 @@ async function getRelatedArticles(id: string): Promise<Article[]> {
     return data || []
   } catch (error) {
     console.error('Error fetching related articles:', error)
+    return []
+  }
+}
+
+// Fetch latest galleries with thumbnails
+async function getLatestGalleries(): Promise<GalleryWithThumbnail[]> {
+  try {
+    const { data: galleriesData, error } = await supabase
+      .from('galleries')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(4)
+
+    if (error) throw error
+
+    // For each gallery, get the first image as thumbnail
+    const galleriesWithThumbnails = await Promise.all(
+      (galleriesData || []).map(async (gallery) => {
+        const { data: imagesData } = await supabase
+          .from('gallery_images')
+          .select('image_url')
+          .eq('gallery_id', gallery.id)
+          .order('display_order', { ascending: true })
+          .limit(1)
+
+        const thumbnailUrl = imagesData && imagesData.length > 0
+          ? prepareImagePath(imagesData[0].image_url)
+          : '/placeholder.svg?height=200&width=300&text=Gallery'
+
+        return {
+          ...gallery,
+          thumbnailUrl
+        }
+      })
+    )
+
+    return galleriesWithThumbnails
+  } catch (error) {
+    console.error('Error fetching galleries:', error)
     return []
   }
 }
@@ -130,9 +174,10 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ id:
   const { id } = await params
 
   // Fetch data on the server
-  const [article, relatedArticles] = await Promise.all([
+  const [article, relatedArticles, latestGalleries] = await Promise.all([
     getArticle(id),
     getRelatedArticles(id),
+    getLatestGalleries(),
   ])
 
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://rkfenikss.lv'
@@ -154,6 +199,7 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ id:
       <NewsDetailClient
         article={article}
         relatedArticles={relatedArticles}
+        latestGalleries={latestGalleries}
         pageUrl={pageUrl}
       />
     </>
