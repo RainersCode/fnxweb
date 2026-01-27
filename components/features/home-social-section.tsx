@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { Facebook, Instagram, ExternalLink } from 'lucide-react'
+import { Facebook, Instagram, ExternalLink, Share2 } from 'lucide-react'
 import Link from 'next/link'
 
 export function HomeSocialSection() {
@@ -30,18 +30,20 @@ export function HomeSocialSection() {
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         {/* Section Header */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-12 h-0.5 bg-teal-400 skew-x-[-12deg]" />
-            <span className="text-teal-300 font-semibold tracking-wider text-sm uppercase">Seko mums</span>
-            <div className="w-12 h-0.5 bg-teal-400 skew-x-[-12deg]" />
+        <div className="mx-auto mb-14 max-w-2xl text-center">
+          <div className="inline-flex items-center gap-3 mb-4">
+            <div className="w-10 h-0.5 bg-teal-400 skew-x-[-12deg]" />
+            <Share2 className="h-5 w-5 text-teal-300" />
+            <div className="w-10 h-0.5 bg-teal-400 skew-x-[-12deg]" />
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Sociālie <span className="text-teal-300">tīkli</span>
+          <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tighter">
+            <span className="text-white">SOCIĀLIE </span>
+            <span className="text-teal-300 italic font-light">TĪKLI</span>
           </h2>
-          <p className="text-teal-100 max-w-2xl mx-auto">
+          <p className="mt-4 text-teal-100 max-w-md mx-auto">
             Seko mūsu jaunākajām ziņām un notikumiem sociālajos tīklos!
           </p>
+          <div className="mx-auto mt-4 h-1 w-20 bg-teal-400 skew-x-[-12deg]" />
         </div>
 
         {/* Social Feeds Grid */}
@@ -67,7 +69,7 @@ export function HomeSocialSection() {
               </Link>
             </div>
 
-            {/* Facebook Page Plugin */}
+            {/* Facebook Page Plugin - Note: FB plugin has max width of 500px */}
             <div className="p-4 bg-white min-h-[400px] flex items-center justify-center">
               <div
                 className="fb-page"

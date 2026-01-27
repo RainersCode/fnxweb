@@ -2,17 +2,7 @@
 
 import { MainLayout } from '@/components/layout/main-layout'
 import { ParallaxHeroSection } from '@/components/features/parallax-hero-section'
-import {
-  Target,
-  Ruler,
-  Trophy,
-  MoveRight,
-  Shield,
-  Users,
-  Flag,
-  AlertTriangle,
-  Play
-} from 'lucide-react'
+import { Target, Play } from 'lucide-react'
 
 export default function RulesPage() {
   return (
@@ -32,15 +22,18 @@ export default function RulesPage() {
           <div className="absolute top-20 left-0 w-32 h-0.5 bg-teal-700/10 skew-x-[-12deg]" />
 
           <div className="container mx-auto px-4 sm:px-6">
-            <div className="max-w-4xl mx-auto">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-0.5 bg-teal-600 skew-x-[-12deg]" />
-                <span className="text-teal-600 font-semibold tracking-wider text-sm">IEVADS</span>
+            <div className="max-w-4xl mx-auto text-center">
+              <div className="inline-flex items-center gap-3 mb-4">
+                <div className="w-10 h-0.5 bg-teal-700 skew-x-[-12deg]" />
+                <Target className="h-5 w-5 text-teal-600" />
+                <div className="w-10 h-0.5 bg-teal-700 skew-x-[-12deg]" />
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-zinc-900 mb-6">
-                Kas ir <span className="text-teal-600">regbijs?</span>
+              <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tighter">
+                <span className="text-teal-900">KAS IR </span>
+                <span className="text-teal-600 italic font-light">REGBIJS?</span>
               </h2>
-              <p className="text-lg text-zinc-600 leading-relaxed">
+              <div className="mx-auto mt-4 h-1 w-20 bg-teal-700 skew-x-[-12deg]" />
+              <p className="mt-6 text-lg text-zinc-600 leading-relaxed max-w-2xl mx-auto">
                 Regbijs ir kontakta komandu sporta spēle, kurā piedalās divas komandas ar 15 spēlētājiem katrā.
                 Spēles mērķis ir gūt vairāk punktus nekā pretinieki, ievērojot noteikumus un sportisko garu.
                 Spēle ilgst 80 minūtes — divi puslaiki pa 40 minūtēm ar pārtraukumu starp tiem.
@@ -57,15 +50,17 @@ export default function RulesPage() {
           <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-8">
-                <div className="flex items-center justify-center gap-3 mb-4">
-                  <div className="w-12 h-0.5 bg-teal-400 skew-x-[-12deg]" />
-                  <span className="text-teal-300 font-semibold tracking-wider text-sm">VIDEO</span>
-                  <div className="w-12 h-0.5 bg-teal-400 skew-x-[-12deg]" />
+                <div className="inline-flex items-center gap-3 mb-4">
+                  <div className="w-10 h-0.5 bg-teal-400 skew-x-[-12deg]" />
+                  <Play className="h-5 w-5 text-teal-300" />
+                  <div className="w-10 h-0.5 bg-teal-400 skew-x-[-12deg]" />
                 </div>
-                <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                  Regbija noteikumi video formātā
+                <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tighter">
+                  <span className="text-white">VIDEO </span>
+                  <span className="text-teal-300 italic font-light">PAMĀCĪBA</span>
                 </h2>
-                <p className="text-teal-100">
+                <div className="mx-auto mt-4 h-1 w-20 bg-teal-400 skew-x-[-12deg]" />
+                <p className="mt-4 text-teal-100 max-w-md mx-auto">
                   Noskatieties īsu video, lai labāk izprastu regbija pamatus
                 </p>
               </div>
@@ -87,12 +82,9 @@ export default function RulesPage() {
         <section className="relative py-16 bg-zinc-50 overflow-hidden">
           <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-4xl mx-auto">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-14 h-14 bg-teal-600 flex items-center justify-center skew-x-[-6deg]">
-                  <Ruler className="h-7 w-7 text-white skew-x-[6deg]" />
-                </div>
-                <h2 className="text-2xl md:text-3xl font-bold text-zinc-900">Spēles laukums</h2>
-              </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-zinc-900 border-l-4 border-teal-600 pl-4 mb-8">
+                Spēles laukums
+              </h2>
               <div className="bg-white p-8 shadow-lg border-l-4 border-teal-600">
                 <p className="text-zinc-600 leading-relaxed">
                   Regbija laukums ir taisnstūra formas zāliens. Tā garums ir līdz <strong>100 metriem</strong>,
@@ -111,12 +103,9 @@ export default function RulesPage() {
 
           <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-4xl mx-auto">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-14 h-14 bg-teal-600 flex items-center justify-center skew-x-[-6deg]">
-                  <Trophy className="h-7 w-7 text-white skew-x-[6deg]" />
-                </div>
-                <h2 className="text-2xl md:text-3xl font-bold text-zinc-900">Kā gūst punktus?</h2>
-              </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-zinc-900 border-l-4 border-teal-600 pl-4 mb-8">
+                Kā gūst punktus?
+              </h2>
 
               <div className="grid gap-6">
                 {/* Try */}
@@ -177,12 +166,9 @@ export default function RulesPage() {
         <section className="relative py-16 bg-zinc-50 overflow-hidden">
           <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-4xl mx-auto">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-14 h-14 bg-teal-600 flex items-center justify-center skew-x-[-6deg]">
-                  <MoveRight className="h-7 w-7 text-white skew-x-[6deg]" />
-                </div>
-                <h2 className="text-2xl md:text-3xl font-bold text-zinc-900">Bumbas pārvietošana</h2>
-              </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-zinc-900 border-l-4 border-teal-600 pl-4 mb-8">
+                Bumbas pārvietošana
+              </h2>
 
               <div className="bg-white p-8 shadow-lg">
                 <p className="text-zinc-600 mb-6">Bumbu var pārvietot trīs veidos:</p>
@@ -218,12 +204,9 @@ export default function RulesPage() {
 
           <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-4xl mx-auto">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-14 h-14 bg-teal-600 flex items-center justify-center skew-x-[-6deg]">
-                  <Shield className="h-7 w-7 text-white skew-x-[6deg]" />
-                </div>
-                <h2 className="text-2xl md:text-3xl font-bold text-zinc-900">Galvenie spēles elementi</h2>
-              </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-zinc-900 border-l-4 border-teal-600 pl-4 mb-8">
+                Galvenie spēles elementi
+              </h2>
 
               <div className="grid md:grid-cols-2 gap-6">
                 {/* Tackle */}
@@ -285,12 +268,9 @@ export default function RulesPage() {
         <section className="relative py-16 bg-zinc-50 overflow-hidden">
           <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-4xl mx-auto">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-14 h-14 bg-amber-500 flex items-center justify-center skew-x-[-6deg]">
-                  <AlertTriangle className="h-7 w-7 text-white skew-x-[6deg]" />
-                </div>
-                <h2 className="text-2xl md:text-3xl font-bold text-zinc-900">Aizspēle (Offside)</h2>
-              </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-zinc-900 border-l-4 border-amber-500 pl-4 mb-8">
+                Aizspēle (Offside)
+              </h2>
 
               <div className="bg-white p-8 shadow-lg border-l-4 border-amber-500">
                 <p className="text-zinc-600 leading-relaxed">
@@ -309,12 +289,9 @@ export default function RulesPage() {
 
           <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-4xl mx-auto">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-14 h-14 bg-teal-600 flex items-center justify-center skew-x-[-6deg]">
-                  <Users className="h-7 w-7 text-white skew-x-[6deg]" />
-                </div>
-                <h2 className="text-2xl md:text-3xl font-bold text-zinc-900">Spēlētāju pozīcijas</h2>
-              </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-zinc-900 border-l-4 border-teal-600 pl-4 mb-8">
+                Spēlētāju pozīcijas
+              </h2>
 
               <p className="text-zinc-600 mb-8">
                 Regbija komandā ir 15 spēlētāji, kas sadalīti divās grupās:
@@ -366,12 +343,9 @@ export default function RulesPage() {
               <div className="grid md:grid-cols-2 gap-8">
                 {/* Kickoff */}
                 <div>
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 bg-teal-600 flex items-center justify-center skew-x-[-6deg]">
-                      <Play className="h-6 w-6 text-white skew-x-[6deg]" />
-                    </div>
-                    <h2 className="text-xl font-bold text-zinc-900">Sākuma sitiens</h2>
-                  </div>
+                  <h2 className="text-xl font-bold text-zinc-900 border-l-4 border-teal-600 pl-4 mb-6">
+                    Sākuma sitiens
+                  </h2>
                   <div className="bg-white p-6 shadow-md">
                     <p className="text-zinc-600 text-sm">
                       Spēle sākas ar sākuma sitienu no laukuma centra.
@@ -383,12 +357,9 @@ export default function RulesPage() {
 
                 {/* Penalties */}
                 <div>
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 bg-amber-500 flex items-center justify-center skew-x-[-6deg]">
-                      <Flag className="h-6 w-6 text-white skew-x-[6deg]" />
-                    </div>
-                    <h2 className="text-xl font-bold text-zinc-900">Sodi un pārkāpumi</h2>
-                  </div>
+                  <h2 className="text-xl font-bold text-zinc-900 border-l-4 border-amber-500 pl-4 mb-6">
+                    Sodi un pārkāpumi
+                  </h2>
                   <div className="bg-white p-6 shadow-md">
                     <p className="text-zinc-600 text-sm mb-4">
                       Ja komanda pārkāpj noteikumus, pretiniekam tiek piešķirts:
@@ -420,14 +391,21 @@ export default function RulesPage() {
         </section>
 
         {/* CTA */}
-        <section className="relative py-16 bg-gradient-to-r from-teal-900 to-teal-700 overflow-hidden">
+        <section className="relative py-20 bg-gradient-to-r from-teal-900 to-teal-700 overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-teal-400 via-teal-300 to-teal-400" />
 
           <div className="container mx-auto px-4 sm:px-6 text-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-              Gatavs izmēģināt regbiju?
+            <div className="inline-flex items-center gap-3 mb-4">
+              <div className="w-10 h-0.5 bg-teal-400 skew-x-[-12deg]" />
+              <Target className="h-5 w-5 text-teal-300" />
+              <div className="w-10 h-0.5 bg-teal-400 skew-x-[-12deg]" />
+            </div>
+            <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tighter">
+              <span className="text-white">GATAVS </span>
+              <span className="text-teal-300 italic font-light">IZMĒĢINĀT?</span>
             </h2>
-            <p className="text-teal-100 mb-8 max-w-2xl mx-auto">
+            <div className="mx-auto mt-4 h-1 w-20 bg-teal-400 skew-x-[-12deg]" />
+            <p className="mt-6 text-teal-100 mb-8 max-w-2xl mx-auto">
               Pievienojies RK "Fēnikss" un iemācies regbiju no pieredzējušiem treneriem.
               Mēs uzņemam spēlētājus jebkurā vecumā un prasmju līmenī!
             </p>

@@ -53,7 +53,7 @@ export default function TeamPage() {
               <TabsList className="mb-12 grid w-full max-w-md mx-auto grid-cols-2 bg-transparent gap-4 h-auto p-0">
                 <TabsTrigger
                   value="players"
-                  className="relative h-14 bg-white shadow-md border-b-4 border-transparent data-[state=active]:border-teal-600 data-[state=active]:bg-teal-800 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-300 skew-x-[-6deg]"
+                  className="relative h-14 rounded-none bg-white text-teal-800 shadow-md border-b-4 border-transparent hover:border-teal-300 hover:shadow-lg data-[state=active]:border-teal-600 data-[state=active]:bg-teal-800 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-300 skew-x-[-6deg]"
                 >
                   <span className="inline-flex skew-x-[6deg] items-center gap-2 font-bold tracking-wide">
                     <Users className="h-5 w-5" />
@@ -62,7 +62,7 @@ export default function TeamPage() {
                 </TabsTrigger>
                 <TabsTrigger
                   value="coaches"
-                  className="relative h-14 bg-white shadow-md border-b-4 border-transparent data-[state=active]:border-teal-600 data-[state=active]:bg-teal-800 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-300 skew-x-[-6deg]"
+                  className="relative h-14 rounded-none bg-white text-teal-800 shadow-md border-b-4 border-transparent hover:border-teal-300 hover:shadow-lg data-[state=active]:border-teal-600 data-[state=active]:bg-teal-800 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-300 skew-x-[-6deg]"
                 >
                   <span className="inline-flex skew-x-[6deg] items-center gap-2 font-bold tracking-wide">
                     <UserCog className="h-5 w-5" />
