@@ -34,6 +34,7 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
     if (path === '/fixtures') return 'FIXTURES'
     if (path === '/news') return 'NEWS'
     if (path === '/gallery') return 'GALLERY'
+    if (path === '/noteikumi') return 'NOTEIKUMI'
     if (path === '/contact') return 'CONTACT'
     if (path === '/privacy-policy') return 'PRIVACY_POLICY'
     if (path === '/cookies-policy') return 'COOKIES_POLICY'
@@ -100,6 +101,7 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
     { key: 'FIXTURES', text: 'SPĒLES' },
     { key: 'NEWS', text: 'ZIŅAS' },
     { key: 'GALLERY', text: 'GALERIJA' },
+    { key: 'NOTEIKUMI', text: 'NOTEIKUMI' },
     { key: 'CONTACT', text: 'KONTAKTI' }
   ]
 
