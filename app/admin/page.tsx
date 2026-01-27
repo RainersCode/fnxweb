@@ -8,7 +8,8 @@ import {
   Phone,
   ArrowRight,
   LayoutDashboard,
-  Home
+  Home,
+  Clock
 } from 'lucide-react'
 
 const adminSections = [
@@ -56,6 +57,15 @@ const adminSections = [
     color: 'from-rose-500 to-rose-600',
     bgLight: 'bg-rose-50',
     textColor: 'text-rose-600'
+  },
+  {
+    title: 'Treniņu grafiks',
+    description: 'Pārvaldīt treniņu laikus un vietas',
+    href: '/admin/training',
+    icon: Clock,
+    color: 'from-cyan-500 to-cyan-600',
+    bgLight: 'bg-cyan-50',
+    textColor: 'text-cyan-600'
   },
   {
     title: 'Kontakti',

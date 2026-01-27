@@ -3,12 +3,13 @@ import { ArrowRight } from 'lucide-react'
 import { MainLayout } from '@/components/layout/main-layout'
 import Link from 'next/link'
 import { supabase, prepareImagePath } from '@/lib/supabase'
-import { Article, Gallery, Fixture } from '@/types/supabase'
+import { Article, Gallery, Fixture, TrainingSession } from '@/types/supabase'
 import { aboutUsData } from '@/data/about-us'
 import { HeroCarousel } from '@/components/features/hero-carousel'
 import { HomeNewsSection } from '@/components/features/home-news-section'
 import { HomeGallerySection } from '@/components/features/home-gallery-section'
 import { HomeFixturesSection } from '@/components/features/home-fixtures-section'
+import { HomeTrainingSection } from '@/components/features/home-training-section'
 
 // Revalidate data every 60 seconds
 export const revalidate = 60
@@ -99,12 +100,30 @@ async function getFixtures(): Promise<Fixture[]> {
   }
 }
 
+async function getTrainingSessions(): Promise<TrainingSession[]> {
+  try {
+    const { data, error } = await supabase
+      .from('training_sessions')
+      .select('*')
+      .eq('is_active', true)
+      .order('day_of_week', { ascending: true })
+      .order('start_time', { ascending: true })
+
+    if (error) throw error
+    return data || []
+  } catch (error) {
+    console.error('Error fetching training sessions:', error)
+    return []
+  }
+}
+
 export default async function HomePage() {
   // Fetch all data in parallel on the server
-  const [articles, galleries, fixtures] = await Promise.all([
+  const [articles, galleries, fixtures, trainingSessions] = await Promise.all([
     getArticles(),
     getGalleries(),
-    getFixtures()
+    getFixtures(),
+    getTrainingSessions()
   ])
 
   return (
@@ -216,6 +235,9 @@ export default async function HomePage() {
 
         {/* Upcoming Matches Section */}
         <HomeFixturesSection initialFixtures={fixtures} />
+
+        {/* Training Schedule Section */}
+        <HomeTrainingSection sessions={trainingSessions} />
 
         {/* Sponsors Section with Parallax */}
         <section className="relative py-20 overflow-hidden">

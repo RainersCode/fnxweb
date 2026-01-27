@@ -67,6 +67,17 @@ export type Contact = {
   display_order: number
 }
 
+export type TrainingSession = {
+  id: string
+  day_of_week: number // 0 = Sunday, 1 = Monday, etc.
+  start_time: string // Format: "HH:MM"
+  end_time: string // Format: "HH:MM"
+  location: string
+  team_group?: string // e.g., "Pieaugušie", "Juniori", "Bērni"
+  description?: string
+  is_active: boolean
+}
+
 // Partial types for creating and updating
 export type CreateArticle = Omit<Article, 'id' | 'published_at' | 'updated_at'>
 export type UpdateArticle = Partial<Omit<Article, 'id'>>
@@ -88,6 +99,9 @@ export type UpdateCoach = Partial<Omit<Coach, 'id'>>
 
 export type CreateContact = Omit<Contact, 'id'>
 export type UpdateContact = Partial<Omit<Contact, 'id'>>
+
+export type CreateTrainingSession = Omit<TrainingSession, 'id'>
+export type UpdateTrainingSession = Partial<Omit<TrainingSession, 'id'>>
 
 // Database response types
 export type Database = {
@@ -127,6 +141,11 @@ export type Database = {
         Row: Contact
         Insert: CreateContact
         Update: UpdateContact
+      }
+      training_sessions: {
+        Row: TrainingSession
+        Insert: CreateTrainingSession
+        Update: UpdateTrainingSession
       }
     }
   }
