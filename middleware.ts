@@ -30,9 +30,25 @@ export default authMiddleware({
     '/favicon.ico',
   ],
 
-  // Routes that can always be accessed, and have no authentication information
+  // Routes that completely bypass Clerk - no auth checking at all
+  // This is essential for Googlebot and other crawlers to access pages
   ignoredRoutes: [
+    '/',
+    '/news(.*)',
+    '/about(.*)',
+    '/team(.*)',
+    '/fixtures(.*)',
+    '/gallery(.*)',
+    '/contact(.*)',
+    '/blog(.*)',
+    '/privacy-policy(.*)',
+    '/cookies-policy(.*)',
+    '/articles(.*)',
+    '/galleries(.*)',
     '/api/webhook/clerk',
+    '/api/galleries(.*)',
+    '/api/fixtures(.*)',
+    '/api/send(.*)',
     '/robots.txt',
     '/sitemap.xml',
     '/favicon.ico',
