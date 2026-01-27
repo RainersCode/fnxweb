@@ -95,53 +95,81 @@ export function HomeFixturesSection({ initialFixtures }: HomeFixturesSectionProp
         </div>
 
         {fixtures.length === 0 ? (
-          <div className="bg-teal-50 border border-teal-100 p-8 text-center max-w-md mx-auto">
-            <CalendarDays className="mx-auto h-12 w-12 text-teal-300 mb-3" />
-            <p className="text-lg font-medium text-teal-800">Šobrīd nav plānotas gaidāmās spēles.</p>
+          <div className="bg-gradient-to-br from-teal-700 via-teal-600 to-teal-700 shadow-2xl overflow-hidden max-w-md mx-auto">
+            <div className="h-1 bg-gradient-to-r from-white/30 via-white/60 to-white/30" />
+            <div className="p-8 text-center relative">
+              <div className="absolute top-4 left-0 w-8 h-0.5 bg-white/20 skew-x-[-12deg]" />
+              <div className="absolute bottom-4 right-0 w-8 h-0.5 bg-white/20 skew-x-[-12deg]" />
+              <div className="inline-flex items-center gap-2 mb-3">
+                <div className="w-6 h-0.5 bg-white/40 skew-x-[-12deg]" />
+                <CalendarDays className="h-8 w-8 text-white/80" />
+                <div className="w-6 h-0.5 bg-white/40 skew-x-[-12deg]" />
+              </div>
+              <h3 className="text-xl font-extrabold tracking-tight mb-1">
+                <span className="text-white">NAV </span>
+                <span className="text-teal-200 italic font-light">SPĒĻU</span>
+              </h3>
+              <div className="mx-auto mt-2 mb-3 h-0.5 w-12 bg-white/50 skew-x-[-12deg]" />
+              <p className="text-sm text-white/80">Šobrīd nav plānotas gaidāmās spēles.</p>
+            </div>
+            <div className="h-1 bg-gradient-to-r from-white/30 via-white/60 to-white/30" />
           </div>
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {fixtures.map((fixture, index) => (
               <div
                 key={fixture.id}
-                className={`group relative bg-white rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 ${
-                  index === 0 ? 'md:col-span-2 lg:col-span-1' : ''
-                }`}
+                className="group bg-gradient-to-br from-teal-700 via-teal-600 to-teal-700 shadow-2xl overflow-hidden relative"
               >
-                {/* Top gradient bar */}
-                <div className="h-1 bg-gradient-to-r from-teal-500 via-teal-400 to-teal-500" />
+                {/* Top accent line */}
+                <div className="h-1 bg-gradient-to-r from-white/30 via-white/60 to-white/30" />
 
-                {/* Next match badge for first fixture */}
-                {index === 0 && (
-                  <div className="absolute top-3 right-3 z-10">
-                    <div className="bg-gradient-to-r from-amber-500 to-amber-400 px-3 py-1 rounded-full shadow-md">
-                      <span className="text-[10px] font-bold text-white uppercase tracking-wider">Nākamā</span>
-                    </div>
-                  </div>
-                )}
+                {/* Header */}
+                <div className="p-5 text-center relative">
+                  {/* Decorative elements */}
+                  <div className="absolute top-4 left-0 w-8 h-0.5 bg-white/20 skew-x-[-12deg]" />
+                  <div className="absolute bottom-4 right-0 w-8 h-0.5 bg-white/20 skew-x-[-12deg]" />
 
-                {/* Compact header with date and time */}
-                <div className="bg-gradient-to-r from-slate-50 to-gray-50 px-4 py-2.5 border-b border-gray-100">
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2 text-slate-700">
-                      <CalendarDays className="h-4 w-4 text-teal-600" />
-                      <span className="font-semibold text-sm">
-                        {formatMatchDate(fixture.match_date)}
-                      </span>
+                  {/* Next match badge for first fixture */}
+                  {index === 0 && (
+                    <div className="absolute top-3 right-3 z-10">
+                      <div className="bg-gradient-to-r from-amber-500 to-amber-400 px-3 py-1 skew-x-[-12deg] shadow-md">
+                        <span className="skew-x-[12deg] inline-block text-[10px] font-bold text-white uppercase tracking-wider">Nākamā</span>
+                      </div>
                     </div>
-                    <div className="w-px h-4 bg-gray-300" />
-                    <span className="text-sm text-slate-500 font-medium">
-                      {extractTimeFromDate(fixture.match_date)}
-                    </span>
+                  )}
+
+                  {/* Icon */}
+                  <div className="inline-flex items-center gap-2 mb-3">
+                    <div className="w-6 h-0.5 bg-white/40 skew-x-[-12deg]" />
+                    <CalendarDays className="h-5 w-5 text-white" />
+                    <div className="w-6 h-0.5 bg-white/40 skew-x-[-12deg]" />
                   </div>
+
+                  {/* Title */}
+                  <h3 className="text-xl font-extrabold tracking-tight mb-1">
+                    <span className="text-white">SPĒLES </span>
+                    <span className="text-teal-200 italic font-light">INFO</span>
+                  </h3>
+
+                  {/* Decorative line */}
+                  <div className="mx-auto mt-2 mb-3 h-0.5 w-12 bg-white/50 skew-x-[-12deg]" />
+
+                  {/* Date and time */}
+                  <p className="text-sm text-white/90 font-medium capitalize">
+                    {formatMatchDate(fixture.match_date)}
+                  </p>
+                  <p className="text-xs text-white/70 mt-1">
+                    {extractTimeFromDate(fixture.match_date)}
+                  </p>
                 </div>
 
-                <div className="p-5">
-                  {/* Teams */}
+                {/* Teams section - white background */}
+                <div className="bg-white p-5">
                   <div className="flex items-center justify-between gap-3">
                     {/* Home team */}
                     <div className="flex-1 flex flex-col items-center text-center">
-                      <div className="h-16 w-16 rounded-full bg-white shadow-md border-2 border-gray-100 p-1.5 overflow-hidden group-hover:border-teal-300 group-hover:shadow-lg transition-all duration-300 mb-2">
+                      <div className="h-16 w-16 rounded-full bg-white shadow-md border-2 border-gray-100 p-1.5 overflow-hidden group-hover:border-teal-400 group-hover:shadow-lg transition-all duration-300 mb-2">
                         <div className="relative w-full h-full rounded-full overflow-hidden">
                           <NextImage
                             src={fixture.home_logo_url || "/Logo/fēniks_logo-removebg-preview.png"}
@@ -169,7 +197,7 @@ export function HomeFixturesSection({ initialFixtures }: HomeFixturesSectionProp
 
                     {/* Away team */}
                     <div className="flex-1 flex flex-col items-center text-center">
-                      <div className="h-16 w-16 rounded-full bg-white shadow-md border-2 border-gray-100 p-1.5 overflow-hidden group-hover:border-teal-300 group-hover:shadow-lg transition-all duration-300 mb-2">
+                      <div className="h-16 w-16 rounded-full bg-white shadow-md border-2 border-gray-100 p-1.5 overflow-hidden group-hover:border-teal-400 group-hover:shadow-lg transition-all duration-300 mb-2">
                         <div className="relative w-full h-full rounded-full overflow-hidden">
                           <NextImage
                             src={fixture.away_logo_url || "/placeholder.svg?height=48&width=48&text=Team"}
@@ -193,18 +221,22 @@ export function HomeFixturesSection({ initialFixtures }: HomeFixturesSectionProp
                       {fixture.location || (fixture.is_home_game ? 'Mājas laukums' : 'Izbraukumā')}
                     </span>
                   </div>
+                </div>
 
-                  {/* CTA */}
-                  <Link href="/fixtures" className="block mt-4">
-                    <button className="w-full rounded-md bg-gradient-to-r from-teal-600 to-teal-700 px-4 py-2.5 text-xs font-bold tracking-wide text-white transition-all duration-300 hover:from-teal-700 hover:to-teal-800 hover:shadow-md flex items-center justify-center gap-2">
-                      SPĒLES DETAĻAS
-                      <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
+                {/* Footer with button */}
+                <div className="p-4 text-center">
+                  <Link href="/fixtures" className="inline-block">
+                    <button className="skew-x-[-12deg] transform bg-white px-6 py-2.5 font-bold tracking-wide text-teal-700 shadow-lg transition-all duration-300 hover:bg-teal-50 hover:scale-105">
+                      <span className="inline-flex skew-x-[12deg] transform items-center gap-2 text-sm">
+                        SPĒLES DETAĻAS
+                        <ArrowRight className="h-4 w-4" />
+                      </span>
                     </button>
                   </Link>
                 </div>
 
-                {/* Subtle bottom accent on hover */}
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-teal-500 to-teal-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                {/* Bottom accent line */}
+                <div className="h-1 bg-gradient-to-r from-white/30 via-white/60 to-white/30" />
               </div>
             ))}
           </div>

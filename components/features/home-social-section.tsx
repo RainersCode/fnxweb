@@ -39,33 +39,42 @@ export function HomeSocialSection() {
         </div>
 
         {/* Social Feeds Grid */}
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {/* Instagram Feed */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10">
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Instagram Card */}
+          <div className="bg-gradient-to-br from-[#833AB4] via-[#FD1D1D] to-[#F77737] shadow-2xl overflow-hidden">
+            {/* Top accent line */}
+            <div className="h-1 bg-gradient-to-r from-white/30 via-white/60 to-white/30" />
+
             {/* Header */}
-            <div className="bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#F77737] px-6 py-4 flex items-center gap-3">
-              <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-                <Instagram className="h-6 w-6 text-[#E4405F]" />
+            <div className="p-5 text-center relative">
+              {/* Decorative elements */}
+              <div className="absolute top-4 left-0 w-8 h-0.5 bg-white/20 skew-x-[-12deg]" />
+              <div className="absolute bottom-4 right-0 w-8 h-0.5 bg-white/20 skew-x-[-12deg]" />
+
+              {/* Icon */}
+              <div className="inline-flex items-center gap-2 mb-3">
+                <div className="w-6 h-0.5 bg-white/40 skew-x-[-12deg]" />
+                <Instagram className="h-5 w-5 text-white" />
+                <div className="w-6 h-0.5 bg-white/40 skew-x-[-12deg]" />
               </div>
-              <div>
-                <h3 className="text-white font-bold">Instagram</h3>
-                <p className="text-white/80 text-sm">@rk_fenikss</p>
-              </div>
-              <Link
-                href="https://www.instagram.com/rk_fenikss/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="ml-auto text-white/80 hover:text-white transition-colors"
-              >
-                <ExternalLink className="h-5 w-5" />
-              </Link>
+
+              {/* Title */}
+              <h3 className="text-xl font-extrabold tracking-tight mb-1">
+                <span className="text-white">INSTA</span>
+                <span className="text-pink-200 italic font-light">GRAM</span>
+              </h3>
+
+              {/* Decorative line */}
+              <div className="mx-auto mt-2 mb-2 h-0.5 w-12 bg-white/50 skew-x-[-12deg]" />
+
+              <p className="text-sm text-white/80">@rk_fenikss</p>
             </div>
 
             {/* Instagram Embed */}
-            <div className="p-4 bg-white min-h-[400px]">
+            <div className="bg-white min-h-[500px]">
               <iframe
                 src="https://www.instagram.com/rk_fenikss/embed"
-                className="w-full h-[450px] border-0"
+                className="w-full h-[500px] border-0"
                 scrolling="no"
                 allowTransparency={true}
                 allow="encrypted-media"
@@ -73,62 +82,85 @@ export function HomeSocialSection() {
             </div>
 
             {/* Footer */}
-            <div className="px-6 py-4 bg-white/5">
+            <div className="p-4 text-center">
               <Link
                 href="https://www.instagram.com/rk_fenikss/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-white font-medium hover:text-teal-300 transition-colors"
+                className="inline-block"
               >
-                <span>Skatīt Instagram profilu</span>
-                <ExternalLink className="h-4 w-4" />
+                <button className="skew-x-[-12deg] transform bg-white px-6 py-2.5 font-bold tracking-wide text-[#E4405F] shadow-lg transition-all duration-300 hover:bg-pink-100 hover:scale-105">
+                  <span className="inline-flex skew-x-[12deg] transform items-center gap-2 text-sm">
+                    SKATĪT PROFILU
+                    <ExternalLink className="h-4 w-4" />
+                  </span>
+                </button>
               </Link>
             </div>
+
+            {/* Bottom accent line */}
+            <div className="h-1 bg-gradient-to-r from-white/30 via-white/60 to-white/30" />
           </div>
 
-          {/* TikTok Feed */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10">
+          {/* TikTok Card */}
+          <div className="bg-gradient-to-br from-[#010101] via-[#1a1a1a] to-[#010101] shadow-2xl overflow-hidden relative">
+            {/* TikTok accent colors */}
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#00f2ea] via-[#ff0050] to-[#00f2ea]" />
+
             {/* Header */}
-            <div className="bg-black px-6 py-4 flex items-center gap-3">
-              <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-                <TikTokIcon className="h-6 w-6 text-black" />
+            <div className="p-5 text-center relative">
+              {/* Decorative elements */}
+              <div className="absolute top-4 left-0 w-8 h-0.5 bg-[#00f2ea]/30 skew-x-[-12deg]" />
+              <div className="absolute bottom-4 right-0 w-8 h-0.5 bg-[#ff0050]/30 skew-x-[-12deg]" />
+
+              {/* Icon */}
+              <div className="inline-flex items-center gap-2 mb-3">
+                <div className="w-6 h-0.5 bg-[#00f2ea]/60 skew-x-[-12deg]" />
+                <TikTokIcon className="h-5 w-5 text-white" />
+                <div className="w-6 h-0.5 bg-[#ff0050]/60 skew-x-[-12deg]" />
               </div>
-              <div>
-                <h3 className="text-white font-bold">TikTok</h3>
-                <p className="text-white/80 text-sm">@rk_fenikss</p>
-              </div>
-              <Link
-                href="https://www.tiktok.com/@rk_fenikss"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="ml-auto text-white/80 hover:text-white transition-colors"
-              >
-                <ExternalLink className="h-5 w-5" />
-              </Link>
+
+              {/* Title */}
+              <h3 className="text-xl font-extrabold tracking-tight mb-1">
+                <span className="text-white">TIK</span>
+                <span className="text-[#00f2ea] italic font-light">TOK</span>
+              </h3>
+
+              {/* Decorative line */}
+              <div className="mx-auto mt-2 mb-2 h-0.5 w-12 bg-gradient-to-r from-[#00f2ea] to-[#ff0050] skew-x-[-12deg]" />
+
+              <p className="text-sm text-white/80">@rk_fenikss</p>
             </div>
 
             {/* TikTok Embed */}
-            <div className="p-4 bg-white min-h-[400px]">
+            <div className="bg-white min-h-[500px]">
               <iframe
                 src="https://www.tiktok.com/embed/@rk_fenikss"
-                className="w-full h-[450px] border-0"
+                className="w-full h-[500px] border-0"
                 scrolling="no"
                 allow="encrypted-media"
               />
             </div>
 
             {/* Footer */}
-            <div className="px-6 py-4 bg-white/5">
+            <div className="p-4 text-center">
               <Link
                 href="https://www.tiktok.com/@rk_fenikss"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-white font-medium hover:text-teal-300 transition-colors"
+                className="inline-block"
               >
-                <span>Skatīt TikTok profilu</span>
-                <ExternalLink className="h-4 w-4" />
+                <button className="skew-x-[-12deg] transform bg-white px-6 py-2.5 font-bold tracking-wide text-black shadow-lg transition-all duration-300 hover:bg-gray-100 hover:scale-105">
+                  <span className="inline-flex skew-x-[12deg] transform items-center gap-2 text-sm">
+                    SKATĪT PROFILU
+                    <ExternalLink className="h-4 w-4" />
+                  </span>
+                </button>
               </Link>
             </div>
+
+            {/* Bottom accent line */}
+            <div className="h-1 bg-gradient-to-r from-[#00f2ea] via-[#ff0050] to-[#00f2ea]" />
           </div>
         </div>
 
