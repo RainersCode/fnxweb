@@ -1,24 +1,16 @@
 'use client'
 
-import { useEffect } from 'react'
-import { Facebook, Instagram, ExternalLink, Share2 } from 'lucide-react'
+import { Instagram, ExternalLink, Share2, Facebook } from 'lucide-react'
 import Link from 'next/link'
 
+// TikTok icon component
+const TikTokIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="currentColor">
+    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+  </svg>
+)
+
 export function HomeSocialSection() {
-  // Load Facebook SDK
-  useEffect(() => {
-    // Load Facebook SDK
-    if (typeof window !== 'undefined' && !(window as any).FB) {
-      const script = document.createElement('script')
-      script.src = 'https://connect.facebook.net/lv_LV/sdk.js#xfbml=1&version=v18.0'
-      script.async = true
-      script.defer = true
-      script.crossOrigin = 'anonymous'
-      document.body.appendChild(script)
-    } else if ((window as any).FB) {
-      ;(window as any).FB.XFBML.parse()
-    }
-  }, [])
 
   return (
     <section className="relative py-20 bg-gradient-to-br from-teal-900 via-teal-800 to-teal-900 overflow-hidden">
@@ -48,63 +40,6 @@ export function HomeSocialSection() {
 
         {/* Social Feeds Grid */}
         <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {/* Facebook Feed */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10">
-            {/* Header */}
-            <div className="bg-[#1877F2] px-6 py-4 flex items-center gap-3">
-              <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-                <Facebook className="h-6 w-6 text-[#1877F2]" />
-              </div>
-              <div>
-                <h3 className="text-white font-bold">Facebook</h3>
-                <p className="text-white/80 text-sm">@RKFenikss</p>
-              </div>
-              <Link
-                href="https://www.facebook.com/RKFenikss"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="ml-auto text-white/80 hover:text-white transition-colors"
-              >
-                <ExternalLink className="h-5 w-5" />
-              </Link>
-            </div>
-
-            {/* Facebook Page Plugin */}
-            <div className="bg-gray-100 min-h-[400px] flex items-center justify-center">
-              <div
-                className="fb-page"
-                data-href="https://www.facebook.com/RKFenikss"
-                data-tabs="timeline"
-                data-width="500"
-                data-height="400"
-                data-small-header="false"
-                data-adapt-container-width="true"
-                data-hide-cover="false"
-                data-show-facepile="true"
-              >
-                <blockquote
-                  cite="https://www.facebook.com/RKFenikss"
-                  className="fb-xfbml-parse-ignore"
-                >
-                  <a href="https://www.facebook.com/RKFenikss">RK Fēnikss</a>
-                </blockquote>
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="px-6 py-4 bg-white/5">
-              <Link
-                href="https://www.facebook.com/RKFenikss"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-white font-medium hover:text-teal-300 transition-colors"
-              >
-                <span>Skatīt Facebook lapu</span>
-                <ExternalLink className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-
           {/* Instagram Feed */}
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10">
             {/* Header */}
@@ -130,7 +65,7 @@ export function HomeSocialSection() {
             <div className="p-4 bg-white min-h-[400px]">
               <iframe
                 src="https://www.instagram.com/rk_fenikss/embed"
-                className="w-full h-[380px] border-0"
+                className="w-full h-[450px] border-0"
                 scrolling="no"
                 allowTransparency={true}
                 allow="encrypted-media"
@@ -146,6 +81,51 @@ export function HomeSocialSection() {
                 className="inline-flex items-center gap-2 text-white font-medium hover:text-teal-300 transition-colors"
               >
                 <span>Skatīt Instagram profilu</span>
+                <ExternalLink className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+
+          {/* TikTok Feed */}
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10">
+            {/* Header */}
+            <div className="bg-black px-6 py-4 flex items-center gap-3">
+              <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+                <TikTokIcon className="h-6 w-6 text-black" />
+              </div>
+              <div>
+                <h3 className="text-white font-bold">TikTok</h3>
+                <p className="text-white/80 text-sm">@rk_fenikss</p>
+              </div>
+              <Link
+                href="https://www.tiktok.com/@rk_fenikss"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ml-auto text-white/80 hover:text-white transition-colors"
+              >
+                <ExternalLink className="h-5 w-5" />
+              </Link>
+            </div>
+
+            {/* TikTok Embed */}
+            <div className="p-4 bg-white min-h-[400px]">
+              <iframe
+                src="https://www.tiktok.com/embed/@rk_fenikss"
+                className="w-full h-[450px] border-0"
+                scrolling="no"
+                allow="encrypted-media"
+              />
+            </div>
+
+            {/* Footer */}
+            <div className="px-6 py-4 bg-white/5">
+              <Link
+                href="https://www.tiktok.com/@rk_fenikss"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-white font-medium hover:text-teal-300 transition-colors"
+              >
+                <span>Skatīt TikTok profilu</span>
                 <ExternalLink className="h-4 w-4" />
               </Link>
             </div>
@@ -170,11 +150,16 @@ export function HomeSocialSection() {
           >
             <Instagram className="h-6 w-6" />
           </Link>
+          <Link
+            href="https://www.tiktok.com/@rk_fenikss"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-12 h-12 bg-white/10 hover:bg-black rounded-lg flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
+          >
+            <TikTokIcon className="h-6 w-6" />
+          </Link>
         </div>
       </div>
-
-      {/* Facebook SDK Root */}
-      <div id="fb-root"></div>
     </section>
   )
 }
