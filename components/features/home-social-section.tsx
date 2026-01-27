@@ -70,12 +70,12 @@ export function HomeSocialSection() {
             </div>
 
             {/* Facebook Page Plugin */}
-            <div className="bg-white min-h-[400px]">
+            <div className="bg-gray-100 min-h-[400px] flex items-center justify-center">
               <div
-                className="fb-page w-full"
+                className="fb-page"
                 data-href="https://www.facebook.com/RKFenikss"
                 data-tabs="timeline"
-                data-width=""
+                data-width="500"
                 data-height="400"
                 data-small-header="false"
                 data-adapt-container-width="true"
