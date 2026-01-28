@@ -201,9 +201,8 @@ export function HomeTrainingSection({ sessions }: HomeTrainingSectionProps) {
                 </div>
 
                 {/* Title - Day name */}
-                <h3 className="text-xl font-extrabold tracking-tight">
-                  <span className="text-white">{label.toUpperCase().slice(0, -1)}</span>
-                  <span className="text-teal-200 italic font-light">{label.toUpperCase().slice(-1)}</span>
+                <h3 className="text-xl font-extrabold tracking-tight text-white">
+                  {label.toUpperCase()}
                 </h3>
 
                 {/* Decorative line */}

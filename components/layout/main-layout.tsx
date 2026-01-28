@@ -119,16 +119,22 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
           {[1, 2, 3].map((i) => (
             <div key={i} className="flex items-center mx-8">
               <Heart className="h-4 w-4 mr-2 animate-pulse" />
+              <span className="font-bold tracking-tight">
+                FĒNIKSS{' '}
+              </span>
+              <span className="italic font-light text-pink-200 mr-1">
+                autisma atbalstam
+              </span>
               <span className="font-medium">
-                Atbalsti mūs! Fēnikss autisma atbalstam — palīdzi mums palīdzēt citiem!
+                — tavs ziedojums var mainīt dzīves!
               </span>
               <Link
                 href="https://gogetfunding.com/fenikss-in-support-of-autism/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="ml-4 bg-white text-pink-600 px-4 py-1 text-sm font-bold rounded-full hover:bg-pink-100 transition-colors"
+                className="ml-4 skew-x-[-12deg] transform bg-white text-pink-600 px-4 py-1 text-sm font-bold hover:bg-pink-100 transition-colors"
               >
-                ZIEDOT
+                <span className="inline-block skew-x-[12deg] transform">ZIEDOT</span>
               </Link>
               <span className="mx-8">•</span>
             </div>
