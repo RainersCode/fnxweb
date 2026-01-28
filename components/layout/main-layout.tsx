@@ -120,8 +120,8 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
           {[1, 2, 3].map((i) => (
             <div key={i} className="flex items-center mx-8">
               <Heart className="h-4 w-4 mr-2 animate-pulse" />
-              <span className="font-bold tracking-tight">
-                FĒNIKSS{' '}
+              <span className="font-bold tracking-tight mr-1.5">
+                FĒNIKSS
               </span>
               <span className="italic font-light text-pink-200 mr-1">
                 autisma atbalstam
