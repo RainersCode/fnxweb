@@ -116,28 +116,32 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
     <div className="flex min-h-screen flex-col bg-white font-sans text-zinc-900">
       {/* Scrolling Announcement Banner */}
       <div className="bg-gradient-to-r from-pink-600 via-red-500 to-pink-600 text-white py-2 overflow-hidden">
-        <div className="animate-marquee whitespace-nowrap flex items-center">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="flex items-center mx-8">
-              <Heart className="h-4 w-4 mr-2 animate-pulse" />
-              <span className="font-bold tracking-tight mr-1.5">
-                FĒNIKSS
-              </span>
-              <span className="italic font-light text-pink-200 mr-1">
-                autisma atbalstam
-              </span>
-              <span className="font-medium">
-                — tavs ziedojums var mainīt dzīves!
-              </span>
-              <Link
-                href="https://gogetfunding.com/fenikss-in-support-of-autism/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="ml-4 skew-x-[-12deg] transform bg-white text-pink-600 px-4 py-1 text-sm font-bold hover:bg-pink-100 transition-colors"
-              >
-                <span className="inline-block skew-x-[12deg] transform">ZIEDOT</span>
-              </Link>
-              <span className="mx-8">•</span>
+        <div className="animate-marquee whitespace-nowrap flex">
+          {[0, 1].map((group) => (
+            <div key={group} className="flex shrink-0 items-center" aria-hidden={group === 1 || undefined}>
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="flex items-center mx-8">
+                  <Heart className="h-4 w-4 mr-2 animate-pulse" />
+                  <span className="font-bold tracking-tight mr-1.5">
+                    FĒNIKSS
+                  </span>
+                  <span className="italic font-light text-pink-200 mr-1">
+                    autisma atbalstam
+                  </span>
+                  <span className="font-medium">
+                    — tavs ziedojums var mainīt dzīves!
+                  </span>
+                  <Link
+                    href="https://gogetfunding.com/fenikss-in-support-of-autism/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="ml-4 skew-x-[-12deg] transform bg-white text-pink-600 px-4 py-1 text-sm font-bold hover:bg-pink-100 transition-colors"
+                  >
+                    <span className="inline-block skew-x-[12deg] transform">ZIEDOT</span>
+                  </Link>
+                  <span className="mx-8">•</span>
+                </div>
+              ))}
             </div>
           ))}
         </div>
