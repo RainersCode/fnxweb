@@ -9,6 +9,7 @@ import { SignInButton, SignUpButton, UserButton, useAuth, useUser } from '@clerk
 import { isAdmin } from '@/lib/utils'
 import { usePathname } from 'next/navigation'
 import { DonationPopup } from '@/components/features/donation-popup'
+import { PageViewTracker } from '@/components/features/page-view-tracker'
 
 interface MainLayoutProps {
   children: ReactNode
@@ -607,6 +608,9 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
 
       {/* Donation Popup */}
       <DonationPopup />
+
+      {/* Page View Tracker */}
+      <PageViewTracker />
     </div>
   )
 }

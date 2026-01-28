@@ -100,6 +100,12 @@ export type UpdateCoach = Partial<Omit<Coach, 'id'>>
 export type CreateContact = Omit<Contact, 'id'>
 export type UpdateContact = Partial<Omit<Contact, 'id'>>
 
+export type PageView = {
+  id: string
+  page_path: string
+  viewed_at: string
+}
+
 export type CreateTrainingSession = Omit<TrainingSession, 'id'>
 export type UpdateTrainingSession = Partial<Omit<TrainingSession, 'id'>>
 
@@ -146,6 +152,11 @@ export type Database = {
         Row: TrainingSession
         Insert: CreateTrainingSession
         Update: UpdateTrainingSession
+      }
+      page_views: {
+        Row: PageView
+        Insert: Omit<PageView, 'id' | 'viewed_at'>
+        Update: never
       }
     }
   }

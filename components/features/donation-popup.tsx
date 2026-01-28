@@ -9,11 +9,17 @@ export function DonationPopup() {
   const [isDismissed, setIsDismissed] = useState(false)
 
   useEffect(() => {
-    // Check if user has dismissed the popup before
     const dismissed = localStorage.getItem('donation-popup-dismissed')
     if (dismissed) {
-      setIsDismissed(true)
-      return
+      const dismissedTime = parseInt(dismissed)
+      const twentyFourHours = 24 * 60 * 60 * 1000
+      if (Date.now() - dismissedTime < twentyFourHours) {
+        // Still within 24h window, don't show
+        setIsDismissed(true)
+        return
+      }
+      // 24h has passed, clear the old dismissal
+      localStorage.removeItem('donation-popup-dismissed')
     }
 
     // Show popup after 5 seconds
@@ -27,23 +33,8 @@ export function DonationPopup() {
   const handleDismiss = () => {
     setIsVisible(false)
     setIsDismissed(true)
-    // Remember dismissal for 24 hours
     localStorage.setItem('donation-popup-dismissed', Date.now().toString())
   }
-
-  // Clear dismissal after 24 hours
-  useEffect(() => {
-    const dismissed = localStorage.getItem('donation-popup-dismissed')
-    if (dismissed) {
-      const dismissedTime = parseInt(dismissed)
-      const now = Date.now()
-      const twentyFourHours = 24 * 60 * 60 * 1000
-      if (now - dismissedTime > twentyFourHours) {
-        localStorage.removeItem('donation-popup-dismissed')
-        setIsDismissed(false)
-      }
-    }
-  }, [])
 
   if (isDismissed || !isVisible) return null
 
