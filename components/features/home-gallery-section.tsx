@@ -4,6 +4,7 @@ import { default as NextImage } from 'next/image'
 import { Camera, ImageIcon, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { Gallery } from '@/types/supabase'
+import { useState, useRef, useEffect } from 'react'
 
 interface GalleryWithThumbnail extends Gallery {
   thumbnailUrl: string | null
@@ -41,7 +42,103 @@ const getImageUrl = (url: string | null): string => {
   return url
 }
 
+// Gallery card component to avoid duplication
+interface GalleryCardProps {
+  gallery: GalleryWithThumbnail
+  isLarge?: boolean
+}
+
+function GalleryCard({ gallery, isLarge = false }: GalleryCardProps) {
+  return (
+    <Link href={`/gallery/${gallery.id}`} className="group block h-full">
+      <div className={`relative overflow-hidden shadow-lg transition-all duration-500 hover:shadow-2xl h-72 ${isLarge ? 'sm:h-full' : ''}`}>
+        {/* Image */}
+        {gallery.thumbnailUrl ? (
+          isSvgUrl(gallery.thumbnailUrl) ? (
+            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-teal-50 to-teal-100">
+              <div className="text-center">
+                <ImageIcon className="mx-auto h-16 w-16 text-teal-800/30" />
+                <p className="mt-2 text-sm font-medium text-teal-800/50">{gallery.title}</p>
+              </div>
+            </div>
+          ) : (
+            <NextImage
+              src={getImageUrl(gallery.thumbnailUrl)}
+              alt={gallery.title}
+              fill
+              className="object-cover transition-transform duration-700 group-hover:scale-110"
+            />
+          )
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-teal-50 to-teal-100">
+            <div className="text-center">
+              <ImageIcon className="mx-auto h-16 w-16 text-teal-800/30" />
+              <p className="mt-2 text-sm font-medium text-teal-800/50">{gallery.title}</p>
+            </div>
+          </div>
+        )}
+
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-teal-900/90 via-teal-900/30 to-transparent opacity-70 transition-opacity duration-300 group-hover:opacity-90" />
+
+        {/* Corner accent */}
+        <div className="absolute top-0 left-0 w-12 h-12 border-l-4 border-t-4 border-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div className="absolute bottom-0 right-0 w-12 h-12 border-r-4 border-b-4 border-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+        {/* Content */}
+        <div className="absolute inset-0 flex flex-col justify-end p-5">
+          <div className="transform transition-all duration-300 group-hover:translate-y-0 translate-y-2">
+            <div className="flex items-center gap-2 mb-2">
+              <Camera className="h-4 w-4 text-teal-300" />
+              <span className="text-xs font-bold text-teal-300 uppercase tracking-wider">Galerija</span>
+            </div>
+            <h3 className={`font-bold text-white tracking-tight ${isLarge ? 'text-2xl' : 'text-lg'}`}>
+              {gallery.title}
+            </h3>
+            {gallery.description && (
+              <p className="line-clamp-2 text-sm text-teal-100/80 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                {gallery.description}
+              </p>
+            )}
+            <div className="mt-3 flex items-center gap-2 text-white opacity-0 group-hover:opacity-100 transition-all duration-300">
+              <span className="text-sm font-semibold">Skatīt galeriju</span>
+              <ArrowRight className="h-4 w-4" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </Link>
+  )
+}
+
 export function HomeGallerySection({ galleries }: HomeGallerySectionProps) {
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const [activeIndex, setActiveIndex] = useState(0)
+
+  // Handle scroll to update active dot indicator
+  useEffect(() => {
+    const container = scrollContainerRef.current
+    if (!container) return
+
+    const handleScroll = () => {
+      const scrollLeft = container.scrollLeft
+      const cardWidth = container.offsetWidth * 0.85 + 16 // card width + gap
+      const newIndex = Math.round(scrollLeft / cardWidth)
+      setActiveIndex(Math.min(newIndex, galleries.length - 1))
+    }
+
+    container.addEventListener('scroll', handleScroll, { passive: true })
+    return () => container.removeEventListener('scroll', handleScroll)
+  }, [galleries.length])
+
+  // Scroll to specific card when dot is clicked
+  const scrollToCard = (index: number) => {
+    const container = scrollContainerRef.current
+    if (!container) return
+    const cardWidth = container.offsetWidth * 0.85 + 16
+    container.scrollTo({ left: cardWidth * index, behavior: 'smooth' })
+  }
+
   return (
     <section className="relative py-20 bg-gradient-to-b from-white via-teal-50/30 to-white overflow-hidden">
       {/* Decorative elements */}
@@ -67,78 +164,61 @@ export function HomeGallerySection({ galleries }: HomeGallerySectionProps) {
           <div className="mx-auto mt-4 h-1 w-20 bg-teal-700 skew-x-[-12deg]" />
         </div>
 
-        {/* Gallery Grid */}
-        <div className="mb-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {galleries.length === 0 ? (
-            <div className="col-span-full bg-teal-50 border border-teal-100 p-8 text-center">
-              <Camera className="mx-auto h-12 w-12 text-teal-300 mb-3" />
-              <p className="text-lg font-medium text-teal-800">Drīzumā sekojiet galerijas atjauninājumiem!</p>
-            </div>
-          ) : (
-            galleries.map((gallery, index) => (
-              <Link href={`/gallery/${gallery.id}`} key={gallery.id} className="group">
-                <div className={`relative overflow-hidden shadow-lg transition-all duration-500 hover:shadow-2xl ${
-                  index === 0 ? 'sm:col-span-2 sm:row-span-2 h-80 sm:h-full' : 'h-72'
-                }`}>
-                  {/* Image */}
-                  {gallery.thumbnailUrl ? (
-                    isSvgUrl(gallery.thumbnailUrl) ? (
-                      <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-teal-50 to-teal-100">
-                        <div className="text-center">
-                          <ImageIcon className="mx-auto h-16 w-16 text-teal-800/30" />
-                          <p className="mt-2 text-sm font-medium text-teal-800/50">{gallery.title}</p>
-                        </div>
-                      </div>
-                    ) : (
-                      <NextImage
-                        src={getImageUrl(gallery.thumbnailUrl)}
-                        alt={gallery.title}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                    )
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-teal-50 to-teal-100">
-                      <div className="text-center">
-                        <ImageIcon className="mx-auto h-16 w-16 text-teal-800/30" />
-                        <p className="mt-2 text-sm font-medium text-teal-800/50">{gallery.title}</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-teal-900/90 via-teal-900/30 to-transparent opacity-70 transition-opacity duration-300 group-hover:opacity-90" />
-
-                  {/* Corner accent */}
-                  <div className="absolute top-0 left-0 w-12 h-12 border-l-4 border-t-4 border-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="absolute bottom-0 right-0 w-12 h-12 border-r-4 border-b-4 border-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                  {/* Content */}
-                  <div className="absolute inset-0 flex flex-col justify-end p-5">
-                    <div className="transform transition-all duration-300 group-hover:translate-y-0 translate-y-2">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Camera className="h-4 w-4 text-teal-300" />
-                        <span className="text-xs font-bold text-teal-300 uppercase tracking-wider">Galerija</span>
-                      </div>
-                      <h3 className={`font-bold text-white tracking-tight ${index === 0 ? 'text-2xl' : 'text-lg'}`}>
-                        {gallery.title}
-                      </h3>
-                      {gallery.description && (
-                        <p className="line-clamp-2 text-sm text-teal-100/80 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          {gallery.description}
-                        </p>
-                      )}
-                      <div className="mt-3 flex items-center gap-2 text-white opacity-0 group-hover:opacity-100 transition-all duration-300">
-                        <span className="text-sm font-semibold">Skatīt galeriju</span>
-                        <ArrowRight className="h-4 w-4" />
-                      </div>
-                    </div>
+        {/* Empty state */}
+        {galleries.length === 0 ? (
+          <div className="mb-12 bg-teal-50 border border-teal-100 p-8 text-center">
+            <Camera className="mx-auto h-12 w-12 text-teal-300 mb-3" />
+            <p className="text-lg font-medium text-teal-800">Drīzumā sekojiet galerijas atjauninājumiem!</p>
+          </div>
+        ) : (
+          <>
+            {/* Mobile Swipable Carousel - visible only on small screens */}
+            <div className="sm:hidden mb-12">
+              <div
+                ref={scrollContainerRef}
+                className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 -mx-4 px-4"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
+                {galleries.map((gallery) => (
+                  <div
+                    key={gallery.id}
+                    className="flex-shrink-0 w-[85%] snap-center"
+                  >
+                    <GalleryCard gallery={gallery} />
                   </div>
+                ))}
+              </div>
+
+              {/* Dot indicators */}
+              <div className="flex justify-center gap-2 mt-4">
+                {galleries.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => scrollToCard(index)}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                      activeIndex === index
+                        ? 'bg-teal-700 w-6'
+                        : 'bg-teal-300 hover:bg-teal-400'
+                    }`}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Desktop/Tablet Grid - hidden on small screens */}
+            <div className="hidden sm:grid mb-12 grid-cols-2 gap-6 lg:grid-cols-4">
+              {galleries.map((gallery, index) => (
+                <div
+                  key={gallery.id}
+                  className={index === 0 ? 'sm:col-span-2 sm:row-span-2' : ''}
+                >
+                  <GalleryCard gallery={gallery} isLarge={index === 0} />
                 </div>
-              </Link>
-            ))
-          )}
-        </div>
+              ))}
+            </div>
+          </>
+        )}
 
         {/* CTA Button */}
         <div className="text-center">

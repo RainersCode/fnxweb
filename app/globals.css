@@ -10,6 +10,15 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+  /* Hide scrollbar for swipable carousels */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
   .clip-path-polygon {
     clip-path: polygon(0 0, 100% 0, 95% 100%, 0 100%);
   }
