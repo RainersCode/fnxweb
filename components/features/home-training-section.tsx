@@ -178,91 +178,103 @@ export function HomeTrainingSection({ sessions }: HomeTrainingSectionProps) {
         </div>
 
         {/* Mobile/Tablet Card View - Hidden on desktop */}
-        <div className="lg:hidden grid md:grid-cols-2 gap-6">
-          {sessionsByDay.map(({ label, sessions: daySessions }) => (
-            <div
-              key={label}
-              className="bg-gradient-to-br from-teal-700 via-teal-600 to-teal-700 shadow-2xl overflow-hidden"
-            >
-              {/* Top accent line */}
-              <div className="h-1 bg-gradient-to-r from-white/30 via-white/60 to-white/30" />
+        <div className="lg:hidden">
+          <div className="bg-gradient-to-br from-teal-700 via-teal-600 to-teal-700 shadow-2xl overflow-hidden">
+            {/* Top accent line */}
+            <div className="h-1 bg-gradient-to-r from-white/30 via-white/60 to-white/30" />
 
-              {/* Header */}
-              <div className="p-5 text-center relative">
-                {/* Decorative elements */}
-                <div className="absolute top-4 left-0 w-8 h-0.5 bg-white/20 skew-x-[-12deg]" />
-                <div className="absolute bottom-4 right-0 w-8 h-0.5 bg-white/20 skew-x-[-12deg]" />
+            {/* Header */}
+            <div className="p-5 text-center relative">
+              {/* Decorative elements */}
+              <div className="absolute top-4 left-0 w-8 h-0.5 bg-white/20 skew-x-[-12deg]" />
+              <div className="absolute bottom-4 right-0 w-8 h-0.5 bg-white/20 skew-x-[-12deg]" />
 
-                {/* Icon */}
-                <div className="inline-flex items-center gap-2 mb-3">
-                  <div className="w-6 h-0.5 bg-white/40 skew-x-[-12deg]" />
-                  <Calendar className="h-5 w-5 text-white" />
-                  <div className="w-6 h-0.5 bg-white/40 skew-x-[-12deg]" />
-                </div>
-
-                {/* Title - Day name */}
-                <h3 className="text-xl font-extrabold tracking-tight text-white">
-                  {label.toUpperCase()}
-                </h3>
-
-                {/* Decorative line */}
-                <div className="mx-auto mt-2 h-0.5 w-12 bg-white/50 skew-x-[-12deg]" />
+              {/* Icon */}
+              <div className="inline-flex items-center gap-2 mb-3">
+                <div className="w-6 h-0.5 bg-white/40 skew-x-[-12deg]" />
+                <Calendar className="h-5 w-5 text-white" />
+                <div className="w-6 h-0.5 bg-white/40 skew-x-[-12deg]" />
               </div>
 
-              {/* Sessions - white background */}
-              <div className="bg-white p-5 space-y-4">
-                {daySessions.map((session, index) => (
-                  <div key={session.id} className="space-y-2">
-                    {/* Time */}
-                    <div className="flex items-center gap-2 text-teal-700">
-                      <Clock className="h-4 w-4" />
-                      <span className="font-semibold text-lg">
-                        {session.start_time} - {session.end_time}
-                      </span>
-                    </div>
+              {/* Title */}
+              <h3 className="text-xl font-extrabold tracking-tight mb-1">
+                <span className="text-white">NEDĒĻAS </span>
+                <span className="text-teal-200 italic font-light">GRAFIKS</span>
+              </h3>
 
-                    {/* Location */}
-                    <div className="flex items-center gap-2 text-zinc-600">
-                      <MapPin className="h-4 w-4 flex-shrink-0 text-teal-600" />
-                      <span className="text-sm">{session.location}</span>
-                    </div>
-
-                    {/* Team Group */}
-                    {session.team_group && session.team_group !== 'Visi' && (
-                      <div className="flex items-center gap-2 text-zinc-500">
-                        <Users className="h-4 w-4 flex-shrink-0 text-teal-600" />
-                        <span className="text-sm">{session.team_group}</span>
-                      </div>
-                    )}
-
-                    {/* Description */}
-                    {session.description && (
-                      <p className="text-zinc-500 text-sm pl-6">{session.description}</p>
-                    )}
-
-                    {/* Separator if multiple sessions */}
-                    {daySessions.length > 1 && index < daySessions.length - 1 && (
-                      <div className="border-t border-gray-200 pt-3 mt-3" />
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              {/* Footer with button */}
-              <div className="p-4 text-center">
-                <Link href="/contact" className="inline-block">
-                  <button className="skew-x-[-12deg] transform bg-white px-6 py-2.5 font-bold tracking-wide text-teal-700 shadow-lg transition-all duration-300 hover:bg-teal-50 hover:scale-105">
-                    <span className="inline-flex skew-x-[12deg] transform items-center gap-2 text-sm">
-                      PIESAKIES
-                    </span>
-                  </button>
-                </Link>
-              </div>
-
-              {/* Bottom accent line */}
-              <div className="h-1 bg-gradient-to-r from-white/30 via-white/60 to-white/30" />
+              {/* Decorative line */}
+              <div className="mx-auto mt-2 h-0.5 w-12 bg-white/50 skew-x-[-12deg]" />
             </div>
-          ))}
+
+            {/* All days in one scrollable area - white background */}
+            <div className="bg-white p-4 sm:p-5 space-y-0 divide-y divide-gray-200">
+              {sessionsByDay.map(({ label, sessions: daySessions }) => (
+                <div key={label} className="py-4 first:pt-0 last:pb-0">
+                  {/* Day header */}
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="h-0.5 w-4 bg-teal-600 skew-x-[-12deg]" />
+                    <h4 className="text-sm font-bold text-teal-700 uppercase tracking-wide">
+                      {label}
+                    </h4>
+                    <div className="flex-1 h-px bg-teal-200" />
+                  </div>
+
+                  {/* Sessions for this day */}
+                  <div className="space-y-3 pl-2">
+                    {daySessions.map((session, index) => (
+                      <div key={session.id} className="space-y-1.5">
+                        {/* Time */}
+                        <div className="flex items-center gap-2 text-teal-700">
+                          <Clock className="h-4 w-4" />
+                          <span className="font-semibold">
+                            {session.start_time} - {session.end_time}
+                          </span>
+                        </div>
+
+                        {/* Location */}
+                        <div className="flex items-center gap-2 text-zinc-600">
+                          <MapPin className="h-4 w-4 flex-shrink-0 text-teal-600" />
+                          <span className="text-sm">{session.location}</span>
+                        </div>
+
+                        {/* Team Group */}
+                        {session.team_group && session.team_group !== 'Visi' && (
+                          <div className="flex items-center gap-2 text-zinc-500">
+                            <Users className="h-4 w-4 flex-shrink-0 text-teal-600" />
+                            <span className="text-sm">{session.team_group}</span>
+                          </div>
+                        )}
+
+                        {/* Description */}
+                        {session.description && (
+                          <p className="text-zinc-500 text-sm pl-6">{session.description}</p>
+                        )}
+
+                        {/* Separator between sessions on same day */}
+                        {daySessions.length > 1 && index < daySessions.length - 1 && (
+                          <div className="border-t border-gray-100 mt-3 pt-2" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Footer with button */}
+            <div className="p-4 text-center">
+              <Link href="/contact" className="inline-block">
+                <button className="skew-x-[-12deg] transform bg-white px-6 py-2.5 font-bold tracking-wide text-teal-700 shadow-lg transition-all duration-300 hover:bg-teal-50 hover:scale-105">
+                  <span className="inline-flex skew-x-[12deg] transform items-center gap-2 text-sm">
+                    PIESAKIES TRENIŅAM
+                  </span>
+                </button>
+              </Link>
+            </div>
+
+            {/* Bottom accent line */}
+            <div className="h-1 bg-gradient-to-r from-white/30 via-white/60 to-white/30" />
+          </div>
         </div>
       </div>
     </section>
