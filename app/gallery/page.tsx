@@ -1,90 +1,87 @@
-'use client'
-
-import { useState, useEffect } from 'react'
+import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { MainLayout } from '@/components/layout/main-layout'
-import { Gallery, GalleryImage } from '@/types/supabase'
+import { Gallery } from '@/types/supabase'
 import { ArrowRight, Image as ImageIcon, Camera, Images, CalendarDays } from 'lucide-react'
 import { ParallaxHeroSection } from '@/components/features/parallax-hero-section'
-import { supabase } from '@/lib/supabase'
-import { prepareImagePath } from '@/lib/supabase'
+import { supabase, prepareImagePath } from '@/lib/supabase'
+
+export const revalidate = 60
+
+export const metadata: Metadata = {
+  title: 'Galerija | RK Fēnikss',
+  description: 'RK Fēnikss regbija kluba foto galerijas - spēļu, treniņu un pasākumu fotogrāfijas.',
+  openGraph: {
+    title: 'Galerija | RK Fēnikss',
+    description: 'RK Fēnikss regbija kluba foto galerijas - spēļu, treniņu un pasākumu fotogrāfijas.',
+  },
+}
 
 interface GalleryWithThumbnail extends Gallery {
   thumbnailUrl: string | null
   imageCount?: number
 }
 
-export default function GalleryPage() {
-  const [galleries, setGalleries] = useState<GalleryWithThumbnail[]>([])
-  const [loading, setLoading] = useState(true)
+function formatDate(dateString: string): string {
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }
+  return new Date(dateString).toLocaleDateString('lv-LV', options)
+}
 
-  // Fetch galleries directly from Supabase
-  useEffect(() => {
-    const fetchGalleries = async () => {
-      setLoading(true)
-      try {
-        // Get galleries
-        const { data: galleriesData, error: galleriesError } = await supabase
-          .from('galleries')
-          .select('*')
-          .order('created_at', { ascending: false })
+async function getGalleries(): Promise<GalleryWithThumbnail[]> {
+  try {
+    const { data: galleriesData, error: galleriesError } = await supabase
+      .from('galleries')
+      .select('*')
+      .order('created_at', { ascending: false })
 
-        if (galleriesError) {
-          console.error('Error fetching galleries:', galleriesError)
-          throw galleriesError
+    if (galleriesError) {
+      console.error('Error fetching galleries:', galleriesError)
+      throw galleriesError
+    }
+
+    const galleriesWithThumbnails = await Promise.all(
+      (galleriesData || []).map(async (gallery) => {
+        const { data: imagesData, error: imagesError } = await supabase
+          .from('gallery_images')
+          .select('*', { count: 'exact' })
+          .eq('gallery_id', gallery.id)
+
+        if (imagesError) {
+          console.error(`Error fetching images for gallery ${gallery.id}:`, imagesError)
+          return {
+            ...gallery,
+            thumbnailUrl: null,
+            imageCount: 0,
+          }
         }
 
-        // For each gallery, get the first image and count
-        const galleriesWithThumbnails = await Promise.all(
-          (galleriesData || []).map(async (gallery) => {
-            // Get images for this gallery
-            const { data: imagesData, error: imagesError, count } = await supabase
-              .from('gallery_images')
-              .select('*', { count: 'exact' })
-              .eq('gallery_id', gallery.id)
+        const thumbnailUrl =
+          imagesData && imagesData.length > 0
+            ? prepareImagePath(imagesData[0].image_url)
+            : null
 
-            if (imagesError) {
-              console.error(`Error fetching images for gallery ${gallery.id}:`, imagesError)
-              return {
-                ...gallery,
-                thumbnailUrl: null,
-                imageCount: 0
-              }
-            }
+        return {
+          ...gallery,
+          thumbnailUrl,
+          imageCount: imagesData?.length || 0,
+        }
+      })
+    )
 
-            const thumbnailUrl = imagesData && imagesData.length > 0
-              ? prepareImagePath(imagesData[0].image_url)
-              : null
-
-            return {
-              ...gallery,
-              thumbnailUrl,
-              imageCount: imagesData?.length || 0
-            }
-          })
-        )
-
-        setGalleries(galleriesWithThumbnails)
-      } catch (error) {
-        console.error('Error in gallery fetching process:', error)
-        setGalleries([])
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchGalleries()
-  }, [])
-
-  const formatDate = (dateString: string): string => {
-    const options: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }
-    return new Date(dateString).toLocaleDateString('lv-LV', options)
+    return galleriesWithThumbnails
+  } catch (error) {
+    console.error('Error in gallery fetching process:', error)
+    return []
   }
+}
+
+export default async function GalleryPage() {
+  const galleries = await getGalleries()
 
   return (
     <MainLayout currentPage="GALLERY">
@@ -123,27 +120,19 @@ export default function GalleryPage() {
               <div className="mx-auto mt-4 h-1 w-20 bg-teal-700 skew-x-[-12deg]" />
             </div>
 
-            {/* Loading State */}
-            {loading && (
-              <div className="flex min-h-[400px] items-center justify-center">
-                <div className="text-center">
-                  <div className="h-12 w-12 mx-auto mb-4 animate-spin rounded-full border-4 border-teal-700 border-t-transparent" />
-                  <span className="text-teal-700 font-medium">Ielādē galerijas...</span>
-                </div>
-              </div>
-            )}
-
             {/* No Galleries State */}
-            {!loading && galleries.length === 0 && (
+            {galleries.length === 0 && (
               <div className="bg-teal-50 border border-teal-100 p-12 text-center max-w-lg mx-auto">
                 <Images className="mx-auto h-16 w-16 text-teal-300 mb-4" />
                 <p className="text-xl font-bold text-teal-800 mb-2">Nav galeriju</p>
-                <p className="text-teal-600">Pagaidām nav pievienotas fotogalerijas. Lūdzu, pārbaudiet vēlāk!</p>
+                <p className="text-teal-600">
+                  Pagaidām nav pievienotas fotogalerijas. Lūdzu, pārbaudiet vēlāk!
+                </p>
               </div>
             )}
 
             {/* Featured Gallery (first one) */}
-            {!loading && galleries.length > 0 && (
+            {galleries.length > 0 && (
               <>
                 <Link href={`/gallery/${galleries[0].id}`} className="group block mb-12">
                   <div className="relative bg-white shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden">
@@ -176,19 +165,26 @@ export default function GalleryPage() {
                         </div>
 
                         {/* Image count badge */}
-                        {galleries[0].imageCount !== undefined && galleries[0].imageCount > 0 && (
-                          <div className="absolute bottom-4 left-4 flex items-center gap-2 bg-black/60 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                            <Camera className="h-4 w-4 text-white" />
-                            <span className="text-sm font-medium text-white">{galleries[0].imageCount} foto</span>
-                          </div>
-                        )}
+                        {galleries[0].imageCount !== undefined &&
+                          galleries[0].imageCount > 0 && (
+                            <div className="absolute bottom-4 left-4 flex items-center gap-2 bg-black/60 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                              <Camera className="h-4 w-4 text-white" />
+                              <span className="text-sm font-medium text-white">
+                                {galleries[0].imageCount} foto
+                              </span>
+                            </div>
+                          )}
                       </div>
 
                       {/* Content */}
                       <div className="p-8 md:p-10 flex flex-col justify-center">
                         <div className="flex items-center gap-2 text-sm text-teal-600 mb-4">
                           <CalendarDays className="h-4 w-4" />
-                          <span className="font-medium">{formatDate(galleries[0].created_at || new Date().toISOString())}</span>
+                          <span className="font-medium">
+                            {formatDate(
+                              galleries[0].created_at || new Date().toISOString()
+                            )}
+                          </span>
                         </div>
 
                         <h3 className="text-2xl md:text-3xl font-bold uppercase tracking-tight text-teal-900 group-hover:text-teal-700 transition-colors mb-4">
@@ -217,7 +213,11 @@ export default function GalleryPage() {
                 {galleries.length > 1 && (
                   <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {galleries.slice(1).map((gallery) => (
-                      <Link href={`/gallery/${gallery.id}`} key={gallery.id} className="group block">
+                      <Link
+                        href={`/gallery/${gallery.id}`}
+                        key={gallery.id}
+                        className="group block"
+                      >
                         <div className="relative h-full bg-white shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden">
                           {/* Top accent */}
                           <div className="h-1.5 bg-gradient-to-r from-teal-600 via-teal-500 to-teal-600" />
@@ -238,17 +238,24 @@ export default function GalleryPage() {
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
                             {/* Image count badge */}
-                            {gallery.imageCount !== undefined && gallery.imageCount > 0 && (
-                              <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded-full">
-                                <Camera className="h-3.5 w-3.5 text-white" />
-                                <span className="text-xs font-medium text-white">{gallery.imageCount}</span>
-                              </div>
-                            )}
+                            {gallery.imageCount !== undefined &&
+                              gallery.imageCount > 0 && (
+                                <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded-full">
+                                  <Camera className="h-3.5 w-3.5 text-white" />
+                                  <span className="text-xs font-medium text-white">
+                                    {gallery.imageCount}
+                                  </span>
+                                </div>
+                              )}
 
                             {/* Date overlay */}
                             <div className="absolute bottom-4 left-4 flex items-center gap-2 text-white/90">
                               <CalendarDays className="h-4 w-4" />
-                              <span className="text-sm font-medium">{formatDate(gallery.created_at || new Date().toISOString())}</span>
+                              <span className="text-sm font-medium">
+                                {formatDate(
+                                  gallery.created_at || new Date().toISOString()
+                                )}
+                              </span>
                             </div>
                           </div>
 

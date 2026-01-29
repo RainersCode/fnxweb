@@ -1,11 +1,19 @@
-'use client'
-
+import { Metadata } from 'next'
 import { default as NextImage } from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, Users } from 'lucide-react'
 import { MainLayout } from '@/components/layout/main-layout'
 import { ParallaxHeroSection } from '@/components/features/parallax-hero-section'
 import { aboutUsData } from '@/data/about-us'
+
+export const metadata: Metadata = {
+  title: 'Par mums | RK Fēnikss',
+  description: 'Uzziniet par RK Fēnikss regbija klubu - mūsu vēsture, misija un vērtības.',
+  openGraph: {
+    title: 'Par mums | RK Fēnikss',
+    description: 'Uzziniet par RK Fēnikss regbija klubu - mūsu vēsture, misija un vērtības.',
+  },
+}
 
 export default function AboutPage() {
   return (
