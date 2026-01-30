@@ -153,9 +153,9 @@ export function HomeSocialSection() {
                 rel="noopener noreferrer"
                 className="inline-block"
               >
-                <button className="skew-x-[-12deg] transform bg-white px-6 py-2.5 font-bold tracking-wide text-[#E4405F] shadow-lg transition-all duration-300 hover:bg-pink-100 hover:scale-105">
+                <button className="skew-x-[-12deg] transform bg-white px-6 py-2.5 font-bold tracking-wide text-[#B5234A] shadow-lg transition-all duration-300 hover:bg-pink-100 hover:scale-105">
                   <span className="inline-flex skew-x-[12deg] transform items-center gap-2 text-sm">
-                    SKATĪT PROFILU
+                    SKATĪT INSTAGRAM PROFILU
                     <ExternalLink className="h-4 w-4" />
                   </span>
                 </button>
@@ -219,7 +219,7 @@ export function HomeSocialSection() {
               >
                 <button className="skew-x-[-12deg] transform bg-white px-6 py-2.5 font-bold tracking-wide text-black shadow-lg transition-all duration-300 hover:bg-gray-100 hover:scale-105">
                   <span className="inline-flex skew-x-[12deg] transform items-center gap-2 text-sm">
-                    SKATĪT PROFILU
+                    SKATĪT TIKTOK PROFILU
                     <ExternalLink className="h-4 w-4" />
                   </span>
                 </button>
@@ -237,6 +237,7 @@ export function HomeSocialSection() {
             href="https://www.facebook.com/RKFenikss"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Facebook"
             className="w-12 h-12 bg-white/10 hover:bg-[#1877F2] rounded-lg flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
           >
             <Facebook className="h-6 w-6" />
@@ -245,6 +246,7 @@ export function HomeSocialSection() {
             href="https://www.instagram.com/rk_fenikss/"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Instagram"
             className="w-12 h-12 bg-white/10 hover:bg-gradient-to-r hover:from-[#833AB4] hover:via-[#FD1D1D] hover:to-[#F77737] rounded-lg flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
           >
             <Instagram className="h-6 w-6" />
@@ -253,6 +255,7 @@ export function HomeSocialSection() {
             href="https://www.tiktok.com/@rk_fenikss"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="TikTok"
             className="w-12 h-12 bg-white/10 hover:bg-black rounded-lg flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
           >
             <TikTokIcon className="h-6 w-6" />

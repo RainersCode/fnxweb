@@ -167,18 +167,20 @@ export function HeroCarousel({ articles }: HeroCarouselProps) {
               </Link>
 
               {/* Slide indicators */}
-              <div className="hidden sm:flex items-center gap-2">
+              <div className="hidden sm:flex items-center gap-0">
                 {newsItems.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentSlide(index)}
-                    className={`h-2 skew-x-[-12deg] transform transition-all duration-300 ${
+                    className="p-3 flex items-center justify-center"
+                    aria-label={`Go to slide ${index + 1}`}
+                  >
+                    <span className={`block h-2 skew-x-[-12deg] transition-all duration-300 ${
                       index === currentSlide
                         ? 'w-10 bg-teal-400'
                         : 'w-6 bg-white/30 hover:bg-white/50'
-                    }`}
-                    aria-label={`Go to slide ${index + 1}`}
-                  />
+                    }`} />
+                  </button>
                 ))}
               </div>
             </div>
@@ -255,18 +257,20 @@ export function HeroCarousel({ articles }: HeroCarouselProps) {
             </div>
 
             {/* Mobile slide indicators */}
-            <div className="flex sm:hidden items-center justify-center gap-2 mt-6">
+            <div className="flex sm:hidden items-center justify-center gap-0 mt-6">
               {newsItems.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentSlide(index)}
-                  className={`h-2 skew-x-[-12deg] transform transition-all duration-300 ${
+                  className="p-3 flex items-center justify-center"
+                  aria-label={`Go to slide ${index + 1}`}
+                >
+                  <span className={`block h-2 skew-x-[-12deg] transition-all duration-300 ${
                     index === currentSlide
                       ? 'w-10 bg-teal-400'
                       : 'w-6 bg-white/30 hover:bg-white/50'
-                  }`}
-                  aria-label={`Go to slide ${index + 1}`}
-                />
+                  }`} />
+                </button>
               ))}
             </div>
           </div>

@@ -190,18 +190,20 @@ export function HomeGallerySection({ galleries }: HomeGallerySectionProps) {
               </div>
 
               {/* Dot indicators */}
-              <div className="flex justify-center gap-2 mt-4">
+              <div className="flex justify-center gap-0 mt-4">
                 {galleries.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => scrollToCard(index)}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    className="p-3 flex items-center justify-center"
+                    aria-label={`Go to slide ${index + 1}`}
+                  >
+                    <span className={`block h-2 rounded-full transition-all duration-300 ${
                       activeIndex === index
                         ? 'bg-teal-700 w-6'
-                        : 'bg-teal-300 hover:bg-teal-400'
-                    }`}
-                    aria-label={`Go to slide ${index + 1}`}
-                  />
+                        : 'bg-teal-300 hover:bg-teal-400 w-2'
+                    }`} />
+                  </button>
                 ))}
               </div>
             </div>

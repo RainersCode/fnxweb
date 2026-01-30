@@ -136,6 +136,7 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
                     target="_blank"
                     rel="noopener noreferrer"
                     className="ml-4 skew-x-[-12deg] transform bg-white text-pink-600 px-4 py-1 text-sm font-bold hover:bg-pink-100 transition-colors"
+                    tabIndex={group === 1 ? -1 : undefined}
                   >
                     <span className="inline-block skew-x-[12deg] transform">ZIEDOT</span>
                   </Link>
