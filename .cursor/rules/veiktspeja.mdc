@@ -1,0 +1,610 @@
+smartphone
+Mobilais
+
+computer
+Dators
+Tiek rādīti rezultāti, kas atbilst šim vietrādim URL: https://www.fnx-rugby.lv/
+Analizēt ar sākotnējo URL
+
+Faktisko lietotāju pieredzes atklāšana
+Nav datu
+
+Veiktspējas problēmu diagnosticēšana
+78
+Veiktspēja
+81
+Pieejamība
+54
+Paraugprakse
+100
+MPO
+78
+FCP
++10
+LCP
++18
+TBT
++25
+CLS
++25
+SI
++0
+Veiktspēja
+Vērtības ir aptuvenas un var atšķirties. Veiktspējas rezultāts tiek aprēķināts, pamatojoties tieši uz šiem metrikas veidiem.Skatiet kalkulatoru.
+0–49
+50–89
+90–100
+Final Screenshot
+
+Metrikas
+Izvērst skatu
+First Contentful Paint
+1,2 s
+Largest Contentful Paint
+3,2 s
+Total Blocking Time
+250 ms
+Cumulative Layout Shift
+0.01
+Speed Index
+15,3 s
+Captured at 2026. g. 30. janv. 11:42 EET
+Emulēta ierīce Moto G Power with Lighthouse 13.0.1
+Vienas lapas sesija
+Sākotnējā lapas ielāde
+Lēna 4G savienojuma ierobežošana
+Using HeadlessChromium 137.0.7151.119 with lr
+Skatīt koka struktūru
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Rādīt pārbaudes, kas atbilst:
+
+All
+
+FCP
+
+LCP
+
+TBT
+
+CLS
+Ieskati
+Attēlu piegādes uzlabošana Aptuvenais ietaupījums: 513 KiB
+Samazinot attēlu lejupielādes laiku, var tikt uzlabots lapas ielādes laiks un LCP. Uzziniet vairāk par attēlu lieluma optimizāciju.LCPFCPNeuzskaitītie
+URL
+Resursa izmēri
+Aptuvenais ietaupījums
+fnx-rugby.lv Pirmā puse
+904,1 KiB	512,9 KiB
+div.flex > main.flex-1 > section.relative > div.absolute
+<div class="absolute inset-0 z-0" style="background-image: url(&quot;/AboutUs/parallax.jpg&quot;); background-size: cover;">
+/AboutUs/parallax.jpg(www.fnx-rugby.lv)
+577,5 KiB
+299,3 KiB
+Modernu attēla formātu (WebP, AVIF) izmantošana vai attēlu saspiešanas koeficienta palielināšana varētu uzlabot šī attēla lejupielādes lielumu.
+299,3 KiB
+Rugby Club Team
+<img alt="Rugby Club Team" loading="lazy" width="800" height="600" decoding="async" data-nimg="1" class="h-auto w-full transition-transform duration-700 group-hover:scale-105" style="color:transparent" srcset="/_next/image?url=%2FAboutUs%2Fteam.jpg&amp;w=828&amp;q=75 1x, /_next/image?url=%2F…" src="/_next/image?url=%2FAboutUs%2Fteam.jpg&amp;w=1920&amp;q=75">
+/_next/image?url=%2FAboutUs%2Fteam.jpg&w=1920&q=75(www.fnx-rugby.lv)
+142,3 KiB
+117,7 KiB
+Šī attēla faila lielums (1600x1088) pārsniedz attēlošanai vajadzīgo lielumu (665x452). Izmantojiet adaptīvos attēlus, lai samazinātu attēla lejupielādes lielumu.
+117,7 KiB
+Mājas laukuma izveide Brenguļos
+<img alt="Mājas laukuma izveide Brenguļos" loading="lazy" decoding="async" data-nimg="fill" class="object-cover transition-transform duration-700 group-hover:scale-110" style="position: absolute; height: 100%; width: 100%; inset: 0px;" sizes="100vw" srcset="/_next/image?url=https%3A%2F%2Fkzneajdawdlvjlfdnxoy.supabase.co%2Fstorage%…" src="https://www.fnx-rugby.lv/_next/image?url=https%3A%2F%2Fkzneajdawdlvjlfdnxo…">
+/_next/image?url=…(www.fnx-rugby.lv)
+105,0 KiB
+72,4 KiB
+Attēla saspiešanas koeficienta palielināšana var uzlabot šī attēla lejupielādes lielumu.
+72,4 KiB
+section.relative > div.absolute > div.absolute > img.object-cover
+<img alt="" fetchpriority="high" loading="eager" decoding="async" data-nimg="fill" class="object-cover blur-2xl scale-110" style="position: absolute; height: 100%; width: 100%; inset: 0px;" sizes="100vw" srcset="/_next/image?url=https%3A%2F%2Fkzneajdawdlvjlfdnxoy.supabase.co%2Fstorage%…" src="https://www.fnx-rugby.lv/_next/image?url=https%3A%2F%2Fkzneajdawdlvjlfdnxo…">
+/_next/image?url=…(www.fnx-rugby.lv)
+32,7 KiB
+17,8 KiB
+Attēla saspiešanas koeficienta palielināšana var uzlabot šī attēla lejupielādes lielumu.
+17,8 KiB
+Latvijas čempionāta spēle pret RK "Eži” 05.04.2025
+<img alt="Latvijas čempionāta spēle pret RK &quot;Eži” 05.04.2025" loading="lazy" decoding="async" data-nimg="fill" class="object-cover transition-transform duration-700 group-hover:scale-110" style="position: absolute; height: 100%; width: 100%; inset: 0px;" sizes="100vw" srcset="/_next/image?url=https%3A%2F%2Fkzneajdawdlvjlfdnxoy.supabase.co%2Fstorage%…" src="https://www.fnx-rugby.lv/_next/image?url=https%3A%2F%2Fkzneajdawdlvjlfdnxo…">
+/_next/image?url=…(www.fnx-rugby.lv)
+46,7 KiB
+5,6 KiB
+Attēla saspiešanas koeficienta palielināšana var uzlabot šī attēla lejupielādes lielumu.
+5,6 KiB
+Mantotais JavaScript kods Aptuvenais ietaupījums: 12 KiB
+Pārlūka ielikumi un pārveidošanas kodi ļauj vecākos pārlūkos izmantot jaunas JavaScript funkcijas. Tomēr modernos pārlūkos daudzi no tiem nav nepieciešami. Ieteicams mainīt JavaScript būvēšanas procesu, lai netiktu transpilētas pamata līmeņa funkcijas, ja vien nezināt, ka jums ir jāatbalsta vecāki pārlūki. Uzziniet, kāpēc lielākajā daļā vietņu var izvietot ES6+ kodu bez transpilēšanas.LCPFCPNeuzskaitītie
+URL
+Neizmantotie baiti
+fnx-rugby.lv Pirmā puse
+11,6 KiB
+…chunks/2117-93c4f123190e6bb2.js(www.fnx-rugby.lv)
+11,6 KiB
+…chunks/2117-93c4f123190e6bb2.js:1:1276(www.fnx-rugby.lv)
+Array.prototype.at
+…chunks/2117-93c4f123190e6bb2.js:1:664(www.fnx-rugby.lv)
+Array.prototype.flat
+…chunks/2117-93c4f123190e6bb2.js:1:777(www.fnx-rugby.lv)
+Array.prototype.flatMap
+…chunks/2117-93c4f123190e6bb2.js:1:1153(www.fnx-rugby.lv)
+Object.fromEntries
+…chunks/2117-93c4f123190e6bb2.js:1:1411(www.fnx-rugby.lv)
+Object.hasOwn
+…chunks/2117-93c4f123190e6bb2.js:1:406(www.fnx-rugby.lv)
+String.prototype.trimEnd
+…chunks/2117-93c4f123190e6bb2.js:1:321(www.fnx-rugby.lv)
+String.prototype.trimStart
+Atveidošanas bloķēšanas pieprasījumi Aptuvenais ietaupījums: 500 ms
+Pieprasījumi bloķē lapas sākotnējo atveidi, un tas var aizkavēt LCP. Atliekot vai iekļaujot šos tīkla pieprasījumus, tos varat pārvietot ārpus kritiskā ceļa.LCPFCPNeuzskaitītie
+URL
+Pārsūtīto failu lielums
+Ilgums
+fnx-rugby.lv Pirmā puse
+25,2 KiB	830 ms
+…css/21853ce8e9374e10.css(www.fnx-rugby.lv)
+24,0 KiB
+330 ms
+…css/7cca8e2c5137bd71.css(www.fnx-rugby.lv)
+1,2 KiB
+500 ms
+LCP iedalījums
+Katrai apakšdaļai ir noteiktas uzlabošanas stratēģijas. Ideālā gadījumā lielāko daļu LCP laika ir jāveido resursu ielādei, nevis aizkavei.LCPNeuzskaitītie
+Apakšdaļa
+Ilgums
+Laiks līdz pirmajam baitam
+0 ms
+Resursa ielādes aizkave
+2590 ms
+Resursa ielādes ilgums
+330 ms
+Elementa atveidošanas aizkave
+150 ms
+section.relative > div.absolute > div.absolute > img.object-cover
+<img alt="" fetchpriority="high" loading="eager" decoding="async" data-nimg="fill" class="object-cover blur-2xl scale-110" style="position: absolute; height: 100%; width: 100%; inset: 0px;" sizes="100vw" srcset="/_next/image?url=https%3A%2F%2Fkzneajdawdlvjlfdnxoy.supabase.co%2Fstorage%…" src="https://www.fnx-rugby.lv/_next/image?url=https%3A%2F%2Fkzneajdawdlvjlfdnxo…">
+Tīkla atkarību koks
+Novērsiet kritisko pieprasījumu ķēdes, samazinot ķēžu garumu, samazinot resursu lejupielādes apjomu vai atliekot nevajadzīgo resursu lejupielādi, lai uzlabotu lapas ielādi.LCPNeuzskaitītie
+Maksimālais kritiskais ceļa latentums: 5894 ms
+Sākotnējā navigācija
+https://www.fnx-rugby.lv - 2595 ms, 22,39 KiB
+…tiktok_fonts/TikTokFont-Bold.woff2?_default_font=1&v=2(sf16-website-login.neutral.ttwstatic.com) - 5894 ms, 58,20 KiB
+…css/21853ce8e9374e10.css(www.fnx-rugby.lv) - 2944 ms, 24,00 KiB
+…css/7cca8e2c5137bd71.css(www.fnx-rugby.lv) - 2812 ms, 1,23 KiB
+Iepriekš pievienotās sākumadreses
+iepriekšējas pieslēgšanas norādes palīdz pārlūkprogrammai izveidot savienojumu agrāk lapas ielādes laikā, tādējādi ietaupot laiku, kad tiek iesniegts pirmais pieprasījums attiecīgajai sākumadresei. Tālāk ir norādītas sākumlapas, kurām lapa tika iepriekš pieslēgta.
+neviena sākumadrese netika iepriekš pievienota
+Iepriekšējās pievienošanas kandidāti
+Pievienojiet iepriekšējas savienojuma izveides norādes saviem svarīgākajiem avotiem, taču centieties izmantot ne vairāk par četriem avotiem.
+Sākumadrese
+Aptuvenais LCP ietaupījums
+https://www.tiktok.com
+320 ms
+Efektīva kešatmiņas darbības ilguma izmantošana Aptuvenais ietaupījums: 27 KiB
+Iestatot ilgu kešatmiņas mūžu, lapas atkārtoti apmeklējumi varētu paātrināties. Uzziniet vairāk.LCPFCPNeuzskaitītie
+Pieprasījums
+Kešatmiņas TTL vērtība
+Pārsūtīto failu lielums
+ttwstatic.com
+27 KiB
+…sdk-web/browser.sg.js?bid=…(sf16-website-login.neutral.ttwstatic.com)
+5 min
+17 KiB
+…plugins/common-monitors.1.16.5.js(sf16-website-login.neutral.ttwstatic.com)
+5 min
+10 KiB
+Instagram social 
+10 KiB
+…t51.2885-19/468….jpg?stp=…(scontent-dfw5-1.cdninstagram.com)
+14 d.
+10 KiB
+Fonta attēlojums Aptuvenais ietaupījums: 20 ms
+Lai teksts vienmēr būtu redzams, ieteicams parametram font-display iestatīt vērtību swap vai optional. Lai mazinātu izkārtojuma nobīdes, swap var optimizēt vēl vairāk, izmantojot fonta rādītāju ignorēšanu.FCPNeuzskaitītie
+URL
+Aptuvenais ietaupījums
+ttwstatic.com
+…tiktok_fonts/TikTokDis….woff2?_default_font=1&v=2(sf16-website-login.neutral.ttwstatic.com)
+20 ms
+…tiktok_fonts/TikTokFont-Regular.woff2?_default_font=1&v=2(sf16-website-login.neutral.ttwstatic.com)
+20 ms
+…tiktok_fonts/TikTokFon….woff2?_default_font=1&v=2(sf16-website-login.neutral.ttwstatic.com)
+20 ms
+…tiktok_fonts/TikTokFont-Bold.woff2?_default_font=1&v=2(sf16-website-login.neutral.ttwstatic.com)
+20 ms
+Izkārtojuma nobīdes cēloņi
+Izkārtojuma nobīdes rodas, ja elementi pārvietojas bez lietotāja mijiedarbības. Izpētiet izkārtojuma nobīdes cēloņus, piemēram, elementu pievienošanu un noņemšanu vai to fonta izmaiņas lapas ielādes laikā.CLSNeuzskaitītie
+Elements
+Izkārtojuma nobīdes rādītājs
+Kopā
+0,000
+Open TikTok
+<button class="css-ug6w5y e1v8cfre4" data-e2e="common-cardFooter-TUXButton">
+0,000
+…tiktok_fonts/TikTokDis….woff2?_default_font=1&v=2(sf16-website-login.neutral.ttwstatic.com)
+Tīmekļa fonts
+…tiktok_fonts/TikTokFon….woff2?_default_font=1&v=2(sf16-website-login.neutral.ttwstatic.com)
+Tīmekļa fonts
+…tiktok_fonts/TikTokFont-Regular.woff2?_default_font=1&v=2(sf16-website-login.neutral.ttwstatic.com)
+Tīmekļa fonts
+Element
+Layout shift score
+Kopā
+0,000
+449
+<div data-e2e="common-Video-Count" class="css-1dw7ik1 e7bdfsk3">
+0,000
+Element
+Layout shift score
+Kopā
+0,010
+Kopš 2024. gada pavasara Regbija klubs Fēnikss ir izveidojis sadarbību ar biedr…
+<p class="text-lg text-teal-100/80 leading-relaxed mb-8 max-w-lg">
+0,010
+Trešās puses
+Trešās puses kods var ievērojami ietekmēt ielādes veiktspēju. Lai piešķirtu prioritāti savas lapas saturam, ierobežojiet un atlieciet trešās puses koda ielādi.Neuzskaitītie
+Trešā puse
+Pārsūtīto vienumu lielums
+Galvenā pavediena laiks
+ttwstatic.com
+1001 KiB	571 ms
+…static/tiktok-embed.module.6c5c90f….js(sf16-website-login.neutral.ttwstatic.com)
+604 KiB
+305 ms
+…1.0.0.223/webmssdk.js(sf16-website-login.neutral.ttwstatic.com)
+45 KiB
+166 ms
+…1.0.0.294/webmssdk_ex.js(sf16-website-login.neutral.ttwstatic.com)
+58 KiB
+53 ms
+…sdk-web/browser.sg.js?bid=…(sf16-website-login.neutral.ttwstatic.com)
+17 KiB
+28 ms
+…sdk-pre/slardar.web.pre.js(sf16-website-login.neutral.ttwstatic.com)
+2 KiB
+9 ms
+…plugins/common-monitors.1.16.5.js(sf16-website-login.neutral.ttwstatic.com)
+10 KiB
+7 ms
+…static/mssdk-init.js(sf16-website-login.neutral.ttwstatic.com)
+2 KiB
+3 ms
+…static/frontity-public-path.js(sf16-website-login.neutral.ttwstatic.com)
+2 KiB
+1 ms
+…static/playlistCard.module.f44be60….js(sf16-website-login.neutral.ttwstatic.com)
+10 KiB
+0 ms
+…tiktok_fonts/TikTokDis….woff2?_default_font=1&v=2(sf16-website-login.neutral.ttwstatic.com)
+59 KiB
+0 ms
+…tiktok_fonts/TikTokFont-Bold.woff2?_default_font=1&v=2(sf16-website-login.neutral.ttwstatic.com)
+58 KiB
+0 ms
+…tiktok_fonts/TikTokFon….woff2?_default_font=1&v=2(sf16-website-login.neutral.ttwstatic.com)
+57 KiB
+0 ms
+…tiktok_fonts/TikTokFont-Regular.woff2?_default_font=1&v=2(sf16-website-login.neutral.ttwstatic.com)
+57 KiB
+0 ms
+…images/fullProfile-7e8cead….png(sf16-website-login.neutral.ttwstatic.com)
+9 KiB
+0 ms
+…static/vendors~home~playlistCard.module.f1fa00b….js(sf16-website-login.neutral.ttwstatic.com)
+8 KiB
+0 ms
+…images/playButton-e9bf746….png(sf16-website-login.neutral.ttwstatic.com)
+4 KiB
+0 ms
+tiktokcdn-eu.com
+69 030 KiB	68 ms
+…1.0.0.933/index.js(sf16-website-login.neutral.tiktokcdn-eu.com)
+38 KiB
+41 ms
+…1.0.0.933/core.js?globalName=__PNS_RUNTIME__(sf16-website-login.neutral.tiktokcdn-eu.com)
+29 KiB
+20 ms
+…1.0.0.933/devtools.js?globalName=…(sf16-website-login.neutral.tiktokcdn-eu.com)
+15 KiB
+8 ms
+/tos-no1a-p-0037-no/oopfDrAP8…~tplv-tikt….image?dr=…(p16-pu-sign-no.tiktokcdn-eu.com)
+751 KiB
+0 ms
+…tos-no1a-…/ogvJQIB7W…?a=…(v15m.tiktokcdn-eu.com)
+18 999 KiB
+0 ms
+…tos-no1a-…/oo1fzCE1X…?a=…(v15m.tiktokcdn-eu.com)
+11 098 KiB
+0 ms
+…tos-no1a-…/oQP2SLw81…?a=…(v15m.tiktokcdn-eu.com)
+10 454 KiB
+0 ms
+…tos-no1a-…/osFPToxBc…?a=…(v15m.tiktokcdn-eu.com)
+10 089 KiB
+0 ms
+…tos-no1a-…/oAPz6QBDI…?a=…(v15m.tiktokcdn-eu.com)
+8006 KiB
+0 ms
+…tos-no1a-…/oEQeSnsE6…?a=…(v15m.tiktokcdn-eu.com)
+6640 KiB
+0 ms
+/tos-no1a-p-0037-no/o8eE6fFox…~tplv-tikt….image?dr=…(p19-pu-sign-no.tiktokcdn-eu.com)
+1658 KiB
+0 ms
+/tos-no1a-p-0037-no/oUe4QkEw8…~tplv-tikt….image?dr=…(p16-common-sign.tiktokcdn-eu.com)
+538 KiB
+0 ms
+/tos-no1a-p-0037-no/oMyBNnJOi…~tplv-tikt….image?dr=…(p16-pu-sign-no.tiktokcdn-eu.com)
+210 KiB
+0 ms
+/tos-no1a-p-0037-no/oI0ETiTvi…~tplv-tikt….image?dr=…(p16-pu-sign-no.tiktokcdn-eu.com)
+209 KiB
+0 ms
+/tos-no1a-p-0037-no/o4tyguwfP…~tplv-tikt….image?dr=…(p19-pu-sign-no.tiktokcdn-eu.com)
+158 KiB
+0 ms
+/tos-no1a-p-0037-no/osPwVAD1s…~tplv-tikt….image?dr=…(p19-pu-sign-no.tiktokcdn-eu.com)
+70 KiB
+0 ms
+/tos-no1a-p-0037-no/oEWMECimT…~tplv-tikt….image?dr=…(p16-pu-sign-no.tiktokcdn-eu.com)
+57 KiB
+0 ms
+/tos-no1a-…/69e36f7…~tplv-tikt…:100:100.jpeg?dr=…(p19-pu-sign-no.tiktokcdn-eu.com)
+9 KiB
+0 ms
+accounts.dev
+77 KiB	36 ms
+…dist/clerk.browser.js(excited-lamb-72.clerk.accounts.dev)
+0 KiB
+36 ms
+…dist/clerk.browser.js(excited-lamb-72.clerk.accounts.dev)
+70 KiB
+0 ms
+/v1/environment?_clerk_js_version=…(excited-lamb-72.clerk.accounts.dev)
+3 KiB
+0 ms
+/v1/dev_browser?_clerk_js_version=4.73.14(excited-lamb-72.clerk.accounts.dev)
+2 KiB
+0 ms
+/v1/client?_clerk_js_version=…(excited-lamb-72.clerk.accounts.dev)
+2 KiB
+0 ms
+TikTok social 
+52 KiB	25 ms
+/embed/@rk_fenikss(www.tiktok.com)
+52 KiB
+25 ms
+tiktokw.eu
+13 KiB	1 ms
+/v1/list(mcs-ie2.tiktokw.eu)
+4 KiB
+0 ms
+/web/report?msToken=&X-Bogus=DFSzswSOQ…(webmssdk16-normal-no1a.tiktokw.eu)
+2 KiB
+0 ms
+/web/resource?eq=25pes5BUx…/sN6voPX-h…(webmssdk16-normal-no1a.tiktokw.eu)
+2 KiB
+0 ms
+…user/webid(mcs-ie2.tiktokw.eu)
+2 KiB
+0 ms
+…2/abtest_config(libraweb-ttp2.tiktokw.eu)
+3 KiB
+0 ms
+tiktokv.eu
+8 KiB	1 ms
+…collect/batch?biz_id=tiktok_web_embed(mon16-normal-no1a.tiktokv.eu)
+6 KiB
+0 ms
+…settings/browser-settings?bid=tiktok_web_embed&store=1(mon16-normal-no1a.tiktokv.eu)
+2 KiB
+0 ms
+Šie ieskati ir pieejami arī Chrome izstrādātāja rīku veiktspējas panelī. Lai skatītu detalizētāku informāciju, reģistrējiet izsekošanas datus.
+Diagnostika
+JavaScript izpildes laika samazināšana 1,4 s
+Ieteicams samazināt laiku, kas tiek izmantots JS parsēšanai, kompilēšanai un izpildei. Iespējams, konstatēsiet, ka ir noderīgi izmantot mazākas JS lietderīgās slodzes. Uzziniet, kā samazināt JavaScript izpildes laiku.TBTNeuzskaitītie
+URL
+Kopējais centrālā procesora laiks
+Skripta novērtēšana
+Skriptu parsēšana
+fnx-rugby.lv Pirmā puse
+1446 ms	240 ms	21 ms
+https://www.fnx-rugby.lv
+1082 ms
+13 ms
+3 ms
+…chunks/2117-93c4f123190e6bb2.js(www.fnx-rugby.lv)
+239 ms
+205 ms
+7 ms
+…chunks/fd9d1056-c993b39eee1c7908.js(www.fnx-rugby.lv)
+125 ms
+22 ms
+11 ms
+ttwstatic.com
+1234 ms	962 ms	96 ms
+…1.0.0.223/webmssdk.js(sf16-website-login.neutral.ttwstatic.com)
+682 ms
+566 ms
+8 ms
+…static/mssdk-init.js(sf16-website-login.neutral.ttwstatic.com)
+372 ms
+330 ms
+0 ms
+…static/tiktok-embed.module.6c5c90f….js(sf16-website-login.neutral.ttwstatic.com)
+117 ms
+14 ms
+76 ms
+…1.0.0.294/webmssdk_ex.js(sf16-website-login.neutral.ttwstatic.com)
+63 ms
+52 ms
+12 ms
+Neattiecināmi
+389 ms	17 ms	0 ms
+Unattributable
+389 ms
+17 ms
+0 ms
+TikTok social 
+60 ms	0 ms	0 ms
+/embed/@rk_fenikss(www.tiktok.com)
+60 ms
+0 ms
+0 ms
+tiktokcdn-eu.com
+52 ms	36 ms	13 ms
+…1.0.0.933/index.js(sf16-website-login.neutral.tiktokcdn-eu.com)
+52 ms
+36 ms
+13 ms
+Samaziniet galvenā pavediena darbu 3,4 s
+Ieteicams samazināt laiku, kas tiek izmantots JS parsēšanai, kompilēšanai un izpildei. Iespējams, konstatēsiet, ka ir noderīgi izmantot mazākas JS lietderīgās slodzes. Uzziniet, kā minimizēt galvenā pavediena darbu.TBTNeuzskaitītie
+Kategorija
+Iztērētais laiks
+Script Evaluation
+1387 ms
+Other
+1070 ms
+Style & Layout
+327 ms
+Rendering
+257 ms
+Script Parsing & Compilation
+210 ms
+Garbage Collection
+122 ms
+Parse HTML & CSS
+43 ms
+Noņemiet neizmantoto CSS kodu Aptuvenais ietaupījums: 46 KiB
+Noņemiet neizmantotās kārtulas no stilu lapām un atlieciet pirmā ekrāna saturā neizmantotā CSS koda ielādi, lai samazinātu tīkla aktivitātes izmantoto baitu apjomu. Uzziniet, kā samazināt neizmantotu CSS kodu.LCPFCPNeuzskaitītie
+URL
+Pārsūtīto failu lielums
+Aptuvenais ietaupījums
+Neattiecināmi
+30,1 KiB	26,7 KiB
+html,body{border:none;margin:0;padding:0;} …
+30,1 KiB
+26,7 KiB
+fnx-rugby.lv Pirmā puse
+23,3 KiB	19,0 KiB
+…css/21853ce8e9374e10.css(www.fnx-rugby.lv)
+23,3 KiB
+19,0 KiB
+Noņemiet neizmantoto JavaScript kodu Aptuvenais ietaupījums: 354 KiB
+Noņemiet neizmantoto JavaScript kodu un atlieciet skriptu ielādi, līdz tie būs nepieciešami, lai samazinātu tīkla aktivitātes izmantoto baitu apjomu. Uzziniet, kā samazināt neizmantotu JavaScript kodu.LCPFCPNeuzskaitītie
+URL
+Pārsūtīto failu lielums
+Aptuvenais ietaupījums
+ttwstatic.com
+658,8 KiB	283,8 KiB
+…static/tiktok-embed.module.6c5c90f….js(sf16-website-login.neutral.ttwstatic.com)
+602,5 KiB
+254,3 KiB
+…1.0.0.294/webmssdk_ex.js(sf16-website-login.neutral.ttwstatic.com)
+56,4 KiB
+29,5 KiB
+accounts.dev
+68,5 KiB	44,8 KiB
+…dist/clerk.browser.js(excited-lamb-72.clerk.accounts.dev)
+68,5 KiB
+44,8 KiB
+fnx-rugby.lv Pirmā puse
+35,2 KiB	25,3 KiB
+…chunks/9462-4087558a25ef3c8c.js(www.fnx-rugby.lv)
+35,2 KiB
+25,3 KiB
+Pārāk lielas tīkla lietderīgās slodzes nepieļaušana Kopējais lielums bija 72 826 KiB
+Lielas tīkla lietderīgās slodzes izmaksā lietotājiem īstu naudu un ir cieši saistītas ar ilgu ielādes laiku. Uzziniet, kā samazināt lietderīgo slodzi.Neuzskaitītie
+URL
+Pārsūtīto failu lielums
+tiktokcdn-eu.com
+66 943,9 KiB
+…tos-no1a-…/oo1fzCE1X…?a=…(v15m.tiktokcdn-eu.com)
+11 097,9 KiB
+…tos-no1a-…/oQP2SLw81…?a=…(v15m.tiktokcdn-eu.com)
+10 454,1 KiB
+…tos-no1a-…/osFPToxBc…?a=…(v15m.tiktokcdn-eu.com)
+10 088,6 KiB
+…tos-no1a-…/ogvJQIB7W…?a=…(v15m.tiktokcdn-eu.com)
+9499,7 KiB
+…tos-no1a-…/ogvJQIB7W…?a=…(v15m.tiktokcdn-eu.com)
+9499,7 KiB
+…tos-no1a-…/oAPz6QBDI…?a=…(v15m.tiktokcdn-eu.com)
+8005,8 KiB
+…tos-no1a-…/oEQeSnsE6…?a=…(v15m.tiktokcdn-eu.com)
+6640,1 KiB
+/tos-no1a-p-0037-no/o8eE6fFox…~tplv-tikt….image?dr=…(p19-pu-sign-no.tiktokcdn-eu.com)
+829,0 KiB
+/tos-no1a-p-0037-no/o8eE6fFox…~tplv-tikt….image?dr=…(p19-pu-sign-no.tiktokcdn-eu.com)
+829,0 KiB
+ttwstatic.com
+604,2 KiB
+…static/tiktok-embed.module.6c5c90f….js(sf16-website-login.neutral.ttwstatic.com)
+604,2 KiB
+Izvairieties no galvenā pavediena uzdevumiem ar ilgu izpildes laiku Tika atrasti 10 uzdevumi ar ilgu izpildes laiku
+Šeit ir norādīti galvenā pavediena uzdevumi ar visilgāko izpildes laiku, lai palīdzētu noteikt, kuri uzdevumi visvairāk palielina ievades aizkavi. Uzziniet, kā izvairīties no ilgiem galvenā pavediena uzdevumiem.TBTNeuzskaitītie
+URL
+Sākuma laiks
+Ilgums
+ttwstatic.com
+869 ms
+…1.0.0.223/webmssdk.js(sf16-website-login.neutral.ttwstatic.com)
+31 254 ms
+183 ms
+…static/mssdk-init.js(sf16-website-login.neutral.ttwstatic.com)
+31 568 ms
+175 ms
+…1.0.0.223/webmssdk.js(sf16-website-login.neutral.ttwstatic.com)
+31 437 ms
+131 ms
+…static/tiktok-embed.module.6c5c90f….js(sf16-website-login.neutral.ttwstatic.com)
+930 ms
+102 ms
+…1.0.0.223/webmssdk.js(sf16-website-login.neutral.ttwstatic.com)
+7397 ms
+90 ms
+…1.0.0.223/webmssdk.js(sf16-website-login.neutral.ttwstatic.com)
+7506 ms
+73 ms
+…1.0.0.294/webmssdk_ex.js(sf16-website-login.neutral.ttwstatic.com)
+34 257 ms
+65 ms
+…static/mssdk-init.js(sf16-website-login.neutral.ttwstatic.com)
+25 448 ms
+50 ms
+Neattiecināmi
+99 ms
+Unattributable
+1032 ms
+99 ms
+fnx-rugby.lv Pirmā puse
+58 ms
+…chunks/2117-93c4f123190e6bb2.js(www.fnx-rugby.lv)
+15 301 ms
+58 ms
+Nesaliktas animācijas nav ieteicams izmantot Tika atrasti 4 animēti elementi
+Nesaliktas animācijas var būt lēnas un palielināt kopējo izkārtojuma nobīdi. Uzziniet, kā izvairīties no nesaliktām animācijām.CLSNeuzskaitītie
+Elements
+Nosaukums
+PIEVIENOJIES MUMS
+<button class="animate-nav-glow w-full group skew-x-[-12deg] transform bg-white px-6 py-3…">
+Neatbalstīti CSS īpašumi: border-bottom-color, box-shadow, border-left-color, border-right-color, border-top-color
+nav-glow
+LASĪT VAIRĀK
+<button class="animate-glow-border skew-x-[-12deg] transform bg-white px-8 py-4 font-bold…">
+Neatbalstīti CSS īpašumi: border-bottom-color, box-shadow, border-left-color, border-right-color, border-top-color
+glow-border
+Go to slide 1
+<button class="h-2 skew-x-[-12deg] transform transition-all duration-300 w-10 bg-teal-400" aria-label="Go to slide 1">
+Neatbalstīts CSS īpašums: background-color
+background-color
+Neatbalstīts CSS īpašums: width
+width
+Go to slide 2
+<button class="h-2 skew-x-[-12deg] transform transition-all duration-300 w-6 bg-white/30 …" aria-label="Go to slide 2">
+Neatbalstīts CSS īpašums: background-color
+background-color
+Neatbalstīts CSS īpašums: width
+width

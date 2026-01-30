@@ -1,6 +1,7 @@
 'use client'
 
-import { Instagram, ExternalLink, Share2, Facebook } from 'lucide-react'
+import { useState, useRef, useEffect } from 'react'
+import { Instagram, ExternalLink, Share2, Facebook, Play } from 'lucide-react'
 import Link from 'next/link'
 
 // TikTok icon component
@@ -9,6 +10,67 @@ const TikTokIcon = ({ className }: { className?: string }) => (
     <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
   </svg>
 )
+
+// Lazy-loaded iframe that only loads when visible and clicked
+function LazyEmbed({
+  src,
+  placeholder,
+  icon,
+  label,
+}: {
+  src: string
+  placeholder: React.ReactNode
+  icon: React.ReactNode
+  label: string
+}) {
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [isNearViewport, setIsNearViewport] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsNearViewport(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '200px' }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <div ref={containerRef} className="bg-white min-h-[500px] relative">
+      {isLoaded && isNearViewport ? (
+        <iframe
+          src={src}
+          className="w-full h-[500px] border-0"
+          scrolling="no"
+          allow="encrypted-media"
+          loading="lazy"
+        />
+      ) : (
+        <button
+          onClick={() => setIsLoaded(true)}
+          className="w-full h-[500px] flex flex-col items-center justify-center gap-4 bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer"
+          aria-label={`Ielādēt ${label}`}
+        >
+          {placeholder}
+          <div className="flex items-center gap-2 bg-white shadow-lg px-6 py-3 rounded-full">
+            <Play className="h-5 w-5 text-gray-700 fill-gray-700" />
+            <span className="font-semibold text-gray-700 text-sm">Ielādēt {label}</span>
+          </div>
+        </button>
+      )}
+    </div>
+  )
+}
 
 export function HomeSocialSection() {
 
@@ -70,16 +132,18 @@ export function HomeSocialSection() {
               <p className="text-sm text-white/80">@rk_fenikss</p>
             </div>
 
-            {/* Instagram Embed */}
-            <div className="bg-white min-h-[500px]">
-              <iframe
-                src="https://www.instagram.com/rk_fenikss/embed"
-                className="w-full h-[500px] border-0"
-                scrolling="no"
-                allowTransparency={true}
-                allow="encrypted-media"
-              />
-            </div>
+            {/* Instagram Embed - Lazy loaded */}
+            <LazyEmbed
+              src="https://www.instagram.com/rk_fenikss/embed"
+              label="Instagram"
+              icon={<Instagram className="h-12 w-12 text-[#E4405F]" />}
+              placeholder={
+                <div className="flex flex-col items-center gap-3">
+                  <Instagram className="h-16 w-16 text-[#E4405F]" />
+                  <span className="text-gray-500 text-sm">@rk_fenikss</span>
+                </div>
+              }
+            />
 
             {/* Footer */}
             <div className="p-4 text-center">
@@ -132,15 +196,18 @@ export function HomeSocialSection() {
               <p className="text-sm text-white/80">@rk_fenikss</p>
             </div>
 
-            {/* TikTok Embed */}
-            <div className="bg-white min-h-[500px]">
-              <iframe
-                src="https://www.tiktok.com/embed/@rk_fenikss"
-                className="w-full h-[500px] border-0"
-                scrolling="no"
-                allow="encrypted-media"
-              />
-            </div>
+            {/* TikTok Embed - Lazy loaded */}
+            <LazyEmbed
+              src="https://www.tiktok.com/embed/@rk_fenikss"
+              label="TikTok"
+              icon={<TikTokIcon className="h-12 w-12 text-black" />}
+              placeholder={
+                <div className="flex flex-col items-center gap-3">
+                  <TikTokIcon className="h-16 w-16 text-black" />
+                  <span className="text-gray-500 text-sm">@rk_fenikss</span>
+                </div>
+              }
+            />
 
             {/* Footer */}
             <div className="p-4 text-center">

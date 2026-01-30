@@ -76,45 +76,50 @@ body {
     /* Animation removed */
   }
 
-  /* Hero button glow animation */
+  /* Hero button glow animation - uses opacity for GPU compositing */
   @keyframes glow-border {
     0% {
-      border-color: rgba(20, 184, 166, 0.2);
-      box-shadow: 0 0 5px rgba(20, 184, 166, 0.2);
+      opacity: 0.3;
     }
     50% {
-      border-color: rgba(20, 184, 166, 0.8);
-      box-shadow: 0 0 20px rgba(20, 184, 166, 0.6);
+      opacity: 1;
     }
     100% {
-      border-color: rgba(20, 184, 166, 0.2);
-      box-shadow: 0 0 5px rgba(20, 184, 166, 0.2);
+      opacity: 0.3;
     }
   }
 
   .animate-glow-border {
+    position: relative;
+    border: 2px solid rgba(20, 184, 166, 0.5);
+  }
+
+  .animate-glow-border::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border: 2px solid rgba(20, 184, 166, 0.8);
+    box-shadow: 0 0 20px rgba(20, 184, 166, 0.6);
     animation: glow-border 2s infinite;
+    pointer-events: none;
+    will-change: opacity;
   }
 
-  /* Navigation button glow animation */
-  @keyframes nav-glow {
-    0% {
-      border-color: rgba(20, 184, 166, 0.2);
-      box-shadow: 0 0 5px rgba(20, 184, 166, 0.2);
-    }
-    50% {
-      border-color: rgba(20, 184, 166, 0.8);
-      box-shadow: 0 0 20px rgba(20, 184, 166, 0.6);
-    }
-    100% {
-      border-color: rgba(20, 184, 166, 0.2);
-      box-shadow: 0 0 5px rgba(20, 184, 166, 0.2);
-    }
-  }
-
+  /* Navigation button glow animation - uses opacity for GPU compositing */
   .animate-nav-glow {
-    animation: nav-glow 2s infinite;
-    border: 2px solid transparent;
+    position: relative;
+    border: 2px solid rgba(20, 184, 166, 0.5);
+  }
+
+  .animate-nav-glow::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border: 2px solid rgba(20, 184, 166, 0.8);
+    box-shadow: 0 0 20px rgba(20, 184, 166, 0.6);
+    animation: glow-border 2s infinite;
+    pointer-events: none;
+    will-change: opacity;
   }
 
   /* Mobile menu slide animation */

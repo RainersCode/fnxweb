@@ -135,16 +135,18 @@ export default async function HomePage() {
 
         {/* About Us Section with Parallax */}
         <section className="relative py-24 overflow-hidden">
-          {/* Parallax Background */}
-          <div
-            className="absolute inset-0 z-0"
-            style={{
-              backgroundImage: "url('/AboutUs/parallax.jpg')",
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundAttachment: 'fixed',
-            }}
-          />
+          {/* Parallax Background - Using Next.js Image for automatic WebP/AVIF optimization */}
+          <div className="absolute inset-0 z-0">
+            <NextImage
+              src="/AboutUs/parallax.jpg"
+              alt=""
+              fill
+              sizes="100vw"
+              className="object-cover"
+              quality={60}
+              loading="lazy"
+            />
+          </div>
           <div className="absolute inset-0 z-0 bg-gradient-to-br from-white/[0.97] via-white/[0.95] to-white/[0.97]" />
 
           {/* Decorative elements */}
@@ -245,16 +247,18 @@ export default async function HomePage() {
 
         {/* Sponsors Section with Parallax */}
         <section className="relative py-20 overflow-hidden">
-          {/* Parallax Background */}
-          <div
-            className="absolute inset-0 z-0"
-            style={{
-              backgroundImage: "url('/AboutUs/parallax.jpg')",
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundAttachment: 'fixed',
-            }}
-          />
+          {/* Parallax Background - Using Next.js Image for automatic WebP/AVIF optimization */}
+          <div className="absolute inset-0 z-0">
+            <NextImage
+              src="/AboutUs/parallax.jpg"
+              alt=""
+              fill
+              sizes="100vw"
+              className="object-cover"
+              quality={60}
+              loading="lazy"
+            />
+          </div>
           {/* Dark overlay for contrast with logos */}
           <div className="absolute inset-0 z-0 bg-gradient-to-br from-teal-900/95 via-teal-800/90 to-teal-900/95" />
 

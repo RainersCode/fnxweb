@@ -158,6 +158,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <html lang="lv" suppressHydrationWarning>
         <head>
+          {/* Preconnect to critical third-party origins to reduce LCP delay */}
+          {process.env.NEXT_PUBLIC_SUPABASE_URL && (
+            <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL} />
+          )}
+          <link rel="dns-prefetch" href="https://clerk.accounts.dev" />
+
           {/* JSON-LD Structured Data for AI and Search Engines */}
           <script
             type="application/ld+json"
