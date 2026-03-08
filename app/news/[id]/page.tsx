@@ -103,7 +103,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const imageUrl = prepareImagePath(article.image_url ?? null)
 
   // Get the base URL from environment or use a default
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://rkfenikss.lv'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fnx-rugby.lv'
   const articleUrl = `${baseUrl}/news/${id}`
   const absoluteImageUrl = imageUrl.startsWith('http') ? imageUrl : `${baseUrl}${imageUrl}`
 
@@ -141,7 +141,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 // Generate JSON-LD structured data
 function generateJsonLd(article: Article, url: string) {
   const imageUrl = prepareImagePath(article.image_url ?? null)
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://rkfenikss.lv'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fnx-rugby.lv'
   const absoluteImageUrl = imageUrl.startsWith('http') ? imageUrl : `${baseUrl}${imageUrl}`
 
   return {
@@ -180,7 +180,7 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ id:
     getLatestGalleries(),
   ])
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://rkfenikss.lv'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fnx-rugby.lv'
   const pageUrl = `${baseUrl}/news/${id}`
 
   return (

@@ -41,11 +41,7 @@ export const metadata: Metadata = {
   referrer: 'origin-when-cross-origin',
   metadataBase: new URL('https://www.fnx-rugby.lv'),
   alternates: {
-    canonical: '/',
-    languages: {
-      'lv-LV': '/',
-      'en-US': '/en',
-    },
+    canonical: 'https://www.fnx-rugby.lv',
   },
   openGraph: {
     title: 'RK "Fēnikss" - Valmieras Regbija Klubs | Dibināts 2005',
@@ -134,6 +130,36 @@ const organizationJsonLd = {
   },
 }
 
+// LocalBusiness JSON-LD for local search
+const localBusinessJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  '@id': 'https://www.fnx-rugby.lv/#localbusiness',
+  name: 'RK Fēnikss - Valmieras Regbija Klubs',
+  description: 'Regbija klubs Valmierā, Latvijā. Dibināts 2005. gadā.',
+  url: 'https://www.fnx-rugby.lv',
+  telephone: '+37129113938',
+  email: 'rkfenikss@gmail.com',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Kaimiņi, Brenguļi, Brenguļu pagasts',
+    addressLocality: 'Valmieras novads',
+    postalCode: 'LV-4245',
+    addressCountry: 'LV',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 57.5388,
+    longitude: 25.4263,
+  },
+  openingHours: ['Tu 18:00-20:00', 'Th 18:00-20:00'],
+  sameAs: [
+    'https://www.facebook.com/RKFenikss',
+    'https://www.instagram.com/rk_fenikss/',
+    'https://www.tiktok.com/@rk_fenikss',
+  ],
+}
+
 // WebSite JSON-LD for search features
 const websiteJsonLd = {
   '@context': 'https://schema.org',
@@ -193,6 +219,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             type="application/ld+json"
             dangerouslySetInnerHTML={{
               __html: JSON.stringify(websiteJsonLd),
+            }}
+          />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(localBusinessJsonLd),
             }}
           />
           {/* AI Search Tool hints */}
