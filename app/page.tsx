@@ -149,7 +149,7 @@ export default async function HomePage() {
         {/* Sponsors Section - Clean Quins style */}
         <section className="py-16 bg-[#bce8e4]">
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
-            <h2 className="font-display text-[clamp(42px,5vw,70px)] font-bold uppercase text-teal-800 leading-[0.88] tracking-tight mb-12">
+            <h2 className="font-display text-[clamp(42px,5.5vw,80px)] font-bold uppercase text-teal-800 leading-[0.88] tracking-tight mb-12">
               Mūsu<br />Sponsori
             </h2>
 

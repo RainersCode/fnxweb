@@ -48,11 +48,19 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
       setIsScrolled(currentScrollY > 10)
       setShowScrollTop(currentScrollY > 400)
       if (currentScrollY > 100) {
-        setIsHeaderHidden(currentScrollY > lastScrollY.current)
+        if (currentScrollY > lastScrollY.current) {
+          // Scrolling down — hide
+          setIsHeaderHidden(true)
+          lastScrollY.current = currentScrollY
+        } else if (currentScrollY < lastScrollY.current - 10) {
+          // Scrolling up by at least 10px — show
+          setIsHeaderHidden(false)
+          lastScrollY.current = currentScrollY
+        }
       } else {
         setIsHeaderHidden(false)
+        lastScrollY.current = currentScrollY
       }
-      lastScrollY.current = currentScrollY
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
@@ -190,72 +198,96 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay */}
-      {mobileMenuOpen && (
-        <div
-          className="fixed inset-0 z-50 bg-black/40 lg:hidden"
-          onClick={() => setMobileMenuOpen(false)}
-        />
-      )}
-
-      {/* Mobile Menu */}
+      {/* Mobile Menu — Full-Screen Takeover */}
       <div
-        className={`fixed inset-y-0 right-0 z-50 w-full max-w-sm bg-white shadow-2xl transition-transform duration-300 ease-out lg:hidden ${
-          mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        className={`fixed inset-0 z-50 lg:hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          mobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`}
       >
-        <div className="flex flex-col h-full px-6 py-4 overflow-y-auto">
-          {/* Header */}
-          <div className="flex items-center justify-between">
+        {/* Dark background with stripes */}
+        <div className="absolute inset-0 bg-[#111]" />
+        <div className="absolute inset-0 bg-stripes-dark pointer-events-none" />
+
+        {/* Giant watermark logo */}
+        <div className="absolute -right-16 -bottom-10 w-[340px] h-[340px] opacity-[0.03] pointer-events-none">
+          <Image
+            src="/Logo/fēniks_logo-removebg-preview.png"
+            alt=""
+            fill
+            className="object-contain"
+            aria-hidden="true"
+          />
+        </div>
+
+        {/* Giant faded "MENU" watermark text */}
+        <span className="absolute top-6 right-6 font-display text-[120px] font-bold uppercase leading-none text-white/[0.02] pointer-events-none select-none" aria-hidden="true">
+          RKF
+        </span>
+
+        <div className="relative z-10 flex flex-col h-full overflow-y-auto">
+          {/* Top bar — logo + close */}
+          <div className="flex items-center justify-between px-6 pt-5 pb-2">
             <Link href="/" className="flex items-center gap-3" onClick={() => setMobileMenuOpen(false)}>
               <Image
                 src="/Logo/fēniks_logo-removebg-preview.png"
                 alt="RK Fēnikss Logo"
-                width={40}
-                height={40}
+                width={36}
+                height={36}
                 className="object-contain"
               />
-              <span className="font-display text-lg font-bold uppercase tracking-wider">RK &quot;Fēnikss&quot;</span>
             </Link>
             <button
-              className="w-10 h-10 rounded-full hover:bg-[#f5f5f5] grid place-items-center transition-colors"
+              className="font-display text-sm font-bold uppercase tracking-[3px] text-white/40 hover:text-white transition-colors duration-200 px-2 py-2"
               onClick={() => setMobileMenuOpen(false)}
               aria-label="Aizvērt izvēlni"
             >
-              <X className="h-5 w-5" />
+              Aizvērt ✕
             </button>
           </div>
 
-          {/* Nav links */}
-          <nav className="mt-8 flex-1">
-            <ul className="space-y-0">
+          {/* Navigation — numbered editorial items */}
+          <nav className="flex-1 px-6 pt-4 pb-6 flex flex-col justify-center">
+            <ul className="space-y-1">
               {navItems.map((item, index) => (
                 <li
                   key={item.key}
-                  className="menu-item-animate border-b border-[#f0f0f0]"
-                  style={{ animationDelay: `${index * 0.05}s` }}
+                  className={mobileMenuOpen ? 'animate-[menuItemReveal_0.5s_ease-out_both]' : 'opacity-0'}
+                  style={{ animationDelay: `${0.1 + index * 0.045}s` }}
                 >
                   {item.key === 'ADMIN' ? (
                     <Link
                       href="/admin"
-                      className="flex items-center py-4 font-cond text-sm font-bold tracking-[2px] uppercase text-amber-600 hover:text-amber-800 transition-colors"
+                      className="flex items-center gap-4 py-2 group"
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      <Settings className="h-4 w-4 mr-2" />
-                      {item.text}
+                      <span className="font-cond text-[11px] font-bold tracking-[2px] text-amber-500/30 w-7 text-right">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                      <Settings className="h-4 w-4 text-amber-500/50 group-hover:text-amber-400 transition-colors" />
+                      <span className="font-display text-xl font-bold uppercase tracking-[1px] text-amber-500/60 group-hover:text-amber-400 transition-colors duration-200">
+                        {item.text}
+                      </span>
                     </Link>
                   ) : (
                     <Link
                       href={item.key === 'HOME' ? '/' : `/${item.key.toLowerCase()}`}
-                      className={`flex items-center justify-between py-4 font-cond text-sm font-bold tracking-[2px] uppercase transition-colors ${
-                        currentPage === item.key ? 'text-teal-700' : 'text-[#111] hover:text-teal-700'
-                      }`}
+                      className="flex items-center gap-4 py-2.5 group"
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      {item.text}
-                      {currentPage === item.key && (
-                        <span className="w-2 h-2 bg-teal-700 rounded-full" />
-                      )}
+                      {/* Number */}
+                      <span className={`font-cond text-[11px] font-bold tracking-[2px] w-7 text-right transition-colors duration-200 ${
+                        currentPage === item.key ? 'text-teal-400/60' : 'text-white/15 group-hover:text-white/30'
+                      }`}>
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                      {/* Nav text */}
+                      <span className={`font-display text-[28px] font-bold uppercase tracking-[1px] transition-all duration-200 ${
+                        currentPage === item.key
+                          ? 'text-teal-400'
+                          : 'text-white/50 group-hover:text-white group-hover:translate-x-2'
+                      }`}>
+                        {item.text}
+                      </span>
                     </Link>
                   )}
                 </li>
@@ -263,41 +295,59 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
             </ul>
 
             {/* CTA */}
-            <div className="mt-8">
+            <div
+              className={`mt-10 ml-11 ${mobileMenuOpen ? 'animate-[menuItemReveal_0.5s_ease-out_both]' : 'opacity-0'}`}
+              style={{ animationDelay: `${0.1 + navItems.length * 0.045 + 0.05}s` }}
+            >
               {isSignedIn ? (
-                <div className="flex justify-center">
+                <div className="flex items-center gap-3">
                   <UserButton afterSignOutUrl="/" />
+                  <span className="font-cond text-xs font-bold tracking-[2px] uppercase text-white/20">
+                    Konts
+                  </span>
                 </div>
               ) : (
                 <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>
-                  <button className="w-full flex items-center justify-center gap-2 py-3.5 bg-teal-700 text-white font-cond text-xs font-bold tracking-[2px] uppercase hover:bg-[#111] transition-colors">
+                  <span className="inline-flex items-center gap-2.5 py-3.5 px-8 bg-teal-700 text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-teal-600 transition-colors duration-200">
                     Pievienojies mums
                     <ArrowRight className="h-3.5 w-3.5" />
-                  </button>
+                  </span>
                 </Link>
               )}
             </div>
           </nav>
 
-          {/* Contact info */}
-          <div className="mt-auto pt-6 border-t border-[#e5e5e5]">
-            <div className="space-y-3 text-sm text-[#888]">
-              <a href="tel:+37129113938" className="flex items-center gap-2 hover:text-teal-700 transition-colors">
-                +371 29113938
-              </a>
-              <a href="mailto:rkfenikss@gmail.com" className="flex items-center gap-2 hover:text-teal-700 transition-colors">
-                rkfenikss@gmail.com
-              </a>
-            </div>
-            <div className="mt-4 flex gap-3.5">
-              <a href="https://www.facebook.com/RKFenikss?locale=lv_LV" target="_blank" rel="noopener noreferrer" aria-label="Facebook"
-                className="w-8 h-8 grid place-items-center text-[#888] hover:text-teal-700 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg>
-              </a>
-              <a href="https://www.instagram.com/rk_fenikss/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
-                className="w-8 h-8 grid place-items-center text-[#888] hover:text-teal-700 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></svg>
-              </a>
+          {/* Bottom — contact & socials */}
+          <div
+            className={`px-6 pb-8 ${mobileMenuOpen ? 'animate-[menuItemReveal_0.5s_ease-out_both]' : 'opacity-0'}`}
+            style={{ animationDelay: `${0.1 + navItems.length * 0.045 + 0.12}s` }}
+          >
+            <div className="ml-11 flex flex-col gap-4">
+              {/* Contact */}
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
+                <a href="tel:+37129113938" className="font-cond text-[11px] font-bold tracking-[2px] uppercase text-white/20 hover:text-teal-400 transition-colors">
+                  +371 29113938
+                </a>
+                <a href="mailto:rkfenikss@gmail.com" className="font-cond text-[11px] font-bold tracking-[2px] uppercase text-white/20 hover:text-teal-400 transition-colors">
+                  rkfenikss@gmail.com
+                </a>
+              </div>
+
+              {/* Social icons */}
+              <div className="flex gap-4">
+                <a href="https://www.facebook.com/RKFenikss?locale=lv_LV" target="_blank" rel="noopener noreferrer" aria-label="Facebook"
+                  className="text-white/20 hover:text-teal-400 transition-colors duration-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg>
+                </a>
+                <a href="https://www.instagram.com/rk_fenikss/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
+                  className="text-white/20 hover:text-teal-400 transition-colors duration-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></svg>
+                </a>
+                <a href="https://www.tiktok.com/@rk_fenikss" target="_blank" rel="noopener noreferrer" aria-label="TikTok"
+                  className="text-white/20 hover:text-teal-400 transition-colors duration-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.46V13a8.28 8.28 0 005.58 2.14V11.7a4.83 4.83 0 01-3.77-1.24V6.69h3.77z"/></svg>
+                </a>
+              </div>
             </div>
           </div>
         </div>

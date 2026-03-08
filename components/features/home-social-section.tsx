@@ -73,7 +73,7 @@ export function HomeSocialSection() {
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
         {/* Section header */}
         <div className="flex items-end justify-between mb-12">
-          <h2 className="font-display text-[clamp(42px,5vw,70px)] font-bold uppercase text-white leading-[0.88] tracking-tight">
+          <h2 className="font-display text-[clamp(42px,5.5vw,80px)] font-bold uppercase text-white leading-[0.88] tracking-tight">
             Sociālie<br />Tīkli
           </h2>
         </div>

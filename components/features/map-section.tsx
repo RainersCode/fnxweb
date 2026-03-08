@@ -24,7 +24,7 @@ export function MapSection({
     <section className="py-16 md:py-20 bg-[#f5f5f5]">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
         <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-700 mb-3 block">Lokācija</span>
-        <h2 className="font-display text-[clamp(32px,4vw,52px)] font-bold uppercase text-[#111] leading-[0.88] tracking-tight mb-10">
+        <h2 className="font-display text-[clamp(42px,5.5vw,80px)] font-bold uppercase text-[#111] leading-[0.88] tracking-tight mb-10">
           Atrodi Mūs
         </h2>
 

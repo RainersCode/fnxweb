@@ -52,7 +52,7 @@ export function HomeFixturesSection({ initialFixtures }: HomeFixturesSectionProp
         <div className="grid lg:grid-cols-[140px_1fr] gap-5 items-start">
           {/* Vertical text (desktop only) */}
           <div className="hidden lg:block">
-            <span className="font-display text-[clamp(100px,12vw,160px)] font-bold uppercase text-[#111]/10 leading-none tracking-tighter [writing-mode:vertical-lr] rotate-180 sticky top-24">
+            <span className="font-display text-[clamp(100px,12vw,160px)] font-bold uppercase text-teal-800 leading-none tracking-tighter [writing-mode:vertical-lr] rotate-180 sticky top-24">
               Spēles
             </span>
           </div>
@@ -60,7 +60,7 @@ export function HomeFixturesSection({ initialFixtures }: HomeFixturesSectionProp
           <div>
             {/* Header */}
             <div className="flex items-end justify-between mb-5">
-              <h2 className="font-display text-[clamp(40px,5vw,60px)] font-bold uppercase text-teal-800 leading-[0.88] tracking-tight lg:hidden">
+              <h2 className="font-display text-[clamp(42px,5.5vw,80px)] font-bold uppercase text-teal-800 leading-[0.88] tracking-tight lg:hidden">
                 Gaidāmās Spēles
               </h2>
               <Link href="/fixtures" className="ml-auto">
