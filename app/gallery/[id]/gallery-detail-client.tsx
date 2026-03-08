@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, X, ChevronLeft, ChevronRight, Camera, CalendarDays, Images, ZoomIn } from 'lucide-react'
+import { default as NextImage } from 'next/image'
+import { ArrowLeft, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { MainLayout } from '@/components/layout/main-layout'
 import { prepareImagePath } from '@/lib/supabase'
 import { Gallery, GalleryImage } from '@/types/supabase'
@@ -71,22 +72,20 @@ export function GalleryDetailClient({ gallery, images }: GalleryDetailClientProp
     return (
       <MainLayout currentPage="GALLERY">
         <main className="flex-1">
-          <section className="relative py-20 bg-gradient-to-b from-gray-50 to-white min-h-[60vh]">
-            <div className="container mx-auto px-4 sm:px-6">
-              <div className="bg-teal-50 border border-teal-100 p-12 text-center max-w-lg mx-auto">
-                <Images className="mx-auto h-16 w-16 text-teal-300 mb-4" />
-                <p className="text-xl font-bold text-teal-800 mb-2">Galerija nav atrasta</p>
-                <p className="text-teal-600 mb-6">Meklētā galerija neeksistē vai ir dzēsta.</p>
-                <Link href="/gallery">
-                  <span className="inline-flex skew-x-[-12deg] transform items-center bg-teal-700 px-5 py-2.5 font-medium tracking-wide text-white transition-all duration-300 hover:bg-teal-800 shadow-lg hover:shadow-xl">
-                    <span className="inline-flex skew-x-[12deg] transform items-center">
-                      <ArrowLeft className="mr-2 h-4 w-4" /> Atpakaļ uz galerijām
-                    </span>
-                  </span>
-                </Link>
+          <div className="min-h-[60vh] flex items-center justify-center bg-white">
+            <div className="text-center max-w-md mx-auto px-4">
+              <div className="relative w-16 h-16 mx-auto mb-5 opacity-30">
+                <NextImage src="/Logo/fēniks_logo-removebg-preview.png" alt="Fēnikss" fill className="object-contain" />
               </div>
+              <h2 className="font-display text-3xl font-bold uppercase text-[#111] mb-3">Galerija nav atrasta</h2>
+              <p className="font-cond text-xs tracking-[2px] uppercase text-[#888] mb-8">Meklētā galerija neeksistē vai ir dzēsta</p>
+              <Link href="/gallery">
+                <button className="inline-flex items-center gap-2 px-9 py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-teal-700 transition-colors duration-200">
+                  <ArrowLeft className="h-4 w-4" /> Atpakaļ uz galerijām
+                </button>
+              </Link>
             </div>
-          </section>
+          </div>
         </main>
       </MainLayout>
     )
@@ -96,111 +95,83 @@ export function GalleryDetailClient({ gallery, images }: GalleryDetailClientProp
     <MainLayout currentPage="GALLERY">
       <main className="flex-1">
         {/* Hero header for gallery */}
-        <section className="relative bg-gradient-to-b from-teal-900 to-teal-800 py-16 overflow-hidden">
-          {/* Decorative elements */}
-          <div className="absolute top-0 left-0 w-64 h-64 bg-teal-700/20 rounded-full -translate-x-1/2 -translate-y-1/2" />
-          <div className="absolute bottom-0 right-0 w-48 h-48 bg-teal-600/10 rounded-full translate-x-1/4 translate-y-1/4" />
-          <div className="absolute top-1/2 right-10 w-1 h-20 bg-white/10 skew-x-[-12deg]" />
-
-          <div className="container mx-auto px-4 sm:px-6 relative z-10">
-            {/* Back button */}
-            <Link href="/gallery" className="inline-flex items-center mb-8 group">
-              <span className="inline-flex skew-x-[-12deg] transform items-center bg-white/10 backdrop-blur-sm px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:bg-white/20">
-                <span className="inline-flex skew-x-[12deg] transform items-center">
-                  <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" /> Visas galerijas
-                </span>
+        <section className="relative h-[340px] md:h-[420px] bg-[#111] bg-stripes-dark overflow-hidden">
+          <div className="absolute inset-0">
+            {images.length > 0 && (
+              <img
+                src={getImageUrl(images[0].image_url)}
+                alt={gallery.title}
+                className="w-full h-full object-cover opacity-30 scale-105 blur-[2px]"
+              />
+            )}
+            <div className="absolute inset-0 bg-black/40" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+          </div>
+          <div className="relative z-10 max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16 h-full flex flex-col justify-end pb-12">
+            <Link href="/gallery" className="inline-flex items-center gap-2 mb-6 group">
+              <span className="font-cond text-sm font-bold tracking-[2px] uppercase text-white/70 group-hover:text-white transition-colors">
+                <ArrowLeft className="h-4 w-4 inline mr-1 transition-transform group-hover:-translate-x-1" />
+                Galerija
               </span>
             </Link>
-
-            {/* Gallery info */}
-            <div className="max-w-3xl">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="flex items-center gap-2 text-teal-200">
-                  <CalendarDays className="h-4 w-4" />
-                  <span className="text-sm font-medium">{formatDate(gallery.created_at || new Date().toISOString())}</span>
-                </div>
-                {images.length > 0 && (
-                  <>
-                    <span className="text-teal-400">•</span>
-                    <div className="flex items-center gap-2 text-teal-200">
-                      <Camera className="h-4 w-4" />
-                      <span className="text-sm font-medium">{images.length} foto</span>
-                    </div>
-                  </>
-                )}
-              </div>
-
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-4">
-                {gallery.title}
-              </h1>
-
-              {gallery.description && (
-                <p className="text-lg text-teal-100/90 leading-relaxed max-w-2xl">
-                  {gallery.description}
-                </p>
+            <h1 className="font-display text-[clamp(28px,4vw,52px)] font-bold uppercase text-white leading-[0.95] tracking-tight max-w-[800px]">
+              {gallery.title}
+            </h1>
+            <div className="flex flex-wrap items-center gap-4 mt-5">
+              <span className="font-cond text-sm font-semibold tracking-[2px] uppercase text-white/65">
+                {formatDate(gallery.created_at || new Date().toISOString())}
+              </span>
+              {images.length > 0 && (
+                <>
+                  <span className="w-1 h-1 bg-white/40 rounded-full" />
+                  <span className="font-cond text-sm font-semibold tracking-[2px] uppercase text-white/65">
+                    {images.length} foto
+                  </span>
+                </>
               )}
-
-              <div className="mt-6 h-1 w-24 bg-white/30 skew-x-[-12deg]" />
             </div>
           </div>
         </section>
 
         {/* Gallery images section */}
-        <section className="relative py-16 bg-gradient-to-b from-gray-50 to-white overflow-hidden">
-          {/* Decorative elements */}
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-teal-200 to-transparent" />
-          <div className="absolute top-12 left-0 w-32 h-0.5 bg-teal-700/20 skew-x-[-12deg]" />
-          <div className="absolute bottom-12 right-0 w-32 h-0.5 bg-teal-700/20 skew-x-[-12deg]" />
-
-          <div className="container mx-auto px-4 sm:px-6 relative z-10">
-            {/* Gallery grid */}
+        <section className="py-16 md:py-20 bg-white">
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
             {images.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
                 {images.map((image, index) => (
                   <div
                     key={image.id}
-                    className="group relative cursor-pointer overflow-hidden bg-white shadow-md hover:shadow-xl transition-all duration-500"
+                    className="group cursor-pointer overflow-hidden"
                     onClick={() => openImageViewer(index)}
                   >
-                    {/* Top accent */}
-                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal-600 via-teal-500 to-teal-600 z-10" />
-
                     <div className="relative aspect-square overflow-hidden">
                       <img
                         src={getImageUrl(image.image_url)}
                         alt={image.caption || `Attēls ${index + 1}`}
-                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                       />
-
-                      {/* Hover overlay */}
-                      <div className="absolute inset-0 bg-teal-900/0 group-hover:bg-teal-900/40 transition-colors duration-300 flex items-center justify-center">
-                        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-75 group-hover:scale-100">
-                          <div className="bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg">
-                            <ZoomIn className="h-6 w-6 text-teal-700" />
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Image number badge */}
-                      <div className="absolute bottom-2 right-2 bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-xs font-medium text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {index + 1}/{images.length}
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-center justify-center">
+                        <svg
+                          viewBox="0 0 24 24"
+                          className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 stroke-current fill-none stroke-2"
+                        >
+                          <circle cx="11" cy="11" r="8" />
+                          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                          <line x1="11" y1="8" x2="11" y2="14" />
+                          <line x1="8" y1="11" x2="14" y2="11" />
+                        </svg>
                       </div>
                     </div>
-
-                    {/* Caption (if exists) */}
-                    {image.caption && (
-                      <div className="p-2 text-xs text-zinc-600 line-clamp-1 bg-white">
-                        {image.caption}
-                      </div>
-                    )}
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="bg-teal-50 border border-teal-100 p-12 text-center max-w-lg mx-auto">
-                <Images className="mx-auto h-16 w-16 text-teal-300 mb-4" />
-                <p className="text-xl font-bold text-teal-800 mb-2">Nav attēlu</p>
-                <p className="text-teal-600">Šajā galerijā pašlaik nav pievienotu attēlu.</p>
+              <div className="text-center py-16">
+                <div className="relative w-16 h-16 mx-auto mb-5 opacity-30">
+                  <NextImage src="/Logo/fēniks_logo-removebg-preview.png" alt="Fēnikss" fill className="object-contain" />
+                </div>
+                <h2 className="font-display text-2xl font-bold uppercase text-[#111] mb-3">Nav attēlu</h2>
+                <p className="font-cond text-xs tracking-[2px] uppercase text-[#888]">Šajā galerijā pašlaik nav pievienotu attēlu</p>
               </div>
             )}
           </div>
@@ -212,14 +183,14 @@ export function GalleryDetailClient({ gallery, images }: GalleryDetailClientProp
             {/* Close button */}
             <button
               onClick={closeImageViewer}
-              className="absolute right-4 top-4 z-20 rounded-full bg-white/10 backdrop-blur-sm p-3 text-white transition-all duration-300 hover:bg-white/20 hover:scale-110"
+              className="absolute right-4 top-4 z-20 bg-white/10 p-3 text-white transition-all duration-300 hover:bg-white/20"
               aria-label="Aizvērt"
             >
               <X className="h-6 w-6" />
             </button>
 
             {/* Image counter */}
-            <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
+            <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 bg-white/10 px-4 py-2">
               <span className="text-white font-medium">
                 {currentImageIndex + 1} / {images.length}
               </span>
@@ -228,7 +199,7 @@ export function GalleryDetailClient({ gallery, images }: GalleryDetailClientProp
             {/* Previous image button */}
             <button
               onClick={navigateToPreviousImage}
-              className="absolute left-4 z-20 rounded-full bg-white/10 backdrop-blur-sm p-3 text-white transition-all duration-300 hover:bg-white/20 hover:scale-110 md:left-8"
+              className="absolute left-4 z-20 bg-white/10 p-3 text-white transition-all duration-300 hover:bg-white/20 md:left-8"
               aria-label="Iepriekšējais attēls"
             >
               <ChevronLeft className="h-8 w-8" />
@@ -237,7 +208,7 @@ export function GalleryDetailClient({ gallery, images }: GalleryDetailClientProp
             {/* Next image button */}
             <button
               onClick={navigateToNextImage}
-              className="absolute right-4 z-20 rounded-full bg-white/10 backdrop-blur-sm p-3 text-white transition-all duration-300 hover:bg-white/20 hover:scale-110 md:right-8"
+              className="absolute right-4 z-20 bg-white/10 p-3 text-white transition-all duration-300 hover:bg-white/20 md:right-8"
               aria-label="Nākamais attēls"
             >
               <ChevronRight className="h-8 w-8" />
@@ -253,21 +224,21 @@ export function GalleryDetailClient({ gallery, images }: GalleryDetailClientProp
 
               {/* Caption */}
               {images[currentImageIndex].caption && (
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 max-w-2xl bg-black/60 backdrop-blur-sm px-6 py-3 rounded-lg text-center">
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 max-w-2xl bg-black/60 backdrop-blur-sm px-6 py-3 text-center">
                   <p className="text-white">{images[currentImageIndex].caption}</p>
                 </div>
               )}
             </div>
 
             {/* Thumbnail strip */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 hidden md:flex gap-2 bg-black/40 backdrop-blur-sm p-2 rounded-lg max-w-3xl overflow-x-auto">
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 hidden md:flex gap-2 bg-black/40 backdrop-blur-sm p-2 max-w-3xl overflow-x-auto">
               {images.map((image, index) => (
                 <button
                   key={image.id}
                   onClick={() => setCurrentImageIndex(index)}
-                  className={`flex-shrink-0 w-16 h-16 rounded overflow-hidden transition-all duration-300 ${
+                  className={`flex-shrink-0 w-16 h-16 overflow-hidden transition-all duration-300 ${
                     index === currentImageIndex
-                      ? 'ring-2 ring-teal-400 ring-offset-2 ring-offset-black/50 scale-110'
+                      ? 'ring-2 ring-teal-400 scale-110'
                       : 'opacity-60 hover:opacity-100'
                   }`}
                 >

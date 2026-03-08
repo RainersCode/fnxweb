@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { default as NextImage } from 'next/image'
-import { ChevronLeft, ChevronRight, CalendarDays, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { Article } from '@/types/supabase'
 
@@ -37,10 +36,8 @@ const fallbackNewsItems: FallbackNewsItem[] = [
   },
 ]
 
-// Helper function to strip HTML tags
 const stripHtml = (html: string): string => {
   if (typeof window === 'undefined') {
-    // Server-side: simple regex removal
     return html.replace(/<[^>]*>/g, '')
   }
   const tmp = document.createElement('DIV')
@@ -57,51 +54,33 @@ export function HeroCarousel({ articles }: HeroCarouselProps) {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev === newsItems.length - 1 ? 0 : prev + 1))
     }, 5000)
-
     return () => clearInterval(interval)
   }, [newsItems.length])
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev === newsItems.length - 1 ? 0 : prev + 1))
-  }
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev === 0 ? newsItems.length - 1 : prev - 1))
-  }
-
-  const getCurrentItem = () => {
-    return newsItems[currentSlide]
-  }
-
-  const getTitle = (item: NewsItem): string => {
-    return item.title
-  }
-
-  const getDescription = (item: NewsItem): string => {
-    if ('id' in item) {
-      return stripHtml(item.content).substring(0, 180) + '...'
-    }
-    return item.description
-  }
-
+  const getTitle = (item: NewsItem): string => item.title
   const getImageUrl = (item: NewsItem): string => {
-    if ('id' in item) {
-      return item.image_url || '/placeholder.svg?height=1080&width=1920&text=Rugby News'
-    }
+    if ('id' in item) return item.image_url || '/placeholder.svg?height=1080&width=1920&text=Rugby News'
     return item.image
   }
-
   const getLink = (item: NewsItem, index: number): string => {
-    if ('id' in item) {
-      return `/news/${item.id}`
-    }
+    if ('id' in item) return `/news/${item.id}`
     return `/news/${index + 1}`
   }
+  const getDate = (item: NewsItem): string => {
+    if ('id' in item) {
+      return new Date(item.published_at).toLocaleDateString('lv-LV', {
+        day: '2-digit', month: 'short', year: 'numeric'
+      })
+    }
+    return '08 Mar 2026'
+  }
+
+  const currentItem = newsItems[currentSlide]
 
   return (
-    <section className="relative min-h-[85vh] bg-gradient-to-br from-teal-900 via-teal-800 to-teal-900 overflow-hidden">
-      {/* Blurred article image background */}
-      <div className="absolute inset-0 z-0">
+    <section className="relative h-[85vh] min-h-[550px] max-h-[780px] overflow-hidden">
+      {/* Full-width hero image */}
+      <div className="absolute inset-0">
         {newsItems.map((item, index) => (
           <div
             key={'id' in item ? item.id : index}
@@ -111,171 +90,99 @@ export function HeroCarousel({ articles }: HeroCarouselProps) {
           >
             <NextImage
               src={getImageUrl(item)}
-              alt=""
+              alt={getTitle(item)}
               fill
               sizes="100vw"
-              className="object-cover blur-2xl scale-110"
+              className="object-cover scale-105 blur-[2px]"
               priority={index === 0}
               loading={index === 0 ? 'eager' : 'lazy'}
-              placeholder="blur"
-              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIhAAAgEDBAMBAAAAAAAAAAAAAQIDAAQRBRIhMQYTQWH/xAAVAQEBAAAAAAAAAAAAAAAAAAADBP/EABkRAAIDAQAAAAAAAAAAAAAAAAECAAMRIf/aAAwDAQACEQMRAD8AzLTtRuLC8iu7WVo54W3I6nkGtDg+RXOr6Xp9ze3E00NuiTSBmKIOc5ycY71SlTiqUWU7M51kXaij/9k="
             />
           </div>
         ))}
-        {/* Overlay to make it light and blend with teal */}
-        <div className="absolute inset-0 bg-gradient-to-br from-teal-900/70 via-teal-800/60 to-teal-900/70" />
+        {/* Overlays to mask low-res artifacts */}
+        <div className="absolute inset-0 bg-black/25" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/10" />
       </div>
 
-      {/* Decorative skewed lines */}
-      <div className="absolute top-20 left-0 w-64 h-1 bg-teal-400/20 skew-x-[-12deg] z-10" />
-      <div className="absolute top-28 left-0 w-32 h-1 bg-teal-400/10 skew-x-[-12deg] z-10" />
-      <div className="absolute bottom-32 right-0 w-48 h-1 bg-teal-400/20 skew-x-[-12deg] z-10" />
+      {/* Bottom-left content */}
+      <div className="absolute bottom-12 left-4 sm:left-8 md:left-16 z-10 max-w-[720px]">
+        <Link href={getLink(currentItem, currentSlide)}>
+          <h1 className="font-display text-[clamp(40px,5.5vw,76px)] font-bold uppercase text-white leading-[0.92] tracking-tight cursor-pointer hover:text-white/90 transition-colors">
+            {getTitle(currentItem)}
+          </h1>
+        </Link>
+        <div className="flex items-center gap-4 mt-5">
+          <span className="font-cond text-sm font-semibold tracking-[2px] uppercase text-white/65">
+            {getDate(currentItem)}
+          </span>
+          {/* Diamond play button */}
+          <Link href={getLink(currentItem, currentSlide)}>
+            <button className="w-10 h-10 border-2 border-white/50 grid place-items-center rotate-45 hover:border-white hover:bg-white/15 transition-all duration-200">
+              <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-white -rotate-45">
+                <polygon points="8,5 19,12 8,19" />
+              </svg>
+            </button>
+          </Link>
+        </div>
 
-      <div className="container mx-auto px-4 sm:px-6 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[85vh] py-12">
-
-          {/* Left Content */}
-          <div className="order-2 lg:order-1 flex flex-col justify-center">
-            {/* Label */}
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-0.5 bg-teal-400 skew-x-[-12deg]" />
-              <span className="text-sm font-bold uppercase tracking-widest text-teal-300">Jaunākās Ziņas</span>
-            </div>
-
-            {/* Title */}
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold uppercase leading-tight tracking-tighter text-white mb-6">
-              {getTitle(getCurrentItem())}
-            </h1>
-
-            {/* Description */}
-            <p className="text-lg text-teal-100/80 leading-relaxed mb-8 max-w-lg">
-              {getDescription(getCurrentItem())}
-            </p>
-
-            {/* CTA Button */}
-            <div className="flex items-center gap-6">
-              <Link
-                href={getLink(getCurrentItem(), currentSlide)}
-                className="group"
-              >
-                <button className="animate-glow-border skew-x-[-12deg] transform bg-white px-8 py-4 font-bold tracking-wide text-teal-900 shadow-xl transition-all duration-300 hover:bg-teal-50 hover:scale-105">
-                  <span className="inline-flex skew-x-[12deg] transform items-center">
-                    LASĪT VAIRĀK
-                    <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
-                  </span>
-                </button>
-              </Link>
-
-              {/* Slide indicators */}
-              <div className="hidden sm:flex items-center gap-0">
-                {newsItems.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentSlide(index)}
-                    className="p-3 flex items-center justify-center"
-                    aria-label={`Go to slide ${index + 1}`}
-                  >
-                    <span className={`block h-2 skew-x-[-12deg] transition-all duration-300 ${
-                      index === currentSlide
-                        ? 'w-10 bg-teal-400'
-                        : 'w-6 bg-white/30 hover:bg-white/50'
-                    }`} />
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Navigation arrows */}
-            <div className="flex items-center gap-3 mt-8">
-              <button
-                onClick={prevSlide}
-                className="skew-x-[-12deg] transform bg-white/10 border border-white/20 p-3 text-white transition-all duration-300 hover:bg-white/20"
-                aria-label="Previous slide"
-              >
-                <ChevronLeft className="h-5 w-5 skew-x-[12deg] transform" />
-              </button>
-              <button
-                onClick={nextSlide}
-                className="skew-x-[-12deg] transform bg-white/10 border border-white/20 p-3 text-white transition-all duration-300 hover:bg-white/20"
-                aria-label="Next slide"
-              >
-                <ChevronRight className="h-5 w-5 skew-x-[12deg] transform" />
-              </button>
-              <span className="ml-2 text-sm text-teal-300/70">
-                {String(currentSlide + 1).padStart(2, '0')} / {String(newsItems.length).padStart(2, '0')}
-              </span>
-            </div>
-          </div>
-
-          {/* Right Image */}
-          <div className="order-1 lg:order-2">
-            {/* Simple image frame */}
-            <div className="relative overflow-hidden shadow-2xl border-b-4 border-teal-400">
-              {/* Image carousel */}
-              <div className="relative aspect-[4/3] bg-teal-800">
-                {newsItems.map((item, index) => (
-                  <div
-                    key={'id' in item ? item.id : index}
-                    className={`absolute inset-0 transition-all duration-700 ${
-                      index === currentSlide
-                        ? 'opacity-100 scale-100'
-                        : 'opacity-0 scale-105'
-                    }`}
-                  >
-                    <NextImage
-                      src={getImageUrl(item)}
-                      alt={getTitle(item)}
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                      className="object-cover"
-                      priority={index === 0}
-                      loading={index === 0 ? 'eager' : 'lazy'}
-                      placeholder="blur"
-                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIhAAAgEDBAMBAAAAAAAAAAAAAQIDAAQRBRIhMQYTQWH/xAAVAQEBAAAAAAAAAAAAAAAAAAADBP/EABkRAAIDAQAAAAAAAAAAAAAAAAECAAMRIf/aAAwDAQACEQMRAD8AzLTtRuLC8iu7WVo54W3I6nkGtDg+RXOr6Xp9ze3E00NuiTSBmKIOc5ycY71SlTiqUWU7M51kXaij/9k="
-                    />
-                  </div>
-                ))}
-              </div>
-
-              {/* Date badge */}
-              {articles.length > 0 && currentSlide < articles.length && (
-                <div className="absolute top-4 right-4 z-20">
-                  <div className="skew-x-[-12deg] transform bg-teal-700/90 backdrop-blur-sm px-4 py-2">
-                    <div className="skew-x-[12deg] transform flex items-center gap-2 text-white">
-                      <CalendarDays className="h-4 w-4" />
-                      <span className="text-sm font-medium">
-                        {new Date(articles[currentSlide].published_at).toLocaleDateString('lv-LV', {
-                          day: 'numeric',
-                          month: 'short',
-                          year: 'numeric'
-                        })}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Mobile slide indicators */}
-            <div className="flex sm:hidden items-center justify-center gap-0 mt-6">
-              {newsItems.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentSlide(index)}
-                  className="p-3 flex items-center justify-center"
-                  aria-label={`Go to slide ${index + 1}`}
-                >
-                  <span className={`block h-2 skew-x-[-12deg] transition-all duration-300 ${
-                    index === currentSlide
-                      ? 'w-10 bg-teal-400'
-                      : 'w-6 bg-white/30 hover:bg-white/50'
-                  }`} />
-                </button>
-              ))}
-            </div>
-          </div>
+        {/* Slide indicators */}
+        <div className="flex items-center gap-2 mt-6">
+          {newsItems.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentSlide(index)}
+              className={`h-[3px] transition-all duration-300 ${
+                index === currentSlide
+                  ? 'w-8 bg-white'
+                  : 'w-4 bg-white/30 hover:bg-white/50'
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
         </div>
       </div>
+
+      {/* Training sidebar (desktop only) */}
+      <aside className="hidden xl:block w-[320px] bg-white absolute right-0 bottom-0 z-20 p-7">
+        <div className="font-cond text-sm font-bold tracking-[2px] uppercase text-[#111] mb-1">
+          Treniņu Laiki
+        </div>
+        <div className="h-px bg-[#e5e5e5] my-3.5" />
+
+        <div className="flex flex-col">
+          {[
+            { day: 'Pirmdiena', time: '18:30 – 20:00', place: 'Valmiera, Daliņi' },
+            { day: 'Otrdiena', time: '18:00 – 20:30', place: 'Brenguļu zāle' },
+            { day: 'Piektdiena', time: '18:30 – 20:00', place: 'Brenguļu zāle' },
+          ].map((item, i) => (
+            <div key={item.day}>
+              {i > 0 && <div className="h-px bg-[#e5e5e5] my-2" />}
+              <div className="py-0.5">
+                <div className="font-cond text-[13px] font-bold tracking-[2px] uppercase text-[#888]">
+                  {item.day}
+                </div>
+                <div className="font-display text-lg font-bold text-teal-700 tracking-tight mt-0.5">
+                  {item.time}
+                </div>
+                <div className="font-cond text-[10px] font-medium tracking-[1.5px] uppercase text-[#888] flex items-center gap-1 mt-0.5">
+                  <svg viewBox="0 0 24 24" className="w-2.5 h-2.5 stroke-current fill-none stroke-2 flex-shrink-0">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                  {item.place}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="h-px bg-[#e5e5e5] mt-4 mb-3.5" />
+        <Link href="/contact">
+          <button className="w-full py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase text-center hover:bg-teal-700 transition-colors duration-200">
+            Pievienoties
+          </button>
+        </Link>
+      </aside>
     </section>
   )
 }

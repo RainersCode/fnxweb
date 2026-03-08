@@ -2,7 +2,6 @@
 
 import { useState, type ReactNode, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import { Menu, X, ArrowRight, ChevronUp, Settings } from 'lucide-react'
 import Image from 'next/image'
 import { SignInButton, SignUpButton, UserButton, useAuth, useUser } from '@clerk/nextjs'
@@ -12,7 +11,7 @@ import { PageViewTracker } from '@/components/features/page-view-tracker'
 
 interface MainLayoutProps {
   children: ReactNode
-  currentPage?: string // Make currentPage optional
+  currentPage?: string
 }
 
 export function MainLayout({ children, currentPage: propCurrentPage }: MainLayoutProps) {
@@ -27,7 +26,6 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
   const isAdminUser = isAdmin(userEmail)
   const pathname = usePathname()
 
-  // Auto-detect current page based on pathname if not provided via props
   const getActivePageKey = (path: string): string => {
     if (path === '/') return 'HOME'
     if (path === '/about') return 'ABOUT'
@@ -44,51 +42,34 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
 
   const currentPage = propCurrentPage || getActivePageKey(pathname)
 
-  // Scroll detection for header visibility, background, and scroll-to-top button
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY
-
-      setIsScrolled(currentScrollY > 50)
+      setIsScrolled(currentScrollY > 10)
       setShowScrollTop(currentScrollY > 400)
-
-      // Hide header on scroll down, show on scroll up
       if (currentScrollY > 100) {
-        if (currentScrollY > lastScrollY.current) {
-          // Scrolling down
-          setIsHeaderHidden(true)
-        } else {
-          // Scrolling up
-          setIsHeaderHidden(false)
-        }
+        setIsHeaderHidden(currentScrollY > lastScrollY.current)
       } else {
-        // Always show header near top of page
         setIsHeaderHidden(false)
       }
-
       lastScrollY.current = currentScrollY
     }
-
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Scroll to top function
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  // Close mobile menu on escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setMobileMenuOpen(false)
     }
-
     if (mobileMenuOpen) {
       document.addEventListener('keydown', handleEscape)
       document.body.style.overflow = 'hidden'
     }
-
     return () => {
       document.removeEventListener('keydown', handleEscape)
       document.body.style.overflow = 'unset'
@@ -96,235 +77,202 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
   }, [mobileMenuOpen])
 
   const baseNavItems = [
-    { key: 'HOME', text: 'SĀKUMS' },
-    { key: 'ABOUT', text: 'PAR MUMS' },
-    { key: 'TEAM', text: 'KOMANDA' },
-    { key: 'FIXTURES', text: 'SPĒLES' },
-    { key: 'NEWS', text: 'ZIŅAS' },
-    { key: 'GALLERY', text: 'GALERIJA' },
-    { key: 'NOTEIKUMI', text: 'NOTEIKUMI' },
-    { key: 'CONTACT', text: 'KONTAKTI' }
+    { key: 'HOME', text: 'Sākums' },
+    { key: 'NEWS', text: 'Ziņas' },
+    { key: 'FIXTURES', text: 'Spēles' },
+    { key: 'TEAM', text: 'Komanda' },
+    { key: 'GALLERY', text: 'Galerija' },
+    { key: 'ABOUT', text: 'Klubs' },
+    { key: 'NOTEIKUMI', text: 'Noteikumi' },
+    { key: 'CONTACT', text: 'Kontakti' },
   ]
 
-  // Add admin link to nav items if user is admin
   const navItems = isAdminUser
-    ? [...baseNavItems, { key: 'ADMIN', text: 'ADMIN', isAdmin: true }]
+    ? [...baseNavItems, { key: 'ADMIN', text: 'Admin', isAdmin: true }]
     : baseNavItems
 
   return (
-    <div className="flex min-h-screen flex-col bg-white font-sans text-zinc-900">
-      {/* Header */}
-      <header
-        className={`sticky top-0 z-50 transition-all duration-300 ${
-          isScrolled
-            ? 'bg-teal-900/95 backdrop-blur-md shadow-lg'
-            : 'bg-gradient-to-r from-teal-900 to-teal-700'
+    <div className="flex min-h-screen flex-col bg-white font-body text-[#111]">
+      {/* Top bar */}
+      <div className="h-8 bg-[#111] flex items-center justify-end px-4 sm:px-8 md:px-16 gap-5">
+        <Link href="/contact" className="font-body text-[11px] font-medium text-white/50 tracking-wider uppercase hover:text-white transition-colors">
+          Kontakti
+        </Link>
+        <div className="w-px h-3 bg-white/15" />
+        <Link href="/about" className="font-body text-[11px] font-medium text-white/50 tracking-wider uppercase hover:text-white transition-colors">
+          Par mums
+        </Link>
+        {isSignedIn && isAdminUser && (
+          <>
+            <div className="w-px h-3 bg-white/15" />
+            <Link href="/admin" className="font-body text-[11px] font-medium text-amber-400/70 tracking-wider uppercase hover:text-amber-300 transition-colors">
+              Admin
+            </Link>
+          </>
+        )}
+      </div>
+
+      {/* Navigation */}
+      <nav
+        className={`sticky top-0 z-50 bg-white transition-all duration-300 ${
+          isScrolled ? 'shadow-[0_2px_24px_rgba(0,0,0,0.1)]' : ''
         } ${isHeaderHidden ? '-translate-y-full' : 'translate-y-0'}`}
       >
-        {/* Top accent line */}
-        <div className="h-1 bg-gradient-to-r from-teal-400 via-teal-300 to-teal-400" />
+        <div className="flex items-center h-[76px] px-4 sm:px-8 md:px-16 max-w-[1600px] mx-auto">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-3.5 mr-12 relative z-10 group">
+            <Image
+              src="/Logo/fēniks_logo-removebg-preview.png"
+              alt="RK Fēnikss Logo"
+              width={50}
+              height={50}
+              className="object-contain transition-transform duration-300 group-hover:scale-[1.06]"
+            />
+          </Link>
 
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="flex h-16 items-center justify-between">
-            {/* Logo */}
-            <Link href="/" className="group">
-              <div className="h-12 w-12 lg:h-14 lg:w-14 overflow-hidden transition-all duration-300 group-hover:scale-105">
-                <Image
-                  src="/Logo/fēniks_logo-removebg-preview.png"
-                  alt="RK Fēnikss Logo"
-                  width={56}
-                  height={56}
-                  className="object-contain"
-                />
-              </div>
-            </Link>
+          {/* Desktop Links */}
+          <ul className="hidden lg:flex items-center list-none flex-1">
+            {navItems.map((item) => (
+              <li key={item.key}>
+                {item.key === 'ADMIN' ? (
+                  <Link
+                    href="/admin"
+                    className="flex items-center h-[76px] px-[18px] font-cond text-sm font-bold tracking-[2.5px] uppercase text-amber-600 hover:text-amber-800 relative transition-colors duration-200"
+                  >
+                    <Settings className="h-4 w-4 mr-1.5" />
+                    {item.text}
+                  </Link>
+                ) : (
+                  <Link
+                    href={item.key === 'HOME' ? '/' : `/${item.key.toLowerCase()}`}
+                    className={`flex items-center h-[76px] px-[18px] font-cond text-[14px] font-bold tracking-[2.5px] uppercase relative transition-colors duration-250 ${
+                      currentPage === item.key ? 'text-teal-700' : 'text-[#111] hover:text-teal-700'
+                    }`}
+                  >
+                    {item.text}
+                    {/* Bottom underline indicator */}
+                    <span
+                      className={`absolute bottom-0 left-[18px] right-[18px] h-[3px] bg-teal-700 transition-transform duration-300 origin-left ${
+                        currentPage === item.key ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                      }`}
+                    />
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex">
-              <ul className="flex items-center">
-                {navItems.map((item) => (
-                  <li key={item.key}>
-                    {item.key === 'ADMIN' ? (
-                      <Link
-                        href="/admin"
-                        className="group relative mx-0.5 px-4 py-5 text-sm font-medium tracking-wide transition-colors duration-200"
-                      >
-                        <span className="flex items-center gap-1.5 text-amber-300 group-hover:text-white">
-                          <Settings className="h-4 w-4" />
-                          {item.text}
-                        </span>
-                      </Link>
-                    ) : (
-                      <Link
-                        href={item.key === 'HOME' ? '/' : `/${item.key.toLowerCase()}`}
-                        className="group relative mx-0.5 px-4 py-5 text-sm font-medium tracking-wide text-white transition-all duration-300"
-                      >
-                        <span className={`relative z-10 transition-colors duration-300 ${
-                          currentPage === item.key ? 'text-teal-300' : 'group-hover:text-teal-200'
-                        }`}>
-                          {item.text}
-                        </span>
-
-                        {/* Skewed background on hover/active */}
-                        <span
-                          className={`absolute inset-0 -z-0 skew-x-[-12deg] transform bg-white/10 transition-all duration-300 ${
-                            currentPage === item.key
-                              ? 'opacity-100 scale-100'
-                              : 'opacity-0 scale-x-75 group-hover:scale-100 group-hover:opacity-100'
-                          }`}
-                        />
-
-                        {/* Bottom indicator line */}
-                        <span
-                          className={`absolute bottom-2 left-1/2 h-0.5 -translate-x-1/2 skew-x-[-12deg] transform bg-teal-400 transition-all duration-300 ${
-                            currentPage === item.key
-                              ? 'w-8 opacity-100'
-                              : 'w-0 opacity-0 group-hover:w-6 group-hover:opacity-100'
-                          }`}
-                        />
-                      </Link>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </nav>
-
-            {/* Right side buttons */}
-            <div className="flex items-center gap-3">
-              {isSignedIn ? (
-                <UserButton afterSignOutUrl="/" />
-              ) : (
-                <Link href="/contact" className="hidden md:block">
-                  <button className="animate-nav-glow group skew-x-[-12deg] transform bg-white px-5 py-2.5 font-medium tracking-wide text-teal-800 shadow-lg transition-all duration-300 hover:bg-teal-50 hover:scale-105">
-                    <span className="inline-flex skew-x-[12deg] transform items-center text-sm">
-                      PIEVIENOJIES
-                      <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                    </span>
-                  </button>
-                </Link>
-              )}
-
-              {/* Mobile menu button */}
-              <button
-                className="skew-x-[-12deg] transform bg-white/10 backdrop-blur-sm border border-white/20 p-2.5 text-white transition-all duration-300 hover:bg-white/20 lg:hidden"
-                onClick={() => setMobileMenuOpen(true)}
-                aria-label="Atvērt izvēlni"
+          {/* Right side */}
+          <div className="flex items-center gap-1.5 ml-auto">
+            {isSignedIn ? (
+              <UserButton afterSignOutUrl="/" />
+            ) : (
+              <Link
+                href="/contact"
+                className="hidden md:inline-flex items-center gap-2 px-6 py-2.5 bg-teal-700 text-white font-cond text-xs font-bold tracking-[2px] uppercase hover:bg-[#111] transition-colors duration-200 ml-1.5"
               >
-                <Menu className="h-5 w-5 skew-x-[12deg] transform" />
-              </button>
-            </div>
+                Pievienojies
+                <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+              </Link>
+            )}
+
+            {/* Hamburger */}
+            <button
+              className="w-10 h-10 rounded-full hover:bg-[#f5f5f5] flex flex-col justify-center items-center gap-[5px] p-1 lg:hidden transition-colors"
+              onClick={() => setMobileMenuOpen(true)}
+              aria-label="Atvērt izvēlni"
+            >
+              <span className="h-0.5 w-5 bg-[#111] block" />
+              <span className="h-0.5 w-5 bg-[#111] block" />
+              <span className="h-0.5 w-5 bg-[#111] block" />
+            </button>
           </div>
         </div>
-      </header>
+      </nav>
 
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-50 bg-black/40 lg:hidden"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
 
       {/* Mobile Menu */}
       <div
-        className={`fixed inset-y-0 right-0 z-50 w-full max-w-sm bg-gradient-to-br from-teal-900 via-teal-800 to-teal-900 shadow-2xl transition-transform duration-300 ease-out lg:hidden ${
+        className={`fixed inset-y-0 right-0 z-50 w-full max-w-sm bg-white shadow-2xl transition-transform duration-300 ease-out lg:hidden ${
           mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        {/* Decorative elements */}
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-teal-400 via-teal-300 to-teal-400" />
-        <div className="absolute bottom-0 left-0 w-1/2 h-0.5 bg-teal-400/30 skew-x-[-12deg]" />
-
         <div className="flex flex-col h-full px-6 py-4 overflow-y-auto">
           {/* Header */}
           <div className="flex items-center justify-between">
-            <div className="h-12 w-12 overflow-hidden">
+            <Link href="/" className="flex items-center gap-3" onClick={() => setMobileMenuOpen(false)}>
               <Image
                 src="/Logo/fēniks_logo-removebg-preview.png"
                 alt="RK Fēnikss Logo"
-                width={48}
-                height={48}
+                width={40}
+                height={40}
                 className="object-contain"
               />
-            </div>
+              <span className="font-display text-lg font-bold uppercase tracking-wider">RK &quot;Fēnikss&quot;</span>
+            </Link>
             <button
-              className="skew-x-[-12deg] transform bg-white/10 border border-white/20 p-2.5 text-white transition-all duration-300 hover:bg-white/20"
+              className="w-10 h-10 rounded-full hover:bg-[#f5f5f5] grid place-items-center transition-colors"
               onClick={() => setMobileMenuOpen(false)}
               aria-label="Aizvērt izvēlni"
             >
-              <X className="h-5 w-5 skew-x-[12deg] transform" />
+              <X className="h-5 w-5" />
             </button>
           </div>
 
-          {/* Navigation */}
-          <nav className="mt-10 flex-1">
-            <ul className="space-y-2">
+          {/* Nav links */}
+          <nav className="mt-8 flex-1">
+            <ul className="space-y-0">
               {navItems.map((item, index) => (
                 <li
                   key={item.key}
-                  className="menu-item-animate"
+                  className="menu-item-animate border-b border-[#f0f0f0]"
                   style={{ animationDelay: `${index * 0.05}s` }}
                 >
                   {item.key === 'ADMIN' ? (
                     <Link
                       href="/admin"
-                      className="group flex items-center py-3 px-4 rounded-lg transition-colors duration-200 text-amber-300 hover:text-white hover:bg-white/10"
+                      className="flex items-center py-4 font-cond text-sm font-bold tracking-[2px] uppercase text-amber-600 hover:text-amber-800 transition-colors"
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      <span className="mr-3 h-6 w-1 skew-x-[-12deg] transform rounded-full bg-amber-400" />
                       <Settings className="h-4 w-4 mr-2" />
-                      <span className="text-base font-medium tracking-wide">{item.text}</span>
+                      {item.text}
                     </Link>
                   ) : (
                     <Link
                       href={item.key === 'HOME' ? '/' : `/${item.key.toLowerCase()}`}
-                      className={`group flex items-center py-3 px-4 rounded-lg transition-all duration-300 ${
-                        currentPage === item.key
-                          ? 'bg-white/15 text-teal-300'
-                          : 'text-white hover:bg-white/10 hover:text-teal-200'
+                      className={`flex items-center justify-between py-4 font-cond text-sm font-bold tracking-[2px] uppercase transition-colors ${
+                        currentPage === item.key ? 'text-teal-700' : 'text-[#111] hover:text-teal-700'
                       }`}
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      {/* Active indicator */}
-                      <span
-                        className={`mr-3 h-6 w-1 skew-x-[-12deg] transform rounded-full transition-all duration-300 ${
-                          currentPage === item.key
-                            ? 'bg-teal-400'
-                            : 'bg-white/20 group-hover:bg-teal-400/50'
-                        }`}
-                      />
-                      <span className="text-base font-medium tracking-wide">{item.text}</span>
-                      {/* Arrow on hover */}
-                      <ArrowRight
-                        className={`ml-auto h-4 w-4 transition-all duration-300 ${
-                          currentPage === item.key
-                            ? 'opacity-100 translate-x-0'
-                            : 'opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0'
-                        }`}
-                      />
+                      {item.text}
+                      {currentPage === item.key && (
+                        <span className="w-2 h-2 bg-teal-700 rounded-full" />
+                      )}
                     </Link>
                   )}
                 </li>
               ))}
             </ul>
 
-            {/* CTA Button */}
+            {/* CTA */}
             <div className="mt-8">
               {isSignedIn ? (
                 <div className="flex justify-center">
                   <UserButton afterSignOutUrl="/" />
                 </div>
               ) : (
-                <Link
-                  href="/contact"
-                  className="block w-full"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <button className="animate-nav-glow w-full group skew-x-[-12deg] transform bg-white px-6 py-3.5 font-bold tracking-wide text-teal-800 shadow-lg transition-all duration-300 hover:bg-teal-50">
-                    <span className="inline-flex skew-x-[12deg] transform items-center justify-center">
-                      PIEVIENOJIES MUMS
-                      <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                    </span>
+                <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>
+                  <button className="w-full flex items-center justify-center gap-2 py-3.5 bg-teal-700 text-white font-cond text-xs font-bold tracking-[2px] uppercase hover:bg-[#111] transition-colors">
+                    Pievienojies mums
+                    <ArrowRight className="h-3.5 w-3.5" />
                   </button>
                 </Link>
               )}
@@ -332,58 +280,23 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
           </nav>
 
           {/* Contact info */}
-          <div className="mt-auto pt-6 border-t border-white/10">
-            <div className="space-y-3 text-sm">
-              <a
-                href="tel:+37129113938"
-                className="flex items-center text-white/80 hover:text-teal-300 transition-colors"
-              >
-                <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center mr-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                  </svg>
-                </div>
+          <div className="mt-auto pt-6 border-t border-[#e5e5e5]">
+            <div className="space-y-3 text-sm text-[#888]">
+              <a href="tel:+37129113938" className="flex items-center gap-2 hover:text-teal-700 transition-colors">
                 +371 29113938
               </a>
-              <a
-                href="mailto:rkfenikss@gmail.com"
-                className="flex items-center text-white/80 hover:text-teal-300 transition-colors"
-              >
-                <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center mr-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect width="20" height="16" x="2" y="4" rx="2" />
-                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-                  </svg>
-                </div>
+              <a href="mailto:rkfenikss@gmail.com" className="flex items-center gap-2 hover:text-teal-700 transition-colors">
                 rkfenikss@gmail.com
               </a>
             </div>
-
-            {/* Social Media */}
-            <div className="mt-6 flex justify-center gap-4">
-              <a
-                href="https://www.facebook.com/RKFenikss?locale=lv_LV"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Facebook"
-                className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-white hover:bg-white hover:text-teal-700 transition-all duration-300"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-                </svg>
+            <div className="mt-4 flex gap-3.5">
+              <a href="https://www.facebook.com/RKFenikss?locale=lv_LV" target="_blank" rel="noopener noreferrer" aria-label="Facebook"
+                className="w-8 h-8 grid place-items-center text-[#888] hover:text-teal-700 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg>
               </a>
-              <a
-                href="https://www.instagram.com/rk_fenikss/"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-white hover:bg-white hover:text-teal-700 transition-all duration-300"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                  <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-                </svg>
+              <a href="https://www.instagram.com/rk_fenikss/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
+                className="w-8 h-8 grid place-items-center text-[#888] hover:text-teal-700 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></svg>
               </a>
             </div>
           </div>
@@ -393,190 +306,129 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
       {children}
 
       {/* Footer */}
-      <footer className="relative bg-gradient-to-br from-teal-900 via-teal-800 to-teal-900 overflow-hidden">
-        {/* Top accent line */}
-        <div className="h-1 bg-gradient-to-r from-teal-400 via-teal-300 to-teal-400" />
-
-        {/* Decorative elements */}
-        <div className="absolute top-16 left-0 w-32 h-0.5 bg-teal-400/20 skew-x-[-12deg]" />
-        <div className="absolute top-20 left-0 w-20 h-0.5 bg-teal-400/10 skew-x-[-12deg]" />
-        <div className="absolute bottom-32 right-0 w-40 h-0.5 bg-teal-400/20 skew-x-[-12deg]" />
-
-        {/* Main Footer Content */}
-        <div className="container mx-auto px-4 sm:px-6 py-16 relative z-10">
-          <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
-            {/* Logo & Description */}
-            <div className="lg:col-span-1">
-              <div className="h-12 w-12 overflow-hidden mb-6">
+      <footer className="bg-[#1a1a1a] text-white pt-14">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 md:px-16">
+          <div className="flex flex-col md:flex-row items-start gap-8 md:gap-16 pb-12 border-b border-white/[0.06]">
+            {/* Brand */}
+            <div className="flex-shrink-0 w-[180px]">
+              <div className="flex items-center gap-2.5 mb-3">
                 <Image
                   src="/Logo/fēniks_logo-removebg-preview.png"
                   alt="RK Fēnikss Logo"
-                  width={48}
-                  height={48}
+                  width={40}
+                  height={40}
                   className="object-contain"
                 />
-              </div>
-              <p className="text-teal-100/80 text-sm leading-relaxed mb-6">
-                Valmieras novada regbija klubs, dibināts 2005. gadā, apvieno dažāda vecuma un prasmju spēlētājus vienotā komandā.
-              </p>
-
-              {/* Social Media */}
-              <div className="flex items-center gap-3">
-                <a
-                  href="https://www.facebook.com/RKFenikss?locale=lv_LV"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Facebook"
-                  className="w-10 h-10 bg-white/10 hover:bg-white hover:text-teal-800 text-white flex items-center justify-center transition-all duration-300 skew-x-[-12deg]"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="skew-x-[12deg]">
-                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-                  </svg>
-                </a>
-                <a
-                  href="https://www.instagram.com/rk_fenikss/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Instagram"
-                  className="w-10 h-10 bg-white/10 hover:bg-white hover:text-teal-800 text-white flex items-center justify-center transition-all duration-300 skew-x-[-12deg]"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="skew-x-[12deg]">
-                    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-                  </svg>
-                </a>
+                <span className="font-display text-lg font-bold uppercase">RK &quot;Fēnikss&quot;</span>
               </div>
             </div>
 
-            {/* Quick Links */}
-            <div>
-              <h3 className="text-white font-bold uppercase tracking-wider mb-6 flex items-center gap-3">
-                <div className="w-8 h-0.5 bg-teal-400 skew-x-[-12deg]" />
-                Ātrās saites
-              </h3>
-              <ul className="space-y-3">
-                {navItems.map((item) => (
-                  <li key={item.key}>
-                    <Link
-                      href={item.key === 'HOME' ? '/' : `/${item.key.toLowerCase()}`}
-                      className="text-teal-100/70 hover:text-white text-sm font-medium tracking-wide transition-all duration-300 flex items-center group"
-                    >
-                      <span className="w-0 h-0.5 bg-teal-400 mr-0 group-hover:w-4 group-hover:mr-2 transition-all duration-300" />
-                      {item.text}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Contact Info */}
-            <div>
-              <h3 className="text-white font-bold uppercase tracking-wider mb-6 flex items-center gap-3">
-                <div className="w-8 h-0.5 bg-teal-400 skew-x-[-12deg]" />
-                Kontakti
-              </h3>
-              <address className="not-italic space-y-4">
-                <a href="tel:+37129113938" className="flex items-center gap-3 text-teal-100/70 hover:text-white transition-colors group">
-                  <div className="w-10 h-10 bg-white/10 group-hover:bg-teal-400 flex items-center justify-center transition-all duration-300 skew-x-[-12deg]">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="skew-x-[12deg]">
-                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                    </svg>
-                  </div>
-                  <span className="text-sm">+371 29113938</span>
-                </a>
-                <a href="mailto:rkfenikss@gmail.com" className="flex items-center gap-3 text-teal-100/70 hover:text-white transition-colors group">
-                  <div className="w-10 h-10 bg-white/10 group-hover:bg-teal-400 flex items-center justify-center transition-all duration-300 skew-x-[-12deg]">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="skew-x-[12deg]">
-                      <rect width="20" height="16" x="2" y="4" rx="2" />
-                      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-                    </svg>
-                  </div>
-                  <span className="text-sm">rkfenikss@gmail.com</span>
-                </a>
-                <div className="flex items-start gap-3 text-teal-100/70">
-                  <div className="w-10 h-10 bg-white/10 flex items-center justify-center flex-shrink-0 skew-x-[-12deg]">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="skew-x-[12deg]">
-                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                      <circle cx="12" cy="10" r="3" />
-                    </svg>
-                  </div>
-                  <span className="text-sm leading-relaxed">Kaimiņi, Brenguļi, Brenguļu pagasts, Valmieras novads, LV-4245</span>
-                </div>
-              </address>
-            </div>
-
-            {/* Legal Info */}
-            <div>
-              <h3 className="text-white font-bold uppercase tracking-wider mb-6 flex items-center gap-3">
-                <div className="w-8 h-0.5 bg-teal-400 skew-x-[-12deg]" />
-                Rekvizīti
-              </h3>
-              <div className="space-y-3 text-sm text-teal-100/70">
-                <p>Biedrība &quot;Regbija klubs &quot;Valmieras Fēnikss&quot;&quot;</p>
-                <p>Reģ. nr: 40008126600</p>
-                <div className="pt-3 border-t border-white/10">
-                  <p className="text-teal-300 font-medium mb-1">Bankas konts:</p>
-                  <p>Swedbank</p>
-                  <p className="text-xs mt-1">LV86HABA0551035059313</p>
-                </div>
+            {/* Columns */}
+            <div className="flex flex-wrap gap-8 md:gap-16 flex-1">
+              <div>
+                <h4 className="font-cond text-xs font-bold tracking-[3px] uppercase text-white/40 mb-4">
+                  Apmeklē mūs
+                </h4>
+                <p className="text-sm text-white/30 leading-relaxed">
+                  Kaimiņi, Brenguļi<br />
+                  Brenguļu pagasts<br />
+                  Valmieras novads<br />
+                  LV-4245<br /><br />
+                  Tel: +371 29113938
+                </p>
+              </div>
+              <div>
+                <h4 className="font-cond text-xs font-bold tracking-[3px] uppercase text-white/40 mb-4">
+                  Kontakti
+                </h4>
+                <ul className="space-y-2">
+                  <li><a href="mailto:rkfenikss@gmail.com" className="text-sm text-white/35 hover:text-teal-400 transition-colors">rkfenikss@gmail.com</a></li>
+                  <li><Link href="/privacy-policy" className="text-sm text-white/35 hover:text-teal-400 transition-colors">Privātuma politika</Link></li>
+                  <li><Link href="/cookies-policy" className="text-sm text-white/35 hover:text-teal-400 transition-colors">Sīkdatņu politika</Link></li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-cond text-xs font-bold tracking-[3px] uppercase text-white/40 mb-4">
+                  Rekvizīti
+                </h4>
+                <p className="text-sm text-white/30 leading-relaxed">
+                  Biedrība &quot;Regbija klubs<br />
+                  &quot;Valmieras Fēnikss&quot;&quot;<br />
+                  Reģ. nr: 40008126600<br /><br />
+                  <span className="font-mono text-xs text-white/20">LV86HABA0551035059313</span>
+                </p>
+              </div>
+              <div>
+                <h4 className="font-cond text-xs font-bold tracking-[3px] uppercase text-white/40 mb-4">
+                  Ātrās saites
+                </h4>
+                <ul className="space-y-2">
+                  {baseNavItems.map((item) => (
+                    <li key={item.key}>
+                      <Link
+                        href={item.key === 'HOME' ? '/' : `/${item.key.toLowerCase()}`}
+                        className="text-sm text-white/35 hover:text-teal-400 transition-colors"
+                      >
+                        {item.text}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-white/10">
-          <div className="container mx-auto px-4 sm:px-6 py-6">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              {/* Copyright */}
-              <p className="text-teal-100/60 text-sm">
-                © 2025 RK &quot;FĒNIKSS&quot;. Visas tiesības aizsargātas.
-              </p>
-
-              {/* Links */}
-              <div className="flex items-center gap-6">
-                {!isSignedIn && (
-                  <>
-                    <SignInButton mode="modal">
-                      <button className="text-xs font-medium text-teal-100/60 hover:text-white transition-colors">
-                        Ieiet
-                      </button>
-                    </SignInButton>
-                    <SignUpButton mode="modal">
-                      <button className="text-xs font-medium text-teal-100/60 hover:text-white transition-colors">
-                        Reģistrēties
-                      </button>
-                    </SignUpButton>
-                    <span className="w-px h-4 bg-white/20" />
-                  </>
-                )}
-                <Link href="/privacy-policy" className="text-xs font-medium text-teal-100/60 hover:text-white transition-colors">
-                  Privātuma Politika
-                </Link>
-                <Link href="/cookies-policy" className="text-xs font-medium text-teal-100/60 hover:text-white transition-colors">
-                  Sīkdatņu Politika
-                </Link>
-              </div>
+        {/* Teal bottom strip */}
+        <div className="bg-teal-700 mt-12">
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-8 md:px-16 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <span className="text-xs text-white/60">
+              © 2025 RK &quot;Fēnikss&quot;. Visas tiesības aizsargātas.
+            </span>
+            <div className="flex items-center gap-3.5">
+              {!isSignedIn && (
+                <>
+                  <SignInButton mode="modal">
+                    <button className="text-xs text-white/60 hover:text-white transition-colors">
+                      Ieiet
+                    </button>
+                  </SignInButton>
+                  <SignUpButton mode="modal">
+                    <button className="text-xs text-white/60 hover:text-white transition-colors">
+                      Reģistrēties
+                    </button>
+                  </SignUpButton>
+                  <span className="w-px h-3 bg-white/20" />
+                </>
+              )}
+              <a href="https://www.facebook.com/RKFenikss?locale=lv_LV" target="_blank" rel="noopener noreferrer" aria-label="Facebook"
+                className="w-8 h-8 grid place-items-center text-white opacity-70 hover:opacity-100 transition-opacity">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+              </a>
+              <a href="https://www.instagram.com/rk_fenikss/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
+                className="w-8 h-8 grid place-items-center text-white opacity-70 hover:opacity-100 transition-opacity">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/></svg>
+              </a>
+              <a href="https://www.tiktok.com/@rk_fenikss" target="_blank" rel="noopener noreferrer" aria-label="TikTok"
+                className="w-8 h-8 grid place-items-center text-white opacity-70 hover:opacity-100 transition-opacity">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.46V13a8.28 8.28 0 005.58 2.14V11.7a4.83 4.83 0 01-3.77-1.24V6.69h3.77z"/></svg>
+              </a>
             </div>
           </div>
         </div>
       </footer>
 
-      {/* Scroll to Top Button */}
+      {/* Scroll to Top */}
       <button
         onClick={scrollToTop}
-        className={`fixed bottom-6 right-6 z-40 skew-x-[-12deg] transform bg-teal-800 p-3 text-white shadow-lg transition-all duration-300 hover:bg-teal-700 hover:scale-110 ${
-          showScrollTop
-            ? 'translate-y-0 opacity-100'
-            : 'translate-y-16 opacity-0 pointer-events-none'
+        className={`fixed bottom-6 right-6 z-40 w-10 h-10 bg-[#111] text-white grid place-items-center shadow-lg transition-all duration-300 hover:bg-teal-700 ${
+          showScrollTop ? 'translate-y-0 opacity-100' : 'translate-y-16 opacity-0 pointer-events-none'
         }`}
         aria-label="Ritināt uz augšu"
       >
-        <ChevronUp className="h-5 w-5 skew-x-[12deg] transform" />
+        <ChevronUp className="h-5 w-5" />
       </button>
 
-      {/* Page View Tracker */}
       <PageViewTracker />
     </div>
   )

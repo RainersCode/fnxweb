@@ -1,8 +1,8 @@
 'use client'
 
-import { MapPin, Phone, Mail, Building2, MessageSquare, Send } from 'lucide-react'
+import Image from 'next/image'
+import { MapPin, Phone, Mail, Building2 } from 'lucide-react'
 import { MainLayout } from '@/components/layout/main-layout'
-import { ParallaxHeroSection } from '@/components/features/parallax-hero-section'
 import { ContactInfoItem } from '@/components/features/contact/contact-info-item'
 import { SocialLinks } from '@/components/features/contact/social-links'
 import { ContactForm } from '@/components/features/contact/contact-form'
@@ -25,50 +25,39 @@ export default function ContactPage() {
   return (
     <MainLayout currentPage="CONTACT">
       <main className="flex-1">
-        <ParallaxHeroSection
-          title="SAZINIES"
-          titleHighlight="AR MUMS"
-          subtitle="Vai jums ir jautājums vai vēlaties pievienoties mūsu klubam? Mēs labprāt no jums dzirdētu."
-          backgroundImage="/AboutUs/parallax.jpg"
-        />
+        {/* Hero Banner */}
+        <section className="relative h-[340px] md:h-[420px] bg-[#111] overflow-hidden">
+          <div className="absolute inset-0">
+            <Image src="/AboutUs/parallax.jpg" alt="Kontakti" fill className="object-cover opacity-30 scale-105 blur-[2px]" priority />
+            <div className="absolute inset-0 bg-black/40" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+          </div>
+          <div className="relative z-10 max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16 h-full flex items-end pb-12">
+            <div>
+              <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400 mb-3 block">RK Fēnikss</span>
+              <h1 className="font-display text-[clamp(48px,6vw,86px)] font-bold uppercase text-white leading-[0.88] tracking-tight">
+                Sazinies<br />Ar Mums
+              </h1>
+            </div>
+          </div>
+        </section>
 
         {/* Contact Section */}
-        <section className="relative py-20 bg-gradient-to-b from-gray-50 to-white overflow-hidden">
-          {/* Decorative elements */}
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-teal-200 to-transparent" />
-          <div className="absolute top-16 left-0 w-48 h-0.5 bg-teal-700/20 skew-x-[-12deg]" />
-          <div className="absolute top-20 left-0 w-32 h-0.5 bg-teal-700/10 skew-x-[-12deg]" />
-          <div className="absolute bottom-16 right-0 w-48 h-0.5 bg-teal-700/20 skew-x-[-12deg]" />
-          <div className="absolute top-1/3 right-0 w-64 h-64 bg-teal-100/30 rounded-full translate-x-1/2" />
-          <div className="absolute bottom-1/4 left-0 w-48 h-48 bg-teal-50/50 rounded-full -translate-x-1/2" />
-
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <section className="py-16 md:py-20 bg-white">
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-              {/* Contact Information */}
-              <div className="w-full">
-                {/* Section Header */}
-                <div className="mb-10">
-                  <div className="inline-flex items-center gap-3 mb-4">
-                    <div className="w-10 h-0.5 bg-teal-700 skew-x-[-12deg]" />
-                    <MessageSquare className="h-5 w-5 text-teal-600" />
-                    <div className="w-10 h-0.5 bg-teal-700 skew-x-[-12deg]" />
-                  </div>
-                  <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tighter">
-                    <span className="text-teal-900">KONTAKT</span>
-                    <span className="text-teal-600 italic font-light">INFORMĀCIJA</span>
-                  </h2>
-                  <p className="mt-3 text-zinc-600">
-                    Sazinieties ar mums jebkurā jums ērtā veidā
-                  </p>
-                  <div className="mt-4 h-1 w-20 bg-teal-700 skew-x-[-12deg]" />
-                </div>
+              {/* Left: Contact Info */}
+              <div>
+                <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-700 mb-3 block">Informācija</span>
+                <h2 className="font-display text-[clamp(32px,4vw,52px)] font-bold uppercase text-[#111] leading-[0.88] tracking-tight mb-10">
+                  Kontakt<br />Informācija
+                </h2>
 
-                {/* Info Cards */}
                 <div className="space-y-5">
                   <ContactInfoItem icon={MapPin} title="KLUBA ADRESE">
-                    Biedrība "Regbija klubs "Valmieras Fēnikss""
+                    Biedrība &quot;Regbija klubs &quot;Valmieras Fēnikss&quot;&quot;
                     <br />
-                    Juridiskā adrese: "Lukstiņi", Bērzaines pagasts, Valmieras novads, LV-4208
+                    Juridiskā adrese: &quot;Lukstiņi&quot;, Bērzaines pagasts, Valmieras novads, LV-4208
                     <br />
                     Adrese: Kaimiņi, Brenguļi, Brenguļu pagasts, Valmieras novads, LV-4245
                     <br />
@@ -94,31 +83,17 @@ export default function ContactPage() {
                   </ContactInfoItem>
                 </div>
 
-                {/* Social Links */}
                 <div className="mt-10">
                   <SocialLinks />
                 </div>
               </div>
 
-              {/* Contact Form */}
-              <div className="w-full">
-                {/* Section Header */}
-                <div className="mb-10">
-                  <div className="inline-flex items-center gap-3 mb-4">
-                    <div className="w-10 h-0.5 bg-teal-700 skew-x-[-12deg]" />
-                    <Send className="h-5 w-5 text-teal-600" />
-                    <div className="w-10 h-0.5 bg-teal-700 skew-x-[-12deg]" />
-                  </div>
-                  <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tighter">
-                    <span className="text-teal-900">SŪTIET </span>
-                    <span className="text-teal-600 italic font-light">ZIŅU</span>
-                  </h2>
-                  <p className="mt-3 text-zinc-600">
-                    Aizpildiet formu un mēs ar jums sazināsimies
-                  </p>
-                  <div className="mt-4 h-1 w-20 bg-teal-700 skew-x-[-12deg]" />
-                </div>
-
+              {/* Right: Form */}
+              <div>
+                <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-700 mb-3 block">Rakstiet mums</span>
+                <h2 className="font-display text-[clamp(32px,4vw,52px)] font-bold uppercase text-[#111] leading-[0.88] tracking-tight mb-10">
+                  Sūtiet<br />Ziņu
+                </h2>
                 <ContactForm onSubmit={handleFormSubmit} />
               </div>
             </div>

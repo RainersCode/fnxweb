@@ -1,26 +1,23 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { Instagram, ExternalLink, Share2, Facebook, Play } from 'lucide-react'
+import { Instagram, ExternalLink, Facebook, Play } from 'lucide-react'
 import Link from 'next/link'
 
-// TikTok icon component
 const TikTokIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" className={className} fill="currentColor">
     <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
   </svg>
 )
 
-// Lazy-loaded iframe that only loads when visible and clicked
 function LazyEmbed({
   src,
   placeholder,
-  icon,
   label,
 }: {
   src: string
   placeholder: React.ReactNode
-  icon: React.ReactNode
+  icon?: React.ReactNode
   label: string
 }) {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -30,7 +27,6 @@ function LazyEmbed({
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
-
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -40,7 +36,6 @@ function LazyEmbed({
       },
       { rootMargin: '200px' }
     )
-
     observer.observe(el)
     return () => observer.disconnect()
   }, [])
@@ -58,13 +53,13 @@ function LazyEmbed({
       ) : (
         <button
           onClick={() => setIsLoaded(true)}
-          className="w-full h-[500px] flex flex-col items-center justify-center gap-4 bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer"
+          className="w-full h-[500px] flex flex-col items-center justify-center gap-4 bg-[#f5f5f5] hover:bg-[#eee] transition-colors cursor-pointer"
           aria-label={`Ielādēt ${label}`}
         >
           {placeholder}
           <div className="flex items-center gap-2 bg-white shadow-lg px-6 py-3 rounded-full">
-            <Play className="h-5 w-5 text-gray-700 fill-gray-700" />
-            <span className="font-semibold text-gray-700 text-sm">Ielādēt {label}</span>
+            <Play className="h-5 w-5 text-[#111] fill-[#111]" />
+            <span className="font-semibold text-[#111] text-sm">Ielādēt {label}</span>
           </div>
         </button>
       )}
@@ -73,192 +68,118 @@ function LazyEmbed({
 }
 
 export function HomeSocialSection() {
-
   return (
-    <section className="relative py-20 bg-gradient-to-br from-teal-900 via-teal-800 to-teal-900 overflow-hidden">
-      {/* Decorative elements */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-teal-400 via-teal-300 to-teal-400" />
-      <div className="absolute top-16 left-0 w-32 h-0.5 bg-teal-400/20 skew-x-[-12deg]" />
-      <div className="absolute top-20 left-0 w-20 h-0.5 bg-teal-400/10 skew-x-[-12deg]" />
-      <div className="absolute bottom-32 right-0 w-40 h-0.5 bg-teal-400/20 skew-x-[-12deg]" />
-
-      <div className="container mx-auto px-4 sm:px-6 relative z-10">
-        {/* Section Header */}
-        <div className="mx-auto mb-14 max-w-2xl text-center">
-          <div className="inline-flex items-center gap-3 mb-4">
-            <div className="w-10 h-0.5 bg-teal-400 skew-x-[-12deg]" />
-            <Share2 className="h-5 w-5 text-teal-300" />
-            <div className="w-10 h-0.5 bg-teal-400 skew-x-[-12deg]" />
-          </div>
-          <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tighter">
-            <span className="text-white">SOCIĀLIE </span>
-            <span className="text-teal-300 italic font-light">TĪKLI</span>
+    <section className="py-20 bg-[#111] bg-stripes-dark">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
+        {/* Section header */}
+        <div className="flex items-end justify-between mb-12">
+          <h2 className="font-display text-[clamp(42px,5vw,70px)] font-bold uppercase text-white leading-[0.88] tracking-tight">
+            Sociālie<br />Tīkli
           </h2>
-          <p className="mt-4 text-teal-100 max-w-md mx-auto">
-            Seko mūsu jaunākajām ziņām un notikumiem sociālajos tīklos!
-          </p>
-          <div className="mx-auto mt-4 h-1 w-20 bg-teal-400 skew-x-[-12deg]" />
         </div>
 
         {/* Social Feeds Grid */}
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Instagram Card */}
-          <div className="bg-gradient-to-br from-[#833AB4] via-[#FD1D1D] to-[#F77737] shadow-2xl overflow-hidden">
-            {/* Top accent line */}
-            <div className="h-1 bg-gradient-to-r from-white/30 via-white/60 to-white/30" />
-
-            {/* Header */}
-            <div className="p-5 text-center relative">
-              {/* Decorative elements */}
-              <div className="absolute top-4 left-0 w-8 h-0.5 bg-white/20 skew-x-[-12deg]" />
-              <div className="absolute bottom-4 right-0 w-8 h-0.5 bg-white/20 skew-x-[-12deg]" />
-
-              {/* Icon */}
-              <div className="inline-flex items-center gap-2 mb-3">
-                <div className="w-6 h-0.5 bg-white/40 skew-x-[-12deg]" />
-                <Instagram className="h-5 w-5 text-white" />
-                <div className="w-6 h-0.5 bg-white/40 skew-x-[-12deg]" />
-              </div>
-
-              {/* Title */}
-              <h3 className="text-xl font-extrabold tracking-tight mb-1">
-                <span className="text-white">INSTA</span>
-                <span className="text-pink-200 italic font-light">GRAM</span>
-              </h3>
-
-              {/* Decorative line */}
-              <div className="mx-auto mt-2 mb-2 h-0.5 w-12 bg-white/50 skew-x-[-12deg]" />
-
-              <p className="text-sm text-white/80">@rk_fenikss</p>
+        <div className="grid md:grid-cols-2 gap-5">
+          {/* Instagram */}
+          <div className="bg-white overflow-hidden">
+            <div className="bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#F77737] px-6 py-4 flex items-center gap-3">
+              <Instagram className="h-5 w-5 text-white" />
+              <span className="font-cond text-sm font-bold tracking-[2px] uppercase text-white">
+                Instagram
+              </span>
+              <span className="text-white/70 text-sm ml-auto">@rk_fenikss</span>
             </div>
 
-            {/* Instagram Embed - Lazy loaded */}
             <LazyEmbed
               src="https://www.instagram.com/rk_fenikss/embed"
               label="Instagram"
-              icon={<Instagram className="h-12 w-12 text-[#E4405F]" />}
               placeholder={
                 <div className="flex flex-col items-center gap-3">
                   <Instagram className="h-16 w-16 text-[#E4405F]" />
-                  <span className="text-gray-500 text-sm">@rk_fenikss</span>
+                  <span className="text-[#888] text-sm">@rk_fenikss</span>
                 </div>
               }
             />
 
-            {/* Footer */}
-            <div className="p-4 text-center">
+            <div className="p-4 text-center border-t border-[#e5e5e5]">
               <Link
                 href="https://www.instagram.com/rk_fenikss/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block"
               >
-                <button className="skew-x-[-12deg] transform bg-white px-6 py-2.5 font-bold tracking-wide text-[#B5234A] shadow-lg transition-all duration-300 hover:bg-pink-100 hover:scale-105">
-                  <span className="inline-flex skew-x-[12deg] transform items-center gap-2 text-sm">
-                    SKATĪT INSTAGRAM PROFILU
-                    <ExternalLink className="h-4 w-4" />
-                  </span>
+                <button className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-[#E4405F] transition-colors duration-200">
+                  Skatīt profilu
+                  <ExternalLink className="h-3.5 w-3.5" />
                 </button>
               </Link>
             </div>
-
-            {/* Bottom accent line */}
-            <div className="h-1 bg-gradient-to-r from-white/30 via-white/60 to-white/30" />
           </div>
 
-          {/* TikTok Card */}
-          <div className="bg-gradient-to-br from-[#010101] via-[#1a1a1a] to-[#010101] shadow-2xl overflow-hidden relative">
-            {/* TikTok accent colors */}
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#00f2ea] via-[#ff0050] to-[#00f2ea]" />
-
-            {/* Header */}
-            <div className="p-5 text-center relative">
-              {/* Decorative elements */}
-              <div className="absolute top-4 left-0 w-8 h-0.5 bg-[#00f2ea]/30 skew-x-[-12deg]" />
-              <div className="absolute bottom-4 right-0 w-8 h-0.5 bg-[#ff0050]/30 skew-x-[-12deg]" />
-
-              {/* Icon */}
-              <div className="inline-flex items-center gap-2 mb-3">
-                <div className="w-6 h-0.5 bg-[#00f2ea]/60 skew-x-[-12deg]" />
-                <TikTokIcon className="h-5 w-5 text-white" />
-                <div className="w-6 h-0.5 bg-[#ff0050]/60 skew-x-[-12deg]" />
-              </div>
-
-              {/* Title */}
-              <h3 className="text-xl font-extrabold tracking-tight mb-1">
-                <span className="text-white">TIK</span>
-                <span className="text-[#00f2ea] italic font-light">TOK</span>
-              </h3>
-
-              {/* Decorative line */}
-              <div className="mx-auto mt-2 mb-2 h-0.5 w-12 bg-gradient-to-r from-[#00f2ea] to-[#ff0050] skew-x-[-12deg]" />
-
-              <p className="text-sm text-white/80">@rk_fenikss</p>
+          {/* TikTok */}
+          <div className="bg-white overflow-hidden">
+            <div className="bg-[#010101] px-6 py-4 flex items-center gap-3 relative">
+              <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-[#00f2ea] via-[#ff0050] to-[#00f2ea]" />
+              <TikTokIcon className="h-5 w-5 text-white" />
+              <span className="font-cond text-sm font-bold tracking-[2px] uppercase text-white">
+                TikTok
+              </span>
+              <span className="text-white/70 text-sm ml-auto">@rk_fenikss</span>
             </div>
 
-            {/* TikTok Embed - Lazy loaded */}
             <LazyEmbed
               src="https://www.tiktok.com/embed/@rk_fenikss"
               label="TikTok"
-              icon={<TikTokIcon className="h-12 w-12 text-black" />}
               placeholder={
                 <div className="flex flex-col items-center gap-3">
                   <TikTokIcon className="h-16 w-16 text-black" />
-                  <span className="text-gray-500 text-sm">@rk_fenikss</span>
+                  <span className="text-[#888] text-sm">@rk_fenikss</span>
                 </div>
               }
             />
 
-            {/* Footer */}
-            <div className="p-4 text-center">
+            <div className="p-4 text-center border-t border-[#e5e5e5]">
               <Link
                 href="https://www.tiktok.com/@rk_fenikss"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block"
               >
-                <button className="skew-x-[-12deg] transform bg-white px-6 py-2.5 font-bold tracking-wide text-black shadow-lg transition-all duration-300 hover:bg-gray-100 hover:scale-105">
-                  <span className="inline-flex skew-x-[12deg] transform items-center gap-2 text-sm">
-                    SKATĪT TIKTOK PROFILU
-                    <ExternalLink className="h-4 w-4" />
-                  </span>
+                <button className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-[#010101] transition-colors duration-200">
+                  Skatīt profilu
+                  <ExternalLink className="h-3.5 w-3.5" />
                 </button>
               </Link>
             </div>
-
-            {/* Bottom accent line */}
-            <div className="h-1 bg-gradient-to-r from-[#00f2ea] via-[#ff0050] to-[#00f2ea]" />
           </div>
         </div>
 
         {/* Social Links */}
-        <div className="flex justify-center gap-4 mt-10">
+        <div className="flex justify-center gap-3.5 mt-10">
           <Link
             href="https://www.facebook.com/RKFenikss"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Facebook"
-            className="w-12 h-12 bg-white/10 hover:bg-[#1877F2] rounded-lg flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
+            className="w-8 h-8 grid place-items-center text-white opacity-70 hover:opacity-100 transition-opacity duration-200"
           >
-            <Facebook className="h-6 w-6" />
+            <Facebook className="h-[18px] w-[18px]" />
           </Link>
           <Link
             href="https://www.instagram.com/rk_fenikss/"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
-            className="w-12 h-12 bg-white/10 hover:bg-gradient-to-r hover:from-[#833AB4] hover:via-[#FD1D1D] hover:to-[#F77737] rounded-lg flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
+            className="w-8 h-8 grid place-items-center text-white opacity-70 hover:opacity-100 transition-opacity duration-200"
           >
-            <Instagram className="h-6 w-6" />
+            <Instagram className="h-[18px] w-[18px]" />
           </Link>
           <Link
             href="https://www.tiktok.com/@rk_fenikss"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="TikTok"
-            className="w-12 h-12 bg-white/10 hover:bg-black rounded-lg flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
+            className="w-8 h-8 grid place-items-center text-white opacity-70 hover:opacity-100 transition-opacity duration-200"
           >
-            <TikTokIcon className="h-6 w-6" />
+            <TikTokIcon className="h-[18px] w-[18px]" />
           </Link>
         </div>
       </div>

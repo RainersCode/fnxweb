@@ -2,9 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { CalendarDays, Clock, MapPin, Trophy, ChevronDown } from 'lucide-react'
 import { MainLayout } from '@/components/layout/main-layout'
-import { ParallaxHeroSection } from '@/components/features/parallax-hero-section'
 import { Fixture } from '@/types/supabase'
 
 interface FixturesClientProps {
@@ -13,520 +11,215 @@ interface FixturesClientProps {
 }
 
 export function FixturesClient({ upcomingFixtures, pastFixtures }: FixturesClientProps) {
-  const [activeTab, setActiveTab] = useState('upcoming')
-  const [expandedMatch, setExpandedMatch] = useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming')
 
-  const toggleMatchDetails = (id: string) => {
-    if (expandedMatch === id) {
-      setExpandedMatch(null)
-    } else {
-      setExpandedMatch(id)
-    }
-  }
-
-  const formatDate = (dateString: string): string => {
-    const date = new Date(dateString)
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }
-    return date.toLocaleDateString('lv-LV', options)
-  }
-
-  const extractTime = (dateString: string): string => {
-    const date = new Date(dateString)
-    return date.toLocaleTimeString('lv-LV', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
+  const formatDateShort = (dateString: string): string => {
+    return new Date(dateString).toLocaleDateString('lv-LV', {
+      day: '2-digit', month: 'short', year: 'numeric',
     })
   }
 
-  const clubName = 'RK "Fēnikss"'
+  const extractTime = (dateString: string): string => {
+    return new Date(dateString).toLocaleTimeString('lv-LV', { hour: '2-digit', minute: '2-digit', hour12: false })
+  }
+
+  const clubName = 'Fēnikss'
 
   const getImageUrl = (url: string | null) => {
     if (!url) return null
-    if (url.toLowerCase().endsWith('.svg') || url.includes('/svg')) {
-      return '/placeholder.svg?height=128&width=128&text=Team'
-    }
-    if (url.startsWith('http://') || url.startsWith('https://')) {
-      return url
-    }
-    if (url.includes('supabase')) {
-      return url.replace(/\s/g, '%20')
-    }
+    if (url.toLowerCase().endsWith('.svg') || url.includes('/svg')) return null
     return url
   }
 
-  const shouldUseImageComponent = (url: string | null) => {
-    if (!url) return false
-    if (url.toLowerCase().endsWith('.svg') || url.includes('/svg')) return false
-    return true
-  }
+  const fixtures = activeTab === 'upcoming' ? upcomingFixtures : pastFixtures
 
   return (
     <MainLayout currentPage="FIXTURES">
       <main className="flex-1">
-        <ParallaxHeroSection
-          title="SPĒLES"
-          titleHighlight="& REZULTĀTI"
-          subtitle="Sekojiet līdzi visām mūsu gaidāmajām spēlēm un nesenajiem rezultātiem."
-          backgroundImage="/AboutUs/parallax.jpg"
-        />
-
-        {/* Fixtures Section */}
-        <section className="relative py-20 bg-gradient-to-b from-gray-50 to-white overflow-hidden">
-          {/* Decorative elements */}
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-teal-200 to-transparent" />
-          <div className="absolute top-16 left-0 w-48 h-0.5 bg-teal-700/20 skew-x-[-12deg]" />
-          <div className="absolute top-20 left-0 w-32 h-0.5 bg-teal-700/10 skew-x-[-12deg]" />
-          <div className="absolute bottom-16 right-0 w-48 h-0.5 bg-teal-700/20 skew-x-[-12deg]" />
-
-          <div className="container mx-auto px-4 sm:px-6 relative z-10">
-            {/* Section Header */}
-            <div className="mx-auto mb-14 max-w-2xl text-center">
-              <div className="inline-flex items-center gap-3 mb-4">
-                <div className="w-10 h-0.5 bg-teal-700 skew-x-[-12deg]" />
-                <CalendarDays className="h-5 w-5 text-teal-600" />
-                <div className="w-10 h-0.5 bg-teal-700 skew-x-[-12deg]" />
-              </div>
-              <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tighter">
-                <span className="text-teal-900">SPĒĻU </span>
-                <span className="text-teal-600 italic font-light">KALENDĀRS</span>
-              </h2>
-              <div className="mx-auto mt-4 h-1 w-20 bg-teal-700 skew-x-[-12deg]" />
+        {/* Hero Banner */}
+        <section className="relative h-[340px] md:h-[420px] bg-[#111] bg-stripes-dark overflow-hidden">
+          <div className="absolute inset-0">
+            <Image src="/AboutUs/parallax.jpg" alt="Spēles" fill className="object-cover opacity-30 scale-105 blur-[2px]" priority />
+            <div className="absolute inset-0 bg-black/40" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+          </div>
+          <div className="relative z-10 max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16 h-full flex items-end pb-12">
+            <div>
+              <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400 mb-3 block">
+                RK Fēnikss
+              </span>
+              <h1 className="font-display text-[clamp(48px,6vw,86px)] font-bold uppercase text-white leading-[0.88] tracking-tight">
+                Spēles &<br />Rezultāti
+              </h1>
             </div>
+          </div>
+        </section>
 
+        {/* Tabs + Content */}
+        <section className="py-16 md:py-20 bg-[#bce8e4]">
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
             {/* Tabs */}
-            <div className="mb-12 flex flex-wrap justify-center gap-4">
+            <div className="flex gap-2 mb-12">
               <button
-                className={`relative h-14 px-8 shadow-md border-b-4 transition-all duration-300 skew-x-[-6deg] ${
-                  activeTab === 'upcoming'
-                    ? 'bg-teal-800 text-white border-teal-600 shadow-lg'
-                    : 'bg-white text-teal-800 border-transparent hover:border-teal-300 hover:shadow-lg'
-                }`}
                 onClick={() => setActiveTab('upcoming')}
+                className={`px-8 py-3.5 font-cond text-xs font-bold tracking-[2.5px] uppercase transition-colors duration-200 ${
+                  activeTab === 'upcoming'
+                    ? 'bg-[#111] text-white'
+                    : 'bg-white text-[#111] hover:bg-[#111] hover:text-white'
+                }`}
               >
-                <span className="inline-flex skew-x-[6deg] items-center gap-2 font-bold tracking-wide">
-                  <CalendarDays className="h-5 w-5" />
-                  GAIDĀMĀS SPĒLES
-                </span>
+                Gaidāmās spēles
               </button>
               <button
-                className={`relative h-14 px-8 shadow-md border-b-4 transition-all duration-300 skew-x-[-6deg] ${
-                  activeTab === 'past'
-                    ? 'bg-teal-800 text-white border-teal-600 shadow-lg'
-                    : 'bg-white text-teal-800 border-transparent hover:border-teal-300 hover:shadow-lg'
-                }`}
                 onClick={() => setActiveTab('past')}
+                className={`px-8 py-3.5 font-cond text-xs font-bold tracking-[2.5px] uppercase transition-colors duration-200 ${
+                  activeTab === 'past'
+                    ? 'bg-[#111] text-white'
+                    : 'bg-white text-[#111] hover:bg-[#111] hover:text-white'
+                }`}
               >
-                <span className="inline-flex skew-x-[6deg] items-center gap-2 font-bold tracking-wide">
-                  <Trophy className="h-5 w-5" />
-                  REZULTĀTI
-                </span>
+                Rezultāti
               </button>
             </div>
 
-            {/* Upcoming Matches */}
-            {activeTab === 'upcoming' && (
-              <div className="space-y-6 max-w-4xl mx-auto">
-                {upcomingFixtures.length === 0 ? (
-                  <div className="bg-gradient-to-br from-teal-700 via-teal-600 to-teal-700 shadow-2xl overflow-hidden max-w-md mx-auto">
-                    <div className="h-1 bg-gradient-to-r from-white/30 via-white/60 to-white/30" />
-                    <div className="p-8 text-center relative">
-                      <div className="absolute top-4 left-0 w-8 h-0.5 bg-white/20 skew-x-[-12deg]" />
-                      <div className="absolute bottom-4 right-0 w-8 h-0.5 bg-white/20 skew-x-[-12deg]" />
-                      <div className="inline-flex items-center gap-2 mb-3">
-                        <div className="w-6 h-0.5 bg-white/40 skew-x-[-12deg]" />
-                        <CalendarDays className="h-8 w-8 text-white/80" />
-                        <div className="w-6 h-0.5 bg-white/40 skew-x-[-12deg]" />
-                      </div>
-                      <h3 className="text-xl font-extrabold tracking-tight mb-1">
-                        <span className="text-white">NAV </span>
-                        <span className="text-teal-200 italic font-light">SPĒĻU</span>
-                      </h3>
-                      <div className="mx-auto mt-2 mb-3 h-0.5 w-12 bg-white/50 skew-x-[-12deg]" />
-                      <p className="text-sm text-white/80">Šobrīd nav ieplānotu gaidāmo spēļu.</p>
-                    </div>
-                    <div className="h-1 bg-gradient-to-r from-white/30 via-white/60 to-white/30" />
-                  </div>
-                ) : (
-                  upcomingFixtures.map((fixture, index) => (
+            {fixtures.length === 0 ? (
+              <div className="py-16 text-center max-w-lg mx-auto">
+                <div className="relative w-16 h-16 mx-auto mb-5 opacity-30">
+                  <Image src="/Logo/fēniks_logo-removebg-preview.png" alt="Fēnikss" fill className="object-contain" />
+                </div>
+                <h3 className="font-display text-2xl font-bold uppercase text-teal-800/60 mb-2">
+                  {activeTab === 'upcoming' ? 'Nav gaidāmo spēļu' : 'Nav rezultātu'}
+                </h3>
+                <p className="font-cond text-xs tracking-[2px] uppercase text-teal-800/40">
+                  {activeTab === 'upcoming' ? 'Šobrīd nav plānotas gaidāmās spēles' : 'Nav iepriekšējo spēļu rezultātu'}
+                </p>
+              </div>
+            ) : (
+              <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+                {fixtures.map((fixture) => {
+                  const isWin = fixture.result === 'win'
+                  const isLoss = fixture.result === 'loss'
+                  const isDraw = fixture.result === 'draw'
+                  const isPast = activeTab === 'past'
+
+                  // Win cards go dark — they POP against the teal bg
+                  // Loss/draw/upcoming stay white
+                  const cardBg = isWin ? 'bg-[#111]' : 'bg-white'
+                  const titleColor = isWin ? 'text-white' : 'text-[#111]'
+                  const metaColor = isWin ? 'text-white/40' : 'text-[#888]'
+                  const metaIconColor = isWin ? 'text-white/30' : 'text-[#888]'
+                  const dividerColor = isWin ? 'bg-white/10' : 'bg-[#e5e5e5]'
+                  const teamNameColor = isWin ? 'text-white/70' : 'text-[#444]'
+
+                  return (
                     <div
                       key={fixture.id}
-                      className="group relative bg-white rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100"
+                      className={`${cardBg} hover:-translate-y-1 transition-all duration-300 overflow-hidden relative`}
                     >
-                      {/* Top gradient bar */}
-                      <div className="h-1 bg-gradient-to-r from-teal-500 via-teal-400 to-teal-500" />
-
-                      {/* Next match badge */}
-                      {index === 0 && (
-                        <div className="absolute top-3 right-3 z-10">
-                          <div className="bg-gradient-to-r from-amber-500 to-amber-400 px-3 py-1 rounded-full shadow-md">
-                            <span className="text-[10px] font-bold text-white uppercase tracking-wider">
-                              Nākamā spēle
-                            </span>
-                          </div>
-                        </div>
+                      {/* Win: subtle stripes in the background */}
+                      {isWin && (
+                        <div className="absolute inset-0 bg-stripes-dark pointer-events-none" />
                       )}
 
-                      {/* Compact header with date and time */}
-                      <div className="bg-gradient-to-r from-slate-50 to-gray-50 px-5 py-3 border-b border-gray-100">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="flex items-center gap-2 text-slate-700">
-                              <CalendarDays className="h-4 w-4 text-teal-600" />
-                              <span className="font-semibold text-sm capitalize">
-                                {formatDate(fixture.match_date)}
-                              </span>
-                            </div>
-                            <div className="w-px h-4 bg-gray-300" />
-                            <div className="flex items-center gap-1.5 text-slate-600">
-                              <Clock className="h-3.5 w-3.5" />
-                              <span className="text-sm font-medium">{extractTime(fixture.match_date)}</span>
-                            </div>
-                          </div>
-                          <div className={`px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide ${
-                            fixture.is_home_game
-                              ? 'bg-teal-100 text-teal-700'
-                              : 'bg-slate-200 text-slate-600'
-                          }`}>
-                            {fixture.is_home_game ? 'Mājas' : 'Izbraukumā'}
+                      <div className="relative z-10 p-7">
+                        {/* Competition */}
+                        <div className="flex items-center justify-between mb-1.5">
+                          <div className={`font-cond text-base font-bold tracking-[2px] uppercase ${titleColor}`}>
+                            {fixture.competition || 'Latvijas Čempionāts'}
                           </div>
                         </div>
-                      </div>
 
-                      {/* Main content - Teams matchup */}
-                      <div className="px-5 py-6">
-                        <div className="flex items-center justify-between gap-4">
+                        {/* Location */}
+                        <div className={`font-cond text-xs font-medium tracking-[1.5px] uppercase ${metaColor} flex items-center gap-1.5`}>
+                          <svg viewBox="0 0 24 24" className={`w-3 h-3 stroke-current fill-none stroke-2 flex-shrink-0 ${metaIconColor}`}>
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                          </svg>
+                          {fixture.location || (fixture.is_home_game ? 'Mājas laukums' : 'Izbraukumā')}
+                        </div>
+
+                        {/* Date & time */}
+                        <div className={`font-cond text-xs font-medium tracking-[1.5px] uppercase ${metaColor} flex items-center gap-1.5 mt-1`}>
+                          <svg viewBox="0 0 24 24" className={`w-3 h-3 stroke-current fill-none stroke-2 flex-shrink-0 ${metaIconColor}`}>
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                          </svg>
+                          <span className="capitalize">{formatDateShort(fixture.match_date)}</span> — {extractTime(fixture.match_date)}
+                        </div>
+
+                        <div className={`h-px ${dividerColor} my-5`} />
+
+                        {/* Teams + Score — scoreboard layout */}
+                        <div className="flex items-center py-3">
                           {/* Home team */}
-                          <div className="flex-1 flex flex-col items-center text-center">
-                            <div className="relative mb-3">
-                              <div className="h-20 w-20 rounded-full bg-white shadow-md border-2 border-gray-100 p-2 overflow-hidden group-hover:border-teal-300 group-hover:shadow-lg transition-all duration-300">
-                                {fixture.home_logo_url && shouldUseImageComponent(fixture.home_logo_url) ? (
-                                  <div className="relative w-full h-full rounded-full overflow-hidden">
-                                    <Image
-                                      src={getImageUrl(fixture.home_logo_url) || '/placeholder.svg?height=128&width=128&text=Team'}
-                                      alt={fixture.is_home_game ? clubName : fixture.opponent}
-                                      fill
-                                      className="object-contain"
-                                    />
-                                  </div>
-                                ) : (
-                                  <div className="flex h-full w-full items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-teal-600 text-white text-xl font-bold">
-                                    {fixture.is_home_game ? 'F' : fixture.opponent[0]}
-                                  </div>
-                                )}
-                              </div>
+                          <div className="flex items-center gap-3 flex-1 min-w-0">
+                            <div className="relative w-12 h-12 flex-shrink-0">
+                              <Image
+                                src={getImageUrl(fixture.home_logo_url) || "/Logo/fēniks_logo-removebg-preview.png"}
+                                alt={fixture.is_home_game ? clubName : fixture.opponent}
+                                fill
+                                className="object-contain"
+                              />
                             </div>
-                            <h4 className="font-bold text-slate-800 text-sm leading-tight mb-1">
+                            <span className={`font-cond text-sm font-bold tracking-[1px] uppercase ${teamNameColor} truncate`}>
                               {fixture.is_home_game ? clubName : fixture.opponent}
-                            </h4>
-                            <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
-                              Mājas
                             </span>
                           </div>
 
-                          {/* VS badge */}
-                          <div className="flex-shrink-0 flex flex-col items-center">
-                            <div className="relative">
-                              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-teal-600 to-teal-700 flex items-center justify-center shadow-lg">
-                                <span className="text-white font-bold text-sm">VS</span>
+                          {/* Score center */}
+                          {isPast && fixture.score ? (
+                            <div className="flex-shrink-0 px-3">
+                              <div className={`font-display text-3xl font-bold tracking-wider ${
+                                isWin ? 'text-teal-400' : isLoss ? 'text-[#999]' : 'text-[#111]'
+                              }`}>
+                                {fixture.score}
                               </div>
-                              <div className="absolute -inset-1 rounded-full border-2 border-teal-200 opacity-50" />
                             </div>
-                          </div>
+                          ) : (
+                            <div className="flex-shrink-0 px-3">
+                              <div className={`font-display text-xl font-bold ${isWin ? 'text-white/20' : 'text-[#ddd]'}`}>
+                                VS
+                              </div>
+                            </div>
+                          )}
 
                           {/* Away team */}
-                          <div className="flex-1 flex flex-col items-center text-center">
-                            <div className="relative mb-3">
-                              <div className="h-20 w-20 rounded-full bg-white shadow-md border-2 border-gray-100 p-2 overflow-hidden group-hover:border-teal-300 group-hover:shadow-lg transition-all duration-300">
-                                {fixture.away_logo_url && shouldUseImageComponent(fixture.away_logo_url) ? (
-                                  <div className="relative w-full h-full rounded-full overflow-hidden">
-                                    <Image
-                                      src={getImageUrl(fixture.away_logo_url) || '/placeholder.svg?height=128&width=128&text=Team'}
-                                      alt={fixture.is_home_game ? fixture.opponent : clubName}
-                                      fill
-                                      className="object-contain"
-                                    />
-                                  </div>
-                                ) : (
-                                  <div className="flex h-full w-full items-center justify-center rounded-full bg-gradient-to-br from-slate-500 to-slate-600 text-white text-xl font-bold">
-                                    {fixture.is_home_game ? fixture.opponent[0] : 'F'}
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                            <h4 className="font-bold text-slate-800 text-sm leading-tight mb-1">
+                          <div className="flex items-center gap-3 flex-1 min-w-0 justify-end">
+                            <span className={`font-cond text-sm font-bold tracking-[1px] uppercase ${teamNameColor} truncate text-right`}>
                               {fixture.is_home_game ? fixture.opponent : clubName}
-                            </h4>
-                            <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
-                              Viesi
                             </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Footer with location */}
-                      <div className="bg-slate-50 px-5 py-3 border-t border-gray-100">
-                        <div className="flex items-center justify-center gap-2 text-slate-600">
-                          <MapPin className="h-3.5 w-3.5 text-teal-600" />
-                          <span className="text-xs font-medium">
-                            {fixture.location || (fixture.is_home_game ? 'Mājas laukums' : 'Izbraukumā')}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Details section */}
-                      {fixture.description && (
-                        <div className="border-t border-gray-100">
-                          <button
-                            onClick={() => toggleMatchDetails(fixture.id)}
-                            className="flex w-full items-center justify-center gap-2 py-2.5 text-xs font-semibold text-teal-700 bg-teal-50/50 hover:bg-teal-50 transition-colors"
-                          >
-                            {expandedMatch === fixture.id ? 'SLĒPT DETAĻAS' : 'RĀDĪT DETAĻAS'}
-                            <ChevronDown
-                              className={`h-3.5 w-3.5 transition-transform duration-300 ${
-                                expandedMatch === fixture.id ? 'rotate-180' : ''
-                              }`}
-                            />
-                          </button>
-
-                          {expandedMatch === fixture.id && (
-                            <div className="px-5 py-4 bg-slate-50 border-t border-gray-100">
-                              <p className="text-sm text-slate-600 leading-relaxed">{fixture.description}</p>
-                            </div>
-                          )}
-                        </div>
-                      )}
-
-                      {/* Subtle bottom accent on hover */}
-                      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-teal-500 to-teal-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-                    </div>
-                  ))
-                )}
-              </div>
-            )}
-
-            {/* Past Results */}
-            {activeTab === 'past' && (
-              <div className="space-y-6 max-w-4xl mx-auto">
-                {pastFixtures.length === 0 ? (
-                  <div className="bg-gradient-to-br from-teal-700 via-teal-600 to-teal-700 shadow-2xl overflow-hidden max-w-md mx-auto">
-                    <div className="h-1 bg-gradient-to-r from-white/30 via-white/60 to-white/30" />
-                    <div className="p-8 text-center relative">
-                      <div className="absolute top-4 left-0 w-8 h-0.5 bg-white/20 skew-x-[-12deg]" />
-                      <div className="absolute bottom-4 right-0 w-8 h-0.5 bg-white/20 skew-x-[-12deg]" />
-                      <div className="inline-flex items-center gap-2 mb-3">
-                        <div className="w-6 h-0.5 bg-white/40 skew-x-[-12deg]" />
-                        <Trophy className="h-8 w-8 text-white/80" />
-                        <div className="w-6 h-0.5 bg-white/40 skew-x-[-12deg]" />
-                      </div>
-                      <h3 className="text-xl font-extrabold tracking-tight mb-1">
-                        <span className="text-white">NAV </span>
-                        <span className="text-teal-200 italic font-light">REZULTĀTU</span>
-                      </h3>
-                      <div className="mx-auto mt-2 mb-3 h-0.5 w-12 bg-white/50 skew-x-[-12deg]" />
-                      <p className="text-sm text-white/80">Nav iepriekšējo spēļu, ko parādīt.</p>
-                    </div>
-                    <div className="h-1 bg-gradient-to-r from-white/30 via-white/60 to-white/30" />
-                  </div>
-                ) : (
-                  pastFixtures.map((fixture) => {
-                    const resultLabel = fixture.result === 'win'
-                      ? 'Uzvara'
-                      : fixture.result === 'loss'
-                        ? 'Zaudējums'
-                        : 'Neizšķirts'
-                    const resultAccent = fixture.result === 'win'
-                      ? 'bg-emerald-400'
-                      : fixture.result === 'loss'
-                        ? 'bg-red-400'
-                        : 'bg-amber-400'
-
-                    return (
-                      <div
-                        key={fixture.id}
-                        className="group relative bg-gradient-to-br from-teal-700 via-teal-600 to-teal-700 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
-                      >
-                        {/* Top gradient line */}
-                        <div className="h-1 bg-gradient-to-r from-white/30 via-white/60 to-white/30" />
-
-                        {/* Decorative accents */}
-                        <div className="absolute top-3 left-0 w-6 h-0.5 bg-white/15 skew-x-[-12deg]" />
-                        <div className="absolute bottom-3 right-0 w-6 h-0.5 bg-white/15 skew-x-[-12deg]" />
-
-                        {/* Background decorative logos - hidden on mobile */}
-                        <div
-                          className="hidden sm:block absolute left-0 top-1/2 -translate-y-1/2 h-28 w-28 -ml-4 opacity-[0.15] pointer-events-none"
-                          style={{ maskImage: 'linear-gradient(to right, white 0%, transparent 80%)', WebkitMaskImage: 'linear-gradient(to right, white 0%, transparent 80%)' }}
-                        >
-                          {fixture.home_logo_url && shouldUseImageComponent(fixture.home_logo_url) ? (
-                            <div className="relative w-full h-full">
+                            <div className="relative w-12 h-12 flex-shrink-0">
                               <Image
-                                src={getImageUrl(fixture.home_logo_url) || '/placeholder.svg?height=128&width=128&text=Team'}
-                                alt=""
+                                src={getImageUrl(fixture.away_logo_url) || "/placeholder.svg?height=48&width=48&text=Team"}
+                                alt={fixture.is_home_game ? fixture.opponent : clubName}
                                 fill
                                 className="object-contain"
                               />
                             </div>
-                          ) : (
-                            <div className="flex h-full w-full items-center justify-center text-white text-5xl font-extrabold">
-                              {fixture.is_home_game ? 'F' : fixture.opponent[0]}
-                            </div>
-                          )}
-                        </div>
-                        <div
-                          className="hidden sm:block absolute right-0 top-1/2 -translate-y-1/2 h-28 w-28 -mr-4 opacity-[0.15] pointer-events-none"
-                          style={{ maskImage: 'linear-gradient(to left, white 0%, transparent 80%)', WebkitMaskImage: 'linear-gradient(to left, white 0%, transparent 80%)' }}
-                        >
-                          {fixture.away_logo_url && shouldUseImageComponent(fixture.away_logo_url) ? (
-                            <div className="relative w-full h-full">
-                              <Image
-                                src={getImageUrl(fixture.away_logo_url) || '/placeholder.svg?height=128&width=128&text=Team'}
-                                alt=""
-                                fill
-                                className="object-contain"
-                              />
-                            </div>
-                          ) : (
-                            <div className="flex h-full w-full items-center justify-center text-white text-5xl font-extrabold">
-                              {fixture.is_home_game ? fixture.opponent[0] : 'F'}
-                            </div>
-                          )}
+                          </div>
                         </div>
 
-                        {/* Header row: date + home/away + result */}
-                        <div className="px-3 sm:px-5 pt-2.5 sm:pt-3 pb-1 flex flex-wrap items-center justify-between gap-y-1">
-                          <div className="flex items-center gap-1.5 sm:gap-2">
-                            <CalendarDays className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-white/50" />
-                            <span className="text-[11px] sm:text-xs text-white/70 font-medium capitalize">
-                              {formatDate(fixture.match_date)}
-                            </span>
-                            <span className="text-white/30">·</span>
-                            <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-teal-200/80">
-                              {fixture.is_home_game ? 'Mājas' : 'Izbraukumā'}
-                            </span>
-                          </div>
-                          {fixture.result && (
-                            <div className="flex items-center gap-1.5">
-                              <div className={`w-1.5 h-1.5 rounded-full ${resultAccent}`} />
-                              <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-white/80">
-                                {resultLabel}
+                        {/* Result footer — only for past matches */}
+                        {isPast && fixture.result && (
+                          <>
+                            <div className={`h-px ${dividerColor} mt-4 mb-4`} />
+                            <div className="flex items-center justify-between">
+                              <span className={`font-cond text-[11px] font-bold tracking-[2px] uppercase ${
+                                isWin ? 'text-teal-400' : isLoss ? 'text-[#aaa]' : 'text-[#888]'
+                              }`}>
+                                {isWin ? 'Uzvara' : isLoss ? 'Zaudējums' : 'Neizšķirts'}
                               </span>
+                              {/* Small result diamond */}
+                              <span className={`w-3 h-3 rotate-45 ${
+                                isWin ? 'bg-teal-400' : isLoss ? 'bg-[#ccc]' : 'bg-[#aaa]'
+                              }`} />
                             </div>
-                          )}
-                        </div>
-
-                        {/* Teams + Score row */}
-                        <div className="px-3 sm:px-5 py-2.5 sm:py-3">
-                          <div className="flex items-center justify-between gap-2 sm:gap-3">
-                            {/* Home team */}
-                            <div className="flex-1 flex items-center gap-2 sm:gap-3 min-w-0">
-                              <div className="h-9 w-9 sm:h-11 sm:w-11 flex-shrink-0 rounded-full bg-white/10 border border-white/20 p-1 sm:p-1.5 overflow-hidden">
-                                {fixture.home_logo_url && shouldUseImageComponent(fixture.home_logo_url) ? (
-                                  <div className="relative w-full h-full rounded-full overflow-hidden">
-                                    <Image
-                                      src={getImageUrl(fixture.home_logo_url) || '/placeholder.svg?height=64&width=64&text=Team'}
-                                      alt={fixture.is_home_game ? clubName : fixture.opponent}
-                                      fill
-                                      className="object-contain"
-                                    />
-                                  </div>
-                                ) : (
-                                  <div className="flex h-full w-full items-center justify-center rounded-full bg-white/20 text-white text-xs sm:text-sm font-bold">
-                                    {fixture.is_home_game ? 'F' : fixture.opponent[0]}
-                                  </div>
-                                )}
-                              </div>
-                              <div className="min-w-0">
-                                <h4 className="font-bold text-white text-xs sm:text-sm leading-tight truncate">
-                                  {fixture.is_home_game ? clubName : fixture.opponent}
-                                </h4>
-                                <span className="text-[9px] sm:text-[10px] font-medium uppercase tracking-wider text-white/50">
-                                  Mājas
-                                </span>
-                              </div>
-                            </div>
-
-                            {/* Score */}
-                            <div className="flex-shrink-0 px-1 sm:px-4">
-                              <div className="skew-x-[-6deg] bg-white/10 border border-white/20 px-2.5 sm:px-4 py-1 sm:py-1.5">
-                                <span className="inline-block skew-x-[6deg] text-white font-extrabold text-base sm:text-lg tracking-wider">
-                                  {fixture.score || '-:-'}
-                                </span>
-                              </div>
-                            </div>
-
-                            {/* Away team */}
-                            <div className="flex-1 flex items-center gap-2 sm:gap-3 justify-end text-right min-w-0">
-                              <div className="min-w-0">
-                                <h4 className="font-bold text-white text-xs sm:text-sm leading-tight truncate">
-                                  {fixture.is_home_game ? fixture.opponent : clubName}
-                                </h4>
-                                <span className="text-[9px] sm:text-[10px] font-medium uppercase tracking-wider text-white/50">
-                                  Viesi
-                                </span>
-                              </div>
-                              <div className="h-9 w-9 sm:h-11 sm:w-11 flex-shrink-0 rounded-full bg-white/10 border border-white/20 p-1 sm:p-1.5 overflow-hidden">
-                                {fixture.away_logo_url && shouldUseImageComponent(fixture.away_logo_url) ? (
-                                  <div className="relative w-full h-full rounded-full overflow-hidden">
-                                    <Image
-                                      src={getImageUrl(fixture.away_logo_url) || '/placeholder.svg?height=64&width=64&text=Team'}
-                                      alt={fixture.is_home_game ? fixture.opponent : clubName}
-                                      fill
-                                      className="object-contain"
-                                    />
-                                  </div>
-                                ) : (
-                                  <div className="flex h-full w-full items-center justify-center rounded-full bg-white/20 text-white text-xs sm:text-sm font-bold">
-                                    {fixture.is_home_game ? fixture.opponent[0] : 'F'}
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Footer: location */}
-                        <div className="px-3 sm:px-5 pb-2.5 sm:pb-3 pt-0 flex items-center justify-center gap-1.5">
-                          <MapPin className="h-3 w-3 text-white/40" />
-                          <span className="text-[10px] sm:text-[11px] text-white/50 font-medium">
-                            {fixture.location || (fixture.is_home_game ? 'Mājas laukums' : 'Izbraukumā')}
-                          </span>
-                        </div>
-
-                        {/* Details section */}
-                        {fixture.description && (
-                          <div className="border-t border-white/10">
-                            <button
-                              onClick={() => toggleMatchDetails(fixture.id)}
-                              className="flex w-full items-center justify-center gap-2 py-2 text-[11px] font-semibold text-white/60 hover:text-white/90 transition-colors"
-                            >
-                              {expandedMatch === fixture.id ? 'SLĒPT DETAĻAS' : 'RĀDĪT DETAĻAS'}
-                              <ChevronDown
-                                className={`h-3 w-3 transition-transform duration-300 ${
-                                  expandedMatch === fixture.id ? 'rotate-180' : ''
-                                }`}
-                              />
-                            </button>
-
-                            {expandedMatch === fixture.id && (
-                              <div className="px-3 sm:px-5 py-3 bg-white/5 border-t border-white/10">
-                                <p className="text-xs sm:text-sm text-white/70 leading-relaxed">{fixture.description}</p>
-                              </div>
-                            )}
-                          </div>
+                          </>
                         )}
-
-                        {/* Bottom gradient line */}
-                        <div className="h-1 bg-gradient-to-r from-white/30 via-white/60 to-white/30" />
                       </div>
-                    )
-                  })
-                )}
+                    </div>
+                  )
+                })}
               </div>
             )}
           </div>

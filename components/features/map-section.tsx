@@ -1,8 +1,7 @@
-import { MapPin, Navigation, ExternalLink } from 'lucide-react'
+import { Navigation, ExternalLink } from 'lucide-react'
 
 interface MapSectionProps {
   title?: string
-  titleHighlight?: string
   address: {
     name: string
     street: string
@@ -12,8 +11,6 @@ interface MapSectionProps {
 }
 
 export function MapSection({
-  title = 'ATRODI',
-  titleHighlight = 'MŪS',
   address,
 }: MapSectionProps) {
   const fullAddress = `${address.street}, ${address.city}, ${address.postcode}, Latvia`
@@ -24,35 +21,14 @@ export function MapSection({
   const embedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(fullAddress)}&t=&z=14&ie=UTF8&iwloc=&output=embed`
 
   return (
-    <section className="relative py-20 bg-gradient-to-b from-white to-gray-50 overflow-hidden">
-      {/* Decorative elements */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-teal-200 to-transparent" />
-      <div className="absolute top-16 right-0 w-48 h-0.5 bg-teal-700/20 skew-x-[-12deg]" />
-      <div className="absolute top-20 right-0 w-32 h-0.5 bg-teal-700/10 skew-x-[-12deg]" />
+    <section className="py-16 md:py-20 bg-[#f5f5f5]">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
+        <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-700 mb-3 block">Lokācija</span>
+        <h2 className="font-display text-[clamp(32px,4vw,52px)] font-bold uppercase text-[#111] leading-[0.88] tracking-tight mb-10">
+          Atrodi Mūs
+        </h2>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section Header */}
-        <div className="mx-auto mb-14 max-w-2xl text-center">
-          <div className="inline-flex items-center gap-3 mb-4">
-            <div className="w-10 h-0.5 bg-teal-700 skew-x-[-12deg]" />
-            <MapPin className="h-5 w-5 text-teal-600" />
-            <div className="w-10 h-0.5 bg-teal-700 skew-x-[-12deg]" />
-          </div>
-          <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tighter">
-            <span className="text-teal-900">{title} </span>
-            <span className="text-teal-600 italic font-light">{titleHighlight}</span>
-          </h2>
-          <p className="mt-4 text-zinc-600 max-w-md mx-auto">
-            Apmeklējiet mūs un pievienojieties mūsu komandai
-          </p>
-          <div className="mx-auto mt-4 h-1 w-20 bg-teal-700 skew-x-[-12deg]" />
-        </div>
-
-        {/* Map Container */}
-        <div className="relative overflow-hidden shadow-2xl">
-          {/* Top accent */}
-          <div className="h-1.5 bg-gradient-to-r from-teal-600 via-teal-500 to-teal-600" />
-
+        <div className="relative overflow-hidden">
           <div className="relative h-[450px] w-full bg-gray-100">
             {/* Google Maps Embed */}
             <iframe
@@ -67,60 +43,36 @@ export function MapSection({
               className="absolute inset-0"
             />
 
-            {/* Address Card Overlay */}
-            <div className="absolute bottom-6 left-6 right-6 sm:left-auto sm:right-6 sm:bottom-6 sm:max-w-md z-10">
-              <div className="bg-white/95 backdrop-blur-md shadow-2xl overflow-hidden">
-                {/* Card top accent */}
-                <div className="h-1 bg-gradient-to-r from-teal-600 via-teal-500 to-teal-600" />
-
-                <div className="p-5 sm:p-6">
-                  {/* Location info */}
-                  <div className="flex items-start gap-4 mb-5">
-                    <div className="flex-shrink-0 h-12 w-12 flex items-center justify-center bg-gradient-to-br from-teal-600 to-teal-800 text-white transform skew-x-[-6deg] shadow-lg">
-                      <MapPin className="h-5 w-5 transform skew-x-[6deg]" />
-                    </div>
-                    <div className="min-w-0">
-                      <h3 className="text-lg font-bold text-teal-900 mb-1 leading-tight">{address.name}</h3>
-                      <p className="text-sm text-zinc-600 leading-relaxed">
-                        {address.street}
-                        <br />
-                        {address.city}, {address.postcode}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Action buttons */}
-                  <div className="flex flex-col sm:flex-row gap-2">
-                    <a
-                      href={googleMapsUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex-1 inline-flex items-center justify-center gap-2 skew-x-[-12deg] transform bg-gradient-to-r from-teal-700 to-teal-800 px-4 py-2.5 font-bold tracking-wide text-white text-sm transition-all duration-300 hover:from-teal-600 hover:to-teal-700 shadow-lg hover:shadow-xl"
-                    >
-                      <span className="inline-flex skew-x-[12deg] transform items-center gap-2">
-                        <Navigation className="h-4 w-4" />
-                        NORĀDES
-                      </span>
-                    </a>
-                    <a
-                      href={googleMapsUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group inline-flex items-center justify-center gap-2 skew-x-[-12deg] transform bg-white border-2 border-teal-700 px-4 py-2.5 font-bold tracking-wide text-teal-700 text-sm transition-all duration-300 hover:bg-teal-50 shadow-md"
-                    >
-                      <span className="inline-flex skew-x-[12deg] transform items-center gap-2">
-                        <ExternalLink className="h-4 w-4" />
-                        ATVĒRT
-                      </span>
-                    </a>
-                  </div>
+            {/* Address overlay card */}
+            <div className="absolute bottom-6 left-6 right-6 sm:left-auto sm:right-6 sm:max-w-md z-10">
+              <div className="bg-white p-6">
+                <h3 className="font-display text-lg font-bold uppercase text-[#111] mb-2">{address.name}</h3>
+                <p className="font-body text-sm text-[#666] leading-relaxed mb-4">
+                  {address.street}<br />{address.city}, {address.postcode}
+                </p>
+                <div className="flex gap-2">
+                  <a
+                    href={googleMapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-teal-700 transition-colors"
+                  >
+                    <Navigation className="h-4 w-4" />
+                    Norādes
+                  </a>
+                  <a
+                    href={googleMapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-6 py-3 border-2 border-[#111] text-[#111] font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-[#111] hover:text-white transition-colors"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    Atvērt
+                  </a>
                 </div>
               </div>
             </div>
           </div>
-
-          {/* Bottom accent */}
-          <div className="h-1 bg-gradient-to-r from-teal-600 via-teal-500 to-teal-600" />
         </div>
       </div>
     </section>

@@ -6,9 +6,27 @@ import { ThemeProvider } from '@/components/providers/theme-provider'
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as SonnerToaster } from '@/components/ui/sonner'
 import { cn } from '@/lib/utils'
-import { Inter } from 'next/font/google'
+import { Oswald, Barlow_Condensed, Barlow } from 'next/font/google'
 
-const inter = Inter({ subsets: ['latin'] })
+const oswald = Oswald({
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-display',
+  display: 'swap',
+})
+
+const barlowCondensed = Barlow_Condensed({
+  subsets: ['latin', 'latin-ext'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-cond',
+  display: 'swap',
+})
+
+const barlow = Barlow({
+  subsets: ['latin', 'latin-ext'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-body',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'RK "Fēnikss" - Valmieras Regbija Klubs | Dibināts 2005',
@@ -181,7 +199,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM Information" />
         </head>
         <body
-          className={cn(inter.className, 'min-h-screen bg-background')}
+          className={cn(barlow.className, oswald.variable, barlowCondensed.variable, barlow.variable, 'min-h-screen bg-background')}
           suppressHydrationWarning
         >
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>

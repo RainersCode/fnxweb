@@ -9,6 +9,11 @@ const config: Config = {
 	],
 	theme: {
 		extend: {
+			fontFamily: {
+				display: ['var(--font-display)', 'Oswald', 'sans-serif'],
+				cond: ['var(--font-cond)', 'Barlow Condensed', 'sans-serif'],
+				body: ['var(--font-body)', 'Barlow', 'sans-serif'],
+			},
 			colors: {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',

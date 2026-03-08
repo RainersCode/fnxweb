@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body), 'Barlow', Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 @layer utilities {
@@ -153,6 +154,11 @@ body {
     animation: slideOutRight 0.3s ease-in forwards;
   }
 
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
   /* Staggered menu items */
   @keyframes fadeInUp {
     from {
@@ -238,6 +244,52 @@ body {
   .animate-slide-in-up {
     animation: slideInUp 0.5s ease-out forwards;
   }
+
+  /* Decorative diagonal stripes */
+  .bg-stripes-dark {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 40px,
+      rgba(255, 255, 255, 0.03) 40px,
+      rgba(255, 255, 255, 0.03) 42px
+    );
+  }
+
+  .bg-stripes-light {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 40px,
+      rgba(0, 0, 0, 0.04) 40px,
+      rgba(0, 0, 0, 0.04) 42px
+    );
+  }
+
+  .bg-stripes-teal {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 40px,
+      rgba(0, 100, 90, 0.06) 40px,
+      rgba(0, 100, 90, 0.06) 42px
+    );
+  }
+
+  /* Scroll reveal animation for Quins-style sections */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .s1 { transition-delay: 0.1s; }
+  .s2 { transition-delay: 0.2s; }
+  .s3 { transition-delay: 0.3s; }
+  .s4 { transition-delay: 0.4s; }
 }
 
 @layer base {

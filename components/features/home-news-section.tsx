@@ -1,7 +1,6 @@
 'use client'
 
 import { default as NextImage } from 'next/image'
-import { CalendarDays, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { Article } from '@/types/supabase'
 import { useState, useRef, useEffect } from 'react'
@@ -24,8 +23,7 @@ const fallbackNewsItems: FallbackNewsItem[] = [
   },
   {
     title: 'JAUNS TRENIŅU GRAFIKS',
-    description:
-      'Treneris Viljams ir paziņojis jauno treniņu grafiku gaidāmajai sezonai.',
+    description: 'Treneris Viljams ir paziņojis jauno treniņu grafiku gaidāmajai sezonai.',
     image: '/placeholder.svg?height=1080&width=1920&text=Training Schedule',
   },
   {
@@ -35,114 +33,35 @@ const fallbackNewsItems: FallbackNewsItem[] = [
   },
 ]
 
-// Helper function to strip HTML tags
 const stripHtml = (html: string): string => {
-  if (typeof window === 'undefined') {
-    return html.replace(/<[^>]*>/g, '')
-  }
+  if (typeof window === 'undefined') return html.replace(/<[^>]*>/g, '')
   const tmp = document.createElement('DIV')
   tmp.innerHTML = html
   return tmp.textContent || tmp.innerText || ''
 }
 
-// News card component to avoid duplication
-interface NewsCardProps {
-  article?: Article
-  fallbackItem?: FallbackNewsItem
-  index: number
-  isFirst: boolean
-}
-
-function NewsCard({ article, fallbackItem, index, isFirst }: NewsCardProps) {
-  const item = article || fallbackItem
-  if (!item) return null
-
-  const isArticle = 'id' in item
-  const href = isArticle ? `/news/${(item as Article).id}` : `/news/${index + 1}`
-  const imageUrl = isArticle
-    ? (item as Article).image_url || '/placeholder.svg?height=600&width=900&text=Rugby News'
-    : (item as FallbackNewsItem).image
-  const title = item.title
-  const content = isArticle ? stripHtml((item as Article).content) : (item as FallbackNewsItem).description
-  const displayContent = content.length > 120 ? `${content.substring(0, 120)}...` : content
-  const date = isArticle
-    ? new Date((item as Article).published_at).toLocaleDateString('lv-LV', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      })
-    : '2023. gada 15. apr.'
-
-  return (
-    <Link href={href} className="group block h-full">
-      <div className="relative h-full bg-white shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border-b-4 border-teal-700">
-        {/* Featured badge for first article */}
-        {isFirst && (
-          <div className="absolute top-4 left-0 z-20 bg-teal-700 px-4 py-1 skew-x-[-12deg] -translate-x-1">
-            <span className="skew-x-[12deg] inline-block text-xs font-bold text-white uppercase tracking-wider">Jaunākais</span>
-          </div>
-        )}
-
-        {/* Image */}
-        <div className="relative h-56 overflow-hidden">
-          <NextImage
-            src={imageUrl}
-            alt={title}
-            fill
-            className="object-cover transition-transform duration-700 group-hover:scale-110"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-
-          {/* Date overlay */}
-          <div className="absolute bottom-4 left-4 flex items-center gap-2 text-white/90">
-            <CalendarDays className="h-4 w-4" />
-            <span className="text-sm font-medium">{date}</span>
-          </div>
-        </div>
-
-        {/* Content */}
-        <div className="p-6">
-          <h3 className="text-xl font-bold uppercase tracking-tight text-teal-900 group-hover:text-teal-700 transition-colors line-clamp-2">
-            {title}
-          </h3>
-
-          <p className="mt-3 text-sm text-zinc-600 line-clamp-3">
-            {displayContent}
-          </p>
-
-          <div className="mt-5 flex items-center text-teal-700 font-semibold text-sm group-hover:text-teal-600 transition-colors">
-            <span>LASĪT VAIRĀK</span>
-            <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-2" />
-          </div>
-        </div>
-      </div>
-    </Link>
-  )
-}
-
 export function HomeNewsSection({ articles }: HomeNewsSectionProps) {
   const displayItems = articles.length > 0 ? articles : null
-  const itemsToShow = displayItems ? articles.slice(0, 3) : fallbackNewsItems.slice(0, 3)
+  const allItems = displayItems ? articles.slice(0, 4) : fallbackNewsItems
+  const featured = allItems[0]
+  const cards = allItems.slice(1, 4)
+
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [activeIndex, setActiveIndex] = useState(0)
 
-  // Handle scroll to update active dot indicator
   useEffect(() => {
     const container = scrollContainerRef.current
     if (!container) return
-
     const handleScroll = () => {
       const scrollLeft = container.scrollLeft
-      const cardWidth = container.offsetWidth * 0.85 + 16 // card width + gap
+      const cardWidth = container.offsetWidth * 0.85 + 16
       const newIndex = Math.round(scrollLeft / cardWidth)
-      setActiveIndex(Math.min(newIndex, itemsToShow.length - 1))
+      setActiveIndex(Math.min(newIndex, allItems.length - 1))
     }
-
     container.addEventListener('scroll', handleScroll, { passive: true })
     return () => container.removeEventListener('scroll', handleScroll)
-  }, [itemsToShow.length])
+  }, [allItems.length])
 
-  // Scroll to specific card when dot is clicked
   const scrollToCard = (index: number) => {
     const container = scrollContainerRef.current
     if (!container) return
@@ -150,93 +69,165 @@ export function HomeNewsSection({ articles }: HomeNewsSectionProps) {
     container.scrollTo({ left: cardWidth * index, behavior: 'smooth' })
   }
 
-  return (
-    <section className="relative py-20 bg-gradient-to-b from-gray-50 to-white overflow-hidden">
-      {/* Decorative elements */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-teal-200 to-transparent" />
-      <div className="absolute top-16 right-0 w-48 h-0.5 bg-teal-700/10 skew-x-[-12deg]" />
-      <div className="absolute bottom-16 left-0 w-32 h-0.5 bg-teal-700/10 skew-x-[-12deg]" />
+  const getImageUrl = (item: Article | FallbackNewsItem): string => {
+    if ('id' in item) return item.image_url || '/placeholder.svg?height=600&width=900&text=Rugby News'
+    return item.image
+  }
+  const getTitle = (item: Article | FallbackNewsItem): string => item.title
+  const getDate = (item: Article | FallbackNewsItem): string => {
+    if ('id' in item) {
+      return new Date(item.published_at).toLocaleDateString('lv-LV', {
+        day: '2-digit', month: 'short', year: 'numeric'
+      })
+    }
+    return '15 Apr 2025'
+  }
+  const getLink = (item: Article | FallbackNewsItem, index: number): string => {
+    if ('id' in item) return `/news/${item.id}`
+    return `/news/${index + 1}`
+  }
+  const getContent = (item: Article | FallbackNewsItem): string => {
+    if ('id' in item) return stripHtml(item.content).substring(0, 120)
+    return item.description
+  }
 
-      <div className="container mx-auto px-4 sm:px-6 relative z-10">
-        {/* Section Header */}
-        <div className="mx-auto mb-14 max-w-2xl text-center">
-          <div className="inline-flex items-center gap-3 mb-4">
-            <div className="w-10 h-0.5 bg-teal-700 skew-x-[-12deg]" />
-            <span className="text-sm font-bold uppercase tracking-widest text-teal-600">Aktualitātes</span>
-            <div className="w-10 h-0.5 bg-teal-700 skew-x-[-12deg]" />
-          </div>
-          <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tighter">
-            <span className="text-teal-900">JAUNĀKĀS </span>
-            <span className="text-teal-600 italic font-light">ZIŅAS</span>
+  return (
+    <section className="py-10 md:py-16 bg-white">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
+        {/* Section header */}
+        <div className="flex items-end justify-between mb-12">
+          <h2 className="font-display text-[clamp(52px,6vw,86px)] font-bold uppercase text-teal-700 leading-[0.88] tracking-tight">
+            Jaunākās<br />Ziņas
           </h2>
-          <div className="mx-auto mt-4 h-1 w-20 bg-teal-700 skew-x-[-12deg]" />
+          <Link href="/news">
+            <button className="hidden md:inline-flex items-center px-9 py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-teal-700 transition-colors duration-200">
+              Skatīt visas
+            </button>
+          </Link>
         </div>
 
-        {/* Mobile Swipable Carousel - visible only on small screens */}
-        <div className="md:hidden mb-12">
+        {/* Featured article - split layout (desktop) */}
+        {featured && (
+          <Link href={getLink(featured, 0)} className="group">
+            <div className="hidden md:grid grid-cols-[1fr_1.4fr] min-h-[440px] mb-6 cursor-pointer">
+              {/* Left text panel */}
+              <div className="bg-[#f5f5f5] p-12 flex flex-col justify-end">
+                <h3 className="font-display text-[clamp(26px,3vw,38px)] font-bold uppercase leading-[0.98] text-[#111]">
+                  {getTitle(featured)}
+                </h3>
+                <div className="flex items-center gap-3.5 mt-6">
+                  <span className="font-cond text-[13px] font-semibold tracking-[2px] uppercase text-[#888]">
+                    {getDate(featured)}
+                  </span>
+                  {/* Diamond button */}
+                  <button className="w-[34px] h-[34px] border-2 border-[#111] grid place-items-center rotate-45 hover:bg-black/5 transition-colors">
+                    <svg viewBox="0 0 24 24" className="w-3 h-3 fill-[#111] -rotate-45">
+                      <polygon points="8,5 19,12 8,19" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              {/* Right image */}
+              <div className="overflow-hidden">
+                <div className="relative h-full">
+                  <NextImage
+                    src={getImageUrl(featured)}
+                    alt={getTitle(featured)}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                  />
+                </div>
+              </div>
+            </div>
+          </Link>
+        )}
+
+        {/* Mobile: swipable carousel for all items */}
+        <div className="md:hidden mb-8">
           <div
             ref={scrollContainerRef}
             className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 -mx-4 px-4"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {itemsToShow.map((item, index) => (
-              <div
-                key={'id' in item ? item.id : index}
-                className="flex-shrink-0 w-[85%] snap-center"
-              >
-                {'id' in item ? (
-                  <NewsCard article={item as Article} index={index} isFirst={index === 0} />
-                ) : (
-                  <NewsCard fallbackItem={item as FallbackNewsItem} index={index} isFirst={index === 0} />
-                )}
+            {allItems.map((item, index) => (
+              <div key={'id' in item ? item.id : index} className="flex-shrink-0 w-[85%] snap-center">
+                <MobileNewsCard item={item} index={index} />
               </div>
             ))}
           </div>
-
-          {/* Dot indicators */}
           <div className="flex justify-center gap-0 mt-4">
-            {itemsToShow.map((_, index) => (
+            {allItems.map((_, index) => (
               <button
                 key={index}
                 onClick={() => scrollToCard(index)}
                 className="p-3 flex items-center justify-center"
                 aria-label={`Go to slide ${index + 1}`}
               >
-                <span className={`block h-2 rounded-full transition-all duration-300 ${
-                  activeIndex === index
-                    ? 'bg-teal-700 w-6'
-                    : 'bg-teal-300 hover:bg-teal-400 w-2'
+                <span className={`block h-[3px] transition-all duration-300 ${
+                  activeIndex === index ? 'bg-teal-700 w-6' : 'bg-gray-300 hover:bg-gray-400 w-3'
                 }`} />
               </button>
             ))}
           </div>
         </div>
 
-        {/* Desktop/Tablet Grid - hidden on small screens */}
-        <div className="hidden md:grid mb-12 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {itemsToShow.map((item, index) => (
-            <div key={'id' in item ? item.id : index}>
-              {'id' in item ? (
-                <NewsCard article={item as Article} index={index} isFirst={index === 0} />
-              ) : (
-                <NewsCard fallbackItem={item as FallbackNewsItem} index={index} isFirst={index === 0} />
-              )}
-            </div>
+        {/* 3 smaller cards below featured (desktop) */}
+        <div className="hidden md:grid grid-cols-3 gap-5">
+          {cards.map((item, index) => (
+            <Link key={'id' in item ? item.id : index} href={getLink(item, index + 1)} className="group cursor-pointer transition-transform duration-300 hover:-translate-y-1">
+              <div className="h-[260px] overflow-hidden mb-3.5">
+                <div className="relative h-full">
+                  <NextImage
+                    src={getImageUrl(item)}
+                    alt={getTitle(item)}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                  />
+                </div>
+              </div>
+              <h3 className="font-display text-xl font-bold uppercase leading-[1.05] text-[#111] tracking-wide">
+                {getTitle(item)}
+              </h3>
+              <div className="font-cond text-xs font-medium tracking-[1.5px] uppercase text-[#888] mt-2">
+                {getDate(item)}
+              </div>
+            </Link>
           ))}
         </div>
 
-        {/* CTA Button */}
-        <div className="flex justify-center">
-          <Link href="/news" className="group">
-            <button className="skew-x-[-12deg] transform bg-teal-800 px-8 py-4 font-bold tracking-wide text-white shadow-lg transition-all duration-300 hover:bg-teal-900 hover:shadow-xl">
-              <span className="inline-flex skew-x-[12deg] transform items-center">
-                SKATĪT VISAS ZIŅAS
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </span>
+        {/* Mobile CTA */}
+        <div className="md:hidden mt-6 text-center">
+          <Link href="/news">
+            <button className="inline-flex items-center px-9 py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-teal-700 transition-colors duration-200">
+              Skatīt visas ziņas
             </button>
           </Link>
         </div>
       </div>
     </section>
+  )
+}
+
+function MobileNewsCard({ item, index }: { item: Article | FallbackNewsItem; index: number }) {
+  const imageUrl = 'id' in item ? (item.image_url || '/placeholder.svg') : item.image
+  const href = 'id' in item ? `/news/${item.id}` : `/news/${index + 1}`
+  const date = 'id' in item
+    ? new Date(item.published_at).toLocaleDateString('lv-LV', { day: '2-digit', month: 'short', year: 'numeric' })
+    : '15 Apr 2025'
+
+  return (
+    <Link href={href} className="group block">
+      <div className="h-[200px] overflow-hidden mb-3">
+        <div className="relative h-full">
+          <NextImage src={imageUrl} alt={item.title} fill className="object-cover" />
+        </div>
+      </div>
+      <h3 className="font-display text-lg font-bold uppercase leading-tight text-[#111]">
+        {item.title}
+      </h3>
+      <div className="font-cond text-xs font-medium tracking-[1.5px] uppercase text-[#888] mt-2">
+        {date}
+      </div>
+    </Link>
   )
 }

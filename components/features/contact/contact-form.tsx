@@ -73,40 +73,31 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
   }
 
   return (
-    <div className="relative bg-white shadow-xl overflow-hidden">
-      {/* Top accent */}
-      <div className="h-1.5 bg-gradient-to-r from-teal-600 via-teal-500 to-teal-600" />
-
+    <div className="bg-white overflow-hidden">
       <div className="p-6 sm:p-8">
         {formSubmitted ? (
           <div className="text-center py-12">
-            <div className="relative inline-flex">
-              <div className="h-20 w-20 bg-gradient-to-br from-teal-100 to-teal-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
-                <CheckCircle2 className="h-10 w-10 text-teal-600" />
-              </div>
-              <div className="absolute -top-1 -right-1 h-6 w-6 bg-teal-500 rounded-full flex items-center justify-center animate-bounce">
-                <Send className="h-3 w-3 text-white" />
-              </div>
+            <div className="h-20 w-20 bg-[#f5f5f5] flex items-center justify-center mx-auto mb-6">
+              <CheckCircle2 className="h-10 w-10 text-teal-700" />
             </div>
-            <h3 className="text-2xl font-bold text-teal-900 mb-3">Ziņa nosūtīta!</h3>
-            <p className="text-zinc-600 max-w-sm mx-auto">
+            <h3 className="font-display text-2xl font-bold uppercase text-[#111] mb-3">Ziņa nosūtīta!</h3>
+            <p className="font-body text-sm text-[#666] max-w-sm mx-auto">
               Paldies, ka sazinājāties ar mums. Mēs jums drīzumā atbildēsim.
             </p>
-            <div className="mt-6 h-1 w-16 bg-teal-600 mx-auto skew-x-[-12deg]" />
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
               <div className="flex items-start gap-3 bg-red-50 border border-red-100 text-red-800 p-4">
                 <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
-                <p className="text-sm">{error}</p>
+                <p className="font-body text-sm">{error}</p>
               </div>
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="space-y-2">
-                <Label htmlFor="name" className="text-zinc-700 font-semibold text-sm flex items-center gap-2">
-                  <User className="h-4 w-4 text-teal-600" />
+                <Label htmlFor="name" className="text-[#111] font-cond text-xs font-bold tracking-[1.5px] uppercase flex items-center gap-2">
+                  <User className="h-4 w-4 text-teal-700" />
                   Jūsu vārds *
                 </Label>
                 <Input
@@ -115,14 +106,14 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="border-zinc-200 bg-gray-50 text-zinc-800 focus:border-teal-500 focus:ring-teal-500 focus:bg-white transition-colors h-11"
+                  className="border-zinc-200 bg-[#f5f5f5] text-[#111] focus:border-teal-700 focus:ring-teal-700 focus:bg-white transition-colors h-11 rounded-none"
                   placeholder="Ievadiet savu vārdu"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-zinc-700 font-semibold text-sm flex items-center gap-2">
-                  <Mail className="h-4 w-4 text-teal-600" />
+                <Label htmlFor="email" className="text-[#111] font-cond text-xs font-bold tracking-[1.5px] uppercase flex items-center gap-2">
+                  <Mail className="h-4 w-4 text-teal-700" />
                   E-pasta adrese *
                 </Label>
                 <Input
@@ -132,7 +123,7 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="border-zinc-200 bg-gray-50 text-zinc-800 focus:border-teal-500 focus:ring-teal-500 focus:bg-white transition-colors h-11"
+                  className="border-zinc-200 bg-[#f5f5f5] text-[#111] focus:border-teal-700 focus:ring-teal-700 focus:bg-white transition-colors h-11 rounded-none"
                   placeholder="Ievadiet savu e-pastu"
                 />
               </div>
@@ -140,8 +131,8 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="space-y-2">
-                <Label htmlFor="phone" className="text-zinc-700 font-semibold text-sm flex items-center gap-2">
-                  <Phone className="h-4 w-4 text-teal-600" />
+                <Label htmlFor="phone" className="text-[#111] font-cond text-xs font-bold tracking-[1.5px] uppercase flex items-center gap-2">
+                  <Phone className="h-4 w-4 text-teal-700" />
                   Tālruņa numurs
                 </Label>
                 <Input
@@ -149,14 +140,14 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="border-zinc-200 bg-gray-50 text-zinc-800 focus:border-teal-500 focus:ring-teal-500 focus:bg-white transition-colors h-11"
+                  className="border-zinc-200 bg-[#f5f5f5] text-[#111] focus:border-teal-700 focus:ring-teal-700 focus:bg-white transition-colors h-11 rounded-none"
                   placeholder="Ievadiet savu tālruņa numuru"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="interest" className="text-zinc-700 font-semibold text-sm flex items-center gap-2">
-                  <MessageSquare className="h-4 w-4 text-teal-600" />
+                <Label htmlFor="interest" className="text-[#111] font-cond text-xs font-bold tracking-[1.5px] uppercase flex items-center gap-2">
+                  <MessageSquare className="h-4 w-4 text-teal-700" />
                   Mani interesē
                 </Label>
                 <div className="relative">
@@ -165,7 +156,7 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
                     name="interest"
                     value={formData.interest}
                     onChange={handleChange}
-                    className="w-full h-11 rounded-md border border-zinc-200 bg-gray-50 text-zinc-800 focus:border-teal-500 focus:ring-teal-500 focus:bg-white transition-colors px-3 pr-10 appearance-none cursor-pointer"
+                    className="w-full h-11 border border-zinc-200 bg-[#f5f5f5] text-[#111] focus:border-teal-700 focus:ring-teal-700 focus:bg-white transition-colors px-3 pr-10 appearance-none cursor-pointer rounded-none"
                   >
                     <option value="general">Vispārīgs jautājums</option>
                     <option value="membership">Dalība</option>
@@ -178,8 +169,8 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="subject" className="text-zinc-700 font-semibold text-sm flex items-center gap-2">
-                <FileText className="h-4 w-4 text-teal-600" />
+              <Label htmlFor="subject" className="text-[#111] font-cond text-xs font-bold tracking-[1.5px] uppercase flex items-center gap-2">
+                <FileText className="h-4 w-4 text-teal-700" />
                 Tēma *
               </Label>
               <Input
@@ -188,14 +179,14 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
                 value={formData.subject}
                 onChange={handleChange}
                 required
-                className="border-zinc-200 bg-gray-50 text-zinc-800 focus:border-teal-500 focus:ring-teal-500 focus:bg-white transition-colors h-11"
+                className="border-zinc-200 bg-[#f5f5f5] text-[#111] focus:border-teal-700 focus:ring-teal-700 focus:bg-white transition-colors h-11 rounded-none"
                 placeholder="Ievadiet tēmu"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="message" className="text-zinc-700 font-semibold text-sm flex items-center gap-2">
-                <MessageSquare className="h-4 w-4 text-teal-600" />
+              <Label htmlFor="message" className="text-[#111] font-cond text-xs font-bold tracking-[1.5px] uppercase flex items-center gap-2">
+                <MessageSquare className="h-4 w-4 text-teal-700" />
                 Jūsu ziņa *
               </Label>
               <Textarea
@@ -205,7 +196,7 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
                 value={formData.message}
                 onChange={handleChange}
                 required
-                className="border-zinc-200 bg-gray-50 text-zinc-800 focus:border-teal-500 focus:ring-teal-500 focus:bg-white transition-colors resize-none"
+                className="border-zinc-200 bg-[#f5f5f5] text-[#111] focus:border-teal-700 focus:ring-teal-700 focus:bg-white transition-colors resize-none rounded-none"
                 placeholder="Šeit ievadiet savu ziņu..."
               />
             </div>
@@ -214,29 +205,27 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`group relative w-full sm:w-auto px-8 py-3.5 font-bold tracking-wide transform skew-x-[-12deg] transition-all duration-300 shadow-lg hover:shadow-xl ${
+                className={`inline-flex items-center gap-2 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase px-9 py-3.5 transition-colors duration-200 ${
                   isSubmitting
-                    ? 'bg-teal-600 cursor-not-allowed'
-                    : 'bg-gradient-to-r from-teal-700 to-teal-800 hover:from-teal-600 hover:to-teal-700'
-                } text-white`}
+                    ? 'opacity-70 cursor-not-allowed'
+                    : 'hover:bg-teal-700'
+                }`}
               >
-                <span className="transform skew-x-[12deg] inline-flex items-center gap-2">
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="h-5 w-5 animate-spin" />
-                      NOSŪTA...
-                    </>
-                  ) : (
-                    <>
-                      NOSŪTĪT ZIŅU
-                      <Send className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </>
-                  )}
-                </span>
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    NOSŪTA...
+                  </>
+                ) : (
+                  <>
+                    NOSŪTĪT ZIŅU
+                    <Send className="h-4 w-4" />
+                  </>
+                )}
               </button>
             </div>
 
-            <p className="text-xs text-zinc-400 pt-2">
+            <p className="font-body text-xs text-[#999] pt-2">
               * Obligāti aizpildāmie lauki
             </p>
           </form>
@@ -244,4 +233,4 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
       </div>
     </div>
   )
-} 
+}

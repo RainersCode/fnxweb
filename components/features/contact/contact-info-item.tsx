@@ -8,27 +8,14 @@ interface ContactInfoItemProps {
 
 export function ContactInfoItem({ icon: Icon, title, children }: ContactInfoItemProps) {
   return (
-    <div className="group relative bg-white p-5 shadow-md hover:shadow-xl transition-all duration-500 overflow-hidden">
-      {/* Top accent */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal-600 via-teal-500 to-teal-600" />
-
-      <div className="flex items-start gap-4">
-        {/* Icon container */}
-        <div className="flex-shrink-0 relative">
-          <div className="h-12 w-12 flex items-center justify-center bg-gradient-to-br from-teal-600 to-teal-800 text-white transform skew-x-[-6deg] shadow-lg group-hover:scale-105 transition-transform duration-300">
-            <Icon className="h-5 w-5 transform skew-x-[6deg]" />
-          </div>
-        </div>
-
-        {/* Content */}
-        <div className="flex-1 min-w-0">
-          <h3 className="font-bold text-teal-900 tracking-wide text-sm uppercase mb-1.5">{title}</h3>
-          <div className="text-zinc-600 text-sm leading-relaxed">{children}</div>
-        </div>
+    <div className="flex items-start gap-4 p-5 bg-[#f5f5f5]">
+      <div className="w-10 h-10 bg-[#111] text-white grid place-items-center flex-shrink-0">
+        <Icon className="h-4 w-4" />
       </div>
-
-      {/* Bottom accent on hover */}
-      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+      <div className="flex-1 min-w-0">
+        <h3 className="font-cond text-xs font-bold tracking-[2px] uppercase text-[#111] mb-1.5">{title}</h3>
+        <div className="font-body text-sm text-[#666] leading-relaxed">{children}</div>
+      </div>
     </div>
   )
-} 
+}
