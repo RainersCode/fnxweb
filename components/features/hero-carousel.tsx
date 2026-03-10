@@ -107,9 +107,9 @@ export function HeroCarousel({ articles }: HeroCarouselProps) {
       {/* Bottom-left content */}
       <div className="absolute bottom-12 left-4 sm:left-8 md:left-16 z-10 max-w-[720px]">
         <Link href={getLink(currentItem, currentSlide)}>
-          <h1 className="font-display text-[clamp(40px,5.5vw,76px)] font-bold uppercase text-white leading-[0.92] tracking-tight cursor-pointer hover:text-white/90 transition-colors">
+          <h2 className="font-display text-[clamp(40px,5.5vw,76px)] font-bold uppercase text-white leading-[0.92] tracking-tight cursor-pointer hover:text-white/90 transition-colors">
             {getTitle(currentItem)}
-          </h1>
+          </h2>
         </Link>
         <div className="flex items-center gap-4 mt-5">
           <span className="font-cond text-sm font-semibold tracking-[2px] uppercase text-white/65">

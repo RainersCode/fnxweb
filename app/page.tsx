@@ -128,6 +128,9 @@ export default async function HomePage() {
   return (
     <MainLayout currentPage="HOME">
       <main className="flex-1">
+        {/* SEO: Primary H1 with target keyword for search visibility */}
+        <h1 className="sr-only">Regbija Klubs "Fēnikss" — Valmieras Regbija Klubs</h1>
+
         {/* Hero Section - Server-rendered with client interactivity */}
         <HeroCarousel articles={articles} />
 

@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RK Fēnikss — Quins-Inspired v3</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --teal:#115e59;
+      --teal-light:#0d9488;
+      --teal-pale:#d1faf5;
+      --match-bg:#bce8e4;
+      --black:#111;
+      --white:#fff;
+      --off-white:#f5f5f5;
+      --gray:#888;
+      --gray-dark:#444;
+      --light-gray:#e5e5e5;
+      --green:#16a34a;
+      --font-display:'Oswald',sans-serif;
+      --font-cond:'Barlow Condensed',sans-serif;
+      --font-body:'Barlow',sans-serif;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--font-body);background:var(--white);color:var(--black);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+
+    /* Scroll animations */
+    .reveal{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+    .s1{transition-delay:.1s}.s2{transition-delay:.2s}.s3{transition-delay:.3s}.s4{transition-delay:.4s}
+
+    /* ===== TOP BAR ===== */
+    .topbar{height:32px;display:flex;align-items:center;justify-content:flex-end;padding:0 60px;gap:20px;background:var(--black)}
+    .topbar-link{font-family:var(--font-body);font-size:11px;font-weight:500;color:rgba(255,255,255,.5);letter-spacing:.5px;transition:color .2s;text-transform:uppercase}
+    .topbar-link:hover{color:var(--white)}
+    .topbar-divider{width:1px;height:12px;background:rgba(255,255,255,.15)}
+
+    /* ===== NAV ===== */
+    .nav{position:sticky;top:0;z-index:1000;background:var(--white);transition:box-shadow .3s}
+    .nav.scrolled{box-shadow:0 2px 24px rgba(0,0,0,.1)}
+    .nav-inner{display:flex;align-items:center;height:76px;padding:0 60px;max-width:1600px;margin:0 auto}
+    .nav-logo{display:flex;align-items:center;gap:14px;margin-right:52px;position:relative;z-index:10}
+    .nav-logo-icon{width:50px;height:50px;background:var(--teal);border-radius:50%;display:grid;place-items:center;transition:transform .3s,box-shadow .3s}
+    .nav-logo:hover .nav-logo-icon{transform:scale(1.06);box-shadow:0 4px 16px rgba(17,94,89,.25)}
+    .nav-logo-icon svg{width:26px;height:26px}
+    .nav-logo-text{font-family:var(--font-display);font-size:22px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--black)}
+    .nav-links{display:flex;align-items:center;list-style:none;flex:1}
+    .nav-links li a{display:flex;align-items:center;height:76px;padding:0 18px;font-family:var(--font-cond);font-size:14px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--black);position:relative;transition:color .25s}
+    .nav-links li a::after{content:'';position:absolute;bottom:0;left:18px;right:18px;height:3px;background:var(--teal);transform:scaleX(0);transform-origin:left;transition:transform .3s cubic-bezier(.4,0,.2,1)}
+    .nav-links li a:hover::after,.nav-links li a.active::after{transform:scaleX(1)}
+    .nav-links li a:hover,.nav-links li a.active{color:var(--teal)}
+    .nav-right{display:flex;align-items:center;gap:6px;margin-left:auto}
+    .nav-icon-btn{width:40px;height:40px;display:grid;place-items:center;cursor:pointer;background:none;border:none;border-radius:50%;transition:background .2s}
+    .nav-icon-btn:hover{background:var(--off-white)}
+    .nav-icon-btn svg{width:19px;height:19px;stroke:var(--black);stroke-width:2.2;fill:none}
+    .nav-join{display:inline-flex;align-items:center;gap:8px;padding:10px 24px;background:var(--teal);color:var(--white);font-family:var(--font-cond);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;transition:all .25s;margin-left:6px}
+    .nav-join:hover{background:var(--black)}
+    .nav-join svg{width:14px;height:14px;stroke:currentColor;stroke-width:2.5;fill:none;transition:transform .25s}
+    .nav-join:hover svg{transform:translateX(3px)}
+    .nav-hamburger{width:40px;height:40px;cursor:pointer;background:none;border:none;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;padding:4px;border-radius:50%;transition:background .2s}
+    .nav-hamburger:hover{background:var(--off-white)}
+    .nav-hamburger span{height:2px;width:20px;background:var(--black);display:block;transition:all .3s}
+
+    /* ===== HERO ===== */
+    .hero{position:relative;height:85vh;min-height:550px;max-height:780px;overflow:hidden}
+    .hero-main{position:absolute;inset:0}
+    .hero-img{position:absolute;inset:0}
+    .hero-img img{width:100%;height:100%;object-fit:cover}
+    .hero-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.6) 0%,rgba(0,0,0,.12) 45%,transparent 100%)}
+    .hero-content{position:absolute;bottom:48px;left:60px;z-index:2;max-width:720px}
+    .hero-title{font-family:var(--font-display);font-size:clamp(40px,5.5vw,76px);font-weight:700;text-transform:uppercase;color:var(--white);line-height:.92;letter-spacing:-1px}
+    .hero-meta{display:flex;align-items:center;gap:16px;margin-top:20px}
+    .hero-date{font-family:var(--font-cond);font-size:14px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.65)}
+    /* Diamond play button like Quins */
+    .diamond-btn{width:40px;height:40px;border:2px solid rgba(255,255,255,.5);display:grid;place-items:center;cursor:pointer;background:none;transform:rotate(45deg);transition:all .2s}
+    .diamond-btn:hover{border-color:#fff;background:rgba(255,255,255,.15)}
+    .diamond-btn svg{width:14px;height:14px;fill:#fff;transform:rotate(-45deg)}
+    .diamond-btn-dark{border-color:var(--black)}
+    .diamond-btn-dark svg{fill:var(--black)}
+    .diamond-btn-dark:hover{background:rgba(0,0,0,.05)}
+
+    /* Hero match sidebar */
+    .hero-sidebar{width:320px;background:var(--white);position:absolute;right:0;bottom:0;z-index:5;padding:28px 28px 24px;max-height:auto}
+    .sidebar-label{font-family:var(--font-cond);font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--black);margin-bottom:4px}
+    .sidebar-info{font-family:var(--font-cond);font-size:12px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray);display:flex;align-items:center;gap:6px;margin-bottom:2px}
+    .sidebar-info svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+    .sidebar-divider{height:1px;background:var(--light-gray);margin:14px 0}
+    .sidebar-teams{display:flex;align-items:center;justify-content:center;gap:16px;margin:24px 0}
+    .sidebar-crest{width:72px;height:72px;display:grid;place-items:center;font-size:32px}
+    .sidebar-crest img{width:72px;height:72px;object-fit:contain}
+    .sidebar-v{font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--gray)}
+    .sidebar-team-name{font-family:var(--font-cond);font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-align:center;color:var(--gray-dark);margin-top:4px}
+    .btn-black{display:block;width:100%;padding:14px;background:var(--black);color:var(--white);font-family:var(--font-cond);font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;text-align:center;border:none;cursor:pointer;transition:background .2s}
+    .btn-black:hover{background:var(--teal)}
+    .btn-outline{display:block;width:100%;padding:12px;background:transparent;color:var(--black);font-family:var(--font-cond);font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;text-align:center;border:2px solid var(--black);cursor:pointer;transition:all .2s}
+    .btn-outline:hover{background:var(--black);color:var(--white)}
+    .sidebar-hosp{font-family:var(--font-cond);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray-dark);margin-top:14px}
+    .btn-green{display:inline-block;padding:10px 24px;background:var(--green);color:var(--white);font-family:var(--font-cond);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;margin-top:6px;transition:background .2s}
+    .btn-green:hover{background:#15803d}
+
+    /* Training sidebar items */
+    .sidebar-training{display:flex;flex-direction:column;gap:0}
+    .sidebar-tr-item{padding:2px 0}
+    .sidebar-tr-day{font-family:var(--font-cond);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray)}
+    .sidebar-tr-time{font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--teal);letter-spacing:-.5px;margin-top:1px}
+    .sidebar-tr-place{font-family:var(--font-cond);font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray);display:flex;align-items:center;gap:4px;margin-top:2px}
+    .sidebar-tr-place svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+    .sidebar-tr-divider{height:1px;background:var(--light-gray);margin:8px 0}
+
+    /* ===== TEAMS SECTION (BLACK bg, cards overflow onto white) ===== */
+    .section-teams{background:var(--black);position:relative;overflow:visible;padding:80px 0 0;margin-bottom:80px}
+    .section-teams::before{display:none}
+    .section-teams::after{display:none}
+
+    .teams-inner{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:0 60px}
+    .teams-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:48px}
+    .teams-title{font-family:var(--font-display);font-size:clamp(60px,7vw,100px);font-weight:700;text-transform:uppercase;color:var(--white);line-height:.85;letter-spacing:-2px}
+    .teams-nav{display:flex;gap:8px}
+    .teams-nav-btn{width:44px;height:44px;border:2px solid rgba(255,255,255,.3);background:none;color:var(--white);font-size:20px;display:grid;place-items:center;cursor:pointer;transition:all .2s}
+    .teams-nav-btn:hover{border-color:var(--white);background:rgba(255,255,255,.08)}
+    .teams-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;transform:translateY(60px)}
+    .team-card{position:relative;cursor:pointer;transition:transform .3s;height:520px;overflow:hidden}
+    .team-card:hover{transform:translateY(-8px)}
+    .team-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;transition:transform .5s}
+    .team-card:hover img{transform:scale(1.05)}
+    /* Dark gradient on hover */
+    .team-card::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85) 0%,rgba(0,0,0,.3) 40%,transparent 100%);opacity:0;transition:opacity .4s}
+    .team-card:hover::after{opacity:1}
+    .team-card-label{position:absolute;bottom:0;left:0;right:0;padding:28px;z-index:2;overflow:hidden}
+    .team-card-name{font-family:var(--font-display);font-size:26px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--white);transform:translateX(-110%);transition:transform .45s cubic-bezier(.16,1,.3,1)}
+    .team-card-pos{font-family:var(--font-cond);font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--teal-light);margin-top:4px;transform:translateX(-110%);transition:transform .45s cubic-bezier(.16,1,.3,1) .08s}
+    .team-card:hover .team-card-name{transform:translateX(0)}
+    .team-card:hover .team-card-pos{transform:translateX(0)}
+
+    /* ===== CONTAINER ===== */
+    .container{max-width:1400px;margin:0 auto;padding:0 60px}
+
+    /* ===== SECTION HEADER ===== */
+    .section-title{font-family:var(--font-display);font-size:clamp(52px,6vw,86px);font-weight:700;text-transform:uppercase;color:var(--teal);line-height:.88;letter-spacing:-1px}
+    .section-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:48px}
+    .btn-see-all{display:inline-flex;align-items:center;padding:14px 36px;background:var(--black);color:var(--white);font-family:var(--font-cond);font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;border:none;cursor:pointer;transition:background .2s}
+    .btn-see-all:hover{background:var(--teal)}
+    .btn-see-all-green{background:var(--green)}
+    .btn-see-all-green:hover{background:#15803d}
+
+    /* ===== NEWS ===== */
+    .section-news{padding:40px 0 60px;background:var(--white)}
+    /* Featured: left text panel + right big image */
+    .news-featured{display:grid;grid-template-columns:1fr 1.4fr;min-height:440px;margin-bottom:24px;cursor:pointer}
+    .news-featured:hover .nf-img img{transform:scale(1.03)}
+    .nf-text{background:var(--off-white);padding:48px;display:flex;flex-direction:column;justify-content:flex-end}
+    .nf-tag{display:inline-block;padding:6px 18px;background:var(--teal);color:var(--white);font-family:var(--font-cond);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;align-self:flex-start}
+    .nf-title{font-family:var(--font-display);font-size:clamp(26px,3vw,38px);font-weight:700;text-transform:uppercase;line-height:.98;color:var(--black)}
+    .nf-date-row{display:flex;align-items:center;gap:14px;margin-top:24px}
+    .nf-date{font-family:var(--font-cond);font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gray)}
+    .nf-img{overflow:hidden}
+    .nf-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+
+    /* Smaller news: image on top, text below (like Quins) */
+    .news-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .news-card{cursor:pointer;transition:transform .3s}
+    .news-card:hover{transform:translateY(-4px)}
+    .news-card:hover .nc-img img{transform:scale(1.04)}
+    .nc-img{height:260px;overflow:hidden;margin-bottom:14px}
+    .nc-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+    .nc-tag{display:inline-block;padding:5px 16px;font-family:var(--font-cond);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--white);margin-bottom:10px}
+    .nc-tag-teal{background:var(--teal)}
+    .nc-tag-accent{background:#c2185b}
+    .nc-title{font-family:var(--font-display);font-size:20px;font-weight:700;text-transform:uppercase;line-height:1.05;color:var(--black);letter-spacing:.5px}
+    .nc-date{font-family:var(--font-cond);font-size:12px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray);margin-top:8px}
+    .nc-line{height:1px;background:var(--light-gray);margin-top:16px}
+
+    /* ===== GALLERY (black bg, overlay cards) ===== */
+    .section-gallery{padding:80px 0;background:var(--black)}
+    .section-gallery .section-title{color:var(--teal-light)}
+    .gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .gallery-card{position:relative;height:340px;overflow:hidden;cursor:pointer}
+    .gallery-card img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+    .gallery-card:hover img{transform:scale(1.04)}
+    .gallery-card-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,rgba(0,0,0,.15) 50%,transparent 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:24px}
+    .gallery-card-count{position:absolute;top:16px;right:16px;width:36px;height:36px;border:2px solid rgba(255,255,255,.4);background:rgba(255,255,255,.1);backdrop-filter:blur(4px);display:grid;place-items:center;transform:rotate(45deg)}
+    .gallery-card-count svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;transform:rotate(-45deg)}
+    .gc-tag{display:inline-block;padding:4px 14px;font-family:var(--font-cond);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--white);margin-bottom:8px;align-self:flex-start}
+    .gc-tag-teal{background:var(--teal)}
+    .gc-tag-accent{background:#c2185b}
+    .gc-title{font-family:var(--font-display);font-size:17px;font-weight:700;text-transform:uppercase;color:var(--white);line-height:1.1;letter-spacing:.5px}
+    .gc-meta{font-family:var(--font-cond);font-size:11px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:6px}
+
+    /* ===== MATCHES (light blue bg, clean Quins-style pattern) ===== */
+    .section-matches{padding:120px 0;background:var(--match-bg);position:relative;overflow:hidden}
+    .section-matches::before{display:none}
+    .section-matches::after{display:none}
+
+    .matches-inner{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:0 60px}
+    .matches-layout{display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:start}
+    .matches-vertical{font-family:var(--font-display);font-size:clamp(100px,12vw,160px);font-weight:700;text-transform:uppercase;writing-mode:vertical-lr;transform:rotate(180deg);color:var(--black);line-height:1;letter-spacing:-4px;opacity:.1;position:sticky;top:100px}
+    .matches-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px}
+    .matches-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+
+    /* ===== MATCH CARD — clean, exact Quins style ===== */
+    .match-card{background:var(--white);padding:32px 28px;transition:transform .3s}
+    .match-card:hover{transform:translateY(-4px)}
+    .mc-comp{font-family:var(--font-cond);font-size:16px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--black)}
+    .mc-info{font-family:var(--font-cond);font-size:12px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray);display:flex;align-items:center;gap:6px;margin-top:5px}
+    .mc-info svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+    .mc-divider{height:1px;background:var(--light-gray);margin:18px 0}
+    .mc-teams{display:flex;align-items:center;justify-content:center;gap:20px;padding:24px 0 28px}
+    .mc-crest{width:80px;height:80px;display:grid;place-items:center;font-size:36px}
+    .mc-v{font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--black)}
+    .mc-btns{display:flex;flex-direction:column;gap:8px}
+    .mc-btn-full{display:block;width:100%;padding:16px;background:var(--black);color:var(--white);font-family:var(--font-cond);font-size:13px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;text-align:center;border:none;cursor:pointer;transition:background .2s}
+    .mc-btn-full:hover{background:var(--teal)}
+    .mc-hosp{font-family:var(--font-cond);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--black);margin-top:16px}
+    .mc-enquire{display:inline-block;padding:10px 28px;background:var(--green);color:var(--white);font-family:var(--font-cond);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;margin-top:8px;transition:background .2s}
+    .mc-enquire:hover{background:#15803d}
+
+    /* ===== CTA / NEWSLETTER (split: left image, right colored bg) ===== */
+    .section-cta{display:grid;grid-template-columns:1fr 1.2fr;min-height:360px}
+    .cta-img{overflow:hidden}
+    .cta-img img{width:100%;height:100%;object-fit:cover}
+    .cta-text{background:var(--black);padding:72px 64px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+    .cta-text::before{content:'JOIN';position:absolute;top:-20px;right:-10px;font-family:var(--font-display);font-size:220px;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,.03);line-height:1;letter-spacing:-8px;pointer-events:none}
+    .cta-label{font-family:var(--font-cond);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--teal-light);margin-bottom:16px}
+    .cta-title{font-family:var(--font-display);font-size:clamp(36px,4vw,56px);font-weight:700;text-transform:uppercase;color:var(--white);line-height:.9;letter-spacing:-1px;margin-bottom:16px}
+    .cta-desc{font-family:var(--font-body);font-size:15px;color:rgba(255,255,255,.6);line-height:1.6;margin-bottom:36px;max-width:380px}
+    .cta-form{display:flex;flex-direction:column;gap:12px;max-width:400px;margin-bottom:36px}
+    .cta-input{padding:14px 0;background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,.15);color:var(--white);font-family:var(--font-body);font-size:15px;outline:none;transition:border-color .3s}
+    .cta-input::placeholder{color:rgba(255,255,255,.4)}
+    .cta-input:focus{border-bottom-color:var(--teal-light)}
+    .cta-btn{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;padding:16px 40px;background:var(--teal);color:var(--white);font-family:var(--font-cond);font-size:13px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;border:none;cursor:pointer;transition:all .3s}
+    .cta-btn:hover{background:var(--teal-light)}
+    .cta-btn svg{width:16px;height:16px;transition:transform .3s}
+    .cta-btn:hover svg{transform:translateX(4px)}
+
+    /* ===== SPONSORS ===== */
+    .section-sponsors{padding:60px 0}
+    .sponsors-heading{font-family:var(--font-display);font-size:36px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:32px}
+    .sponsors-sub{font-family:var(--font-cond);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gray-dark);margin-bottom:20px}
+    .sponsors-row{display:flex;align-items:center;gap:40px;flex-wrap:wrap;margin-bottom:12px}
+    .sponsor-box{width:120px;height:48px;background:var(--off-white);border-radius:4px;opacity:.5;transition:opacity .3s}
+    .sponsor-box:hover{opacity:1}
+    .sponsors-line{height:1px;background:var(--light-gray);margin:28px 0}
+
+    /* ===== FOOTER ===== */
+    .footer{background:#1a1a1a;color:var(--white);padding:56px 0 0}
+    .footer-top{display:flex;align-items:flex-start;gap:60px;padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,.06)}
+    .footer-brand{flex:0 0 180px}
+    .footer-logo{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+    .footer-logo-icon{width:40px;height:40px;background:var(--teal);border-radius:50%;display:grid;place-items:center}
+    .footer-logo-icon svg{width:20px;height:20px}
+    .footer-logo-text{font-family:var(--font-display);font-size:18px;font-weight:700;text-transform:uppercase}
+    .footer-leagues{display:flex;gap:16px;margin-top:16px}
+    .footer-league{width:60px;height:28px;background:rgba(255,255,255,.06);border-radius:3px}
+    .footer-cols{display:flex;gap:60px;flex:1}
+    .footer-col h4{font-family:var(--font-cond);font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:16px}
+    .footer-col ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+    .footer-col ul li{font-size:14px;color:rgba(255,255,255,.35)}
+    .footer-col ul li a{color:rgba(255,255,255,.35);transition:color .2s}
+    .footer-col ul li a:hover{color:var(--teal-light)}
+    .footer-col p{font-size:14px;color:rgba(255,255,255,.3);line-height:1.6}
+    /* Bottom teal strip with social */
+    .footer-bottom{background:var(--teal);padding:14px 0;margin-top:48px}
+    .footer-bottom-inner{max-width:1400px;margin:0 auto;padding:0 60px;display:flex;align-items:center;justify-content:space-between}
+    .footer-copy{font-size:12px;color:rgba(255,255,255,.6)}
+    .footer-social{display:flex;gap:14px}
+    .footer-social a{width:32px;height:32px;display:grid;place-items:center;color:var(--white);opacity:.7;transition:opacity .2s}
+    .footer-social a:hover{opacity:1}
+    .footer-social a svg{width:18px;height:18px}
+
+    /* ===== TRAINING ===== */
+    .section-training{padding:80px 0;background:var(--white)}
+    .training-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .tr-card{background:var(--off-white);overflow:hidden}
+    .tr-head{background:var(--teal);padding:16px 24px;display:flex;align-items:center;justify-content:space-between}
+    .tr-day{font-family:var(--font-display);font-size:18px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--white)}
+    .tr-dot{width:10px;height:10px;background:#22c55e;border-radius:50%;box-shadow:0 0 8px rgba(34,197,94,.5)}
+    .tr-body{padding:20px 24px}
+    .tr-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--light-gray)}
+    .tr-row:last-child{border-bottom:none}
+    .tr-icon{width:36px;height:36px;background:rgba(17,94,89,.08);display:grid;place-items:center;flex-shrink:0}
+    .tr-icon svg{width:16px;height:16px;stroke:var(--teal);fill:none;stroke-width:2}
+    .tr-label{font-family:var(--font-cond);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray)}
+    .tr-value{font-weight:600;font-size:15px}
+
+    /* ===== RESPONSIVE ===== */
+    @media(max-width:1200px){
+      .hero-sidebar{display:none}
+      .teams-grid{grid-template-columns:1fr 1fr;transform:translateY(50px)}
+      .team-card{height:400px}
+      .matches-layout{grid-template-columns:1fr}
+      .matches-vertical{display:none}
+      .gallery-grid{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:900px){
+      .container,.teams-inner,.matches-inner{padding:0 24px}
+      .nav-inner{padding:0 24px}
+      .topbar{padding:0 24px}
+      .news-featured{grid-template-columns:1fr}
+      .nf-text{padding:32px}
+      .nf-img{height:280px}
+      .news-grid{grid-template-columns:1fr}
+      .matches-cards{grid-template-columns:1fr}
+      .training-cards{grid-template-columns:1fr}
+      .section-cta{grid-template-columns:1fr}
+      .cta-img{height:240px}
+      .footer-top{flex-direction:column;gap:32px}
+      .footer-cols{flex-wrap:wrap;gap:32px}
+    }
+    @media(max-width:640px){
+      .nav-links{display:none}
+      .nav-join{display:none}
+      .teams-grid{grid-template-columns:1fr;transform:translateY(40px)}
+      .team-card{height:360px}
+      .gallery-grid{grid-template-columns:1fr}
+      .footer-bottom-inner{flex-direction:column;gap:12px;text-align:center}
+      .section-news,.section-videos,.section-training{padding:48px 0}
+      .section-teams,.section-matches{padding:48px 0}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <a href="#" class="topbar-link">Kontakti</a>
+    <div class="topbar-divider"></div>
+    <a href="#" class="topbar-link">Sponsoriem</a>
+    <div class="topbar-divider"></div>
+    <a href="#" class="topbar-link">LV / EN</a>
+  </div>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <div class="nav-logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z"/></svg></div>
+        <span class="nav-logo-text">Fēnikss</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/news" class="active">Ziņas</a></li>
+        <li><a href="/matches">Spēles</a></li>
+        <li><a href="/team">Komanda</a></li>
+        <li><a href="/gallery">Galerija</a></li>
+        <li><a href="/club">Klubs</a></li>
+        <li><a href="/shop">Veikals</a></li>
+      </ul>
+      <div class="nav-right">
+        <button class="nav-icon-btn"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></button>
+        <a href="#" class="nav-join">Pievienojies <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        <button class="nav-hamburger"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-main">
+      <div class="hero-img">
+        <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1920&q=80" alt="Rugby match">
+      </div>
+      <div class="hero-content">
+        <h1 class="hero-title">Highlights: Fēnikss v Garkalnes Livonija</h1>
+        <div class="hero-meta">
+          <span class="hero-date">08 Mar 2026</span>
+          <button class="diamond-btn"><svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <!-- Training sidebar -->
+    <aside class="hero-sidebar">
+      <div class="sidebar-label">Treniņu Laiki</div>
+      <div class="sidebar-divider"></div>
+
+      <div class="sidebar-training">
+        <div class="sidebar-tr-item">
+          <div class="sidebar-tr-day">Pirmdiena</div>
+          <div class="sidebar-tr-time">18:30 – 20:00</div>
+          <div class="sidebar-tr-place">
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Valmiera, Daliņi
+          </div>
+        </div>
+
+        <div class="sidebar-tr-divider"></div>
+
+        <div class="sidebar-tr-item">
+          <div class="sidebar-tr-day">Otrdiena</div>
+          <div class="sidebar-tr-time">18:00 – 20:30</div>
+          <div class="sidebar-tr-place">
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Brenguļu zāle
+          </div>
+        </div>
+
+        <div class="sidebar-tr-divider"></div>
+
+        <div class="sidebar-tr-item">
+          <div class="sidebar-tr-day">Piektdiena</div>
+          <div class="sidebar-tr-time">18:30 – 20:00</div>
+          <div class="sidebar-tr-place">
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Brenguļu zāle
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-divider" style="margin-top:18px"></div>
+      <button class="btn-black" style="margin-top:14px">Pievienoties</button>
+    </aside>
+  </section>
+
+  <!-- TEAMS (black bg, diagonal stripes, player portraits, vertical label) -->
+  <section class="section-teams">
+
+    <div class="teams-inner">
+      <div class="teams-header reveal">
+        <h2 class="teams-title">Spēlētāji</h2>
+        <div class="teams-nav">
+          <button class="teams-nav-btn">‹</button>
+          <button class="teams-nav-btn">›</button>
+        </div>
+      </div>
+      <div class="teams-grid">
+        <div class="team-card reveal s1">
+          <img src="https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=600&q=80" alt="Kārlis Bērziņš">
+          <div class="team-card-label">
+            <div class="team-card-name">Kārlis Bērziņš</div>
+            <div class="team-card-pos">Āķis / Hooker</div>
+          </div>
+        </div>
+        <div class="team-card reveal s2">
+          <img src="https://images.unsplash.com/photo-1544298621-a21e4e4cb0a3?w=600&q=80" alt="Rihards Ozoliņš">
+          <div class="team-card-label">
+            <div class="team-card-name">Rihards Ozoliņš</div>
+            <div class="team-card-pos">Atpakaļsargs / Fullback</div>
+          </div>
+        </div>
+        <div class="team-card reveal s3">
+          <img src="https://images.unsplash.com/photo-1551958219-acbc608c6377?w=600&q=80" alt="Mārtiņš Kalniņš">
+          <div class="team-card-label">
+            <div class="team-card-name">Mārtiņš Kalniņš</div>
+            <div class="team-card-pos">Pussargs / Fly-half</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LATEST NEWS -->
+  <section class="section-news">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 class="section-title">Jaunākās<br>Ziņas</h2>
+        <button class="btn-see-all">Skatīt visas</button>
+      </div>
+
+      <!-- Featured article: split (left text on gray, right big photo) -->
+      <div class="news-featured reveal">
+        <div class="nf-text">
+          <span class="nf-tag">Ziņas</span>
+          <h3 class="nf-title">Pievienojies Atbalsta Kampaņai!</h3>
+          <div class="nf-date-row">
+            <span class="nf-date">24 Jan 2026</span>
+            <button class="diamond-btn diamond-btn-dark" style="width:34px;height:34px"><svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg></button>
+          </div>
+        </div>
+        <div class="nf-img">
+          <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=900&q=80" alt="">
+        </div>
+      </div>
+
+      <!-- 3 smaller cards: image top, text below (like Quins) -->
+      <div class="news-grid">
+        <div class="news-card reveal s1">
+          <div class="nc-img"><img src="https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=500&q=75" alt=""></div>
+          <span class="nc-tag nc-tag-accent">Spēles</span>
+          <h3 class="nc-title">Fēnikss Savā Laukumā Uzņems Garkalnes Livonija</h3>
+          <div class="nc-date">10 Jun 2025</div>
+          <div class="nc-line"></div>
+        </div>
+        <div class="news-card reveal s2">
+          <div class="nc-img"><img src="https://images.unsplash.com/photo-1544298621-a21e4e4cb0a3?w=500&q=75" alt=""></div>
+          <span class="nc-tag nc-tag-teal">Treniņi</span>
+          <h3 class="nc-title">Atvērtais Treniņš Priekuļos Visiem Vecumiem</h3>
+          <div class="nc-date">30 Jul 2025</div>
+          <div class="nc-line"></div>
+        </div>
+        <div class="news-card reveal s3">
+          <div class="nc-img"><img src="https://images.unsplash.com/photo-1551958219-acbc608c6377?w=500&q=75" alt=""></div>
+          <span class="nc-tag nc-tag-teal">Rezultāts</span>
+          <h3 class="nc-title">Sezonas Noslēguma Pārskats 2025</h3>
+          <div class="nc-date">15 Nov 2025</div>
+          <div class="nc-line"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY (black bg, overlay cards with diamond icon) -->
+  <section class="section-gallery">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 class="section-title">Galerija</h2>
+        <button class="btn-see-all">Skatīt visas</button>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-card reveal s1">
+          <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=500&q=75" alt="">
+          <div class="gallery-card-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+          <div class="gallery-card-overlay">
+            <span class="gc-tag gc-tag-accent">Spēle</span>
+            <div class="gc-title">Fēnikss v Garkalnes Livonija</div>
+            <div class="gc-meta">24 fotogrāfijas</div>
+          </div>
+        </div>
+        <div class="gallery-card reveal s2">
+          <img src="https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=500&q=75" alt="">
+          <div class="gallery-card-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+          <div class="gallery-card-overlay">
+            <span class="gc-tag gc-tag-accent">Spēle</span>
+            <div class="gc-title">Bronzas Spēle Pret RK "Eži"</div>
+            <div class="gc-meta">18 fotogrāfijas</div>
+          </div>
+        </div>
+        <div class="gallery-card reveal s3">
+          <img src="https://images.unsplash.com/photo-1544298621-a21e4e4cb0a3?w=500&q=75" alt="">
+          <div class="gallery-card-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+          <div class="gallery-card-overlay">
+            <span class="gc-tag gc-tag-teal">Treniņi</span>
+            <div class="gc-title">Londonas Tūre 2025</div>
+            <div class="gc-meta">32 fotogrāfijas</div>
+          </div>
+        </div>
+        <div class="gallery-card reveal s4">
+          <img src="https://images.unsplash.com/photo-1551958219-acbc608c6377?w=500&q=75" alt="">
+          <div class="gallery-card-count"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+          <div class="gallery-card-overlay">
+            <span class="gc-tag gc-tag-teal">Klubs</span>
+            <div class="gc-title">Sezonas Atklāšana</div>
+            <div class="gc-meta">15 fotogrāfijas</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MATCHES (light teal bg, diagonal stripes, vertical text, white cards) -->
+  <section class="section-matches">
+
+    <div class="matches-inner">
+      <div class="matches-layout">
+        <div class="matches-vertical">Spēles</div>
+        <div>
+          <div class="matches-header reveal">
+            <div></div>
+            <button class="btn-see-all">Skatīt visas</button>
+          </div>
+          <div class="matches-cards">
+            <div class="match-card reveal s1">
+              <div class="mc-comp">Latvijas Čempionāts</div>
+              <div class="mc-info">
+                <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Brenguļi, Valmiera
+              </div>
+              <div class="mc-info">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                20 Mar 2026 - 14:00
+              </div>
+              <div class="mc-divider"></div>
+              <div class="mc-teams">
+                <div class="mc-crest">🔥</div>
+                <div class="mc-v">V</div>
+                <div class="mc-crest">🦔</div>
+              </div>
+              <div class="mc-btns">
+                <button class="mc-btn-full">Biļetes</button>
+                <button class="mc-btn-full">Spēles Info</button>
+              </div>
+              <div class="mc-hosp">Hospitality</div>
+              <button class="mc-enquire">Enquire</button>
+            </div>
+            <div class="match-card reveal s2">
+              <div class="mc-comp">Draudzības Spēle</div>
+              <div class="mc-info">
+                <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Garkalnes
+              </div>
+              <div class="mc-info">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                5 Apr 2026 - 16:00
+              </div>
+              <div class="mc-divider"></div>
+              <div class="mc-teams">
+                <div class="mc-crest">🔥</div>
+                <div class="mc-v">V</div>
+                <div class="mc-crest">🏛️</div>
+              </div>
+              <div class="mc-btns">
+                <button class="mc-btn-full">Biļetes</button>
+                <button class="mc-btn-full">Spēles Info</button>
+              </div>
+              <div class="mc-hosp">Hospitality</div>
+              <button class="mc-enquire">Enquire</button>
+            </div>
+            <div class="match-card reveal s3">
+              <div class="mc-comp">Latvijas Čempionāts</div>
+              <div class="mc-info">
+                <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Brenguļi, Valmiera
+              </div>
+              <div class="mc-info">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                19 Apr 2026 - 15:00
+              </div>
+              <div class="mc-divider"></div>
+              <div class="mc-teams">
+                <div class="mc-crest">🔥</div>
+                <div class="mc-v">V</div>
+                <div class="mc-crest">⚡</div>
+              </div>
+              <div class="mc-btns">
+                <button class="mc-btn-full">Spēles Info</button>
+              </div>
+              <div class="mc-hosp">Hospitality</div>
+              <button class="mc-enquire">Enquire</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA / NEWSLETTER (split: left photo, right teal with email) -->
+  <section class="section-cta">
+    <div class="cta-img">
+      <img src="https://images.unsplash.com/photo-1589487391730-58f20eb2c308?w=900&q=80" alt="Rugby stadium">
+    </div>
+    <div class="cta-text">
+      <span class="cta-label">Pievienojies mums</span>
+      <h2 class="cta-title">Pievienojies<br>Fēnikss</h2>
+      <p class="cta-desc">Neatkarīgi no pieredzes līmeņa — mums ir vieta tev. Aizpildi formu un mēs sazināsimies.</p>
+      <div class="cta-form">
+        <input class="cta-input" type="text" placeholder="Vārds, Uzvārds">
+        <input class="cta-input" type="email" placeholder="E-pasts">
+        <input class="cta-input" type="tel" placeholder="Telefons">
+      </div>
+      <button class="cta-btn">Pieteikties <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+    </div>
+  </section>
+
+  <!-- SPONSORS -->
+  <section class="section-sponsors">
+    <div class="container">
+      <h2 class="sponsors-heading reveal">Mūsu Sponsori</h2>
+      <div class="sponsors-sub">Galvenais partneris</div>
+      <div class="sponsors-row reveal">
+        <div class="sponsor-box" style="width:160px;height:56px;opacity:.7"></div>
+      </div>
+      <div class="sponsors-line"></div>
+      <div class="sponsors-sub">Oficiālie partneri</div>
+      <div class="sponsors-row reveal">
+        <div class="sponsor-box"></div>
+        <div class="sponsor-box"></div>
+        <div class="sponsor-box"></div>
+        <div class="sponsor-box"></div>
+      </div>
+      <div class="sponsors-line"></div>
+      <div class="sponsors-sub">Atbalstītāji</div>
+      <div class="sponsors-row reveal">
+        <div class="sponsor-box"></div>
+        <div class="sponsor-box"></div>
+        <div class="sponsor-box"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="footer-logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z"/></svg></div>
+            <span class="footer-logo-text">Fēnikss</span>
+          </div>
+          <div class="footer-leagues">
+            <div class="footer-league"></div>
+            <div class="footer-league"></div>
+          </div>
+        </div>
+        <div class="footer-cols">
+          <div class="footer-col">
+            <h4>Apmeklē mūs</h4>
+            <p>Kaimiņi, Brenguļi<br>Brenguļu pagasts<br>Valmieras novads<br>LV-4245<br><br>Tel: +371 29113938</p>
+          </div>
+          <div class="footer-col">
+            <h4>Kontakti</h4>
+            <ul>
+              <li><a href="mailto:rkfenikss@gmail.com">rkfenikss@gmail.com</a></li>
+              <li><a href="/privacy-policy">Privātuma politika</a></li>
+              <li><a href="/cookies-policy">Sīkdatņu politika</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Rekvizīti</h4>
+            <p>Biedrība "Regbija klubs<br>"Valmieras Fēnikss""<br>Reģ. nr: 40008126600<br><br><span style="font-family:monospace;font-size:12px;color:rgba(255,255,255,.2)">LV86HABA0551035059313</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Teal bottom strip -->
+    <div class="footer-bottom">
+      <div class="footer-bottom-inner">
+        <span class="footer-copy">© 2025 RK "Fēnikss". Visas tiesības aizsargātas.</span>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/></svg></a>
+          <a href="#" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.46V13a8.28 8.28 0 005.58 2.14V11.7a4.83 4.83 0 01-3.77-1.24V6.69h3.77z"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+    document.querySelectorAll('.reveal,.team-card').forEach(el => obs.observe(el));
+
+    // Nav shadow
+    window.addEventListener('scroll', () => {
+      document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 10);
+    });
+
+  </script>
+
+</body>
+</html>
