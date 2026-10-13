@@ -286,6 +286,24 @@ body {
     );
   }
 
+  /* Club green with depth and a large faint phoenix behind the heading.
+     Needs `relative` on the section and a positioned child above it (z-index >= 1). */
+  .bg-club-phoenix {
+    background: radial-gradient(120% 140% at 12% 0%, #0B6A5A 0%, #014D43 48%, #00332C 100%);
+  }
+  .bg-club-phoenix::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.1);
+    /* Mask is clipped to the section box, so the phoenix never leaks into the next section */
+    /* Sized by width so it sits behind the heading whatever the section's height */
+    -webkit-mask: url('/Logo/f%C4%93niks_logo-removebg-preview.png') no-repeat right -2% top -90px / min(860px, 80vw) auto;
+    mask: url('/Logo/f%C4%93niks_logo-removebg-preview.png') no-repeat right -2% top -90px / min(860px, 80vw) auto;
+    pointer-events: none;
+    z-index: 0;
+  }
+
   /* Scroll reveal animation for Quins-style sections */
   .reveal {
     opacity: 0;

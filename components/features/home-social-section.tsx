@@ -85,8 +85,8 @@ function LazyEmbed({
 
 export function HomeSocialSection() {
   return (
-    <section className="py-20 bg-club">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
+    <section className="py-20 bg-club-phoenix relative">
+      <div className="relative z-[1] max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
         {/* Section header */}
         <div className="flex items-end justify-between mb-12">
           <h2 className="font-display text-[clamp(34px,4vw,56px)] font-bold uppercase text-white leading-[1.15] tracking-tight">

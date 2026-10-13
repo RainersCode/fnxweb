@@ -95,7 +95,7 @@ export function HomePlayersSection({ players }: HomePlayersSectionProps) {
   }
 
   return (
-    <section className="bg-club relative overflow-visible pt-20 pb-0 mb-20">
+    <section className="bg-club-phoenix relative overflow-visible pt-20 pb-0 mb-20">
       <div className="relative z-[2] max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
         {/* Header */}
         <div className="flex items-center justify-between mb-12">
