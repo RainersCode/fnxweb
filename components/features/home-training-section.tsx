@@ -31,11 +31,11 @@ export function HomeTrainingSection({ sessions }: HomeTrainingSectionProps) {
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
         {/* Section header */}
         <div className="flex items-end justify-between mb-12">
-          <h2 className="font-display text-[clamp(42px,5.5vw,80px)] font-bold uppercase text-teal-700 leading-[1.15] tracking-tight">
+          <h2 className="font-display text-[clamp(42px,5.5vw,80px)] font-bold uppercase text-club leading-[1.15] tracking-tight">
             Treniņu<br className="hidden sm:block" /> Laiki
           </h2>
           <Link href="/contact">
-            <button className="hidden md:inline-flex items-center px-9 py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-teal-700 transition-colors duration-200">
+            <button className="hidden md:inline-flex items-center px-9 py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-club transition-colors duration-200">
               Piesakies
             </button>
           </Link>
@@ -46,7 +46,7 @@ export function HomeTrainingSection({ sessions }: HomeTrainingSectionProps) {
           {sessionsByDay.map(({ label, sessions: daySessions }) => (
             <div key={label} className="bg-[#f5f5f5] overflow-hidden">
               {/* Teal header */}
-              <div className="bg-teal-700 px-6 py-4 flex items-center justify-between">
+              <div className="bg-club px-6 py-4 flex items-center justify-between">
                 <span className="font-display text-lg font-bold uppercase tracking-[2px] text-white">
                   {label}
                 </span>
@@ -61,8 +61,8 @@ export function HomeTrainingSection({ sessions }: HomeTrainingSectionProps) {
                     <div className="flex flex-col gap-3 flex-1">
                       {/* Time */}
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 bg-teal-700/[0.08] grid place-items-center flex-shrink-0">
-                          <Clock className="h-4 w-4 text-teal-700" />
+                        <div className="w-9 h-9 bg-club/[0.08] grid place-items-center flex-shrink-0">
+                          <Clock className="h-4 w-4 text-club" />
                         </div>
                         <div>
                           <div className="font-cond text-[10px] font-bold tracking-[2px] uppercase text-[#888]">
@@ -75,8 +75,8 @@ export function HomeTrainingSection({ sessions }: HomeTrainingSectionProps) {
                       </div>
                       {/* Location */}
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 bg-teal-700/[0.08] grid place-items-center flex-shrink-0">
-                          <MapPin className="h-4 w-4 text-teal-700" />
+                        <div className="w-9 h-9 bg-club/[0.08] grid place-items-center flex-shrink-0">
+                          <MapPin className="h-4 w-4 text-club" />
                         </div>
                         <div>
                           <div className="font-cond text-[10px] font-bold tracking-[2px] uppercase text-[#888]">
@@ -90,8 +90,8 @@ export function HomeTrainingSection({ sessions }: HomeTrainingSectionProps) {
                       {/* Team Group */}
                       {session.team_group && session.team_group !== 'Visi' && (
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 bg-teal-700/[0.08] grid place-items-center flex-shrink-0">
-                            <Users className="h-4 w-4 text-teal-700" />
+                          <div className="w-9 h-9 bg-club/[0.08] grid place-items-center flex-shrink-0">
+                            <Users className="h-4 w-4 text-club" />
                           </div>
                           <div>
                             <div className="font-cond text-[10px] font-bold tracking-[2px] uppercase text-[#888]">
@@ -116,8 +116,8 @@ export function HomeTrainingSection({ sessions }: HomeTrainingSectionProps) {
           {sessionsByDay.map(({ label, sessions: daySessions }) => (
             <div key={label} className="py-5 first:pt-0 last:pb-0">
               <div className="flex items-center gap-2 mb-3">
-                <div className="h-px w-4 bg-teal-700" />
-                <h4 className="font-display text-base font-bold text-teal-700 uppercase tracking-wide">
+                <div className="h-px w-4 bg-club" />
+                <h4 className="font-display text-base font-bold text-club uppercase tracking-wide">
                   {label}
                 </h4>
                 <div className="flex-1 h-px bg-[#e5e5e5]" />
@@ -126,17 +126,17 @@ export function HomeTrainingSection({ sessions }: HomeTrainingSectionProps) {
               <div className="space-y-3 pl-2">
                 {daySessions.map((session, i) => (
                   <div key={session.id} className="space-y-1.5">
-                    <div className="flex items-center gap-2 text-teal-700">
+                    <div className="flex items-center gap-2 text-club">
                       <Clock className="h-4 w-4" />
                       <span className="font-semibold">{session.start_time} - {session.end_time}</span>
                     </div>
                     <div className="flex items-center gap-2 text-[#666]">
-                      <MapPin className="h-4 w-4 flex-shrink-0 text-teal-700" />
+                      <MapPin className="h-4 w-4 flex-shrink-0 text-club" />
                       <span className="text-sm">{session.location}</span>
                     </div>
                     {session.team_group && session.team_group !== 'Visi' && (
                       <div className="flex items-center gap-2 text-[#888]">
-                        <Users className="h-4 w-4 flex-shrink-0 text-teal-700" />
+                        <Users className="h-4 w-4 flex-shrink-0 text-club" />
                         <span className="text-sm">{session.team_group}</span>
                       </div>
                     )}
@@ -151,7 +151,7 @@ export function HomeTrainingSection({ sessions }: HomeTrainingSectionProps) {
         {/* Mobile CTA */}
         <div className="md:hidden mt-8 text-center">
           <Link href="/contact">
-            <button className="inline-flex items-center px-9 py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-teal-700 transition-colors duration-200">
+            <button className="inline-flex items-center px-9 py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-club transition-colors duration-200">
               Piesakies treniņam
             </button>
           </Link>

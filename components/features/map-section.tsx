@@ -23,7 +23,7 @@ export function MapSection({
   return (
     <section className="py-16 md:py-20 bg-[#f5f5f5]">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
-        <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-700 mb-3 block">Lokācija</span>
+        <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-club mb-3 block">Lokācija</span>
         <h2 className="font-display text-[clamp(42px,5.5vw,80px)] font-bold uppercase text-[#111] leading-[1.15] tracking-tight mb-10">
           Atrodi Mūs
         </h2>
@@ -55,7 +55,7 @@ export function MapSection({
                     href={googleMapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-teal-700 transition-colors"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-club transition-colors"
                   >
                     <Navigation className="h-4 w-4" />
                     Norādes

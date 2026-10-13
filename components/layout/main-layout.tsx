@@ -154,13 +154,13 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
                   <Link
                     href={item.key === 'HOME' ? '/' : `/${item.key.toLowerCase()}`}
                     className={`flex items-center h-[76px] px-[18px] font-cond text-[14px] font-bold tracking-[2.5px] uppercase relative transition-colors duration-250 ${
-                      currentPage === item.key ? 'text-teal-700' : 'text-[#111] hover:text-teal-700'
+                      currentPage === item.key ? 'text-club' : 'text-[#111] hover:text-club'
                     }`}
                   >
                     {item.text}
                     {/* Bottom underline indicator */}
                     <span
-                      className={`absolute bottom-0 left-[18px] right-[18px] h-[3px] bg-teal-700 transition-transform duration-300 origin-left ${
+                      className={`absolute bottom-0 left-[18px] right-[18px] h-[3px] bg-club transition-transform duration-300 origin-left ${
                         currentPage === item.key ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
                       }`}
                     />
@@ -276,14 +276,14 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
                     >
                       {/* Number */}
                       <span className={`font-cond text-[11px] font-bold tracking-[2px] w-7 text-right transition-colors duration-200 ${
-                        currentPage === item.key ? 'text-teal-400/60' : 'text-white/15 group-hover:text-white/30'
+                        currentPage === item.key ? 'text-club-mint/60' : 'text-white/15 group-hover:text-white/30'
                       }`}>
                         {String(index + 1).padStart(2, '0')}
                       </span>
                       {/* Nav text */}
                       <span className={`font-display text-[28px] font-bold uppercase tracking-[1px] transition-all duration-200 ${
                         currentPage === item.key
-                          ? 'text-teal-400'
+                          ? 'text-club-mint'
                           : 'text-white/50 group-hover:text-white group-hover:translate-x-2'
                       }`}>
                         {item.text}
@@ -325,10 +325,10 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
             <div className="ml-11 flex flex-col gap-4">
               {/* Contact */}
               <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
-                <a href="tel:+37129113938" className="font-cond text-[11px] font-bold tracking-[2px] uppercase text-white/20 hover:text-teal-400 transition-colors">
+                <a href="tel:+37129113938" className="font-cond text-[11px] font-bold tracking-[2px] uppercase text-white/20 hover:text-club-mint transition-colors">
                   +371 29113938
                 </a>
-                <a href="mailto:rkfenikss@gmail.com" className="font-cond text-[11px] font-bold tracking-[2px] uppercase text-white/20 hover:text-teal-400 transition-colors">
+                <a href="mailto:rkfenikss@gmail.com" className="font-cond text-[11px] font-bold tracking-[2px] uppercase text-white/20 hover:text-club-mint transition-colors">
                   rkfenikss@gmail.com
                 </a>
               </div>
@@ -336,15 +336,15 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
               {/* Social icons */}
               <div className="flex gap-4">
                 <a href="https://www.facebook.com/RKFenikss?locale=lv_LV" target="_blank" rel="noopener noreferrer" aria-label="Facebook"
-                  className="text-white/20 hover:text-teal-400 transition-colors duration-200">
+                  className="text-white/20 hover:text-club-mint transition-colors duration-200">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg>
                 </a>
                 <a href="https://www.instagram.com/rk_fenikss/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
-                  className="text-white/20 hover:text-teal-400 transition-colors duration-200">
+                  className="text-white/20 hover:text-club-mint transition-colors duration-200">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></svg>
                 </a>
                 <a href="https://www.tiktok.com/@rk_fenikss" target="_blank" rel="noopener noreferrer" aria-label="TikTok"
-                  className="text-white/20 hover:text-teal-400 transition-colors duration-200">
+                  className="text-white/20 hover:text-club-mint transition-colors duration-200">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.46V13a8.28 8.28 0 005.58 2.14V11.7a4.83 4.83 0 01-3.77-1.24V6.69h3.77z"/></svg>
                 </a>
               </div>
@@ -356,7 +356,7 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
       {children}
 
       {/* Footer */}
-      <footer className="bg-[#1a1a1a] text-white pt-14">
+      <footer className="bg-club-deep text-white pt-14">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-8 md:px-16">
           <div className="flex flex-col md:flex-row items-start gap-8 md:gap-16 pb-12 border-b border-white/[0.06]">
             {/* Brand */}
@@ -392,9 +392,9 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
                   Kontakti
                 </h4>
                 <ul className="space-y-2">
-                  <li><a href="mailto:rkfenikss@gmail.com" className="text-sm text-white/65 hover:text-teal-400 transition-colors">rkfenikss@gmail.com</a></li>
-                  <li><Link href="/privacy-policy" className="text-sm text-white/65 hover:text-teal-400 transition-colors">Privātuma politika</Link></li>
-                  <li><Link href="/cookies-policy" className="text-sm text-white/65 hover:text-teal-400 transition-colors">Sīkdatņu politika</Link></li>
+                  <li><a href="mailto:rkfenikss@gmail.com" className="text-sm text-white/65 hover:text-club-mint transition-colors">rkfenikss@gmail.com</a></li>
+                  <li><Link href="/privacy-policy" className="text-sm text-white/65 hover:text-club-mint transition-colors">Privātuma politika</Link></li>
+                  <li><Link href="/cookies-policy" className="text-sm text-white/65 hover:text-club-mint transition-colors">Sīkdatņu politika</Link></li>
                 </ul>
               </div>
               <div>
@@ -417,7 +417,7 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
                     <li key={item.key}>
                       <Link
                         href={item.key === 'HOME' ? '/' : `/${item.key.toLowerCase()}`}
-                        className="text-sm text-white/65 hover:text-teal-400 transition-colors"
+                        className="text-sm text-white/65 hover:text-club-mint transition-colors"
                       >
                         {item.text}
                       </Link>
@@ -430,7 +430,7 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
         </div>
 
         {/* Teal bottom strip */}
-        <div className="bg-teal-700 mt-12">
+        <div className="bg-club-darker mt-12">
           <div className="max-w-[1400px] mx-auto px-4 sm:px-8 md:px-16 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3">
             <span className="text-xs text-white/60">
               © {new Date().getFullYear()} RK &quot;Fēnikss&quot;. Visas tiesības aizsargātas.
@@ -466,7 +466,7 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
       {/* Scroll to Top */}
       <button
         onClick={scrollToTop}
-        className={`fixed bottom-6 right-6 z-40 w-10 h-10 bg-[#111] text-white grid place-items-center shadow-lg transition-all duration-300 hover:bg-teal-700 ${
+        className={`fixed bottom-6 right-6 z-40 w-10 h-10 bg-[#111] text-white grid place-items-center shadow-lg transition-all duration-300 hover:bg-club ${
           showScrollTop ? 'translate-y-0 opacity-100' : 'translate-y-16 opacity-0 pointer-events-none'
         }`}
         aria-label="Ritināt uz augšu"

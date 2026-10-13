@@ -184,10 +184,10 @@ export default async function HomePage() {
         <HomeSocialSection />
 
         {/* Sponsors Section - Clean Quins style */}
-        <section className="py-16 bg-[#bce8e4]">
+        <section className="py-16 bg-white">
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
-            <h2 className="font-display text-[clamp(42px,5.5vw,80px)] font-bold uppercase text-teal-800 leading-[1.15] tracking-tight mb-12">
-              Mūsu<br />Sponsori
+            <h2 className="font-display text-[clamp(34px,4vw,56px)] font-bold uppercase text-club leading-[1.15] tracking-tight mb-12">
+              Mūsu sponsori
             </h2>
 
             <div className="flex flex-wrap justify-center items-center gap-x-10 gap-y-10 md:gap-x-16 md:gap-y-12 max-w-[1100px] mx-auto">
@@ -225,11 +225,11 @@ export default async function HomePage() {
             <span className="absolute -top-5 -right-3 font-display text-[220px] font-bold uppercase text-white/[0.03] leading-none tracking-tighter pointer-events-none select-none hidden md:block">
               FNX
             </span>
-            <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400 mb-4">
+            <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-club-mint mb-4">
               Nāc uz treniņu
             </span>
-            <h2 className="font-display text-[clamp(36px,4.2vw,60px)] font-bold uppercase text-white leading-[1.15] tracking-tight mb-4">
-              Pievienojies<br />Fēniksam
+            <h2 className="font-display text-[clamp(34px,4vw,56px)] font-bold uppercase text-white leading-[1.15] tracking-tight mb-4">
+              Pievienojies Fēniksam
             </h2>
             <p className="font-body text-[15px] text-white/70 leading-relaxed mb-8 max-w-[400px]">
               Mūsu mērķis ir nodrošināt viesmīlīgu vidi, kur ikviens var baudīt spēli, attīstīt savas

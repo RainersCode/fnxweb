@@ -26,7 +26,7 @@ export default function AboutPage() {
           </div>
           <div className="relative z-10 max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16 h-full flex items-end pb-12">
             <div>
-              <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400 mb-3 block">RK Fēnikss</span>
+              <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-club-mint mb-3 block">RK Fēnikss</span>
               <h1 className="font-display text-[clamp(48px,6vw,86px)] font-bold uppercase text-white leading-[1.15] tracking-tight">
                 Par<br />Mums
               </h1>
@@ -47,7 +47,7 @@ export default function AboutPage() {
               <div className="space-y-10">
                 {/* History */}
                 <div>
-                  <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-700 mb-3 block">Vēsture</span>
+                  <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-club mb-3 block">Vēsture</span>
                   <h3 className="font-display text-3xl lg:text-4xl font-bold uppercase tracking-tight text-[#111] leading-tight mb-4">
                     {aboutUsData.history.title}
                   </h3>
@@ -58,7 +58,7 @@ export default function AboutPage() {
 
                 {/* Mission */}
                 <div>
-                  <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-700 mb-3 block">Misija</span>
+                  <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-club mb-3 block">Misija</span>
                   <h3 className="font-display text-3xl lg:text-4xl font-bold uppercase tracking-tight text-[#111] leading-tight mb-4">
                     {aboutUsData.mission.title}
                   </h3>
@@ -72,7 +72,7 @@ export default function AboutPage() {
         {/* CTA Section */}
         <section className="py-16 md:py-20 bg-[#111] bg-stripes-dark">
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16 text-center">
-            <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400 mb-4 block">Pievienojies</span>
+            <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-club-mint mb-4 block">Pievienojies</span>
             <h2 className="font-display text-[clamp(32px,4vw,52px)] font-bold uppercase text-white leading-[1.15] tracking-tight mb-6">
               {aboutUsData.cta.title}
             </h2>

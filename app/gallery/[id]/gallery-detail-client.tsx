@@ -80,7 +80,7 @@ export function GalleryDetailClient({ gallery, images }: GalleryDetailClientProp
               <h2 className="font-display text-3xl font-bold uppercase text-[#111] mb-3">Galerija nav atrasta</h2>
               <p className="font-cond text-xs tracking-[2px] uppercase text-[#888] mb-8">Meklētā galerija neeksistē vai ir dzēsta</p>
               <Link href="/gallery">
-                <button className="inline-flex items-center gap-2 px-9 py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-teal-700 transition-colors duration-200">
+                <button className="inline-flex items-center gap-2 px-9 py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-club transition-colors duration-200">
                   <ArrowLeft className="h-4 w-4" /> Atpakaļ uz galerijām
                 </button>
               </Link>
@@ -238,7 +238,7 @@ export function GalleryDetailClient({ gallery, images }: GalleryDetailClientProp
                   onClick={() => setCurrentImageIndex(index)}
                   className={`flex-shrink-0 w-16 h-16 overflow-hidden transition-all duration-300 ${
                     index === currentImageIndex
-                      ? 'ring-2 ring-teal-400 scale-110'
+                      ? 'ring-2 ring-club-mint scale-110'
                       : 'opacity-60 hover:opacity-100'
                   }`}
                 >

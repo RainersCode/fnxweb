@@ -12,8 +12,8 @@ export function HeroSection({
   subtitle,
   titleHighlight,
   backgroundImage,
-  gradientFrom = "from-teal-900/80",
-  gradientTo = "to-teal-700/80",
+  gradientFrom = "from-club-deep/80",
+  gradientTo = "to-club/80",
 }: HeroSectionProps) {
   return (
     <section className="relative py-24 overflow-hidden">
@@ -34,7 +34,7 @@ export function HeroSection({
             {titleHighlight && <span className="text-white font-light italic ml-2">{titleHighlight}</span>}
           </h1>
           <div className="h-1 w-32 bg-white mx-auto mb-6 transform skew-x-[-12deg]"></div>
-          {subtitle && <p className="text-xl text-teal-100">{subtitle}</p>}
+          {subtitle && <p className="text-xl text-club-pale">{subtitle}</p>}
         </div>
       </div>
     </section>

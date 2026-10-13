@@ -137,11 +137,11 @@ export function HomeNewsSection({ articles }: HomeNewsSectionProps) {
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
         {/* Section header */}
         <div className="flex items-end justify-between mb-12">
-          <h2 className="font-display text-[clamp(42px,5.5vw,80px)] font-bold uppercase text-teal-700 leading-[1.15] tracking-tight">
-            Jaunākās<br />Ziņas
+          <h2 className="font-display text-[clamp(34px,4vw,56px)] font-bold uppercase text-club leading-[1.15] tracking-tight">
+            Jaunākās ziņas
           </h2>
           <Link href="/news">
-            <button className="hidden md:inline-flex items-center px-9 py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-teal-700 transition-colors duration-200">
+            <button className="hidden md:inline-flex items-center px-9 py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-club transition-colors duration-200">
               Skatīt visas
             </button>
           </Link>
@@ -153,7 +153,7 @@ export function HomeNewsSection({ articles }: HomeNewsSectionProps) {
             <div className="hidden md:grid grid-cols-[1fr_1.4fr] min-h-[440px] mb-6 cursor-pointer">
               {/* Left text panel */}
               <div className="bg-[#f5f5f5] p-12 flex flex-col">
-                <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-700">
+                <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-club">
                   Jaunākā ziņa
                 </span>
                 <h3 className="font-display text-[clamp(26px,3vw,38px)] font-bold uppercase leading-none text-[#111] mt-auto">
@@ -209,7 +209,7 @@ export function HomeNewsSection({ articles }: HomeNewsSectionProps) {
                 aria-label={`Go to slide ${index + 1}`}
               >
                 <span className={`block h-[3px] transition-all duration-300 ${
-                  activeIndex === index ? 'bg-teal-700 w-6' : 'bg-gray-300 hover:bg-gray-400 w-3'
+                  activeIndex === index ? 'bg-club w-6' : 'bg-gray-300 hover:bg-gray-400 w-3'
                 }`} />
               </button>
             ))}
@@ -241,7 +241,7 @@ export function HomeNewsSection({ articles }: HomeNewsSectionProps) {
         {/* Mobile CTA */}
         <div className="md:hidden mt-6 text-center">
           <Link href="/news">
-            <button className="inline-flex items-center px-9 py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-teal-700 transition-colors duration-200">
+            <button className="inline-flex items-center px-9 py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-club transition-colors duration-200">
               Skatīt visas ziņas
             </button>
           </Link>

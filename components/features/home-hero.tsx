@@ -45,7 +45,7 @@ export function HomeHero({ nextFixture }: HomeHeroProps) {
         <div className="w-full grid xl:grid-cols-[1fr_320px] gap-10 items-end">
           <div className="max-w-[640px]">
             <h1>
-              <span className="block font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400">
+              <span className="block font-cond text-[13px] font-bold tracking-[3px] uppercase text-club-mint">
                 Valmieras regbija klubs
               </span>{' '}
               {/* Top padding leaves room for the macron on Ē */}
@@ -88,7 +88,7 @@ export function HomeHero({ nextFixture }: HomeHeroProps) {
                     <div className="font-cond text-[13px] font-bold tracking-[2px] uppercase text-[#888]">
                       {item.day}
                     </div>
-                    <div className="font-display text-lg font-bold text-teal-700 tracking-tight mt-0.5">
+                    <div className="font-display text-lg font-bold text-club tracking-tight mt-0.5">
                       {item.time}
                     </div>
                     <div className="font-cond text-[10px] font-medium tracking-[1.5px] uppercase text-[#888] flex items-center gap-1 mt-0.5">
@@ -110,16 +110,16 @@ export function HomeHero({ nextFixture }: HomeHeroProps) {
       {nextFixture && (
         <Link
           href="/fixtures"
-          className="group relative z-10 block bg-teal-800 hover:bg-teal-700 transition-colors duration-200"
+          className="group relative z-10 block bg-club hover:bg-club-deep transition-colors duration-200"
         >
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16 py-5 flex flex-col md:flex-row md:items-center gap-2 md:gap-8">
-            <span className="font-cond text-xs font-bold tracking-[3px] uppercase text-teal-300 shrink-0">
+            <span className="font-cond text-xs font-bold tracking-[3px] uppercase text-club-mint shrink-0">
               Nākamā spēle
             </span>
             <span className="font-display text-2xl md:text-3xl font-bold uppercase text-white leading-[1.15] tracking-tight">
               {nextFixture.is_home_game
-                ? <>Fēnikss <span className="text-teal-300">v</span> {nextFixture.opponent}</>
-                : <>{nextFixture.opponent} <span className="text-teal-300">v</span> Fēnikss</>}
+                ? <>Fēnikss <span className="text-club-mint">v</span> {nextFixture.opponent}</>
+                : <>{nextFixture.opponent} <span className="text-club-mint">v</span> Fēnikss</>}
             </span>
             <span className="font-cond text-[13px] font-semibold tracking-[1.5px] uppercase text-white/70 md:ml-auto">
               {formatMatchDate(nextFixture.match_date)} · {formatMatchTime(nextFixture.match_date)}

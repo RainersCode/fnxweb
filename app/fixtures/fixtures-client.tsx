@@ -45,7 +45,7 @@ export function FixturesClient({ upcomingFixtures, pastFixtures }: FixturesClien
           </div>
           <div className="relative z-10 max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16 h-full flex items-end pb-12">
             <div>
-              <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400 mb-3 block">
+              <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-club-mint mb-3 block">
                 RK Fēnikss
               </span>
               <h1 className="font-display text-[clamp(48px,6vw,86px)] font-bold uppercase text-white leading-[1.15] tracking-tight">
@@ -56,7 +56,7 @@ export function FixturesClient({ upcomingFixtures, pastFixtures }: FixturesClien
         </section>
 
         {/* Tabs + Content */}
-        <section className="py-16 md:py-20 bg-[#bce8e4]">
+        <section className="py-16 md:py-20 bg-club-pale">
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
             {/* Tabs */}
             <div className="flex gap-2 mb-12">
@@ -87,10 +87,10 @@ export function FixturesClient({ upcomingFixtures, pastFixtures }: FixturesClien
                 <div className="relative w-16 h-16 mx-auto mb-5 opacity-30">
                   <Image src="/Logo/fēniks_logo-removebg-preview.png" alt="Fēnikss" fill className="object-contain" />
                 </div>
-                <h3 className="font-display text-2xl font-bold uppercase text-teal-800/60 mb-2">
+                <h3 className="font-display text-2xl font-bold uppercase text-club/60 mb-2">
                   {activeTab === 'upcoming' ? 'Nav gaidāmo spēļu' : 'Nav rezultātu'}
                 </h3>
-                <p className="font-cond text-xs tracking-[2px] uppercase text-teal-800/40">
+                <p className="font-cond text-xs tracking-[2px] uppercase text-club/40">
                   {activeTab === 'upcoming' ? 'Šobrīd nav plānotas gaidāmās spēles' : 'Nav iepriekšējo spēļu rezultātu'}
                 </p>
               </div>
@@ -104,7 +104,7 @@ export function FixturesClient({ upcomingFixtures, pastFixtures }: FixturesClien
 
                   // Win cards go dark — they POP against the teal bg
                   // Loss/draw/upcoming stay white
-                  const cardBg = isWin ? 'bg-[#111]' : 'bg-white'
+                  const cardBg = isWin ? 'bg-club' : 'bg-white'
                   const titleColor = isWin ? 'text-white' : 'text-[#111]'
                   const metaColor = isWin ? 'text-white/40' : 'text-[#888]'
                   const metaIconColor = isWin ? 'text-white/30' : 'text-[#888]'
@@ -170,7 +170,7 @@ export function FixturesClient({ upcomingFixtures, pastFixtures }: FixturesClien
                           {isPast && fixture.score ? (
                             <div className="flex-shrink-0 px-3">
                               <div className={`font-display text-3xl font-bold tracking-wider ${
-                                isWin ? 'text-teal-400' : isLoss ? 'text-[#999]' : 'text-[#111]'
+                                isWin ? 'text-club-mint' : isLoss ? 'text-[#999]' : 'text-[#111]'
                               }`}>
                                 {fixture.score}
                               </div>
@@ -205,13 +205,13 @@ export function FixturesClient({ upcomingFixtures, pastFixtures }: FixturesClien
                             <div className={`h-px ${dividerColor} mt-4 mb-4`} />
                             <div className="flex items-center justify-between">
                               <span className={`font-cond text-[11px] font-bold tracking-[2px] uppercase ${
-                                isWin ? 'text-teal-400' : isLoss ? 'text-[#aaa]' : 'text-[#888]'
+                                isWin ? 'text-club-mint' : isLoss ? 'text-[#aaa]' : 'text-[#888]'
                               }`}>
                                 {isWin ? 'Uzvara' : isLoss ? 'Zaudējums' : 'Neizšķirts'}
                               </span>
                               {/* Small result diamond */}
                               <span className={`w-3 h-3 rotate-45 ${
-                                isWin ? 'bg-teal-400' : isLoss ? 'bg-[#ccc]' : 'bg-[#aaa]'
+                                isWin ? 'bg-club-mint' : isLoss ? 'bg-[#ccc]' : 'bg-[#aaa]'
                               }`} />
                             </div>
                           </>

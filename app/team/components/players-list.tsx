@@ -63,9 +63,9 @@ export default function PlayersList() {
 
   if (!players || players.length === 0) {
     return (
-      <div className="bg-teal-50 border border-teal-100 p-8 text-center">
-        <User className="mx-auto h-12 w-12 text-teal-300 mb-3" />
-        <p className="text-lg font-medium text-teal-800">Nav atrasti spēlētāji.</p>
+      <div className="bg-club-pale border border-club-pale p-8 text-center">
+        <User className="mx-auto h-12 w-12 text-club-mint mb-3" />
+        <p className="text-lg font-medium text-club">Nav atrasti spēlētāji.</p>
       </div>
     )
   }
@@ -87,12 +87,12 @@ export default function PlayersList() {
             />
 
             {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-teal-900/80 via-teal-900/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
+            <div className="absolute inset-0 bg-gradient-to-t from-club-deep/80 via-club-deep/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
 
             {/* Jersey number badge */}
             {player.jersey_number && (
               <div className="absolute top-4 right-0 z-10">
-                <div className="skew-x-[-12deg] transform bg-teal-600 px-4 py-2 shadow-lg translate-x-1">
+                <div className="skew-x-[-12deg] transform bg-club px-4 py-2 shadow-lg translate-x-1">
                   <span className="skew-x-[12deg] inline-block text-2xl font-extrabold text-white">
                     {player.jersey_number}
                   </span>
@@ -106,8 +106,8 @@ export default function PlayersList() {
                 {player.name}
               </h3>
               <div className="flex items-center gap-2 mt-1">
-                <div className="w-6 h-0.5 bg-teal-400 skew-x-[-12deg]" />
-                <p className="text-sm font-semibold text-teal-300 uppercase tracking-wider">
+                <div className="w-6 h-0.5 bg-club-mint skew-x-[-12deg]" />
+                <p className="text-sm font-semibold text-club-mint uppercase tracking-wider">
                   {player.position || 'Komandas biedrs'}
                 </p>
               </div>
@@ -122,7 +122,7 @@ export default function PlayersList() {
           </div>
 
           {/* Bottom accent bar */}
-          <div className="absolute bottom-0 left-0 right-0 h-1 bg-teal-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-club transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
         </div>
       ))}
     </div>

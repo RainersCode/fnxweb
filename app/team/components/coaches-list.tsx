@@ -62,9 +62,9 @@ export default function CoachesList() {
 
   if (!coaches || coaches.length === 0) {
     return (
-      <div className="bg-teal-50 border border-teal-100 p-8 text-center">
-        <UserCog className="mx-auto h-12 w-12 text-teal-300 mb-3" />
-        <p className="text-lg font-medium text-teal-800">Nav atrasti treneri.</p>
+      <div className="bg-club-pale border border-club-pale p-8 text-center">
+        <UserCog className="mx-auto h-12 w-12 text-club-mint mb-3" />
+        <p className="text-lg font-medium text-club">Nav atrasti treneri.</p>
       </div>
     )
   }
@@ -86,11 +86,11 @@ export default function CoachesList() {
             />
 
             {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-teal-900/80 via-teal-900/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
+            <div className="absolute inset-0 bg-gradient-to-t from-club-deep/80 via-club-deep/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
 
             {/* Role badge */}
             <div className="absolute top-4 right-0 z-10">
-              <div className="skew-x-[-12deg] transform bg-teal-700 px-4 py-2 shadow-lg translate-x-1">
+              <div className="skew-x-[-12deg] transform bg-club px-4 py-2 shadow-lg translate-x-1">
                 <span className="skew-x-[12deg] inline-block text-xs font-bold text-white uppercase tracking-wider">
                   Treneris
                 </span>
@@ -103,8 +103,8 @@ export default function CoachesList() {
                 {coach.name}
               </h3>
               <div className="flex items-center gap-2 mt-1">
-                <div className="w-6 h-0.5 bg-teal-400 skew-x-[-12deg]" />
-                <p className="text-sm font-semibold text-teal-300 uppercase tracking-wider">
+                <div className="w-6 h-0.5 bg-club-mint skew-x-[-12deg]" />
+                <p className="text-sm font-semibold text-club-mint uppercase tracking-wider">
                   {coach.role || 'Treneru sastāvs'}
                 </p>
               </div>
@@ -119,7 +119,7 @@ export default function CoachesList() {
           </div>
 
           {/* Bottom accent bar */}
-          <div className="absolute bottom-0 left-0 right-0 h-1 bg-teal-700 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-club transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
         </div>
       ))}
     </div>

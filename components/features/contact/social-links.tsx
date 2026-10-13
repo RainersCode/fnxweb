@@ -29,7 +29,7 @@ export function SocialLinks({ links = defaultSocialLinks, title = "SEKOJIET MUMS
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 bg-[#111] text-white grid place-items-center hover:bg-teal-700 transition-colors duration-200"
+              className="w-10 h-10 bg-[#111] text-white grid place-items-center hover:bg-club transition-colors duration-200"
               aria-label={link.label}
             >
               <Icon className="h-4 w-4" />
