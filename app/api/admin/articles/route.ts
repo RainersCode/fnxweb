@@ -1,20 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@clerk/nextjs'
+import { isAdminRequest } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase'
 import { Article } from '@/types/supabase'
 
-// Only allow authorized admin users
-const checkAuth = () => {
-  const { userId } = auth()
-  if (!userId) {
-    return false
-  }
-  return true
-}
+// Only allow signed-in users on the admin email list
+const checkAuth = () => isAdminRequest()
 
 // GET - fetch articles
 export async function GET() {
-  if (!checkAuth()) {
+  if (!(await checkAuth())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -35,7 +29,7 @@ export async function GET() {
 
 // POST - create new article
 export async function POST(request: NextRequest) {
-  if (!checkAuth()) {
+  if (!(await checkAuth())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -54,7 +48,7 @@ export async function POST(request: NextRequest) {
 
 // PATCH - update article
 export async function PATCH(request: NextRequest) {
-  if (!checkAuth()) {
+  if (!(await checkAuth())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -78,7 +72,7 @@ export async function PATCH(request: NextRequest) {
 
 // DELETE - delete article
 export async function DELETE(request: NextRequest) {
-  if (!checkAuth()) {
+  if (!(await checkAuth())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
