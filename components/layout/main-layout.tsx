@@ -4,7 +4,7 @@ import { useState, type ReactNode, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { Menu, X, ArrowRight, ChevronUp, Settings } from 'lucide-react'
 import Image from 'next/image'
-import { SignInButton, SignUpButton, UserButton, useAuth, useUser } from '@clerk/nextjs'
+import { SignInButton, UserButton, useAuth, useUser } from '@clerk/nextjs'
 import { isAdmin } from '@/lib/utils'
 import { usePathname } from 'next/navigation'
 import { PageViewTracker } from '@/components/features/page-view-tracker'
@@ -376,10 +376,10 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
             {/* Columns */}
             <div className="flex flex-wrap gap-8 md:gap-16 flex-1">
               <div>
-                <h4 className="font-cond text-xs font-bold tracking-[3px] uppercase text-white/40 mb-4">
+                <h4 className="font-cond text-xs font-bold tracking-[3px] uppercase text-white/60 mb-4">
                   Apmeklē mūs
                 </h4>
-                <p className="text-sm text-white/30 leading-relaxed">
+                <p className="text-sm text-white/60 leading-relaxed">
                   Kaimiņi, Brenguļi<br />
                   Brenguļu pagasts<br />
                   Valmieras novads<br />
@@ -388,28 +388,28 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
                 </p>
               </div>
               <div>
-                <h4 className="font-cond text-xs font-bold tracking-[3px] uppercase text-white/40 mb-4">
+                <h4 className="font-cond text-xs font-bold tracking-[3px] uppercase text-white/60 mb-4">
                   Kontakti
                 </h4>
                 <ul className="space-y-2">
-                  <li><a href="mailto:rkfenikss@gmail.com" className="text-sm text-white/35 hover:text-teal-400 transition-colors">rkfenikss@gmail.com</a></li>
-                  <li><Link href="/privacy-policy" className="text-sm text-white/35 hover:text-teal-400 transition-colors">Privātuma politika</Link></li>
-                  <li><Link href="/cookies-policy" className="text-sm text-white/35 hover:text-teal-400 transition-colors">Sīkdatņu politika</Link></li>
+                  <li><a href="mailto:rkfenikss@gmail.com" className="text-sm text-white/65 hover:text-teal-400 transition-colors">rkfenikss@gmail.com</a></li>
+                  <li><Link href="/privacy-policy" className="text-sm text-white/65 hover:text-teal-400 transition-colors">Privātuma politika</Link></li>
+                  <li><Link href="/cookies-policy" className="text-sm text-white/65 hover:text-teal-400 transition-colors">Sīkdatņu politika</Link></li>
                 </ul>
               </div>
               <div>
-                <h4 className="font-cond text-xs font-bold tracking-[3px] uppercase text-white/40 mb-4">
+                <h4 className="font-cond text-xs font-bold tracking-[3px] uppercase text-white/60 mb-4">
                   Rekvizīti
                 </h4>
-                <p className="text-sm text-white/30 leading-relaxed">
+                <p className="text-sm text-white/60 leading-relaxed">
                   Biedrība &quot;Regbija klubs<br />
                   &quot;Valmieras Fēnikss&quot;&quot;<br />
                   Reģ. nr: 40008126600<br /><br />
-                  <span className="font-mono text-xs text-white/20">LV86HABA0551035059313</span>
+                  <span className="font-mono text-xs text-white/50">LV86HABA0551035059313</span>
                 </p>
               </div>
               <div>
-                <h4 className="font-cond text-xs font-bold tracking-[3px] uppercase text-white/40 mb-4">
+                <h4 className="font-cond text-xs font-bold tracking-[3px] uppercase text-white/60 mb-4">
                   Ātrās saites
                 </h4>
                 <ul className="space-y-2">
@@ -417,7 +417,7 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
                     <li key={item.key}>
                       <Link
                         href={item.key === 'HOME' ? '/' : `/${item.key.toLowerCase()}`}
-                        className="text-sm text-white/35 hover:text-teal-400 transition-colors"
+                        className="text-sm text-white/65 hover:text-teal-400 transition-colors"
                       >
                         {item.text}
                       </Link>
@@ -433,7 +433,7 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
         <div className="bg-teal-700 mt-12">
           <div className="max-w-[1400px] mx-auto px-4 sm:px-8 md:px-16 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3">
             <span className="text-xs text-white/60">
-              © 2025 RK &quot;Fēnikss&quot;. Visas tiesības aizsargātas.
+              © {new Date().getFullYear()} RK &quot;Fēnikss&quot;. Visas tiesības aizsargātas.
             </span>
             <div className="flex items-center gap-3.5">
               {!isSignedIn && (
@@ -443,11 +443,6 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
                       Ieiet
                     </button>
                   </SignInButton>
-                  <SignUpButton mode="modal">
-                    <button className="text-xs text-white/60 hover:text-white transition-colors">
-                      Reģistrēties
-                    </button>
-                  </SignUpButton>
                   <span className="w-px h-3 bg-white/20" />
                 </>
               )}
