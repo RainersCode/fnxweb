@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { supabase, prepareImagePath } from '@/lib/supabase'
 import { Article, Gallery, Fixture, TeamPlayer } from '@/types/supabase'
 import { aboutUsData } from '@/data/about-us'
-import { HeroCarousel } from '@/components/features/hero-carousel'
+import { HomeHero } from '@/components/features/home-hero'
 import { HomeNewsSection } from '@/components/features/home-news-section'
 import { HomeGallerySection } from '@/components/features/home-gallery-section'
 import { HomeFixturesSection } from '@/components/features/home-fixtures-section'
@@ -19,6 +19,21 @@ export const revalidate = 60
 interface GalleryWithThumbnail extends Gallery {
   thumbnailUrl: string | null
 }
+
+// Logos are pre-trimmed; width/height are the file's pixel size
+const sponsors = [
+  { src: '/sponsors/lwhouses.png', name: 'LW Houses', width: 693, height: 111 },
+  { src: '/sponsors/brengulu.png', name: 'Brenguļu alus', width: 474, height: 437 },
+  { src: '/sponsors/grasbergs.png', name: 'Grasbergs', width: 519, height: 279 },
+  { src: '/sponsors/versis-ro.png', name: 'Vērsis RO', width: 768, height: 123 },
+  { src: '/sponsors/mutes-veselibas-centrs.png', name: 'Mutes veselības centrs Sigulda', width: 648, height: 269 },
+  { src: '/sponsors/ulyssere.png', name: 'UlysseRe', width: 706, height: 122 },
+  { src: '/sponsors/valmieras-novads.png', name: 'Valmieras novads', width: 374, height: 115 },
+]
+
+// Give every logo roughly the same visual area, so wide wordmarks and square emblems look balanced
+const sponsorDisplayWidth = (width: number, height: number) =>
+  Math.min(Math.round(Math.sqrt(9000 * (width / height))), 220)
 
 // Server-side data fetching functions
 async function getArticles(): Promise<Article[]> {
@@ -116,23 +131,42 @@ async function getFixtures(): Promise<Fixture[]> {
   }
 }
 
+async function getRecentResults(): Promise<Fixture[]> {
+  try {
+    const { data, error } = await supabase
+      .from('fixtures')
+      .select('*')
+      .lt('match_date', new Date().toISOString())
+      .order('match_date', { ascending: false })
+      .limit(3)
+
+    if (error) throw error
+    return data || []
+  } catch (error) {
+    console.error('Error fetching recent results:', error)
+    return []
+  }
+}
+
 export default async function HomePage() {
   // Fetch all data in parallel on the server
-  const [articles, galleries, fixtures, players] = await Promise.all([
+  const [articles, galleries, fixtures, players, recentResults] = await Promise.all([
     getArticles(),
     getGalleries(),
     getFixtures(),
     getPlayers(),
+    getRecentResults(),
   ])
+
+  // Fixtures are fetched from midnight, so skip any match that already kicked off today
+  const now = new Date()
+  const nextFixture = fixtures.find((fixture) => new Date(fixture.match_date) > now) ?? null
 
   return (
     <MainLayout currentPage="HOME">
       <main className="flex-1">
-        {/* SEO: Primary H1 with target keyword for search visibility */}
-        <h1 className="sr-only">Regbija Klubs "Fēnikss" — Valmieras Regbija Klubs</h1>
-
-        {/* Hero Section - Server-rendered with client interactivity */}
-        <HeroCarousel articles={articles} />
+        {/* Hero Section - contains the page's primary H1 */}
+        <HomeHero nextFixture={nextFixture} />
 
         {/* Players Section */}
         <HomePlayersSection players={players} />
@@ -144,50 +178,35 @@ export default async function HomePage() {
         <HomeGallerySection galleries={galleries} />
 
         {/* Upcoming Matches Section */}
-        <HomeFixturesSection initialFixtures={fixtures} />
+        <HomeFixturesSection initialFixtures={fixtures} recentResults={recentResults} />
 
-{/* Social Media Section */}
+        {/* Social Media Section */}
         <HomeSocialSection />
 
         {/* Sponsors Section - Clean Quins style */}
         <section className="py-16 bg-[#bce8e4]">
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
-            <h2 className="font-display text-[clamp(42px,5.5vw,80px)] font-bold uppercase text-teal-800 leading-[0.88] tracking-tight mb-12">
+            <h2 className="font-display text-[clamp(42px,5.5vw,80px)] font-bold uppercase text-teal-800 leading-[1.15] tracking-tight mb-12">
               Mūsu<br />Sponsori
             </h2>
 
-            {[
-              [
-                { src: '/SponsorsImages/Sponsor_logo_1-removebg-preview.png', alt: 'Sponsors 1' },
-                { src: '/SponsorsImages/Sponsoru_logo_2-removebg-preview.png', alt: 'Sponsors 2' },
-                { src: '/SponsorsImages/Sponsoru_logo_3-removebg-preview.png', alt: 'Sponsors 3' },
-              ],
-              [
-                { src: '/SponsorsImages/Sponsoru_logo_4-removebg-preview.png', alt: 'Sponsors 4' },
-                { src: '/SponsorsImages/Sponsoru_logo_5-removebg-preview.png', alt: 'Sponsors 5' },
-                { src: '/SponsorsImages/Sponsoru_logo_6-removebg-preview.png', alt: 'Sponsors 6' },
-              ],
-              [
-                { src: '/SponsorsImages/sponsoru_logo_7-removebg-preview.png', alt: 'Sponsors 7' },
-              ],
-            ].map((row, rowIndex) => (
-              <div key={rowIndex} className="flex justify-center gap-8 mb-8 last:mb-0">
-                {row.map((sponsor) => (
-                  <div
+            <div className="flex flex-wrap justify-center items-center gap-x-10 gap-y-10 md:gap-x-16 md:gap-y-12 max-w-[1100px] mx-auto">
+              {sponsors.map((sponsor) => {
+                const displayWidth = sponsorDisplayWidth(sponsor.width, sponsor.height)
+                return (
+                  <NextImage
                     key={sponsor.src}
-                    className="h-24 w-[200px] flex items-center justify-center p-3"
-                  >
-                    <NextImage
-                      src={sponsor.src}
-                      alt={sponsor.alt}
-                      width={200}
-                      height={80}
-                      className="object-contain max-h-full"
-                    />
-                  </div>
-                ))}
-              </div>
-            ))}
+                    src={sponsor.src}
+                    alt={sponsor.name}
+                    width={sponsor.width}
+                    height={sponsor.height}
+                    sizes={`${displayWidth}px`}
+                    style={{ width: displayWidth, height: 'auto' }}
+                    className="max-w-[38vw]"
+                  />
+                )
+              })}
+            </div>
           </div>
         </section>
 
@@ -196,7 +215,7 @@ export default async function HomePage() {
           <div className="relative h-60 md:h-auto overflow-hidden">
             <NextImage
               src={aboutUsData.imageUrl}
-              alt="Rugby Club Team"
+              alt="RK Fēnikss komanda"
               fill
               sizes="(max-width: 768px) 100vw, 45vw"
               className="object-cover"
@@ -204,20 +223,21 @@ export default async function HomePage() {
           </div>
           <div className="bg-[#111] px-10 py-16 md:px-16 md:py-20 flex flex-col justify-center relative overflow-hidden">
             <span className="absolute -top-5 -right-3 font-display text-[220px] font-bold uppercase text-white/[0.03] leading-none tracking-tighter pointer-events-none select-none hidden md:block">
-              JOIN
+              FNX
             </span>
             <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400 mb-4">
-              Pievienojies mums
+              Nāc uz treniņu
             </span>
-            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold uppercase text-white leading-[0.9] tracking-tight mb-4">
-              Pievienojies<br />Fēnikss
+            <h2 className="font-display text-[clamp(36px,4.2vw,60px)] font-bold uppercase text-white leading-[1.15] tracking-tight mb-4">
+              Pievienojies<br />Fēniksam
             </h2>
-            <p className="font-body text-[15px] text-white/60 leading-relaxed mb-8 max-w-[380px]">
-              {aboutUsData.mission.content.substring(0, 180)}...
+            <p className="font-body text-[15px] text-white/70 leading-relaxed mb-8 max-w-[400px]">
+              Mūsu mērķis ir nodrošināt viesmīlīgu vidi, kur ikviens var baudīt spēli, attīstīt savas
+              prasmes un veidot ilgstošas draudzības gan laukumā, gan ārpus tā.
             </p>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2.5 bg-teal-700 hover:bg-teal-600 text-white px-10 py-4 font-cond text-[13px] font-bold tracking-[2.5px] uppercase transition-all duration-300 self-start"
+              className="group inline-flex items-center gap-2.5 bg-teal-700 hover:bg-teal-600 text-white px-10 py-4 font-cond text-[13px] font-bold tracking-[2.5px] uppercase transition-all duration-300 self-start"
             >
               Sazināties
               <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />

@@ -65,7 +65,7 @@ export default async function NewsPage() {
               <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400 mb-3 block">
                 RK Fēnikss
               </span>
-              <h1 className="font-display text-[clamp(48px,6vw,86px)] font-bold uppercase text-white leading-[0.88] tracking-tight">
+              <h1 className="font-display text-[clamp(48px,6vw,86px)] font-bold uppercase text-white leading-[1.15] tracking-tight">
                 Jaunākās<br />Ziņas
               </h1>
             </div>
@@ -138,7 +138,7 @@ export default async function NewsPage() {
                             />
                           </div>
                         </div>
-                        <h3 className="font-display text-xl font-bold uppercase leading-[1.05] text-[#111] tracking-wide">
+                        <h3 className="font-display text-xl font-bold uppercase leading-[1.15] text-[#111] tracking-wide">
                           {article.title}
                         </h3>
                         <div className="font-cond text-xs font-medium tracking-[1.5px] uppercase text-[#888] mt-2">

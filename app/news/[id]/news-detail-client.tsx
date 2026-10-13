@@ -89,7 +89,7 @@ export function NewsDetailClient({ article, relatedArticles, latestGalleries, pa
               </span>
             </Link>
 
-            <h1 className="font-display text-[clamp(28px,4vw,52px)] font-bold uppercase text-white leading-[0.95] tracking-tight max-w-[800px] break-words">
+            <h1 className="font-display text-[clamp(28px,4vw,52px)] font-bold uppercase text-white leading-[1.05] tracking-tight max-w-[800px] break-words">
               {article.title}
             </h1>
 
@@ -235,7 +235,7 @@ export function NewsDetailClient({ article, relatedArticles, latestGalleries, pa
         {relatedArticles.length > 0 && (
           <section className="py-16 md:py-20 bg-[#f5f5f5]">
             <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
-              <h2 className="font-display text-[clamp(32px,4vw,52px)] font-bold uppercase text-[#111] leading-[0.88] tracking-tight mb-10">
+              <h2 className="font-display text-[clamp(32px,4vw,52px)] font-bold uppercase text-[#111] leading-[1.05] tracking-tight mb-10">
                 Citas Ziņas
               </h2>
 

@@ -35,7 +35,7 @@ export default function ContactPage() {
           <div className="relative z-10 max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16 h-full flex items-end pb-12">
             <div>
               <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400 mb-3 block">RK Fēnikss</span>
-              <h1 className="font-display text-[clamp(48px,6vw,86px)] font-bold uppercase text-white leading-[0.88] tracking-tight">
+              <h1 className="font-display text-[clamp(48px,6vw,86px)] font-bold uppercase text-white leading-[1.15] tracking-tight">
                 Sazinies<br />Ar Mums
               </h1>
             </div>
@@ -49,7 +49,7 @@ export default function ContactPage() {
               {/* Left: Contact Info */}
               <div>
                 <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-700 mb-3 block">Informācija</span>
-                <h2 className="font-display text-[clamp(32px,4vw,52px)] font-bold uppercase text-[#111] leading-[0.88] tracking-tight mb-10">
+                <h2 className="font-display text-[clamp(32px,4vw,52px)] font-bold uppercase text-[#111] leading-[1.15] tracking-tight mb-10">
                   Kontakt<br />Informācija
                 </h2>
 
@@ -91,7 +91,7 @@ export default function ContactPage() {
               {/* Right: Form */}
               <div>
                 <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-700 mb-3 block">Rakstiet mums</span>
-                <h2 className="font-display text-[clamp(32px,4vw,52px)] font-bold uppercase text-[#111] leading-[0.88] tracking-tight mb-10">
+                <h2 className="font-display text-[clamp(32px,4vw,52px)] font-bold uppercase text-[#111] leading-[1.15] tracking-tight mb-10">
                   Sūtiet<br />Ziņu
                 </h2>
                 <ContactForm onSubmit={handleFormSubmit} />
