@@ -52,7 +52,7 @@ export function NewsDetailClient({ article, relatedArticles, latestGalleries, pa
                 Meklētais raksts neeksistē vai ir dzēsts
               </p>
               <Link href="/news">
-                <button className="inline-flex items-center gap-2 px-9 py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-teal-700 transition-colors duration-200">
+                <button className="inline-flex items-center gap-2 px-9 py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-club transition-colors duration-200">
                   <ArrowLeft className="h-4 w-4" />
                   Atpakaļ uz ziņām
                 </button>
@@ -124,12 +124,12 @@ export function NewsDetailClient({ article, relatedArticles, latestGalleries, pa
                   prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4
                   prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
                   prose-p:font-body prose-p:text-[#444] prose-p:leading-relaxed
-                  prose-a:text-teal-700 prose-a:font-medium
+                  prose-a:text-club prose-a:font-medium
                   prose-strong:text-[#111]
                   prose-img:max-w-full prose-img:h-auto
                   prose-ul:text-[#444] prose-ol:text-[#444]
-                  prose-li:marker:text-teal-700
-                  prose-blockquote:border-l-teal-700 prose-blockquote:bg-[#f5f5f5] prose-blockquote:py-3 prose-blockquote:px-5 prose-blockquote:not-italic prose-blockquote:text-[#444]
+                  prose-li:marker:text-club
+                  prose-blockquote:border-l-club prose-blockquote:bg-[#f5f5f5] prose-blockquote:py-3 prose-blockquote:px-5 prose-blockquote:not-italic prose-blockquote:text-[#444]
                   [&_*]:max-w-full
                 ">
                   <div dangerouslySetInnerHTML={{ __html: article.content }} />
@@ -183,7 +183,7 @@ export function NewsDetailClient({ article, relatedArticles, latestGalleries, pa
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                           </div>
-                          <h4 className="font-display text-sm font-bold uppercase text-[#111] group-hover:text-teal-700 transition-colors line-clamp-2">
+                          <h4 className="font-display text-sm font-bold uppercase text-[#111] group-hover:text-club transition-colors line-clamp-2">
                             {gallery.title}
                           </h4>
                         </Link>
@@ -191,7 +191,7 @@ export function NewsDetailClient({ article, relatedArticles, latestGalleries, pa
                     </div>
                     <div className="mt-5">
                       <Link href="/gallery">
-                        <button className="w-full py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase text-center hover:bg-teal-700 transition-colors duration-200">
+                        <button className="w-full py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase text-center hover:bg-club transition-colors duration-200">
                           Visas galerijas
                         </button>
                       </Link>
@@ -264,7 +264,7 @@ export function NewsDetailClient({ article, relatedArticles, latestGalleries, pa
 
               <div className="mt-10 text-center">
                 <Link href="/news">
-                  <button className="inline-flex items-center px-9 py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-teal-700 transition-colors duration-200">
+                  <button className="inline-flex items-center px-9 py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-club transition-colors duration-200">
                     Skatīt visas ziņas
                   </button>
                 </Link>

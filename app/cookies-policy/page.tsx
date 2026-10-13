@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 function DiamondBullet() {
   return (
-    <span className="inline-block w-[6px] h-[6px] bg-teal-500 rotate-45 mr-3 mt-[7px] shrink-0" />
+    <span className="inline-block w-[6px] h-[6px] bg-club rotate-45 mr-3 mt-[7px] shrink-0" />
   )
 }
 
@@ -26,7 +26,7 @@ export default function CookiesPolicyPage() {
           </div>
           <div className="relative z-10 max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16 h-full flex items-end pb-12">
             <div>
-              <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400 mb-3 block">RK Fēnikss</span>
+              <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-club-mint mb-3 block">RK Fēnikss</span>
               <h1 className="font-display text-[clamp(48px,6vw,86px)] font-bold uppercase text-white leading-[1.15] tracking-tight">
                 Sīkdatņu<br />Politika
               </h1>
@@ -68,7 +68,7 @@ export default function CookiesPolicyPage() {
                 Jūs varat atteikties izmantot Google Analytics sīkdatnes, lejupielādējot un instalējot Google Analytics Opt-out Browser Add-on papildrīku. Šis papildrīks sazināsies ar Google Analytics JavaScript (ga.js), lai norādītu, ka informāciju par attiecīgo interneta vietnes apmeklējumu nedrīkst sūtīt uz Google Analytics.
               </p>
               <p className="font-body text-[15px] text-[#666] leading-relaxed mb-4">
-                Tāpat Jūs varat mainīt pārlūkprogrammas iestatījumus, lai atteiktos no jaunām sīkdatnēm, izslēgtu esošās vai vienkārši informētu Jūs par jaunu sīkdatņu nosūtīšanu uz Jūsu ierīci. Vairāk lasiet <a href="http://www.allaboutcookies.org/" target="_blank" rel="noopener noreferrer" className="text-teal-700 hover:text-teal-600">http://www.allaboutcookies.org/</a>.
+                Tāpat Jūs varat mainīt pārlūkprogrammas iestatījumus, lai atteiktos no jaunām sīkdatnēm, izslēgtu esošās vai vienkārši informētu Jūs par jaunu sīkdatņu nosūtīšanu uz Jūsu ierīci. Vairāk lasiet <a href="http://www.allaboutcookies.org/" target="_blank" rel="noopener noreferrer" className="text-club hover:text-club-deep">http://www.allaboutcookies.org/</a>.
               </p>
 
               <h2 className="font-display text-xl font-bold uppercase text-[#111] tracking-tight mt-10 mb-4">Politikas grozījumi</h2>

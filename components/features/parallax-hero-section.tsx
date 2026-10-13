@@ -23,7 +23,7 @@ export function ParallaxHeroSection({
           backgroundAttachment: 'fixed',
         }}
       />
-      <div className="absolute inset-0 z-0 bg-gradient-to-b from-teal-900/80 to-teal-700/80" />
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-club-deep/80 to-club/80" />
 
       <div className="container relative z-10 mx-auto px-4 sm:px-6">
         <div className="mx-auto max-w-3xl text-center text-white">
@@ -34,7 +34,7 @@ export function ParallaxHeroSection({
             )}
           </h1>
           <div className="mx-auto mb-6 h-1 w-32 skew-x-[-12deg] transform bg-white"></div>
-          {subtitle && <p className="text-xl text-teal-100">{subtitle}</p>}
+          {subtitle && <p className="text-xl text-club-pale">{subtitle}</p>}
         </div>
       </div>
     </section>

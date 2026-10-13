@@ -95,11 +95,11 @@ export function HomePlayersSection({ players }: HomePlayersSectionProps) {
   }
 
   return (
-    <section className="bg-[#111] bg-stripes-dark relative overflow-visible pt-20 pb-0 mb-20">
+    <section className="bg-club-phoenix relative overflow-visible pt-20 pb-0 mb-20">
       <div className="relative z-[2] max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
         {/* Header */}
         <div className="flex items-center justify-between mb-12">
-          <h2 className="font-display text-[clamp(42px,5.5vw,80px)] font-bold uppercase text-white leading-[1.15] tracking-tight">
+          <h2 className="font-display text-[clamp(34px,4vw,56px)] font-bold uppercase text-white leading-[1.15] tracking-tight">
             Spēlētāji
           </h2>
           {/* Desktop arrows */}
@@ -138,15 +138,15 @@ export function HomePlayersSection({ players }: HomePlayersSectionProps) {
           {items.length > 1 && (
             <div className="flex justify-center gap-2 mt-4">
               <span className={`block h-[3px] transition-all duration-300 ${
-                mobileActiveIndex <= 0 ? 'bg-teal-400 w-6' : 'bg-white/30 w-3'
+                mobileActiveIndex <= 0 ? 'bg-club-mint w-6' : 'bg-white/30 w-3'
               }`} />
               {items.length > 2 && (
                 <span className={`block h-[3px] transition-all duration-300 ${
-                  mobileActiveIndex > 0 && mobileActiveIndex < items.length - 1 ? 'bg-teal-400 w-6' : 'bg-white/30 w-3'
+                  mobileActiveIndex > 0 && mobileActiveIndex < items.length - 1 ? 'bg-club-mint w-6' : 'bg-white/30 w-3'
                 }`} />
               )}
               <span className={`block h-[3px] transition-all duration-300 ${
-                mobileActiveIndex >= items.length - 1 ? 'bg-teal-400 w-6' : 'bg-white/30 w-3'
+                mobileActiveIndex >= items.length - 1 ? 'bg-club-mint w-6' : 'bg-white/30 w-3'
               }`} />
             </div>
           )}

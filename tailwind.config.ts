@@ -15,6 +15,14 @@ const config: Config = {
 				body: ['var(--font-body)', 'Barlow', 'sans-serif'],
 			},
 			colors: {
+				// Club colours: green sampled from the logo background
+				club: {
+					DEFAULT: '#014D43',
+					deep: '#00332C',
+					darker: '#002621',
+					pale: '#EEF2EF',
+					mint: '#8ED1B5'
+				},
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				card: {

@@ -56,11 +56,11 @@ export function HomeGallerySection({ galleries }: HomeGallerySectionProps) {
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
         {/* Section header */}
         <div className="flex items-end justify-between mb-12">
-          <h2 className="font-display text-[clamp(42px,5.5vw,80px)] font-bold uppercase text-teal-400 leading-[1.15] tracking-tight">
+          <h2 className="font-display text-[clamp(34px,4vw,56px)] font-bold uppercase text-white leading-[1.15] tracking-tight">
             Galerija
           </h2>
           <Link href="/gallery">
-            <button className="hidden md:inline-flex items-center px-9 py-3.5 bg-white/10 text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-teal-700 transition-colors duration-200 border border-white/20">
+            <button className="hidden md:inline-flex items-center px-9 py-3.5 bg-white/10 text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-club transition-colors duration-200 border border-white/20">
               Skatīt visas
             </button>
           </Link>
@@ -95,7 +95,7 @@ export function HomeGallerySection({ galleries }: HomeGallerySectionProps) {
                     aria-label={`Go to slide ${index + 1}`}
                   >
                     <span className={`block h-[3px] transition-all duration-300 ${
-                      activeIndex === index ? 'bg-teal-400 w-6' : 'bg-white/30 hover:bg-white/50 w-3'
+                      activeIndex === index ? 'bg-club-mint w-6' : 'bg-white/30 hover:bg-white/50 w-3'
                     }`} />
                   </button>
                 ))}
@@ -114,7 +114,7 @@ export function HomeGallerySection({ galleries }: HomeGallerySectionProps) {
         {/* Mobile CTA */}
         <div className="md:hidden mt-6 text-center">
           <Link href="/gallery">
-            <button className="inline-flex items-center px-9 py-3.5 bg-white/10 text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-teal-700 transition-colors duration-200 border border-white/20">
+            <button className="inline-flex items-center px-9 py-3.5 bg-white/10 text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-club transition-colors duration-200 border border-white/20">
               Skatīt visas galerijas
             </button>
           </Link>

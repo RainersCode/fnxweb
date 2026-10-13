@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 function DiamondBullet() {
   return (
-    <span className="inline-block w-[6px] h-[6px] bg-teal-500 rotate-45 mr-3 mt-[7px] shrink-0" />
+    <span className="inline-block w-[6px] h-[6px] bg-club rotate-45 mr-3 mt-[7px] shrink-0" />
   )
 }
 
@@ -26,7 +26,7 @@ export default function PrivacyPolicyPage() {
           </div>
           <div className="relative z-10 max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16 h-full flex items-end pb-12">
             <div>
-              <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400 mb-3 block">RK Fēnikss</span>
+              <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-club-mint mb-3 block">RK Fēnikss</span>
               <h1 className="font-display text-[clamp(48px,6vw,86px)] font-bold uppercase text-white leading-[1.15] tracking-tight">
                 Privātuma<br />Politika
               </h1>
@@ -39,7 +39,7 @@ export default function PrivacyPolicyPage() {
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
             <div className="max-w-3xl">
               <p className="font-body text-[15px] text-[#666] leading-relaxed mb-4">
-                Šī privātuma politika informē par privātuma praksi un personas datu apstrādes principiem saistībā ar biedrības regbija klubs &quot;FĒNIKSS&quot; mājas lapu un pakalpojumiem. Lai sazinātos saistībā ar datu apstrādes jautājumiem, lūdzu rakstiet e-pastu uz <a href="mailto:rkfenikss@gmail.com" className="text-teal-700 hover:text-teal-600">rkfenikss@gmail.com</a>.
+                Šī privātuma politika informē par privātuma praksi un personas datu apstrādes principiem saistībā ar biedrības regbija klubs &quot;FĒNIKSS&quot; mājas lapu un pakalpojumiem. Lai sazinātos saistībā ar datu apstrādes jautājumiem, lūdzu rakstiet e-pastu uz <a href="mailto:rkfenikss@gmail.com" className="text-club hover:text-club-deep">rkfenikss@gmail.com</a>.
               </p>
 
               <h2 className="font-display text-xl font-bold uppercase text-[#111] tracking-tight mt-10 mb-4">Kādu informāciju mēs iegūstam?</h2>

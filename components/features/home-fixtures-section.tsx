@@ -65,17 +65,17 @@ export function HomeFixturesSection({ initialFixtures, recentResults }: HomeFixt
 
   if (items.length === 0) {
     return (
-      <section className="py-12 bg-[#bce8e4]">
+      <section className="py-12 bg-club-pale">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16 flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-8">
-          <h2 className="font-display text-3xl md:text-4xl font-bold uppercase text-teal-800 leading-[1.15] tracking-tight">
+          <h2 className="font-display text-3xl md:text-4xl font-bold uppercase text-club leading-[1.15] tracking-tight">
             Spēles
           </h2>
-          <p className="font-cond text-sm font-semibold tracking-[2px] uppercase text-teal-800/70">
+          <p className="font-cond text-sm font-semibold tracking-[2px] uppercase text-club/70">
             Šobrīd nav plānotu spēļu — sekojiet līdzi spēļu kalendāram
           </p>
           <Link
             href="/fixtures"
-            className="sm:ml-auto inline-flex self-start sm:self-auto items-center px-9 py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-teal-700 transition-colors duration-200"
+            className="sm:ml-auto inline-flex self-start sm:self-auto items-center px-9 py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-club transition-colors duration-200"
           >
             Spēļu kalendārs
           </Link>
@@ -85,12 +85,12 @@ export function HomeFixturesSection({ initialFixtures, recentResults }: HomeFixt
   }
 
   return (
-    <section className="py-20 md:py-28 bg-[#bce8e4] relative overflow-hidden">
+    <section className="py-20 md:py-28 bg-club-pale relative overflow-hidden">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16 relative z-10">
         <div className="grid lg:grid-cols-[140px_1fr] gap-5 items-start">
           {/* Vertical text (desktop only) */}
           <div className="hidden lg:block">
-            <span className="font-display text-[clamp(100px,12vw,160px)] font-bold uppercase text-teal-800 leading-none tracking-tighter [writing-mode:vertical-lr] rotate-180 sticky top-24">
+            <span className="font-display text-[clamp(100px,12vw,160px)] font-bold uppercase text-club leading-none tracking-tighter [writing-mode:vertical-lr] rotate-180 sticky top-24">
               Spēles
             </span>
           </div>
@@ -98,14 +98,14 @@ export function HomeFixturesSection({ initialFixtures, recentResults }: HomeFixt
           <div>
             {/* Header */}
             <div className="flex items-end justify-between mb-5">
-              <h2 className="font-display text-[clamp(42px,5.5vw,80px)] font-bold uppercase text-teal-800 leading-[1.15] tracking-tight lg:hidden">
+              <h2 className="font-display text-[clamp(34px,4vw,56px)] font-bold uppercase text-club leading-[1.15] tracking-tight lg:hidden">
                 {heading}
               </h2>
-              <span className="hidden lg:block font-cond text-sm font-bold tracking-[3px] uppercase text-teal-800">
+              <span className="hidden lg:block font-cond text-sm font-bold tracking-[3px] uppercase text-club">
                 {heading}
               </span>
               <Link href="/fixtures" className="ml-auto">
-                <button className="hidden md:inline-flex items-center px-9 py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-teal-700 transition-colors duration-200">
+                <button className="hidden md:inline-flex items-center px-9 py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-club transition-colors duration-200">
                   Skatīt visas
                 </button>
               </Link>
@@ -120,7 +120,7 @@ export function HomeFixturesSection({ initialFixtures, recentResults }: HomeFixt
             {/* Mobile CTA */}
             <div className="md:hidden mt-8 text-center">
               <Link href="/fixtures">
-                <button className="inline-flex items-center px-9 py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-teal-700 transition-colors duration-200">
+                <button className="inline-flex items-center px-9 py-3.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-club transition-colors duration-200">
                   Skatīt visas spēles
                 </button>
               </Link>
@@ -140,7 +140,7 @@ function FixtureCard({ fixture, isResult }: { fixture: Fixture; isResult: boolea
   const metaColor = isWin ? 'text-white/50' : 'text-[#777]'
 
   return (
-    <div className={`p-7 hover:-translate-y-1 transition-transform duration-300 ${isWin ? 'bg-[#111]' : 'bg-white'}`}>
+    <div className={`p-7 hover:-translate-y-1 transition-transform duration-300 ${isWin ? 'bg-club' : 'bg-white'}`}>
       {/* Competition name */}
       <div className={`font-cond text-base font-bold tracking-[2px] uppercase ${isWin ? 'text-white' : 'text-[#111]'}`}>
         {getCompetition(fixture)}
@@ -168,7 +168,7 @@ function FixtureCard({ fixture, isResult }: { fixture: Fixture; isResult: boolea
       <div className="flex items-center justify-center gap-5 py-6">
         <TeamBadge name={homeName} logo={fixture.home_logo_url || (fixture.is_home_game ? CLUB_LOGO : undefined)} dark={isWin} />
         {isResult && fixture.score ? (
-          <span className={`font-display text-3xl font-bold tracking-wider ${isWin ? 'text-teal-400' : isLoss ? 'text-[#999]' : 'text-[#111]'}`}>
+          <span className={`font-display text-3xl font-bold tracking-wider ${isWin ? 'text-club-mint' : isLoss ? 'text-[#999]' : 'text-[#111]'}`}>
             {fixture.score}
           </span>
         ) : (
@@ -180,14 +180,14 @@ function FixtureCard({ fixture, isResult }: { fixture: Fixture; isResult: boolea
       {isResult ? (
         fixture.result && (
           <div className={`font-cond text-[13px] font-bold tracking-[2.5px] uppercase text-center pt-2 ${
-            isWin ? 'text-teal-400' : isLoss ? 'text-[#999]' : 'text-[#666]'
+            isWin ? 'text-club-mint' : isLoss ? 'text-[#999]' : 'text-[#666]'
           }`}>
             {isWin ? 'Uzvara' : isLoss ? 'Zaudējums' : 'Neizšķirts'}
           </div>
         )
       ) : (
         <Link href="/fixtures" className="block w-full">
-          <button className="w-full py-4 bg-[#111] text-white font-cond text-[13px] font-bold tracking-[2.5px] uppercase text-center hover:bg-teal-700 transition-colors duration-200">
+          <button className="w-full py-4 bg-[#111] text-white font-cond text-[13px] font-bold tracking-[2.5px] uppercase text-center hover:bg-club transition-colors duration-200">
             Spēles Info
           </button>
         </Link>

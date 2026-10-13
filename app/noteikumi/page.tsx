@@ -113,7 +113,7 @@ export default function RulesPage() {
 
           <div className="relative z-10 max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16 h-full flex items-end pb-14">
             <div className="max-w-[700px]">
-              <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400 mb-3 block">
+              <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-club-mint mb-3 block">
                 RK Fēnikss — Ceļvedis
               </span>
               <h1 className="font-display text-[clamp(52px,7vw,96px)] font-bold uppercase text-white leading-[1.15] tracking-tight">
@@ -128,7 +128,7 @@ export default function RulesPage() {
         </section>
 
         {/* ── STATS RIBBON ── */}
-        <section className="bg-teal-700">
+        <section className="bg-club">
           <div className="max-w-[1400px] mx-auto grid grid-cols-2 md:grid-cols-4">
             {[
               { value: '15', label: 'Spēlētāji komandā' },
@@ -136,11 +136,11 @@ export default function RulesPage() {
               { value: '100m', label: 'Laukuma garums' },
               { value: '5', label: 'Punkti par piezemējumu' },
             ].map((stat) => (
-              <div key={stat.label} className="px-6 py-5 md:py-6 border-r border-teal-600/50 last:border-r-0 text-center md:text-left">
+              <div key={stat.label} className="px-6 py-5 md:py-6 border-r border-white/15 last:border-r-0 text-center md:text-left">
                 <span className="font-display text-3xl md:text-4xl font-bold text-white leading-none">
                   {stat.value}
                 </span>
-                <span className="block font-cond text-[11px] font-bold tracking-[2px] uppercase text-teal-200/70 mt-1">
+                <span className="block font-cond text-[11px] font-bold tracking-[2px] uppercase text-club-mint/70 mt-1">
                   {stat.label}
                 </span>
               </div>
@@ -154,7 +154,7 @@ export default function RulesPage() {
             <div className="grid lg:grid-cols-[1fr_1.2fr] min-h-[400px]">
               {/* Text */}
               <div className="px-4 sm:px-6 md:px-16 py-16 md:py-20 flex flex-col justify-center">
-                <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-700 mb-4 block">
+                <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-club mb-4 block">
                   01 — Ievads
                 </span>
                 <h2 className="font-display text-[clamp(36px,5vw,60px)] font-bold uppercase text-[#111] leading-[1.15] tracking-tight mb-6">
@@ -199,7 +199,7 @@ export default function RulesPage() {
         {/* ── PLAYING FIELD DETAIL ── */}
         <section className="py-12 bg-[#f5f5f5]">
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
-            <div className="bg-white p-8 md:p-10 border-l-4 border-teal-700">
+            <div className="bg-white p-8 md:p-10 border-l-4 border-club">
               <h3 className="font-display text-lg font-bold uppercase text-[#111] mb-3">Spēles laukums</h3>
               <p className="font-body text-[15px] text-[#555] leading-[1.8] max-w-3xl">
                 Regbija laukums ir taisnstūra formas zāliens. Tā garums ir līdz <strong className="text-[#111]">100 metriem</strong>,
@@ -222,7 +222,7 @@ export default function RulesPage() {
             <div className="grid lg:grid-cols-[340px_1fr] gap-10 lg:gap-16 items-center">
               {/* Left label */}
               <div>
-                <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400 mb-4 block">
+                <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-club-mint mb-4 block">
                   02 — Video
                 </span>
                 <h2 className="font-display text-[clamp(36px,5vw,56px)] font-bold uppercase text-white leading-[1.15] tracking-tight mb-5">
@@ -255,7 +255,7 @@ export default function RulesPage() {
           </div>
 
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16 relative z-10">
-            <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-700 mb-4 block">
+            <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-club mb-4 block">
               03 — Punkti
             </span>
             <h2 className="font-display text-[clamp(36px,5vw,60px)] font-bold uppercase text-[#111] leading-[1.15] tracking-tight mb-14">
@@ -271,12 +271,12 @@ export default function RulesPage() {
                   }`}
                 >
                   {/* Giant point number */}
-                  <div className="absolute top-6 right-8 font-display text-[100px] md:text-[120px] font-bold text-[#f0f0f0] leading-none select-none pointer-events-none group-hover:text-teal-100 transition-colors duration-300">
+                  <div className="absolute top-6 right-8 font-display text-[100px] md:text-[120px] font-bold text-[#f0f0f0] leading-none select-none pointer-events-none group-hover:text-club-pale transition-colors duration-300">
                     {method.points}
                   </div>
 
                   <div className="relative z-10">
-                    <span className="font-cond text-[11px] font-bold tracking-[2px] uppercase text-teal-700 block mb-2">
+                    <span className="font-cond text-[11px] font-bold tracking-[2px] uppercase text-club block mb-2">
                       {method.points} {method.points === 1 ? 'Punkts' : 'Punkti'}
                     </span>
                     <h3 className="font-display text-2xl font-bold uppercase text-[#111] leading-tight mb-1">
@@ -300,7 +300,7 @@ export default function RulesPage() {
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16 relative z-10">
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
               <div>
-                <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400 mb-4 block">
+                <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-club-mint mb-4 block">
                   04 — Bumbas kustība
                 </span>
                 <h2 className="font-display text-[clamp(36px,5vw,56px)] font-bold uppercase text-white leading-[1.15] tracking-tight mb-8">
@@ -314,7 +314,7 @@ export default function RulesPage() {
                     { action: 'Spiežot', detail: 'bumbu ar kāju — spert var jebkurā virzienā' },
                   ].map((item, i) => (
                     <div key={i} className="flex items-start gap-5">
-                      <span className="w-10 h-10 bg-teal-700 text-white font-display text-lg font-bold grid place-items-center flex-shrink-0">
+                      <span className="w-10 h-10 bg-club text-white font-display text-lg font-bold grid place-items-center flex-shrink-0">
                         {i + 1}
                       </span>
                       <div>
@@ -350,7 +350,7 @@ export default function RulesPage() {
         {/* ── GAME ELEMENTS ── */}
         <section className="py-16 md:py-24 bg-white relative overflow-hidden">
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16 relative z-10">
-            <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-700 mb-4 block">
+            <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-club mb-4 block">
               05 — Spēles elementi
             </span>
             <h2 className="font-display text-[clamp(36px,5vw,60px)] font-bold uppercase text-[#111] leading-[1.15] tracking-tight mb-14">
@@ -366,7 +366,7 @@ export default function RulesPage() {
                     i === 4 ? 'lg:col-span-2' : ''
                   }`}
                 >
-                  <span className="font-cond text-[11px] font-bold tracking-[2px] uppercase text-teal-700 group-hover:text-teal-400 transition-colors block mb-2">
+                  <span className="font-cond text-[11px] font-bold tracking-[2px] uppercase text-club group-hover:text-club-mint transition-colors block mb-2">
                     {el.nameEn}
                   </span>
                   <h3 className="font-display text-xl font-bold uppercase text-[#111] group-hover:text-white transition-colors leading-tight mb-4">
@@ -382,12 +382,12 @@ export default function RulesPage() {
         </section>
 
         {/* ── OFFSIDE — Full-width callout ── */}
-        <section className="bg-[#bce8e4]">
+        <section className="bg-club-pale">
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16 py-14 md:py-16">
             <div className="grid lg:grid-cols-[auto_1fr] gap-8 lg:gap-16 items-center">
               <div className="flex items-center gap-5">
                 <div className="w-20 h-20 md:w-24 md:h-24 bg-[#111] grid place-items-center flex-shrink-0">
-                  <svg viewBox="0 0 24 24" className="w-8 h-8 md:w-10 md:h-10 text-teal-400 stroke-current fill-none" strokeWidth="2">
+                  <svg viewBox="0 0 24 24" className="w-8 h-8 md:w-10 md:h-10 text-club-mint stroke-current fill-none" strokeWidth="2">
                     <line x1="12" y1="2" x2="12" y2="22" />
                     <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
                   </svg>
@@ -396,7 +396,7 @@ export default function RulesPage() {
                   <h2 className="font-display text-3xl md:text-4xl font-bold uppercase text-[#111] leading-tight">
                     Aizspēle
                   </h2>
-                  <span className="font-cond text-xs font-bold tracking-[2px] uppercase text-teal-800/60">Offside</span>
+                  <span className="font-cond text-xs font-bold tracking-[2px] uppercase text-club/60">Offside</span>
                 </div>
               </div>
               <p className="font-body text-[15px] text-[#444] leading-[1.8] max-w-2xl">
@@ -416,7 +416,7 @@ export default function RulesPage() {
           </div>
 
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16 relative z-10">
-            <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400 mb-4 block">
+            <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-club-mint mb-4 block">
               06 — Pozīcijas
             </span>
             <h2 className="font-display text-[clamp(36px,5vw,60px)] font-bold uppercase text-white leading-[1.15] tracking-tight mb-6">
@@ -433,7 +433,7 @@ export default function RulesPage() {
                 <div className="flex items-center justify-between mb-6">
                   <div>
                     <h3 className="font-display text-2xl font-bold uppercase text-white">Uzbrucēji</h3>
-                    <span className="font-cond text-xs font-bold tracking-[2px] uppercase text-teal-400">Forwards — 1 līdz 8</span>
+                    <span className="font-cond text-xs font-bold tracking-[2px] uppercase text-club-mint">Forwards — 1 līdz 8</span>
                   </div>
                   <span className="font-display text-5xl font-bold text-white/10">F</span>
                 </div>
@@ -441,7 +441,7 @@ export default function RulesPage() {
                 <ul className="space-y-3">
                   {forwards.map((p) => (
                     <li key={p.num} className="flex items-center gap-4">
-                      <span className="w-8 h-8 bg-teal-700 text-white font-display text-sm font-bold grid place-items-center flex-shrink-0">
+                      <span className="w-8 h-8 bg-club text-white font-display text-sm font-bold grid place-items-center flex-shrink-0">
                         {p.num}
                       </span>
                       <div className="flex-1 min-w-0">
@@ -458,7 +458,7 @@ export default function RulesPage() {
                 <div className="flex items-center justify-between mb-6">
                   <div>
                     <h3 className="font-display text-2xl font-bold uppercase text-white">Aizsargi</h3>
-                    <span className="font-cond text-xs font-bold tracking-[2px] uppercase text-teal-400">Backs — 9 līdz 15</span>
+                    <span className="font-cond text-xs font-bold tracking-[2px] uppercase text-club-mint">Backs — 9 līdz 15</span>
                   </div>
                   <span className="font-display text-5xl font-bold text-white/10">B</span>
                 </div>
@@ -484,7 +484,7 @@ export default function RulesPage() {
         {/* ── KICKOFF & PENALTIES — Side-by-side ── */}
         <section className="py-16 md:py-20 bg-[#f5f5f5]">
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
-            <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-700 mb-4 block">
+            <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-club mb-4 block">
               07 — Noteikumi
             </span>
             <h2 className="font-display text-[clamp(36px,5vw,56px)] font-bold uppercase text-[#111] leading-[1.15] tracking-tight mb-14">
@@ -493,7 +493,7 @@ export default function RulesPage() {
 
             <div className="grid md:grid-cols-2 gap-5 mb-5">
               {/* Kickoff */}
-              <div className="bg-white p-8 border-t-4 border-teal-700">
+              <div className="bg-white p-8 border-t-4 border-club">
                 <h3 className="font-display text-xl font-bold uppercase text-[#111] mb-4">Sākuma sitiens</h3>
                 <p className="font-body text-[14px] text-[#666] leading-[1.7]">
                   Spēle sākas ar sākuma sitienu no laukuma centra.
@@ -510,14 +510,14 @@ export default function RulesPage() {
                 </p>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-3">
-                    <span className="w-2 h-2 bg-teal-700 rotate-45 mt-1.5 flex-shrink-0" />
+                    <span className="w-2 h-2 bg-club rotate-45 mt-1.5 flex-shrink-0" />
                     <span className="font-body text-[14px] text-[#666]">
                       <strong className="text-[#111]">Soda sitiens</strong> — par nopietniem pārkāpumiem;
                       komanda var izvēlēties sist pa vārtiem, spert bumbu vai pieprasīt sadursmi
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="w-2 h-2 bg-teal-700 rotate-45 mt-1.5 flex-shrink-0" />
+                    <span className="w-2 h-2 bg-club rotate-45 mt-1.5 flex-shrink-0" />
                     <span className="font-body text-[14px] text-[#666]">
                       <strong className="text-[#111]">Brīvsitiens</strong> — par mazāk nopietniem pārkāpumiem
                     </span>
@@ -529,7 +529,7 @@ export default function RulesPage() {
             {/* Advantage — full-width dark card */}
             <div className="bg-[#111] p-8 md:p-10 grid md:grid-cols-[auto_1fr] gap-6 md:gap-10 items-center">
               <div>
-                <span className="font-cond text-[11px] font-bold tracking-[2px] uppercase text-teal-400 block mb-1">Noteikums</span>
+                <span className="font-cond text-[11px] font-bold tracking-[2px] uppercase text-club-mint block mb-1">Noteikums</span>
                 <h3 className="font-display text-2xl md:text-3xl font-bold uppercase text-white leading-tight">
                   Priekšrocība
                 </h3>
@@ -554,7 +554,7 @@ export default function RulesPage() {
           </div>
 
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16 text-center relative z-10">
-            <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400 mb-4 block">
+            <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-club-mint mb-4 block">
               Pievienojies
             </span>
             <h2 className="font-display text-[clamp(40px,6vw,72px)] font-bold uppercase text-white leading-[1.15] tracking-tight mb-6">

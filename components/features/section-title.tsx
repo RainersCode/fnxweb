@@ -22,7 +22,7 @@ export function SectionTitle({
       })}
     >
       <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-zinc-900">
-        {title} {titleHighlight && <span className="text-teal-800">{titleHighlight}</span>}
+        {title} {titleHighlight && <span className="text-club">{titleHighlight}</span>}
       </h2>
       {subtitle && <p className="mt-4 text-lg text-zinc-600">{subtitle}</p>}
     </div>
