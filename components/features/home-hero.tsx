@@ -7,12 +7,6 @@ interface HomeHeroProps {
   nextFixture: Fixture | null
 }
 
-const trainingTimes = [
-  { day: 'Pirmdiena', time: '18:30 – 20:00', place: 'Valmiera, Daliņi' },
-  { day: 'Otrdiena', time: '18:00 – 20:30', place: 'Brenguļu zāle' },
-  { day: 'Piektdiena', time: '18:30 – 20:00', place: 'Brenguļu zāle' },
-]
-
 // Rendered on the server, so pin the timezone to the club's local time
 const formatMatchDate = (dateString: string): string =>
   new Date(dateString).toLocaleDateString('lv-LV', {
@@ -42,7 +36,7 @@ export function HomeHero({ nextFixture }: HomeHeroProps) {
 
       {/* Main content */}
       <div className="relative z-10 flex-1 flex items-end w-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16 pb-12 md:pb-16">
-        <div className="w-full grid xl:grid-cols-[1fr_320px] gap-10 items-end">
+        <div className="w-full">
           <div className="max-w-[640px]">
             <h1>
               <span className="block font-cond text-[13px] font-bold tracking-[3px] uppercase text-club-mint">
@@ -73,36 +67,6 @@ export function HomeHero({ nextFixture }: HomeHeroProps) {
               </Link>
             </div>
           </div>
-
-          {/* Training times (desktop only) */}
-          <aside className="hidden xl:block bg-white p-7">
-            <div className="font-cond text-sm font-bold tracking-[2px] uppercase text-[#111] mb-1">
-              Treniņu Laiki
-            </div>
-            <div className="h-px bg-[#e5e5e5] my-3.5" />
-            <div className="flex flex-col">
-              {trainingTimes.map((item, i) => (
-                <div key={item.day}>
-                  {i > 0 && <div className="h-px bg-[#e5e5e5] my-2" />}
-                  <div className="py-0.5">
-                    <div className="font-cond text-[13px] font-bold tracking-[2px] uppercase text-[#888]">
-                      {item.day}
-                    </div>
-                    <div className="font-display text-lg font-bold text-club tracking-tight mt-0.5">
-                      {item.time}
-                    </div>
-                    <div className="font-cond text-[10px] font-medium tracking-[1.5px] uppercase text-[#888] flex items-center gap-1 mt-0.5">
-                      <svg viewBox="0 0 24 24" className="w-2.5 h-2.5 stroke-current fill-none stroke-2 flex-shrink-0">
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-                        <circle cx="12" cy="10" r="3" />
-                      </svg>
-                      {item.place}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </aside>
         </div>
       </div>
 
