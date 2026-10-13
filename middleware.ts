@@ -1,10 +1,13 @@
 import { authMiddleware, clerkClient } from '@clerk/nextjs'
 import { NextResponse } from 'next/server'
+import { hasAdminEmail } from '@/lib/admin-auth'
 
 export default authMiddleware({
   publicRoutes: [
     '/sign-in(.*)',
     '/sign-up(.*)',
+    // Page views are recorded by every visitor; the admin stats (GET) are checked in the route itself
+    '/api/page-views(.*)',
   ],
 
   async afterAuth(auth, req) {
@@ -16,11 +19,13 @@ export default authMiddleware({
       return NextResponse.next()
     }
 
-    // Admin routes require authentication + email allowlist
-    if (path.startsWith('/admin')) {
-      const allowedEmails = process.env.ALLOWED_EMAILS || ''
-
+    // Admin pages and admin API both require authentication + email allowlist
+    const isAdminApi = path.startsWith('/api/admin')
+    if (path.startsWith('/admin') || isAdminApi) {
       if (!userId) {
+        if (isAdminApi) {
+          return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+        }
         const signInUrl = new URL('/sign-in', req.url)
         signInUrl.searchParams.set('redirect_url', req.url)
         return NextResponse.redirect(signInUrl)
@@ -28,16 +33,17 @@ export default authMiddleware({
 
       try {
         const user = await clerkClient.users.getUser(userId)
-        const userEmail = user.emailAddresses[0]?.emailAddress
-
-        if (!userEmail || !allowedEmails.includes(userEmail)) {
-          return NextResponse.redirect(new URL('/', req.url))
+        if (!hasAdminEmail(user.emailAddresses)) {
+          return isAdminApi
+            ? NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+            : NextResponse.redirect(new URL('/', req.url))
         }
-
         return NextResponse.next()
       } catch (error) {
         console.error('Error in auth process:', error)
-        return NextResponse.redirect(new URL('/', req.url))
+        return isAdminApi
+          ? NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+          : NextResponse.redirect(new URL('/', req.url))
       }
     }
 

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@clerk/nextjs'
+import { isAdminRequest } from '@/lib/admin-auth'
 import { updateGallery, deleteGallery, getGalleryWithImages } from '@/lib/api'
 import { Gallery } from '@/types/supabase'
 
@@ -11,8 +11,7 @@ interface RouteParams {
 
 export async function GET(request: NextRequest, { params }: RouteParams) {
   // Check authentication
-  const { userId } = auth()
-  if (!userId) {
+  if (!(await isAdminRequest())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -28,8 +27,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   // Check authentication
-  const { userId } = auth()
-  if (!userId) {
+  if (!(await isAdminRequest())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -57,8 +55,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   // Check authentication
-  const { userId } = auth()
-  if (!userId) {
+  if (!(await isAdminRequest())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

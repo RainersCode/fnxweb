@@ -1,19 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@clerk/nextjs'
+import { isAdminRequest } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase'
 
-// Only allow authorized admin users
-const checkAuth = () => {
-  const { userId } = auth()
-  if (!userId) {
-    return false
-  }
-  return true
-}
+// Only allow signed-in users on the admin email list
+const checkAuth = () => isAdminRequest()
 
 // GET - fetch training sessions
 export async function GET() {
-  if (!checkAuth()) {
+  if (!(await checkAuth())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -35,7 +29,7 @@ export async function GET() {
 
 // POST - create new training session
 export async function POST(request: NextRequest) {
-  if (!checkAuth()) {
+  if (!(await checkAuth())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -58,7 +52,7 @@ export async function POST(request: NextRequest) {
 
 // PATCH - update training session
 export async function PATCH(request: NextRequest) {
-  if (!checkAuth()) {
+  if (!(await checkAuth())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -82,7 +76,7 @@ export async function PATCH(request: NextRequest) {
 
 // DELETE - delete training session
 export async function DELETE(request: NextRequest) {
-  if (!checkAuth()) {
+  if (!(await checkAuth())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

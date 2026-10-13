@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@clerk/nextjs'
+import { isAdminRequest } from '@/lib/admin-auth'
 import { createGallery, getGalleriesWithCovers } from '@/lib/api'
 import { Gallery } from '@/types/supabase'
 
 export async function GET() {
   // Check authentication
-  const { userId } = auth()
-  if (!userId) {
+  if (!(await isAdminRequest())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -22,8 +21,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   // Check authentication
-  const { userId } = auth()
-  if (!userId) {
+  if (!(await isAdminRequest())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

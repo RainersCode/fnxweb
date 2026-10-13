@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@clerk/nextjs'
+import { isAdminRequest } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase'
 
 // POST - record a page view (public, no auth needed)
@@ -25,8 +25,7 @@ export async function POST(request: NextRequest) {
 
 // GET - fetch page view stats (admin only)
 export async function GET(request: NextRequest) {
-  const { userId } = auth()
-  if (!userId) {
+  if (!(await isAdminRequest())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

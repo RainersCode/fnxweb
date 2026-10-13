@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@clerk/nextjs'
+import { isAdminRequest } from '@/lib/admin-auth'
 import { deleteMedia } from '@/lib/api'
 
 export async function POST(request: NextRequest) {
   // Check authentication
-  const { userId } = auth()
-  if (!userId) {
+  if (!(await isAdminRequest())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
