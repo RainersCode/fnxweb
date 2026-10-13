@@ -99,7 +99,7 @@ export function HomePlayersSection({ players }: HomePlayersSectionProps) {
       <div className="relative z-[2] max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
         {/* Header */}
         <div className="flex items-center justify-between mb-12">
-          <h2 className="font-display text-[clamp(42px,5.5vw,80px)] font-bold uppercase text-white leading-[0.85] tracking-tight">
+          <h2 className="font-display text-[clamp(42px,5.5vw,80px)] font-bold uppercase text-white leading-[1.15] tracking-tight">
             Spēlētāji
           </h2>
           {/* Desktop arrows */}

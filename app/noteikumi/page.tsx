@@ -116,7 +116,7 @@ export default function RulesPage() {
               <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400 mb-3 block">
                 RK Fēnikss — Ceļvedis
               </span>
-              <h1 className="font-display text-[clamp(52px,7vw,96px)] font-bold uppercase text-white leading-[0.85] tracking-tight">
+              <h1 className="font-display text-[clamp(52px,7vw,96px)] font-bold uppercase text-white leading-[1.15] tracking-tight">
                 Regbija<br />Noteikumi
               </h1>
               <p className="font-body text-[15px] text-white/50 leading-relaxed mt-5 max-w-[480px]">
@@ -157,7 +157,7 @@ export default function RulesPage() {
                 <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-700 mb-4 block">
                   01 — Ievads
                 </span>
-                <h2 className="font-display text-[clamp(36px,5vw,60px)] font-bold uppercase text-[#111] leading-[0.88] tracking-tight mb-6">
+                <h2 className="font-display text-[clamp(36px,5vw,60px)] font-bold uppercase text-[#111] leading-[1.15] tracking-tight mb-6">
                   Kas Ir<br />Regbijs?
                 </h2>
                 <p className="font-body text-[16px] text-[#555] leading-[1.8] max-w-[520px]">
@@ -225,7 +225,7 @@ export default function RulesPage() {
                 <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400 mb-4 block">
                   02 — Video
                 </span>
-                <h2 className="font-display text-[clamp(36px,5vw,56px)] font-bold uppercase text-white leading-[0.88] tracking-tight mb-5">
+                <h2 className="font-display text-[clamp(36px,5vw,56px)] font-bold uppercase text-white leading-[1.15] tracking-tight mb-5">
                   Video<br />Pamācība
                 </h2>
                 <p className="font-body text-[15px] text-white/40 leading-relaxed">
@@ -258,7 +258,7 @@ export default function RulesPage() {
             <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-700 mb-4 block">
               03 — Punkti
             </span>
-            <h2 className="font-display text-[clamp(36px,5vw,60px)] font-bold uppercase text-[#111] leading-[0.88] tracking-tight mb-14">
+            <h2 className="font-display text-[clamp(36px,5vw,60px)] font-bold uppercase text-[#111] leading-[1.15] tracking-tight mb-14">
               Kā Gūst<br />Punktus?
             </h2>
 
@@ -303,7 +303,7 @@ export default function RulesPage() {
                 <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400 mb-4 block">
                   04 — Bumbas kustība
                 </span>
-                <h2 className="font-display text-[clamp(36px,5vw,56px)] font-bold uppercase text-white leading-[0.88] tracking-tight mb-8">
+                <h2 className="font-display text-[clamp(36px,5vw,56px)] font-bold uppercase text-white leading-[1.15] tracking-tight mb-8">
                   Bumbas<br />Pārvietošana
                 </h2>
 
@@ -353,7 +353,7 @@ export default function RulesPage() {
             <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-700 mb-4 block">
               05 — Spēles elementi
             </span>
-            <h2 className="font-display text-[clamp(36px,5vw,60px)] font-bold uppercase text-[#111] leading-[0.88] tracking-tight mb-14">
+            <h2 className="font-display text-[clamp(36px,5vw,60px)] font-bold uppercase text-[#111] leading-[1.15] tracking-tight mb-14">
               Galvenie Spēles<br />Elementi
             </h2>
 
@@ -419,7 +419,7 @@ export default function RulesPage() {
             <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400 mb-4 block">
               06 — Pozīcijas
             </span>
-            <h2 className="font-display text-[clamp(36px,5vw,60px)] font-bold uppercase text-white leading-[0.88] tracking-tight mb-6">
+            <h2 className="font-display text-[clamp(36px,5vw,60px)] font-bold uppercase text-white leading-[1.15] tracking-tight mb-6">
               Spēlētāju<br />Pozīcijas
             </h2>
             <p className="font-body text-[15px] text-white/40 mb-14 max-w-xl">
@@ -487,7 +487,7 @@ export default function RulesPage() {
             <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-700 mb-4 block">
               07 — Noteikumi
             </span>
-            <h2 className="font-display text-[clamp(36px,5vw,56px)] font-bold uppercase text-[#111] leading-[0.88] tracking-tight mb-14">
+            <h2 className="font-display text-[clamp(36px,5vw,56px)] font-bold uppercase text-[#111] leading-[1.15] tracking-tight mb-14">
               Sākums, Sodi &<br />Priekšrocība
             </h2>
 
@@ -557,7 +557,7 @@ export default function RulesPage() {
             <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400 mb-4 block">
               Pievienojies
             </span>
-            <h2 className="font-display text-[clamp(40px,6vw,72px)] font-bold uppercase text-white leading-[0.85] tracking-tight mb-6">
+            <h2 className="font-display text-[clamp(40px,6vw,72px)] font-bold uppercase text-white leading-[1.15] tracking-tight mb-6">
               Gatavs<br />Izmēģināt?
             </h2>
             <p className="font-body text-[15px] text-white/40 leading-relaxed mb-10 max-w-xl mx-auto">

@@ -48,7 +48,7 @@ export function FixturesClient({ upcomingFixtures, pastFixtures }: FixturesClien
               <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400 mb-3 block">
                 RK Fēnikss
               </span>
-              <h1 className="font-display text-[clamp(48px,6vw,86px)] font-bold uppercase text-white leading-[0.88] tracking-tight">
+              <h1 className="font-display text-[clamp(48px,6vw,86px)] font-bold uppercase text-white leading-[1.15] tracking-tight">
                 Spēles &<br />Rezultāti
               </h1>
             </div>

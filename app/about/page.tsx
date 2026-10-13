@@ -27,7 +27,7 @@ export default function AboutPage() {
           <div className="relative z-10 max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16 h-full flex items-end pb-12">
             <div>
               <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400 mb-3 block">RK Fēnikss</span>
-              <h1 className="font-display text-[clamp(48px,6vw,86px)] font-bold uppercase text-white leading-[0.88] tracking-tight">
+              <h1 className="font-display text-[clamp(48px,6vw,86px)] font-bold uppercase text-white leading-[1.15] tracking-tight">
                 Par<br />Mums
               </h1>
             </div>
@@ -73,7 +73,7 @@ export default function AboutPage() {
         <section className="py-16 md:py-20 bg-[#111] bg-stripes-dark">
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16 text-center">
             <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-400 mb-4 block">Pievienojies</span>
-            <h2 className="font-display text-[clamp(32px,4vw,52px)] font-bold uppercase text-white leading-[0.88] tracking-tight mb-6">
+            <h2 className="font-display text-[clamp(32px,4vw,52px)] font-bold uppercase text-white leading-[1.15] tracking-tight mb-6">
               {aboutUsData.cta.title}
             </h2>
             <p className="font-body text-[15px] text-white/60 leading-relaxed mb-8 max-w-2xl mx-auto">

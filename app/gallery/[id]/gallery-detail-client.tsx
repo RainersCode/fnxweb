@@ -114,7 +114,7 @@ export function GalleryDetailClient({ gallery, images }: GalleryDetailClientProp
                 Galerija
               </span>
             </Link>
-            <h1 className="font-display text-[clamp(28px,4vw,52px)] font-bold uppercase text-white leading-[0.95] tracking-tight max-w-[800px]">
+            <h1 className="font-display text-[clamp(28px,4vw,52px)] font-bold uppercase text-white leading-[1.05] tracking-tight max-w-[800px]">
               {gallery.title}
             </h1>
             <div className="flex flex-wrap items-center gap-4 mt-5">
