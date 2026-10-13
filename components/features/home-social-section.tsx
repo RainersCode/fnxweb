@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { Instagram, ExternalLink, Facebook, Play } from 'lucide-react'
+import { Instagram, ExternalLink, Facebook } from 'lucide-react'
 import Link from 'next/link'
 
 const TikTokIcon = ({ className }: { className?: string }) => (
@@ -10,18 +10,26 @@ const TikTokIcon = ({ className }: { className?: string }) => (
   </svg>
 )
 
+// The Instagram profile embed grows with its width (header + two rows of square posts)
+const instagramHeight = (width: number) => Math.round(140 + width * 0.71)
+// TikTok's embed is a fixed-height strip; on wide screens match Instagram so the cards line up
+const tiktokHeight = (width: number) => (width < 500 ? 390 : instagramHeight(width))
+
+// Loads the feed automatically once it scrolls near the viewport, so it doesn't slow the first paint
 function LazyEmbed({
   src,
   placeholder,
   label,
+  heightFor,
 }: {
   src: string
   placeholder: React.ReactNode
-  icon?: React.ReactNode
   label: string
+  heightFor: (width: number) => number
 }) {
-  const [isLoaded, setIsLoaded] = useState(false)
   const [isNearViewport, setIsNearViewport] = useState(false)
+  const [isReady, setIsReady] = useState(false)
+  const [height, setHeight] = useState(500)
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -34,35 +42,43 @@ function LazyEmbed({
           observer.disconnect()
         }
       },
-      { rootMargin: '200px' }
+      { rootMargin: '400px' }
     )
     observer.observe(el)
     return () => observer.disconnect()
   }, [])
 
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const resizeObserver = new ResizeObserver(([entry]) => {
+      setHeight(heightFor(entry.contentRect.width))
+    })
+    resizeObserver.observe(el)
+    return () => resizeObserver.disconnect()
+  }, [heightFor])
+
   return (
-    <div ref={containerRef} className="bg-white min-h-[500px] relative">
-      {isLoaded && isNearViewport ? (
+    <div ref={containerRef} className="bg-white relative" style={{ height }}>
+      {isNearViewport && (
         <iframe
           src={src}
-          className="w-full h-[500px] border-0"
+          title={`${label} @rk_fenikss`}
+          onLoad={() => setIsReady(true)}
+          className="absolute inset-0 w-full h-full border-0"
           scrolling="no"
           allow="encrypted-media"
-          loading="lazy"
         />
-      ) : (
-        <button
-          onClick={() => setIsLoaded(true)}
-          className="w-full h-[500px] flex flex-col items-center justify-center gap-4 bg-[#f5f5f5] hover:bg-[#eee] transition-colors cursor-pointer"
-          aria-label={`Ielādēt ${label}`}
-        >
-          {placeholder}
-          <div className="flex items-center gap-2 bg-white shadow-lg px-6 py-3 rounded-full">
-            <Play className="h-5 w-5 text-[#111] fill-[#111]" />
-            <span className="font-semibold text-[#111] text-sm">Ielādēt {label}</span>
-          </div>
-        </button>
       )}
+      {/* Placeholder stays on top until the embed has finished loading */}
+      <div
+        className={`absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[#f5f5f5] transition-opacity duration-500 ${
+          isReady ? 'opacity-0 pointer-events-none' : 'opacity-100'
+        }`}
+        aria-hidden={isReady}
+      >
+        <div className="animate-pulse">{placeholder}</div>
+      </div>
     </div>
   )
 }
@@ -73,7 +89,7 @@ export function HomeSocialSection() {
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
         {/* Section header */}
         <div className="flex items-end justify-between mb-12">
-          <h2 className="font-display text-[clamp(42px,5.5vw,80px)] font-bold uppercase text-white leading-[0.88] tracking-tight">
+          <h2 className="font-display text-[clamp(42px,5.5vw,80px)] font-bold uppercase text-white leading-[1.15] tracking-tight">
             Sociālie<br />Tīkli
           </h2>
         </div>
@@ -93,6 +109,7 @@ export function HomeSocialSection() {
             <LazyEmbed
               src="https://www.instagram.com/rk_fenikss/embed"
               label="Instagram"
+              heightFor={instagramHeight}
               placeholder={
                 <div className="flex flex-col items-center gap-3">
                   <Instagram className="h-16 w-16 text-[#E4405F]" />
@@ -129,6 +146,7 @@ export function HomeSocialSection() {
             <LazyEmbed
               src="https://www.tiktok.com/embed/@rk_fenikss"
               label="TikTok"
+              heightFor={tiktokHeight}
               placeholder={
                 <div className="flex flex-col items-center gap-3">
                   <TikTokIcon className="h-16 w-16 text-black" />

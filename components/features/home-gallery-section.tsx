@@ -56,7 +56,7 @@ export function HomeGallerySection({ galleries }: HomeGallerySectionProps) {
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
         {/* Section header */}
         <div className="flex items-end justify-between mb-12">
-          <h2 className="font-display text-[clamp(42px,5.5vw,80px)] font-bold uppercase text-teal-400 leading-[0.88] tracking-tight">
+          <h2 className="font-display text-[clamp(42px,5.5vw,80px)] font-bold uppercase text-teal-400 leading-[1.15] tracking-tight">
             Galerija
           </h2>
           <Link href="/gallery">
@@ -136,6 +136,7 @@ function GalleryCard({ gallery, index = 0 }: { gallery: GalleryWithThumbnail; in
             src={getImageUrl(gallery.thumbnailUrl)}
             alt={gallery.title}
             fill
+            sizes="(max-width: 768px) 85vw, (max-width: 1024px) 50vw, 25vw"
             className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
           />
         ) : (

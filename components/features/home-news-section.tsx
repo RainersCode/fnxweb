@@ -33,11 +33,52 @@ const fallbackNewsItems: FallbackNewsItem[] = [
   },
 ]
 
-const stripHtml = (html: string): string => {
-  if (typeof window === 'undefined') return html.replace(/<[^>]*>/g, '')
-  const tmp = document.createElement('DIV')
-  tmp.innerHTML = html
-  return tmp.textContent || tmp.innerText || ''
+// Same result on server and client, so the excerpt doesn't cause a hydration mismatch
+const stripHtml = (html: string): string =>
+  html
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&')
+    .replace(/\s+/g, ' ')
+    .trim()
+
+// Posters and square photos would lose their text when cropped into a wide card,
+// so those are shown whole on a neutral background instead
+function NewsImage({
+  src,
+  alt,
+  sizes,
+  hoverScale = '',
+  priority = false,
+}: {
+  src: string
+  alt: string
+  sizes: string
+  hoverScale?: string
+  priority?: boolean
+}) {
+  const [isTall, setIsTall] = useState(false)
+
+  return (
+    <div className={`relative h-full ${isTall ? 'bg-[#e9ecea]' : ''}`}>
+      <NextImage
+        src={src}
+        alt={alt}
+        fill
+        sizes={sizes}
+        priority={priority}
+        onLoad={(e) => {
+          const img = e.currentTarget
+          setIsTall(img.naturalWidth / img.naturalHeight < 1.25)
+        }}
+        className={`${isTall ? 'object-contain' : 'object-cover'} transition-transform duration-500 ${hoverScale}`}
+      />
+    </div>
+  )
 }
 
 export function HomeNewsSection({ articles }: HomeNewsSectionProps) {
@@ -87,7 +128,7 @@ export function HomeNewsSection({ articles }: HomeNewsSectionProps) {
     return `/news/${index + 1}`
   }
   const getContent = (item: Article | FallbackNewsItem): string => {
-    if ('id' in item) return stripHtml(item.content).substring(0, 120)
+    if ('id' in item) return stripHtml(item.content)
     return item.description
   }
 
@@ -96,7 +137,7 @@ export function HomeNewsSection({ articles }: HomeNewsSectionProps) {
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
         {/* Section header */}
         <div className="flex items-end justify-between mb-12">
-          <h2 className="font-display text-[clamp(42px,5.5vw,80px)] font-bold uppercase text-teal-700 leading-[0.88] tracking-tight">
+          <h2 className="font-display text-[clamp(42px,5.5vw,80px)] font-bold uppercase text-teal-700 leading-[1.15] tracking-tight">
             Jaunākās<br />Ziņas
           </h2>
           <Link href="/news">
@@ -111,10 +152,16 @@ export function HomeNewsSection({ articles }: HomeNewsSectionProps) {
           <Link href={getLink(featured, 0)} className="group">
             <div className="hidden md:grid grid-cols-[1fr_1.4fr] min-h-[440px] mb-6 cursor-pointer">
               {/* Left text panel */}
-              <div className="bg-[#f5f5f5] p-12 flex flex-col justify-end">
-                <h3 className="font-display text-[clamp(26px,3vw,38px)] font-bold uppercase leading-[0.98] text-[#111]">
+              <div className="bg-[#f5f5f5] p-12 flex flex-col">
+                <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-teal-700">
+                  Jaunākā ziņa
+                </span>
+                <h3 className="font-display text-[clamp(26px,3vw,38px)] font-bold uppercase leading-none text-[#111] mt-auto">
                   {getTitle(featured)}
                 </h3>
+                <p className="font-body text-[15px] text-[#555] leading-relaxed mt-4 line-clamp-3">
+                  {getContent(featured)}
+                </p>
                 <div className="flex items-center gap-3.5 mt-6">
                   <span className="font-cond text-[13px] font-semibold tracking-[2px] uppercase text-[#888]">
                     {getDate(featured)}
@@ -129,14 +176,12 @@ export function HomeNewsSection({ articles }: HomeNewsSectionProps) {
               </div>
               {/* Right image */}
               <div className="overflow-hidden">
-                <div className="relative h-full">
-                  <NextImage
-                    src={getImageUrl(featured)}
-                    alt={getTitle(featured)}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                  />
-                </div>
+                <NewsImage
+                  src={getImageUrl(featured)}
+                  alt={getTitle(featured)}
+                  sizes="(max-width: 1400px) 58vw, 760px"
+                  hoverScale="group-hover:scale-[1.03]"
+                />
               </div>
             </div>
           </Link>
@@ -176,16 +221,14 @@ export function HomeNewsSection({ articles }: HomeNewsSectionProps) {
           {cards.map((item, index) => (
             <Link key={'id' in item ? item.id : index} href={getLink(item, index + 1)} className="group cursor-pointer transition-transform duration-300 hover:-translate-y-1">
               <div className="h-[260px] overflow-hidden mb-3.5">
-                <div className="relative h-full">
-                  <NextImage
-                    src={getImageUrl(item)}
-                    alt={getTitle(item)}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                  />
-                </div>
+                <NewsImage
+                  src={getImageUrl(item)}
+                  alt={getTitle(item)}
+                  sizes="(max-width: 1400px) 30vw, 420px"
+                  hoverScale="group-hover:scale-[1.04]"
+                />
               </div>
-              <h3 className="font-display text-xl font-bold uppercase leading-[1.05] text-[#111] tracking-wide">
+              <h3 className="font-display text-xl font-bold uppercase leading-[1.15] text-[#111] tracking-wide">
                 {getTitle(item)}
               </h3>
               <div className="font-cond text-xs font-medium tracking-[1.5px] uppercase text-[#888] mt-2">
@@ -218,9 +261,7 @@ function MobileNewsCard({ item, index }: { item: Article | FallbackNewsItem; ind
   return (
     <Link href={href} className="group block">
       <div className="h-[200px] overflow-hidden mb-3">
-        <div className="relative h-full">
-          <NextImage src={imageUrl} alt={item.title} fill className="object-cover" />
-        </div>
+        <NewsImage src={imageUrl} alt={item.title} sizes="85vw" />
       </div>
       <h3 className="font-display text-lg font-bold uppercase leading-tight text-[#111]">
         {item.title}
