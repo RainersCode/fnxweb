@@ -1,86 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { isAdminRequest } from '@/lib/admin-auth'
-import { createAdminClient } from '@/lib/supabase'
+import { listAndCreate } from '@/lib/admin-crud'
+import { coachSchema } from '@/lib/admin-schemas'
 
-// Only allow signed-in users on the admin email list
-const checkAuth = () => isAdminRequest()
+export const dynamic = 'force-dynamic'
 
-// GET - fetch coaches
-export async function GET() {
-  if (!(await checkAuth())) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
-  const adminClient = createAdminClient()
-  try {
-    const { data, error } = await adminClient.from('coaches').select('*').order('name')
-
-    if (error) throw error
-    return NextResponse.json(data)
-  } catch (error) {
-    console.error('Error fetching coaches:', error)
-    return NextResponse.json({ error: 'Failed to fetch coaches' }, { status: 500 })
-  }
-}
-
-// POST - create new coach
-export async function POST(request: NextRequest) {
-  if (!(await checkAuth())) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
-  try {
-    const coach = await request.json()
-    const adminClient = createAdminClient()
-    const { data, error } = await adminClient.from('coaches').insert(coach).select().single()
-
-    if (error) throw error
-    return NextResponse.json(data)
-  } catch (error) {
-    console.error('Error creating coach:', error)
-    return NextResponse.json({ error: 'Failed to create coach' }, { status: 500 })
-  }
-}
-
-// PATCH - update coach
-export async function PATCH(request: NextRequest) {
-  if (!(await checkAuth())) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
-  try {
-    const { id, ...coach } = await request.json()
-    const adminClient = createAdminClient()
-    const { data, error } = await adminClient
-      .from('coaches')
-      .update(coach)
-      .eq('id', id)
-      .select()
-      .single()
-
-    if (error) throw error
-    return NextResponse.json(data)
-  } catch (error) {
-    console.error('Error updating coach:', error)
-    return NextResponse.json({ error: 'Failed to update coach' }, { status: 500 })
-  }
-}
-
-// DELETE - delete coach
-export async function DELETE(request: NextRequest) {
-  if (!(await checkAuth())) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
-  try {
-    const { id } = await request.json()
-    const adminClient = createAdminClient()
-    const { error } = await adminClient.from('coaches').delete().eq('id', id)
-
-    if (error) throw error
-    return NextResponse.json({ success: true })
-  } catch (error) {
-    console.error('Error deleting coach:', error)
-    return NextResponse.json({ error: 'Failed to delete coach' }, { status: 500 })
-  }
-}
+export const { GET, POST } = listAndCreate({
+  table: 'coaches',
+  schema: coachSchema,
+  order: [{ column: 'name' }],
+  imageField: 'image_url',
+  label: 'treneri',
+})
