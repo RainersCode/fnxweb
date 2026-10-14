@@ -5,6 +5,7 @@ import { MainLayout } from '@/components/layout/main-layout'
 import { Gallery } from '@/types/supabase'
 import { Image as ImageIcon } from 'lucide-react'
 import { supabase, prepareImagePath } from '@/lib/supabase'
+import { galleryCover } from '@/lib/gallery'
 
 export const revalidate = 60
 
@@ -49,6 +50,7 @@ async function getGalleries(): Promise<GalleryWithThumbnail[]> {
           .from('gallery_images')
           .select('*', { count: 'exact' })
           .eq('gallery_id', gallery.id)
+          .order('display_order', { ascending: true })
 
         if (imagesError) {
           console.error(`Error fetching images for gallery ${gallery.id}:`, imagesError)
@@ -59,10 +61,8 @@ async function getGalleries(): Promise<GalleryWithThumbnail[]> {
           }
         }
 
-        const thumbnailUrl =
-          imagesData && imagesData.length > 0
-            ? prepareImagePath(imagesData[0].image_url)
-            : null
+        const coverUrl = galleryCover(gallery.cover_image_url, imagesData?.[0]?.image_url)
+        const thumbnailUrl = coverUrl ? prepareImagePath(coverUrl) : null
 
         return {
           ...gallery,

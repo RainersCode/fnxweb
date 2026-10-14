@@ -27,19 +27,11 @@ async function getGalleryImages(id: string): Promise<GalleryImage[]> {
       .from('gallery_images')
       .select('*')
       .eq('gallery_id', id)
+      .order('display_order', { ascending: true })
+      .order('uploaded_at', { ascending: true })
 
     if (error) throw error
-
-    if (data && data.length > 0) {
-      if (data[0].hasOwnProperty('order')) {
-        return [...data].sort((a, b) => (a.order || 0) - (b.order || 0))
-      } else if (data[0].hasOwnProperty('display_order')) {
-        return [...data].sort((a, b) => (a.display_order || 0) - (b.display_order || 0))
-      }
-      return data
-    }
-
-    return []
+    return data || []
   } catch (error) {
     console.error('Error fetching gallery images:', error)
     return []

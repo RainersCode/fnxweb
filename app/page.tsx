@@ -4,6 +4,7 @@ import { MainLayout } from '@/components/layout/main-layout'
 import Link from 'next/link'
 import { supabase, prepareImagePath } from '@/lib/supabase'
 import { onlyVisible } from '@/lib/articles'
+import { galleryCover } from '@/lib/gallery'
 import { Article, Gallery, Fixture, TeamPlayer } from '@/types/supabase'
 import { aboutUsData } from '@/data/about-us'
 import { HomeHero } from '@/components/features/home-hero'
@@ -69,6 +70,7 @@ async function getGalleries(): Promise<GalleryWithThumbnail[]> {
           .from('gallery_images')
           .select('*')
           .eq('gallery_id', gallery.id)
+          .order('display_order', { ascending: true })
           .limit(1)
 
         if (imagesError) {
@@ -78,9 +80,8 @@ async function getGalleries(): Promise<GalleryWithThumbnail[]> {
           }
         }
 
-        const thumbnailUrl = imagesData && imagesData.length > 0
-          ? prepareImagePath(imagesData[0].image_url)
-          : '/placeholder.svg?height=300&width=400&text=Gallery'
+        const coverUrl = galleryCover(gallery.cover_image_url, imagesData?.[0]?.image_url)
+        const thumbnailUrl = coverUrl ? prepareImagePath(coverUrl) : '/placeholder.svg?height=300&width=400&text=Gallery'
 
         return {
           ...gallery,
