@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { plainText } from './articles'
+import { validateForPublish } from './articles'
 import { sanitizeArticleHtml } from './sanitize-article'
 
 export const MIGRATION_MESSAGE = 'Datubāzei vajadzīgs atjauninājums'
@@ -24,12 +24,13 @@ export const articleActionSchema = z.discriminatedUnion('action', [
   z.object({ action: z.literal('unpublish') }),
 ])
 
-export function validateForPublish(a: { title?: string | null; content?: string | null }): string | null {
-  if (!a.title?.trim()) return 'Pievieno virsrakstu'
-  const content = a.content ?? ''
-  const hasMedia = /<figure|<img|data-video-embed/.test(content)
-  if (!plainText(content) && !hasMedia) return 'Ziņai vajag tekstu, foto vai video'
-  return null
+// validateForPublish lives in the browser-safe lib/articles; re-exported for server callers
+export { validateForPublish }
+
+// Server-side check on what will actually be stored: a pasted foreign photo is removed by the
+// sanitizer, so it must not count as content
+export function checkPublishable(a: { title?: string | null; content?: string | null }): string | null {
+  return validateForPublish({ ...a, content: sanitizeArticleHtml(a.content ?? '') })
 }
 
 const trimOrNull = (v: string | null | undefined) => {

@@ -6,8 +6,9 @@ import { useRouter } from 'next/navigation'
 import { ArrowLeft, Eye, Settings2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
-import { type AdminArticle, articleState, formatRigaDateTime, fromDateTimeLocal, toDateTimeLocal } from '@/lib/articles'
-import { validateForPublish } from '@/lib/article-publish'
+import {
+  type AdminArticle, articleState, formatRigaDateTime, fromDateTimeLocal, toDateTimeLocal, validateForPublish,
+} from '@/lib/articles'
 import { shouldOfferRestore, type LocalBackup } from '@/lib/autosave'
 import { ArticleStatusPill } from './article-status-pill'
 import { CoverPhotoField } from './cover-photo-field'
@@ -91,28 +92,88 @@ export function ArticleEditor({ article, fixtures, galleries }: { article: Admin
     author: fields.author, is_featured: fields.is_featured, fixture_id: fields.fixture_id, gallery_id: fields.gallery_id,
   }), [fields])
 
+  // Latest values for callbacks that outlive a render (save completions, page hide, unmount)
+  const payloadRef = useRef(payload)
+  const dirtyRef = useRef(dirty)
+  const isDraftRef = useRef(isDraft)
+  payloadRef.current = payload
+  dirtyRef.current = dirty
+  isDraftRef.current = isDraft
+
   const autosave = useAutosave({
     data: payload,
     enabled: isDraft,
     save: async (data) => {
       await sendAction(article.id, { action: 'save', fields: data })
+      // An older save finishing late must not clear newer, still-unsaved edits or their device copy
+      if (data !== payloadRef.current) return
       setDirty(false)
       try { localStorage.removeItem(backupKey) } catch { /* ignore */ }
     },
   })
 
-  // Unsaved edits to a live article must not be lost silently
+  // Leaving a draft within the autosave delay: send the pending edits on the way out
+  useEffect(() => {
+    const flush = () => {
+      if (!isDraftRef.current || !dirtyRef.current) return
+      fetch(`/api/admin/articles/${article.id}`, {
+        method: 'PATCH',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'save', fields: payloadRef.current }),
+        keepalive: true,
+      }).catch(() => { /* the device copy remains for the restore banner */ })
+    }
+    window.addEventListener('pagehide', flush)
+    return () => {
+      window.removeEventListener('pagehide', flush)
+      flush()
+    }
+  }, [article.id])
+
+  // Unsaved edits to a live article must not be lost silently: closing the tab or following a link
   useEffect(() => {
     if (isDraft || !dirty) return
     const warn = (e: BeforeUnloadEvent) => { e.preventDefault(); e.returnValue = '' }
+    const guardLinks = (e: MouseEvent) => {
+      const link = (e.target as HTMLElement | null)?.closest('a[href]') as HTMLAnchorElement | null
+      if (!link || link.target === '_blank') return
+      if (!window.confirm('Ir nesaglabātas izmaiņas. Iziet bez saglabāšanas?')) {
+        e.preventDefault()
+        e.stopPropagation()
+      }
+    }
     window.addEventListener('beforeunload', warn)
-    return () => window.removeEventListener('beforeunload', warn)
+    document.addEventListener('click', guardLinks, true)
+    return () => {
+      window.removeEventListener('beforeunload', warn)
+      document.removeEventListener('click', guardLinks, true)
+    }
   }, [isDraft, dirty])
+
+  // Drafts: save first so the preview shows the latest text. Live articles with unsaved
+  // changes can't be previewed, because the preview reads what is stored.
+  const openPreview = async () => {
+    const url = `/admin/articles/${article.id}/preview`
+    if (!isDraft) {
+      window.open(url, '_blank')
+      return
+    }
+    const tab = window.open('', '_blank')
+    try {
+      if (dirty) await sendAction(article.id, { action: 'save', fields: payload })
+      if (tab) tab.location.href = url
+      else window.location.href = url
+    } catch (error) {
+      tab?.close()
+      toast.error(error instanceof Error ? error.message : 'Neizdevās saglabāt')
+    }
+  }
 
   const publish = async () => {
     if (hasPendingUploads()) return toast.error('Pagaidi, kamēr foto augšupielādējas')
     const problem = validateForPublish(fields)
     if (problem) return toast.error(problem)
+    if (!fields.image_url) toast.warning('Ziņai nav vāka foto — kartītē būs rezerves attēls')
     const scheduled = !isDraft || scheduleMode === 'schedule'
     setBusy(true)
     try {
@@ -197,9 +258,15 @@ export function ArticleEditor({ article, fixtures, galleries }: { article: Admin
         <span className="hidden sm:inline-flex"><ArticleStatusPill status={status} publishedAt={publishedAt} /></span>
         <span className={`truncate text-xs font-semibold ${autosave.state === 'error' ? 'text-[#B42318]' : 'text-[#146C43]'}`}>{saveLabel}</span>
         <span className="flex-1" />
-        <Link href={`/admin/articles/${article.id}/preview`} target="_blank" className="flex items-center gap-1.5 rounded-md border border-[#DCE3DF] px-3 py-1.5 text-sm font-semibold">
+        <button
+          type="button"
+          onClick={openPreview}
+          disabled={!isDraft && dirty}
+          title={!isDraft && dirty ? 'Lai priekšskatītu izmaiņas, vispirms nospied "Atjaunināt"' : undefined}
+          className="flex items-center gap-1.5 rounded-md border border-[#DCE3DF] px-3 py-1.5 text-sm font-semibold disabled:opacity-50"
+        >
           <Eye className="h-4 w-4" /><span className="hidden sm:inline">Priekšskatīt</span>
-        </Link>
+        </button>
         <Sheet>
           <SheetTrigger className="flex items-center gap-1.5 rounded-md border border-[#DCE3DF] px-3 py-1.5 text-sm font-semibold lg:hidden">
             <Settings2 className="h-4 w-4" /><span className="sr-only sm:not-sr-only">Iestatījumi</span>

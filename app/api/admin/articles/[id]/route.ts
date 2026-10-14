@@ -3,8 +3,8 @@ import { isAdminRequest } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase'
 import { slugify, uniqueSlug } from '@/lib/articles'
 import {
-  articleActionSchema, buildPublishUpdate, isMissingColumnError, MIGRATION_MESSAGE,
-  prepareFields, validateForPublish,
+  articleActionSchema, buildPublishUpdate, checkPublishable, isMissingColumnError, MIGRATION_MESSAGE,
+  prepareFields,
 } from '@/lib/article-publish'
 
 export const dynamic = 'force-dynamic'
@@ -57,7 +57,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     update = { ...prepareFields(body.fields), updated_at: now.toISOString() }
   } else if (body.action === 'publish') {
     const merged = { ...current, ...body.fields }
-    const problem = validateForPublish(merged)
+    const problem = checkPublishable(merged)
     if (problem) return NextResponse.json({ error: problem }, { status: 422 })
 
     let slug: string | undefined
@@ -71,8 +71,12 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     update = { status: 'draft', updated_at: now.toISOString() }
   }
 
-  const { data, error } = await db.from('articles').update(update).eq('id', params.id).select('*').single()
+  let query = db.from('articles').update(update).eq('id', params.id)
+  // A slow autosave that arrives after "Publicēt" must not overwrite the live article
+  if (body.action === 'save') query = query.eq('status', 'draft')
+  const { data, error } = await query.select('*').maybeSingle()
   if (error) return failure(error, 'Neizdevās saglabāt ziņu')
+  if (!data) return NextResponse.json({ error: 'Ziņa jau ir publicēta — izmaiņas saglabā ar "Atjaunināt"' }, { status: 409 })
   return NextResponse.json(data)
 }
 

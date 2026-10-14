@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import {
   slugify, uniqueSlug, plainText, excerptFor, articleState, isPubliclyVisible,
-  onlyVisible, toDateTimeLocal, fromDateTimeLocal,
+  onlyVisible, toDateTimeLocal, fromDateTimeLocal, jsonLdString, isMediaUrl,
 } from './articles'
 
 describe('slugify', () => {
@@ -80,5 +80,25 @@ describe('datetime-local conversion', () => {
   })
   it('produces the input format', () => {
     expect(toDateTimeLocal('2026-10-18T07:30:45.000Z')).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/)
+  })
+})
+
+describe('review fixes', () => {
+  it('does not end the excerpt at Latvian ordinal numbers', () => {
+    expect(excerptFor({ content: '<p>Sestdien, 18. oktobrī, Fēnikss spēlēs Jūrmalā. Nāc!</p>' })).toBe('Sestdien, 18. oktobrī, Fēnikss spēlēs Jūrmalā.')
+    expect(excerptFor({ content: '<p>2025. gada 18. oktobrī notiks spēle. Nāc!</p>' })).toBe('2025. gada 18. oktobrī notiks spēle.')
+    expect(excerptFor({ content: '<p>Komanda ieguva 2. vietu turnīrā. Apsveicam!</p>' })).toBe('Komanda ieguva 2. vietu turnīrā.')
+  })
+  it('escapes < in JSON-LD so a title cannot close the script tag', () => {
+    const out = jsonLdString({ headline: '</script><script>alert(1)</script>' })
+    expect(out).not.toContain('<')
+    expect(JSON.parse(out).headline).toBe('</script><script>alert(1)</script>')
+  })
+  it('recognises only media-bucket image URLs', () => {
+    process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://proj.supabase.co'
+    expect(isMediaUrl('https://proj.supabase.co/storage/v1/object/public/media/articles/a/x.webp')).toBe(true)
+    expect(isMediaUrl('https://evil.com/x.png')).toBe(false)
+    expect(isMediaUrl('data:image/png;base64,AAAA')).toBe(false)
+    expect(isMediaUrl('file:///C:/x.png')).toBe(false)
   })
 })

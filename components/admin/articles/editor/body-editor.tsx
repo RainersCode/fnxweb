@@ -5,6 +5,8 @@ import { EditorContent, useEditor, type Editor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
 import Placeholder from '@tiptap/extension-placeholder'
+import TextAlign from '@tiptap/extension-text-align'
+import Underline from '@tiptap/extension-underline'
 import { toast } from 'sonner'
 import { uploadWithProgress } from '@/lib/upload-with-progress'
 import { Figure } from './figure-node'
@@ -34,6 +36,9 @@ export function BodyEditor({ articleId, content, onChange }: { articleId: string
     extensions: [
       StarterKit.configure({ heading: { levels: [2, 3] } }),
       Link.configure({ openOnClick: false, autolink: true }),
+      // No toolbar buttons: these keep older articles' centring and underlines when they are edited
+      TextAlign.configure({ types: ['heading', 'paragraph'] }),
+      Underline,
       Placeholder.configure({
         includeChildren: true,
         placeholder: ({ node }) => (node.type.name === 'figure' ? 'Paraksts (nav obligāts)' : 'Raksti šeit…'),

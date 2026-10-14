@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import { requireAdminPage } from '@/lib/require-admin-page'
 import { createAdminClient } from '@/lib/supabase'
 import { isMissingColumnError } from '@/lib/article-publish'
 import type { AdminArticle } from '@/lib/articles'
@@ -9,6 +10,7 @@ import type { FixtureOption, GalleryOption } from '@/components/admin/articles/a
 export const dynamic = 'force-dynamic'
 
 export default async function EditArticlePage({ params }: { params: { id: string } }) {
+  await requireAdminPage()
   const db = createAdminClient()
   const [article, fixtures, galleries] = await Promise.all([
     db.from('articles').select('*').eq('id', params.id).maybeSingle(),

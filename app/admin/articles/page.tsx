@@ -1,4 +1,5 @@
 import { createAdminClient } from '@/lib/supabase'
+import { requireAdminPage } from '@/lib/require-admin-page'
 import { isMissingColumnError } from '@/lib/article-publish'
 import { MigrationNotice } from '@/components/admin/migration-notice'
 import { ArticleList, type ArticleListItem } from '@/components/admin/articles/article-list'
@@ -6,6 +7,7 @@ import { ArticleList, type ArticleListItem } from '@/components/admin/articles/a
 export const dynamic = 'force-dynamic'
 
 export default async function ArticlesPage() {
+  await requireAdminPage()
   const db = createAdminClient()
   const { data, error } = await db
     .from('articles')

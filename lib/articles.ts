@@ -54,11 +54,23 @@ export function plainText(html: string): string {
     .trim()
 }
 
+// End of the first sentence: . ! or ? followed by the end or by a capitalised word.
+// A period right after a digit is a Latvian ordinal ("18. oktobrī", "2. vietu"), not an ending.
+function firstSentence(text: string): string {
+  for (const match of Array.from(text.matchAll(/[.!?]/g))) {
+    const i = match.index ?? 0
+    if (match[0] === '.' && /\d/.test(text[i - 1] ?? '')) continue
+    const rest = text.slice(i + 1)
+    if (rest === '' || /^\s+["„“(]?[A-ZĀČĒĢĪĶĻŅŠŪŽ]/.test(rest)) return text.slice(0, i + 1)
+  }
+  return text
+}
+
 export function excerptFor(article: { excerpt?: string | null; content: string }, max = 160): string {
   const written = article.excerpt?.trim()
   if (written) return written
   const text = plainText(article.content)
-  const sentence = text.match(/^(.+?[.!?])(\s|$)/)?.[1] ?? text
+  const sentence = firstSentence(text)
   if (sentence.length <= max) return sentence
   const cut = sentence.slice(0, max)
   const lastSpace = cut.lastIndexOf(' ')
@@ -91,6 +103,27 @@ export type VisibleQuery<Q> = {
 export function onlyVisible<Q>(query: Q, now: Date = new Date()): Q {
   const q = query as unknown as VisibleQuery<VisibleQuery<Q>>
   return q.eq('status', 'published').lte('published_at', now.toISOString()) as unknown as Q
+}
+
+// Browser-safe (the editor uses it); the server runs it on sanitized content via checkPublishable
+export function validateForPublish(a: { title?: string | null; content?: string | null }): string | null {
+  if (!a.title?.trim()) return 'Pievieno virsrakstu'
+  const content = a.content ?? ''
+  // An empty <figure> left after the sanitizer removed a foreign photo is not content
+  const hasMedia = /<img\b|data-video-embed/.test(content)
+  if (!plainText(content) && !hasMedia) return 'Ziņai vajag tekstu, foto vai video'
+  return null
+}
+
+// JSON for a <script type="application/ld+json"> tag: escaping < stops text from closing the tag
+export function jsonLdString(data: unknown): string {
+  return JSON.stringify(data).replace(/</g, '\\u003c')
+}
+
+// Photos we store ourselves; anything else in article content is dropped
+export function isMediaUrl(src: string): boolean {
+  const prefix = `${process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''}/storage/v1/object/public/media/`
+  return src.startsWith('https://') && src.startsWith(prefix)
 }
 
 export function formatRigaDateTime(iso: string): string {

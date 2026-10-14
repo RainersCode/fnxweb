@@ -2,9 +2,12 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { supabase, prepareImagePath } from '@/lib/supabase'
 import { Article, Gallery } from '@/types/supabase'
-import { onlyVisible, excerptFor } from '@/lib/articles'
+import { onlyVisible, excerptFor, jsonLdString } from '@/lib/articles'
 import { sanitizeArticleHtml } from '@/lib/sanitize-article'
 import { NewsDetailClient, type LinkedFixture, type LinkedGallery } from './news-detail-client'
+
+// Re-check every minute so scheduled articles appear on time and unpublished ones disappear
+export const revalidate = 60
 
 // Type for gallery with thumbnail
 interface GalleryWithThumbnail extends Gallery {
@@ -197,7 +200,7 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ id:
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(generateJsonLd(safeArticle, pageUrl)),
+          __html: jsonLdString(generateJsonLd(safeArticle, pageUrl)),
         }}
       />
 

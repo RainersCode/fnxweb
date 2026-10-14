@@ -1,13 +1,6 @@
 import sanitizeHtml from 'sanitize-html'
 import { isAllowedEmbedSrc } from './video-embed'
-
-function mediaPrefix(): string {
-  return `${process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''}/storage/v1/object/public/media/`
-}
-
-function isAllowedImageSrc(src: string): boolean {
-  return src.startsWith('https://') && src.startsWith(mediaPrefix())
-}
+import { isMediaUrl } from './articles'
 
 function isExternal(href: string): boolean {
   const site = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.fnx-rugby.lv'
@@ -34,8 +27,10 @@ export function sanitizeArticleHtml(html: string): string {
     selfClosing: ['img', 'br', 'hr'],
     exclusiveFilter: (frame) =>
       (frame.tag === 'iframe' && !isAllowedEmbedSrc(frame.attribs.src ?? '')) ||
-      (frame.tag === 'img' && !isAllowedImageSrc(frame.attribs.src ?? '')),
+      (frame.tag === 'img' && !isMediaUrl(frame.attribs.src ?? '')),
     transformTags: {
+      // The old editor had an H1 button; keep those headings as H2 instead of dropping them to bare text
+      h1: 'h2',
       a: (tagName, attribs) => {
         const href = attribs.href ?? ''
         if (!isExternal(href)) {

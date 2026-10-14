@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { isAdminRequest } from '@/lib/admin-auth'
 import { uploadMedia } from '@/lib/api'
 import sharp from 'sharp'
-import { isSafeUploadFolder, isHeicFile, HEIC_MESSAGE } from '@/lib/upload-rules'
+import { isSafeUploadFolder, isHeicFile, safeUploadBaseName, HEIC_MESSAGE } from '@/lib/upload-rules'
 
 // App Router config - increase timeout for large image processing
 export const maxDuration = 60 // 60 seconds max (Vercel Pro) or 10 seconds (Hobby)
@@ -42,12 +42,14 @@ export async function POST(request: NextRequest) {
     // *** Start Image Optimization Logic ***
     let fileBuffer: Buffer
     let optimizedFileName: string
-    const originalName = file.name.split('.').slice(0, -1).join('.') // Get name without extension
+    // Only [a-z0-9-] from the user's file name reaches the storage path
+    const originalName = safeUploadBaseName(file.name)
+    const fileExt = (file.name.split('.').pop() || '').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 8) || 'bin'
     const timestamp = Date.now()
     const randomString = Math.random().toString(36).substring(2, 15)
 
-    // Check if the file is an image and optimize
-    if (file.type.startsWith('image/')) {
+    // Check if the file is an image and optimize (HEIC from iPhones may arrive without a MIME type)
+    if (file.type.startsWith('image/') || isHeicFile(file.name, file.type)) {
         try {
             console.log(`Processing image: ${file.name}, Size: ${Math.round(file.size / 1024)} KB`)
             const originalBuffer = Buffer.from(await file.arrayBuffer())
@@ -75,14 +77,12 @@ export async function POST(request: NextRequest) {
             console.error('Error optimizing image:', optimizationError);
             // Fallback: Upload original if optimization fails
             fileBuffer = Buffer.from(await file.arrayBuffer())
-            const fileExt = file.name.split('.').pop() || 'bin';
             optimizedFileName = `${folder}/${timestamp}-${randomString}-${originalName}.${fileExt}`
             console.log(`Uploading original due to optimization error: ${optimizedFileName}`)
         }
     } else {
       // Not an image, prepare original buffer and filename
       fileBuffer = Buffer.from(await file.arrayBuffer())
-      const fileExt = file.name.split('.').pop() || 'bin';
       optimizedFileName = `${folder}/${timestamp}-${randomString}-${originalName}.${fileExt}`
       console.log(`Uploading non-image file: ${optimizedFileName}`)
     }
@@ -91,7 +91,11 @@ export async function POST(request: NextRequest) {
 
     // Upload the processed (or original) buffer
     // Construct a Blob from the buffer
-    const blob = new Blob([fileBuffer], { type: file.type.startsWith('image/') ? `image/${TARGET_FORMAT}` : file.type })
+    // Label what was actually stored: converted images are WebP, fallbacks keep their own type
+    const storedType = optimizedFileName.endsWith(`.${TARGET_FORMAT}`)
+      ? `image/${TARGET_FORMAT}`
+      : file.type || 'application/octet-stream'
+    const blob = new Blob([fileBuffer], { type: storedType })
     // Construct a File object from Blob, which uploadMedia likely expects
     const processedFile = new File([blob], optimizedFileName, { type: blob.type });
 

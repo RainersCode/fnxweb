@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll } from 'vitest'
 import {
   articleFieldsSchema, articleActionSchema, validateForPublish, prepareFields,
-  buildPublishUpdate, isMissingColumnError,
+  buildPublishUpdate, isMissingColumnError, checkPublishable,
 } from './article-publish'
 
 beforeAll(() => {
@@ -67,5 +67,12 @@ describe('isMissingColumnError', () => {
     expect(isMissingColumnError({ code: 'PGRST204', message: "Could not find the 'status' column" })).toBe(true)
     expect(isMissingColumnError({ code: '23505', message: 'duplicate' })).toBe(false)
     expect(isMissingColumnError(null)).toBe(false)
+  })
+})
+
+describe('checkPublishable', () => {
+  it('judges the body after sanitizing, so a foreign pasted photo does not count', () => {
+    expect(checkPublishable({ title: 'A', content: '<figure><img src="https://evil.com/a.png"></figure>' })).toBe('Ziņai vajag tekstu, foto vai video')
+    expect(checkPublishable({ title: 'A', content: '<p>Teksts</p>' })).toBeNull()
   })
 })

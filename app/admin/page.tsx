@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { requireAdminPage } from '@/lib/require-admin-page'
 import { Images, ExternalLink } from 'lucide-react'
 import { createAdminClient } from '@/lib/supabase'
 import { articleState, formatRigaDateTime } from '@/lib/articles'
@@ -22,6 +23,7 @@ function Section({ title, empty, children }: { title: string; empty: string; chi
 }
 
 export default async function AdminHome() {
+  await requireAdminPage()
   const db = createAdminClient()
   const { data, error } = await db
     .from('articles')

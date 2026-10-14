@@ -1,6 +1,7 @@
 'use client'
 
 import { Node, NodeViewContent, NodeViewWrapper, ReactNodeViewRenderer, type NodeViewProps } from '@tiptap/react'
+import { isMediaUrl } from '@/lib/articles'
 import { useUploadProgress } from './upload-store'
 
 function FigureView({ node }: NodeViewProps) {
@@ -41,15 +42,22 @@ export const Figure = Node.create({
     return [
       {
         tag: 'figure',
-        contentElement: 'figcaption',
+        // Pasted figures often have no caption; give the parser an empty one instead of null
+        contentElement: (dom) => (dom as HTMLElement).querySelector('figcaption') ?? document.createElement('figcaption'),
         getAttrs: (el) => {
           const img = (el as HTMLElement).querySelector('img')
-          return img ? { src: img.getAttribute('src'), alt: img.getAttribute('alt') ?? '' } : false
+          const src = img?.getAttribute('src') ?? ''
+          return isMediaUrl(src) ? { src, alt: img?.getAttribute('alt') ?? '' } : false
         },
       },
       {
+        // Only photos we store ourselves: images pasted from other sites, Word or data: URIs
+        // would be stripped on save anyway, so they are never shown in the editor
         tag: 'img[src]',
-        getAttrs: (el) => ({ src: (el as HTMLElement).getAttribute('src'), alt: (el as HTMLElement).getAttribute('alt') ?? '' }),
+        getAttrs: (el) => {
+          const src = (el as HTMLElement).getAttribute('src') ?? ''
+          return isMediaUrl(src) ? { src, alt: (el as HTMLElement).getAttribute('alt') ?? '' } : false
+        },
       },
     ]
   },

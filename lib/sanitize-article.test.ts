@@ -39,3 +39,9 @@ describe('sanitizeArticleHtml', () => {
     expect(sanitizeArticleHtml('<a href="javascript:alert(1)">x</a>')).toBe('<a>x</a>')
   })
 })
+
+describe('old article formatting', () => {
+  it('turns old H1 headings into H2 instead of bare text', () => {
+    expect(sanitizeArticleHtml('<h1>Liels</h1><p>x</p>')).toBe('<h2>Liels</h2><p>x</p>')
+  })
+})

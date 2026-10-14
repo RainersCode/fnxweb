@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { requireAdminPage } from '@/lib/require-admin-page'
 import { notFound } from 'next/navigation'
 import { createAdminClient } from '@/lib/supabase'
 import { articleState } from '@/lib/articles'
@@ -9,6 +10,7 @@ import type { Article } from '@/types/supabase'
 export const dynamic = 'force-dynamic'
 
 export default async function PreviewArticlePage({ params }: { params: { id: string } }) {
+  await requireAdminPage()
   const db = createAdminClient()
   const { data: article } = await db.from('articles').select('*').eq('id', params.id).maybeSingle()
   if (!article) notFound()

@@ -14,9 +14,10 @@ describe('shouldOfferRestore', () => {
     const backup = { fields: { title: 'A', content: '<p>x y</p>' }, at: Date.parse(serverAt) + 60_000 }
     expect(shouldOfferRestore(backup, serverAt, server)).toBe(true)
   })
-  it('ignores an older copy', () => {
-    const backup = { fields: { title: 'B', content: '' }, at: Date.parse(serverAt) - 60_000 }
-    expect(shouldOfferRestore(backup, serverAt, server)).toBe(false)
+  it('offers a different copy even when it was written within a second of the last save', () => {
+    // Typed right after a save, then the next save never made it: the device copy is the only record
+    const backup = { fields: { title: 'A', content: '<p>x y</p>' }, at: Date.parse(serverAt) + 300 }
+    expect(shouldOfferRestore(backup, serverAt, server)).toBe(true)
   })
   it('ignores an identical copy and a missing one', () => {
     expect(shouldOfferRestore({ fields: server, at: Date.parse(serverAt) + 60_000 }, serverAt, server)).toBe(false)
