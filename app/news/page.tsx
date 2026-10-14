@@ -5,13 +5,16 @@ import { MainLayout } from '@/components/layout/main-layout'
 import { supabase } from '@/lib/supabase'
 import { onlyVisible, excerptFor } from '@/lib/articles'
 import { Article } from '@/types/supabase'
+import { pageUrl } from '@/lib/site'
 
 export const revalidate = 60
 
 export const metadata: Metadata = {
+  alternates: { canonical: pageUrl('/news') },
   title: 'Ziņas | RK Fēnikss',
   description: 'Jaunākās ziņas un notikumi no RK Fēnikss regbija kluba.',
   openGraph: {
+    url: pageUrl('/news'),
     title: 'Ziņas | RK Fēnikss',
     description: 'Jaunākās ziņas un notikumi no RK Fēnikss regbija kluba.',
   },

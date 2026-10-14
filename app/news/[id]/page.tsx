@@ -6,6 +6,7 @@ import { Article, Gallery } from '@/types/supabase'
 import { onlyVisible, excerptFor, jsonLdString } from '@/lib/articles'
 import { sanitizeArticleHtml } from '@/lib/sanitize-article'
 import { NewsDetailClient, type LinkedFixture, type LinkedGallery } from './news-detail-client'
+import { SITE_URL } from '@/lib/site'
 
 // Re-check every minute so scheduled articles appear on time and unpublished ones disappear
 export const revalidate = 60
@@ -109,13 +110,14 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const imageUrl = prepareImagePath(article.image_url ?? null)
 
   // Get the base URL from environment or use a default
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fnx-rugby.lv'
+  const baseUrl = SITE_URL
   const articleUrl = `${baseUrl}/news/${id}`
   const absoluteImageUrl = imageUrl.startsWith('http') ? imageUrl : `${baseUrl}${imageUrl}`
 
   return {
     title: `${article.title} | RK Fēnikss`,
     description,
+    alternates: { canonical: articleUrl },
     openGraph: {
       title: article.title,
       description,
@@ -147,7 +149,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 // Generate JSON-LD structured data
 function generateJsonLd(article: Article, url: string) {
   const imageUrl = prepareImagePath(article.image_url ?? null)
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fnx-rugby.lv'
+  const baseUrl = SITE_URL
   const absoluteImageUrl = imageUrl.startsWith('http') ? imageUrl : `${baseUrl}${imageUrl}`
 
   return {
@@ -191,7 +193,7 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ id:
   const linked = await getLinked(article)
   const safeArticle = { ...article, content: sanitizeArticleHtml(article.content) }
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fnx-rugby.lv'
+  const baseUrl = SITE_URL
   const pageUrl = `${baseUrl}/news/${id}`
 
   return (

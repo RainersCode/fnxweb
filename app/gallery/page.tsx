@@ -6,13 +6,16 @@ import { Gallery } from '@/types/supabase'
 import { Image as ImageIcon } from 'lucide-react'
 import { supabase, prepareImagePath } from '@/lib/supabase'
 import { galleryCover } from '@/lib/gallery'
+import { pageUrl } from '@/lib/site'
 
 export const revalidate = 60
 
 export const metadata: Metadata = {
+  alternates: { canonical: pageUrl('/gallery') },
   title: 'Galerija | RK Fēnikss',
   description: 'RK Fēnikss regbija kluba foto galerijas - spēļu, treniņu un pasākumu fotogrāfijas.',
   openGraph: {
+    url: pageUrl('/gallery'),
     title: 'Galerija | RK Fēnikss',
     description: 'RK Fēnikss regbija kluba foto galerijas - spēļu, treniņu un pasākumu fotogrāfijas.',
   },

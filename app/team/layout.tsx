@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
+import { pageUrl } from '@/lib/site'
 
 export const metadata: Metadata = {
+  alternates: { canonical: pageUrl('/team') },
   title: 'Komanda | RK Fēnikss',
   description:
     'Iepazīsti RK Fēnikss regbija komandu — spēlētājus un trenerus. Valmieras regbija klubs, dibināts 2005. gadā.',
@@ -15,7 +17,7 @@ export const metadata: Metadata = {
     title: 'Komanda | RK Fēnikss',
     description:
       'Iepazīsti RK Fēnikss regbija komandu — spēlētājus un trenerus. Valmieras regbija klubs, dibināts 2005. gadā.',
-    url: 'https://www.fnx-rugby.lv/team',
+    url: pageUrl('/team'),
   },
 }
 

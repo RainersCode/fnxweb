@@ -4,11 +4,14 @@ import Link from 'next/link'
 import { MainLayout } from '@/components/layout/main-layout'
 import { aboutUsData } from '@/data/about-us'
 import { getActiveTraining, TrainingTimesSection } from '@/components/features/training-times'
+import { pageUrl } from '@/lib/site'
 
 export const metadata: Metadata = {
+  alternates: { canonical: pageUrl('/about') },
   title: 'Par mums | RK Fēnikss',
   description: 'Uzziniet par RK Fēnikss regbija klubu - mūsu vēsture, misija un vērtības.',
   openGraph: {
+    url: pageUrl('/about'),
     title: 'Par mums | RK Fēnikss',
     description: 'Uzziniet par RK Fēnikss regbija klubu - mūsu vēsture, misija un vērtības.',
   },

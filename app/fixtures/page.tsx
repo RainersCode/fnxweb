@@ -2,13 +2,16 @@ import { Metadata } from 'next'
 import { supabase } from '@/lib/supabase'
 import { Fixture } from '@/types/supabase'
 import { FixturesClient } from './fixtures-client'
+import { pageUrl } from '@/lib/site'
 
 export const revalidate = 60
 
 export const metadata: Metadata = {
+  alternates: { canonical: pageUrl('/fixtures') },
   title: 'Spēles & Rezultāti | RK Fēnikss',
   description: 'RK Fēnikss regbija kluba gaidāmās spēles un iepriekšējo spēļu rezultāti.',
   openGraph: {
+    url: pageUrl('/fixtures'),
     title: 'Spēles & Rezultāti | RK Fēnikss',
     description: 'RK Fēnikss regbija kluba gaidāmās spēles un iepriekšējo spēļu rezultāti.',
   },

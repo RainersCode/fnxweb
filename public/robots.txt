@@ -4,8 +4,9 @@
 # Standard crawlers
 User-agent: *
 Allow: /
-Disallow: /admin/
-Disallow: /sign-in/
+Disallow: /admin
+Disallow: /sign-in
+Disallow: /sign-up
 Disallow: /api/
 
 # AI Search Crawlers - Welcome!

@@ -1,10 +1,13 @@
 import { Metadata } from 'next'
 import { default as NextImage } from 'next/image'
 import { MainLayout } from '@/components/layout/main-layout'
+import { pageUrl } from '@/lib/site'
 
 export const metadata: Metadata = {
+  alternates: { canonical: pageUrl('/cookies-policy') },
   title: 'Sīkdatņu Politika | RK "Fēnikss"',
   description: 'RK "Fēnikss" sīkdatņu politika un izmantošanas principi',
+  openGraph: { url: pageUrl('/cookies-policy'), title: 'Sīkdatņu Politika | RK "Fēnikss"', description: 'RK "Fēnikss" sīkdatņu politika un izmantošanas principi' },
 }
 
 function DiamondBullet() {

@@ -29,9 +29,8 @@ const barlow = Barlow({
 })
 
 export const metadata: Metadata = {
-  title: 'Regbija Klubs "Fēnikss" Valmiera | RK Fēnikss - Dibināts 2005',
-  description: 'Regbija klubs "Fēnikss" - Valmieras vadošais regbija klubs, dibināts 2005. gadā. Regbija klubs Valmierā apvieno dažāda vecuma un prasmju spēlētājus. Uzzini par spēlēm, jaunumiem un pievienojies mūsu komandai!',
-  generator: 'v0.dev',
+  title: 'Regbija klubs "Fēnikss" Valmierā | RK Fēnikss',
+  description: 'Valmieras regbija klubs "Fēnikss", dibināts 2005. gadā. Spēlējam regbiju XV un regbiju-7. Spēles, ziņas un treniņi: nāc un pievienojies!',
   keywords: ['regbija klubs', 'regbija klubs Valmiera', 'regbija klubs fēnikss', 'regbijs', 'Valmiera', 'Fēnikss', 'Latvijas regbijs', 'regbija spēles', 'regbija komanda', 'sporta klubs', 'komandas sports', 'rugby club', 'Latvia rugby', 'regbijs Valmierā'],
   authors: [{ name: 'RK Fēnikss' }],
   applicationName: 'RK Fēnikss Website',
@@ -40,11 +39,8 @@ export const metadata: Metadata = {
   category: 'Sports',
   referrer: 'origin-when-cross-origin',
   metadataBase: new URL('https://www.fnx-rugby.lv'),
-  alternates: {
-    canonical: 'https://www.fnx-rugby.lv',
-  },
   openGraph: {
-    title: 'Regbija Klubs "Fēnikss" Valmiera | RK Fēnikss - Dibināts 2005',
+    title: 'Regbija klubs "Fēnikss" Valmierā | RK Fēnikss',
     description: 'Regbija klubs "Fēnikss" - Valmieras vadošais regbija klubs, dibināts 2005. gadā. Regbija klubs Valmierā apvieno dažāda vecuma un prasmju spēlētājus.',
     url: 'https://www.fnx-rugby.lv',
     siteName: 'RK Fēnikss',
@@ -125,7 +121,8 @@ const organizationJsonLd = {
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'customer service',
-    email: 'info@fnx-rugby.lv',
+    email: 'rkfenikss@gmail.com',
+    telephone: '+37129113938',
     availableLanguage: ['Latvian', 'English'],
   },
 }

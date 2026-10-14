@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { supabase, prepareImagePath } from '@/lib/supabase'
 import { Gallery, GalleryImage } from '@/types/supabase'
 import { GalleryDetailClient } from './gallery-detail-client'
+import { SITE_URL } from '@/lib/site'
 
 export const revalidate = 60
 
@@ -49,16 +50,16 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     }
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://fnx-rugby.lv'
 
   return {
     title: `${gallery.title} | Galerija | RK Fēnikss`,
     description: gallery.description || `Foto galerija: ${gallery.title}`,
+    alternates: { canonical: `${SITE_URL}/gallery/${id}` },
     openGraph: {
       title: `${gallery.title} | RK Fēnikss`,
       description: gallery.description || `Foto galerija: ${gallery.title}`,
       type: 'website',
-      url: `${baseUrl}/gallery/${id}`,
+      url: `${SITE_URL}/gallery/${id}`,
       siteName: 'RK Fēnikss',
       locale: 'lv_LV',
     },
