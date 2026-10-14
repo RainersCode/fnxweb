@@ -8,6 +8,10 @@ export type Article = {
   author?: string
   slug: string
   is_featured: boolean
+  status?: 'draft' | 'published'
+  excerpt?: string | null
+  fixture_id?: string | null
+  gallery_id?: string | null
 }
 
 export type Fixture = {
