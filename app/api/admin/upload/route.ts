@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { isAdminRequest } from '@/lib/admin-auth'
 import { uploadMedia } from '@/lib/api'
 import sharp from 'sharp'
-import { isSafeUploadFolder, isHeicFile, safeUploadBaseName, HEIC_MESSAGE } from '@/lib/upload-rules'
+import { isSafeUploadFolder, isHeicFile, safeUploadBaseName, HEIC_MESSAGE, IMAGE_RESIZE } from '@/lib/upload-rules'
 
 // App Router config - increase timeout for large image processing
 export const maxDuration = 60 // 60 seconds max (Vercel Pro) or 10 seconds (Hobby)
@@ -11,7 +11,6 @@ export const dynamic = 'force-dynamic'
 // Maximum file size (10MB)
 const MAX_FILE_SIZE = 10 * 1024 * 1024
 // Optimization settings
-const MAX_WIDTH = 1920 // Max width in pixels
 const QUALITY = 80 // Quality setting for WebP/JPEG (0-100)
 const TARGET_FORMAT = 'webp' // Target format
 
@@ -59,11 +58,7 @@ export async function POST(request: NextRequest) {
               limitInputPixels: 50000000, // Allow up to 50 megapixels
               sequentialRead: true, // More memory efficient
             })
-              .resize({
-                width: MAX_WIDTH,
-                withoutEnlargement: true,
-                fastShrinkOnLoad: true, // Faster processing
-              })
+              .resize(IMAGE_RESIZE)
               .toFormat(TARGET_FORMAT, { quality: QUALITY })
               .toBuffer()
 
