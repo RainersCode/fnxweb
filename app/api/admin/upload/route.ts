@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { isAdminRequest } from '@/lib/admin-auth'
 import { uploadMedia } from '@/lib/api'
 import sharp from 'sharp'
+import { isSafeUploadFolder, isHeicFile, HEIC_MESSAGE } from '@/lib/upload-rules'
 
 // App Router config - increase timeout for large image processing
 export const maxDuration = 60 // 60 seconds max (Vercel Pro) or 10 seconds (Hobby)
@@ -29,13 +30,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 })
     }
 
-    if (!folder) {
-      return NextResponse.json({ error: 'No folder specified' }, { status: 400 })
+    if (!folder || !isSafeUploadFolder(folder)) {
+      return NextResponse.json({ error: 'Nederīga mape' }, { status: 400 })
     }
 
     // Check file size *before* processing
     if (file.size > MAX_FILE_SIZE) {
-      return NextResponse.json({ error: `File size exceeds ${MAX_FILE_SIZE / 1024 / 1024}MB limit` }, { status: 400 })
+      return NextResponse.json({ error: 'Fails ir lielāks par 10 MB' }, { status: 400 })
     }
 
     // *** Start Image Optimization Logic ***
@@ -68,6 +69,9 @@ export async function POST(request: NextRequest) {
             optimizedFileName = `${folder}/${timestamp}-${randomString}-${originalName}.${TARGET_FORMAT}`
             console.log(`Optimized image: ${optimizedFileName}, Size: ${Math.round(fileBuffer.length / 1024)} KB (saved ${Math.round((1 - fileBuffer.length / file.size) * 100)}%)`)
         } catch (optimizationError) {
+            if (isHeicFile(file.name, file.type)) {
+              return NextResponse.json({ error: HEIC_MESSAGE }, { status: 415 })
+            }
             console.error('Error optimizing image:', optimizationError);
             // Fallback: Upload original if optimization fails
             fileBuffer = Buffer.from(await file.arrayBuffer())
