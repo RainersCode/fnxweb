@@ -1,6 +1,6 @@
 import { auth } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
-import MainLayout from '@/components/layout/main-layout'
+import { AdminShell } from '@/components/admin/shell/admin-shell'
 import { isAdminRequest } from '@/lib/admin-auth'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -14,5 +14,5 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     redirect('/')
   }
 
-  return <MainLayout currentPage="ADMIN">{children}</MainLayout>
+  return <AdminShell>{children}</AdminShell>
 }

@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next';
+import { onlyVisible } from '@/lib/articles';
 import { createClient } from '@supabase/supabase-js';
 
 // Initialize Supabase client
@@ -6,13 +7,14 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+// Rebuild hourly so new articles reach search engines without a deploy
+export const revalidate = 3600;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://www.fnx-rugby.lv';
 
   // Get all articles
-  const { data: articles } = await supabase
-    .from('articles')
-    .select('id, published_at')
+  const { data: articles } = await onlyVisible(supabase.from('articles').select('id, published_at'))
     .order('published_at', { ascending: false });
 
   // Generate article URLs

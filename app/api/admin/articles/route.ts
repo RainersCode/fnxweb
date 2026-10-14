@@ -1,90 +1,50 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
+import { currentUser } from '@clerk/nextjs'
 import { isAdminRequest } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase'
-import { Article } from '@/types/supabase'
+import { isMissingColumnError, MIGRATION_MESSAGE } from '@/lib/article-publish'
 
-// Only allow signed-in users on the admin email list
-const checkAuth = () => isAdminRequest()
+export const dynamic = 'force-dynamic'
 
-// GET - fetch articles
+// GET - list articles for the admin (all statuses), newest edit first
 export async function GET() {
-  if (!(await checkAuth())) {
+  if (!(await isAdminRequest())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
+  const db = createAdminClient()
+  const { data, error } = await db
+    .from('articles')
+    .select('id, title, status, published_at, updated_at, image_url, author')
+    .order('updated_at', { ascending: false })
 
-  const adminClient = createAdminClient()
-  try {
-    const { data, error } = await adminClient
-      .from('articles')
-      .select('*')
-      .order('published_at', { ascending: false })
-
-    if (error) throw error
-    return NextResponse.json(data)
-  } catch (error) {
-    console.error('Error fetching articles:', error)
-    return NextResponse.json({ error: 'Failed to fetch articles' }, { status: 500 })
+  if (error) {
+    if (isMissingColumnError(error)) return NextResponse.json({ error: MIGRATION_MESSAGE }, { status: 409 })
+    console.error('Error listing articles:', error)
+    return NextResponse.json({ error: 'Neizdevās ielādēt ziņas' }, { status: 500 })
   }
+  return NextResponse.json(data)
 }
 
-// POST - create new article
-export async function POST(request: NextRequest) {
-  if (!(await checkAuth())) {
+// POST - create an empty draft so the editor has an id to autosave into
+export async function POST() {
+  if (!(await isAdminRequest())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
+  const user = await currentUser()
+  const author =
+    [user?.firstName, user?.lastName].filter(Boolean).join(' ') || user?.emailAddresses[0]?.emailAddress || null
 
-  try {
-    const article = await request.json()
-    const adminClient = createAdminClient()
-    const { data, error } = await adminClient.from('articles').insert(article).select().single()
+  const db = createAdminClient()
+  const { data, error } = await db
+    .from('articles')
+    .insert({ status: 'draft', title: null, content: '', author })
+    .select('id')
+    .single()
 
-    if (error) throw error
-    return NextResponse.json(data)
-  } catch (error) {
-    console.error('Error creating article:', error)
-    return NextResponse.json({ error: 'Failed to create article' }, { status: 500 })
+  if (error) {
+    if (isMissingColumnError(error)) return NextResponse.json({ error: MIGRATION_MESSAGE }, { status: 409 })
+    console.error('Error creating draft:', error)
+    return NextResponse.json({ error: 'Neizdevās izveidot ziņu' }, { status: 500 })
   }
-}
-
-// PATCH - update article
-export async function PATCH(request: NextRequest) {
-  if (!(await checkAuth())) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
-  try {
-    const { id, ...article } = await request.json()
-    const adminClient = createAdminClient()
-    const { data, error } = await adminClient
-      .from('articles')
-      .update(article)
-      .eq('id', id)
-      .select()
-      .single()
-
-    if (error) throw error
-    return NextResponse.json(data)
-  } catch (error) {
-    console.error('Error updating article:', error)
-    return NextResponse.json({ error: 'Failed to update article' }, { status: 500 })
-  }
-}
-
-// DELETE - delete article
-export async function DELETE(request: NextRequest) {
-  if (!(await checkAuth())) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
-  try {
-    const { id } = await request.json()
-    const adminClient = createAdminClient()
-    const { error } = await adminClient.from('articles').delete().eq('id', id)
-
-    if (error) throw error
-    return NextResponse.json({ success: true })
-  } catch (error) {
-    console.error('Error deleting article:', error)
-    return NextResponse.json({ error: 'Failed to delete article' }, { status: 500 })
-  }
+  return NextResponse.json({ id: data.id })
 }

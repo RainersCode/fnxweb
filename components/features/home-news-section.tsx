@@ -128,7 +128,7 @@ export function HomeNewsSection({ articles }: HomeNewsSectionProps) {
     return `/news/${index + 1}`
   }
   const getContent = (item: Article | FallbackNewsItem): string => {
-    if ('id' in item) return stripHtml(item.content)
+    if ('id' in item) return item.excerpt?.trim() || stripHtml(item.content)
     return item.description
   }
 
