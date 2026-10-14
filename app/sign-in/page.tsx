@@ -2,6 +2,7 @@ import { SignIn } from '@clerk/nextjs'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: false },
   title: 'Sign In - Rugby Club Admin',
   description: 'Sign in to access the admin dashboard',
 }
