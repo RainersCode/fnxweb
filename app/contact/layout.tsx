@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Kontakti | RK Fēnikss',
   description:
-    'Sazinies ar RK Fēnikss regbija klubu Valmierā. Adrese, telefons, e-pasts un treniņu laiki. Pievienojies mūsu regbija komandai!',
+    'Sazinies ar RK Fēnikss regbija klubu: tālrunis, e-pasts, sociālie tīkli un ceļš uz Brenguļiem. Pievienojies mūsu regbija komandai!',
   keywords: [
     'regbija klubs kontakti',
     'Valmiera regbijs',
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Kontakti | RK Fēnikss',
     description:
-      'Sazinies ar RK Fēnikss regbija klubu Valmierā. Adrese, telefons, e-pasts un treniņu laiki. Pievienojies mūsu regbija komandai!',
+      'Sazinies ar RK Fēnikss regbija klubu: tālrunis, e-pasts, sociālie tīkli un ceļš uz Brenguļiem. Pievienojies mūsu regbija komandai!',
     url: 'https://www.fnx-rugby.lv/contact',
   },
 }

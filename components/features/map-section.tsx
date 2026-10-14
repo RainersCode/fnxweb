@@ -1,7 +1,6 @@
-import { Navigation, ExternalLink } from 'lucide-react'
+import { Navigation } from 'lucide-react'
 
 interface MapSectionProps {
-  title?: string
   address: {
     name: string
     street: string
@@ -10,69 +9,48 @@ interface MapSectionProps {
   }
 }
 
-export function MapSection({
-  address,
-}: MapSectionProps) {
+export function MapSection({ address }: MapSectionProps) {
   const fullAddress = `${address.street}, ${address.city}, ${address.postcode}, Latvia`
-
-  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`
-
-  // Google Maps embed URL using search query for the actual address
-  const embedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(fullAddress)}&t=&z=14&ie=UTF8&iwloc=&output=embed`
+  const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(fullAddress)}`
+  const embedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(fullAddress)}&t=&z=13&ie=UTF8&iwloc=&output=embed`
 
   return (
-    <section className="py-16 md:py-20 bg-[#f5f5f5]">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
-        <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-club mb-3 block">Lokācija</span>
-        <h2 className="font-display text-[clamp(42px,5.5vw,80px)] font-bold uppercase text-[#111] leading-[1.15] tracking-tight mb-10">
-          Atrodi Mūs
-        </h2>
-
-        <div className="relative overflow-hidden">
-          <div className="relative h-[450px] w-full bg-gray-100">
-            {/* Google Maps Embed */}
-            <iframe
-              src={embedUrl}
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Kluba atrašanās vieta"
-              className="absolute inset-0"
-            />
-
-            {/* Address overlay card */}
-            <div className="absolute bottom-6 left-6 right-6 sm:left-auto sm:right-6 sm:max-w-md z-10">
-              <div className="bg-white p-6">
-                <h3 className="font-display text-lg font-bold uppercase text-[#111] mb-2">{address.name}</h3>
-                <p className="font-body text-sm text-[#666] leading-relaxed mb-4">
-                  {address.street}<br />{address.city}, {address.postcode}
-                </p>
-                <div className="flex gap-2">
-                  <a
-                    href={googleMapsUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-[#111] text-white font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-club transition-colors"
-                  >
-                    <Navigation className="h-4 w-4" />
-                    Norādes
-                  </a>
-                  <a
-                    href={googleMapsUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-3 border-2 border-[#111] text-[#111] font-cond text-xs font-bold tracking-[2.5px] uppercase hover:bg-[#111] hover:text-white transition-colors"
-                  >
-                    <ExternalLink className="h-4 w-4" />
-                    Atvērt
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
+    <section className="py-14 md:py-20 bg-club-pale">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 md:px-16 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.7fr)] lg:items-stretch">
+        <div className="flex flex-col">
+          <span className="font-cond text-[13px] font-bold tracking-[3px] uppercase text-club mb-3 block">Kur mūs atrast</span>
+          <h2 className="font-display text-[clamp(34px,4.5vw,54px)] font-bold uppercase text-[#111] leading-[1.15] tracking-tight">
+            Atbrauc pie mums
+          </h2>
+          <address className="not-italic font-body text-[16px] text-[#444] leading-[1.75] mt-5">
+            {address.name}
+            <br />
+            {address.street}
+            <br />
+            {address.city}, {address.postcode}
+          </address>
+          <a
+            href={directionsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-8 inline-flex w-full sm:w-auto self-start justify-center items-center gap-2.5 bg-teal-700 hover:bg-teal-600 text-white px-8 py-4 font-cond text-[13px] font-bold tracking-[2.5px] uppercase transition-colors duration-200"
+          >
+            <Navigation className="h-4 w-4" aria-hidden="true" />
+            Rādīt ceļu
+          </a>
+        </div>
+        <div className="relative h-[320px] md:h-[420px] w-full overflow-hidden bg-[#DCE3DF]">
+          <iframe
+            src={embedUrl}
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            title="Kluba atrašanās vieta kartē"
+            className="absolute inset-0"
+          />
         </div>
       </div>
     </section>
