@@ -1,26 +1,20 @@
 import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import { supabase, prepareImagePath } from '@/lib/supabase'
 import { Article, Gallery } from '@/types/supabase'
-import { NewsDetailClient } from './news-detail-client'
+import { onlyVisible, excerptFor } from '@/lib/articles'
+import { sanitizeArticleHtml } from '@/lib/sanitize-article'
+import { NewsDetailClient, type LinkedFixture, type LinkedGallery } from './news-detail-client'
 
 // Type for gallery with thumbnail
 interface GalleryWithThumbnail extends Gallery {
   thumbnailUrl: string
 }
 
-// Helper function to strip HTML (server-safe version)
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
-}
-
-// Fetch article data
+// Fetch article data (only articles that are publicly visible)
 async function getArticle(id: string): Promise<Article | null> {
   try {
-    const { data, error } = await supabase
-      .from('articles')
-      .select('*')
-      .eq('id', id)
-      .single()
+    const { data, error } = await onlyVisible(supabase.from('articles').select('*').eq('id', id)).maybeSingle()
 
     if (error) throw error
     return data
@@ -33,10 +27,7 @@ async function getArticle(id: string): Promise<Article | null> {
 // Fetch related articles
 async function getRelatedArticles(id: string): Promise<Article[]> {
   try {
-    const { data } = await supabase
-      .from('articles')
-      .select('*')
-      .neq('id', id)
+    const { data } = await onlyVisible(supabase.from('articles').select('*').neq('id', id))
       .order('published_at', { ascending: false })
       .limit(3)
 
@@ -86,6 +77,19 @@ async function getLatestGalleries(): Promise<GalleryWithThumbnail[]> {
   }
 }
 
+// The match and gallery an article is linked to, shown as cards under the article
+async function getLinked(article: Article): Promise<{ fixture: LinkedFixture | null; gallery: LinkedGallery | null }> {
+  const [fixture, gallery] = await Promise.all([
+    article.fixture_id
+      ? supabase.from('fixtures').select('id, opponent, match_date, is_home_game, score').eq('id', article.fixture_id).maybeSingle()
+      : Promise.resolve({ data: null }),
+    article.gallery_id
+      ? supabase.from('galleries').select('id, title').eq('id', article.gallery_id).maybeSingle()
+      : Promise.resolve({ data: null }),
+  ])
+  return { fixture: fixture.data ?? null, gallery: gallery.data ?? null }
+}
+
 // Generate metadata for SEO and social sharing
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params
@@ -98,8 +102,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     }
   }
 
-  const plainText = stripHtml(article.content)
-  const description = plainText.length > 160 ? `${plainText.substring(0, 160)}...` : plainText
+  const description = excerptFor(article)
   const imageUrl = prepareImagePath(article.image_url ?? null)
 
   // Get the base URL from environment or use a default
@@ -180,27 +183,32 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ id:
     getLatestGalleries(),
   ])
 
+  // Drafts and scheduled articles are not public yet
+  if (!article) notFound()
+  const linked = await getLinked(article)
+  const safeArticle = { ...article, content: sanitizeArticleHtml(article.content) }
+
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fnx-rugby.lv'
   const pageUrl = `${baseUrl}/news/${id}`
 
   return (
     <>
       {/* JSON-LD structured data */}
-      {article && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(generateJsonLd(article, pageUrl)),
-          }}
-        />
-      )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(generateJsonLd(safeArticle, pageUrl)),
+        }}
+      />
 
       {/* Client component for interactive UI */}
       <NewsDetailClient
-        article={article}
+        article={safeArticle}
         relatedArticles={relatedArticles}
         latestGalleries={latestGalleries}
         pageUrl={pageUrl}
+        linkedFixture={linked.fixture}
+        linkedGallery={linked.gallery}
       />
     </>
   )

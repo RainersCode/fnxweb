@@ -68,53 +68,6 @@ export type Contact = {
   display_order?: number
 }
 
-// Articles
-export async function getArticles() {
-  const { data, error } = await supabase
-    .from('articles')
-    .select('*')
-    .order('published_at', { ascending: false })
-
-  if (error) throw error
-  return data
-}
-
-export async function getArticleBySlug(slug: string) {
-  const { data, error } = await supabase.from('articles').select('*').eq('slug', slug).single()
-
-  if (error) throw error
-  return data
-}
-
-export async function createArticle(article: Article) {
-  const adminClient = createAdminClient()
-  const { data, error } = await adminClient.from('articles').insert(article).select().single()
-
-  if (error) throw error
-  return data
-}
-
-export async function updateArticle(id: string, article: Partial<Article>) {
-  const adminClient = createAdminClient()
-  const { data, error } = await adminClient
-    .from('articles')
-    .update(article)
-    .eq('id', id)
-    .select()
-    .single()
-
-  if (error) throw error
-  return data
-}
-
-export async function deleteArticle(id: string) {
-  const adminClient = createAdminClient()
-  const { error } = await adminClient.from('articles').delete().eq('id', id)
-
-  if (error) throw error
-  return true
-}
-
 // Fixtures
 export async function getFixtures() {
   const { data, error } = await supabase

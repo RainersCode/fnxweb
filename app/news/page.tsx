@@ -3,6 +3,7 @@ import { default as NextImage } from 'next/image'
 import Link from 'next/link'
 import { MainLayout } from '@/components/layout/main-layout'
 import { supabase } from '@/lib/supabase'
+import { onlyVisible, excerptFor } from '@/lib/articles'
 import { Article } from '@/types/supabase'
 
 export const revalidate = 60
@@ -16,10 +17,6 @@ export const metadata: Metadata = {
   },
 }
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
-}
-
 function formatDate(dateString: string): string {
   return new Date(dateString).toLocaleDateString('lv-LV', {
     day: '2-digit', month: 'short', year: 'numeric',
@@ -28,9 +25,7 @@ function formatDate(dateString: string): string {
 
 async function getArticles(): Promise<Article[]> {
   try {
-    const { data, error } = await supabase
-      .from('articles')
-      .select('*')
+    const { data, error } = await onlyVisible(supabase.from('articles').select('*'))
       .order('published_at', { ascending: false })
 
     if (error) throw error
@@ -98,7 +93,7 @@ export default async function NewsPage() {
                         {articles[0].title}
                       </h3>
                       <p className="font-body text-[15px] text-[#666] leading-relaxed mt-4 line-clamp-3">
-                        {stripHtml(articles[0].content).substring(0, 200)}...
+                        {excerptFor(articles[0], 200)}
                       </p>
                       <div className="flex items-center gap-3.5 mt-6">
                         <span className="font-cond text-[13px] font-semibold tracking-[2px] uppercase text-[#888]">

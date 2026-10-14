@@ -12,19 +12,25 @@ const XIcon = ({ className }: { className?: string }) => (
 import MainLayout from '@/components/layout/main-layout'
 import { prepareImagePath } from '@/lib/supabase'
 import { Article, Gallery } from '@/types/supabase'
+import { formatRigaDate } from '@/lib/articles'
 
 interface GalleryWithThumbnail extends Gallery {
   thumbnailUrl: string
 }
+
+export type LinkedFixture = { id: string; opponent: string; match_date: string; is_home_game: boolean; score?: string | null }
+export type LinkedGallery = { id: string; title: string }
 
 interface NewsDetailClientProps {
   article: Article | null
   relatedArticles: Article[]
   latestGalleries: GalleryWithThumbnail[]
   pageUrl: string
+  linkedFixture?: LinkedFixture | null
+  linkedGallery?: LinkedGallery | null
 }
 
-export function NewsDetailClient({ article, relatedArticles, latestGalleries, pageUrl }: NewsDetailClientProps) {
+export function NewsDetailClient({ article, relatedArticles, latestGalleries, pageUrl, linkedFixture, linkedGallery }: NewsDetailClientProps) {
   const formatDate = (dateString: string): string => {
     return new Date(dateString).toLocaleDateString('lv-LV', {
       day: '2-digit', month: 'short', year: 'numeric',
@@ -134,6 +140,29 @@ export function NewsDetailClient({ article, relatedArticles, latestGalleries, pa
                 ">
                   <div dangerouslySetInnerHTML={{ __html: article.content }} />
                 </article>
+
+                {(linkedFixture || linkedGallery) && (
+                  <div className="mt-10 grid gap-4 sm:grid-cols-2">
+                    {linkedFixture && (
+                      <Link href="/fixtures" className="group block border border-[#e5e5e5] p-5 hover:border-club transition-colors">
+                        <span className="font-cond text-[11px] font-bold tracking-[2px] uppercase text-[#888]">Spēle</span>
+                        <span className="block font-display text-xl font-bold uppercase text-[#111] mt-1">
+                          {linkedFixture.is_home_game ? `Fēnikss v ${linkedFixture.opponent}` : `${linkedFixture.opponent} v Fēnikss`}
+                        </span>
+                        <span className="block font-cond text-sm text-[#666] mt-1">
+                          {formatRigaDate(linkedFixture.match_date)}{linkedFixture.score ? ` · ${linkedFixture.score}` : ''}
+                        </span>
+                      </Link>
+                    )}
+                    {linkedGallery && (
+                      <Link href={`/gallery/${linkedGallery.id}`} className="group block bg-club text-white p-5 hover:bg-club-deep transition-colors">
+                        <span className="font-cond text-[11px] font-bold tracking-[2px] uppercase text-club-mint">Foto</span>
+                        <span className="block font-display text-xl font-bold uppercase mt-1">Skatīt foto galeriju</span>
+                        <span className="block font-cond text-sm text-white/70 mt-1">{linkedGallery.title}</span>
+                      </Link>
+                    )}
+                  </div>
+                )}
 
                 {/* Share */}
                 <div className="mt-12 pt-8 border-t border-[#e5e5e5]">

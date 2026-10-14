@@ -85,9 +85,12 @@ export type VisibleQuery<Q> = {
   lte(column: string, value: string): Q
 }
 
-// The one place that defines "public": every public article query goes through this
-export function onlyVisible<Q extends VisibleQuery<Q>>(query: Q, now: Date = new Date()): Q {
-  return query.eq('status', 'published').lte('published_at', now.toISOString())
+// The one place that defines "public": every public article query goes through this.
+// Unconstrained on purpose: checking Supabase's query builder against any constraint
+// hits TypeScript's instantiation depth limit. The tests pin the eq/lte calls.
+export function onlyVisible<Q>(query: Q, now: Date = new Date()): Q {
+  const q = query as unknown as VisibleQuery<VisibleQuery<Q>>
+  return q.eq('status', 'published').lte('published_at', now.toISOString()) as unknown as Q
 }
 
 export function formatRigaDateTime(iso: string): string {

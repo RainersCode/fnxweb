@@ -3,6 +3,7 @@ import { ArrowRight } from 'lucide-react'
 import { MainLayout } from '@/components/layout/main-layout'
 import Link from 'next/link'
 import { supabase, prepareImagePath } from '@/lib/supabase'
+import { onlyVisible } from '@/lib/articles'
 import { Article, Gallery, Fixture, TeamPlayer } from '@/types/supabase'
 import { aboutUsData } from '@/data/about-us'
 import { HomeHero } from '@/components/features/home-hero'
@@ -38,9 +39,7 @@ const sponsorDisplayWidth = (width: number, height: number) =>
 // Server-side data fetching functions
 async function getArticles(): Promise<Article[]> {
   try {
-    const { data, error } = await supabase
-      .from('articles')
-      .select('*')
+    const { data, error } = await onlyVisible(supabase.from('articles').select('*'))
       .order('published_at', { ascending: false })
       .limit(4)
 
