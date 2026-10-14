@@ -18,3 +18,12 @@ export function isSafeUploadFolder(folder: string): boolean {
 export function isHeicFile(name: string, type: string): boolean {
   return /image\/hei[cf]/i.test(type) || /\.(heic|heif)$/i.test(name)
 }
+
+// Fit inside 1920×1920: portrait photos are limited too, not only landscape ones
+export const IMAGE_RESIZE = {
+  width: 1920,
+  height: 1920,
+  fit: 'inside',
+  withoutEnlargement: true,
+  fastShrinkOnLoad: true,
+} as const

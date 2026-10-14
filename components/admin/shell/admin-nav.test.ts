@@ -16,4 +16,9 @@ describe('admin navigation', () => {
     expect(isEditorPath('/admin/articles/3f2b/preview')).toBe(false)
     expect(isPreviewPath('/admin/articles/3f2b/preview')).toBe(true)
   })
+  it('treats every section form as an editor page', () => {
+    expect(isEditorPath('/admin/players/new')).toBe(true)
+    expect(isEditorPath('/admin/gallery/3f2b')).toBe(true)
+    expect(isEditorPath('/admin/fixtures')).toBe(false)
+  })
 })

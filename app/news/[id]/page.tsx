@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { supabase, prepareImagePath } from '@/lib/supabase'
+import { galleryCover } from '@/lib/gallery'
 import { Article, Gallery } from '@/types/supabase'
 import { onlyVisible, excerptFor, jsonLdString } from '@/lib/articles'
 import { sanitizeArticleHtml } from '@/lib/sanitize-article'
@@ -62,9 +63,8 @@ async function getLatestGalleries(): Promise<GalleryWithThumbnail[]> {
           .order('display_order', { ascending: true })
           .limit(1)
 
-        const thumbnailUrl = imagesData && imagesData.length > 0
-          ? prepareImagePath(imagesData[0].image_url)
-          : '/placeholder.svg?height=200&width=300&text=Gallery'
+        const coverUrl = galleryCover(gallery.cover_image_url, imagesData?.[0]?.image_url)
+        const thumbnailUrl = coverUrl ? prepareImagePath(coverUrl) : '/placeholder.svg?height=200&width=300&text=Gallery'
 
         return {
           ...gallery,

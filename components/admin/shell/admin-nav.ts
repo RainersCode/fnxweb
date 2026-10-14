@@ -16,8 +16,9 @@ export function isActiveNav(pathname: string, href: string): boolean {
   return href === '/admin' ? pathname === '/admin' : pathname === href || pathname.startsWith(`${href}/`)
 }
 
+// Full-page editors bring their own top bar: articles, and the new/edit forms of every section
 export function isEditorPath(pathname: string): boolean {
-  return /^\/admin\/articles\/[^/]+$/.test(pathname)
+  return /^\/admin\/(articles|players|coaches|training|fixtures|gallery)\/[^/]+$/.test(pathname)
 }
 
 export function isPreviewPath(pathname: string): boolean {

@@ -27,12 +27,19 @@ export type Fixture = {
   away_logo_url?: string
 }
 
+export type Team = {
+  id: string
+  name: string
+  logo_url: string | null
+  created_at: string
+}
+
 export type Gallery = {
   id: string
   title: string
   description?: string
   created_at: string
-  cover_image?: string | null
+  cover_image_url?: string | null
 }
 
 export type GalleryImage = {

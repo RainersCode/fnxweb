@@ -2,6 +2,8 @@
 // Shrink big photos in the browser first; the server still resizes and converts to WebP.
 const SHRINK_ABOVE_BYTES = 3.5 * 1024 * 1024
 const MAX_SIDE = 2560
+// A stalled request on a weak network must fail so the photo can be retried
+export const UPLOAD_TIMEOUT_MS = 120_000
 
 async function shrinkIfLarge(file: File): Promise<File> {
   const shrinkable = /^image\/(jpeg|png|webp)$/.test(file.type)
@@ -36,6 +38,7 @@ export async function uploadWithProgress(
 
     const xhr = new XMLHttpRequest()
     xhr.open('POST', '/api/admin/upload')
+    xhr.timeout = UPLOAD_TIMEOUT_MS
     xhr.upload.onprogress = (e) => {
       if (e.lengthComputable) onProgress(Math.round((e.loaded / e.total) * 95))
     }
@@ -52,6 +55,8 @@ export async function uploadWithProgress(
       }
     }
     xhr.onerror = () => reject(new Error('Nav savienojuma — foto netika augšupielādēts'))
+    xhr.ontimeout = () => reject(new Error('Augšupielāde ilga pārāk ilgi — mēģini vēlreiz'))
+    xhr.onabort = () => reject(new Error('Augšupielāde tika pārtraukta'))
     xhr.send(form)
   })
 }

@@ -4,6 +4,7 @@ import { MainLayout } from '@/components/layout/main-layout'
 import Link from 'next/link'
 import { supabase, prepareImagePath } from '@/lib/supabase'
 import { onlyVisible } from '@/lib/articles'
+import { galleryCover } from '@/lib/gallery'
 import { Article, Gallery, Fixture, TeamPlayer } from '@/types/supabase'
 import { aboutUsData } from '@/data/about-us'
 import { HomeHero } from '@/components/features/home-hero'
@@ -12,6 +13,7 @@ import { HomeGallerySection } from '@/components/features/home-gallery-section'
 import { HomeFixturesSection } from '@/components/features/home-fixtures-section'
 import { HomeSocialSection } from '@/components/features/home-social-section'
 import { HomePlayersSection } from '@/components/features/home-players-section'
+import { getActiveTraining, TrainingTimesList } from '@/components/features/training-times'
 
 // Revalidate data every 60 seconds
 export const revalidate = 60
@@ -68,6 +70,7 @@ async function getGalleries(): Promise<GalleryWithThumbnail[]> {
           .from('gallery_images')
           .select('*')
           .eq('gallery_id', gallery.id)
+          .order('display_order', { ascending: true })
           .limit(1)
 
         if (imagesError) {
@@ -77,9 +80,8 @@ async function getGalleries(): Promise<GalleryWithThumbnail[]> {
           }
         }
 
-        const thumbnailUrl = imagesData && imagesData.length > 0
-          ? prepareImagePath(imagesData[0].image_url)
-          : '/placeholder.svg?height=300&width=400&text=Gallery'
+        const coverUrl = galleryCover(gallery.cover_image_url, imagesData?.[0]?.image_url)
+        const thumbnailUrl = coverUrl ? prepareImagePath(coverUrl) : '/placeholder.svg?height=300&width=400&text=Gallery'
 
         return {
           ...gallery,
@@ -149,12 +151,13 @@ async function getRecentResults(): Promise<Fixture[]> {
 
 export default async function HomePage() {
   // Fetch all data in parallel on the server
-  const [articles, galleries, fixtures, players, recentResults] = await Promise.all([
+  const [articles, galleries, fixtures, players, recentResults, training] = await Promise.all([
     getArticles(),
     getGalleries(),
     getFixtures(),
     getPlayers(),
     getRecentResults(),
+    getActiveTraining(),
   ])
 
   // Fixtures are fetched from midnight, so skip any match that already kicked off today
@@ -234,6 +237,11 @@ export default async function HomePage() {
               Mūsu mērķis ir nodrošināt viesmīlīgu vidi, kur ikviens var baudīt spēli, attīstīt savas
               prasmes un veidot ilgstošas draudzības gan laukumā, gan ārpus tā.
             </p>
+            {training.length > 0 && (
+              <div className="mb-8 max-w-[400px]">
+                <TrainingTimesList sessions={training} tone="dark" />
+              </div>
+            )}
             <Link
               href="/contact"
               className="group inline-flex items-center gap-2.5 bg-teal-700 hover:bg-teal-600 text-white px-10 py-4 font-cond text-[13px] font-bold tracking-[2.5px] uppercase transition-all duration-300 self-start"

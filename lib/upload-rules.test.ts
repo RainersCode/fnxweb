@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { isSafeUploadFolder, isHeicFile, safeUploadBaseName } from './upload-rules'
+import { isSafeUploadFolder, isHeicFile, safeUploadBaseName, IMAGE_RESIZE } from './upload-rules'
 
 describe('isSafeUploadFolder', () => {
   it.each(['articles', 'players', 'articles/3f2b1c9e-1d2a-4b7c-9a1e-2f3a4b5c6d7e', 'galleries'])('allows %s', (f) => {
@@ -30,5 +30,11 @@ describe('safeUploadBaseName', () => {
   })
   it('falls back when nothing usable remains', () => {
     expect(safeUploadBaseName('...')).toBe('foto')
+  })
+})
+
+describe('IMAGE_RESIZE', () => {
+  it('limits the longest side, not just the width', () => {
+    expect(IMAGE_RESIZE).toMatchObject({ width: 1920, height: 1920, fit: 'inside', withoutEnlargement: true })
   })
 })

@@ -155,7 +155,7 @@ export function FixturesClient({ upcomingFixtures, pastFixtures }: FixturesClien
                           <div className="flex items-center gap-3 flex-1 min-w-0">
                             <div className="relative w-12 h-12 flex-shrink-0">
                               <Image
-                                src={getImageUrl(fixture.home_logo_url) || "/Logo/fēniks_logo-removebg-preview.png"}
+                                src={getImageUrl(fixture.home_logo_url) || (fixture.is_home_game ? "/Logo/fēniks_logo-removebg-preview.png" : "/placeholder.svg?height=48&width=48&text=Team")}
                                 alt={fixture.is_home_game ? clubName : fixture.opponent}
                                 fill
                                 className="object-contain"
@@ -190,7 +190,7 @@ export function FixturesClient({ upcomingFixtures, pastFixtures }: FixturesClien
                             </span>
                             <div className="relative w-12 h-12 flex-shrink-0">
                               <Image
-                                src={getImageUrl(fixture.away_logo_url) || "/placeholder.svg?height=48&width=48&text=Team"}
+                                src={getImageUrl(fixture.away_logo_url) || (fixture.is_home_game ? "/placeholder.svg?height=48&width=48&text=Team" : "/Logo/fēniks_logo-removebg-preview.png")}
                                 alt={fixture.is_home_game ? fixture.opponent : clubName}
                                 fill
                                 className="object-contain"
