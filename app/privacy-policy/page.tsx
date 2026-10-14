@@ -1,10 +1,13 @@
 import { Metadata } from 'next'
 import { default as NextImage } from 'next/image'
 import { MainLayout } from '@/components/layout/main-layout'
+import { pageUrl } from '@/lib/site'
 
 export const metadata: Metadata = {
+  alternates: { canonical: pageUrl('/privacy-policy') },
   title: 'Privātuma Politika | RK "Fēnikss"',
   description: 'RK "Fēnikss" privātuma politika un personas datu apstrādes principi',
+  openGraph: { url: pageUrl('/privacy-policy'), title: 'Privātuma Politika | RK "Fēnikss"', description: 'RK "Fēnikss" privātuma politika un personas datu apstrādes principi' },
 }
 
 function DiamondBullet() {

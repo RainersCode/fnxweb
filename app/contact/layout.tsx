@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
+import { pageUrl } from '@/lib/site'
 
 export const metadata: Metadata = {
+  alternates: { canonical: pageUrl('/contact') },
   title: 'Kontakti | RK Fēnikss',
   description:
     'Sazinies ar RK Fēnikss regbija klubu: tālrunis, e-pasts, sociālie tīkli un ceļš uz Brenguļiem. Pievienojies mūsu regbija komandai!',
@@ -14,7 +16,7 @@ export const metadata: Metadata = {
     title: 'Kontakti | RK Fēnikss',
     description:
       'Sazinies ar RK Fēnikss regbija klubu: tālrunis, e-pasts, sociālie tīkli un ceļš uz Brenguļiem. Pievienojies mūsu regbija komandai!',
-    url: 'https://www.fnx-rugby.lv/contact',
+    url: pageUrl('/contact'),
   },
 }
 

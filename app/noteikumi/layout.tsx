@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
+import { pageUrl } from '@/lib/site'
 
 export const metadata: Metadata = {
+  alternates: { canonical: pageUrl('/noteikumi') },
   title: 'Regbija Noteikumi | RK Fēnikss',
   description:
     'Regbija noteikumi iesācējiem: kā gūst punktus, kas ir piezemējums, grupu cīņa, auts, raks, mols un aizmugure, un kādas ir spēlētāju pozīcijas.',
@@ -16,7 +18,7 @@ export const metadata: Metadata = {
     title: 'Regbija Noteikumi | RK Fēnikss',
     description:
       'Regbija noteikumi iesācējiem: kā gūst punktus, kas ir piezemējums, grupu cīņa, auts, raks, mols un aizmugure, un kādas ir spēlētāju pozīcijas.',
-    url: 'https://www.fnx-rugby.lv/noteikumi',
+    url: pageUrl('/noteikumi'),
   },
 }
 

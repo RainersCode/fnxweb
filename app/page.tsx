@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { default as NextImage } from 'next/image'
 import { ArrowRight } from 'lucide-react'
 import { MainLayout } from '@/components/layout/main-layout'
@@ -14,9 +15,14 @@ import { HomeFixturesSection } from '@/components/features/home-fixtures-section
 import { HomeSocialSection } from '@/components/features/home-social-section'
 import { HomePlayersSection } from '@/components/features/home-players-section'
 import { getActiveTraining, TrainingTimesList } from '@/components/features/training-times'
+import { SITE_URL } from '@/lib/site'
 
 // Revalidate data every 60 seconds
 export const revalidate = 60
+
+export const metadata: Metadata = {
+  alternates: { canonical: SITE_URL },
+}
 
 // Add type for galleries with thumbnails
 interface GalleryWithThumbnail extends Gallery {
