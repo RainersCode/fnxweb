@@ -9,9 +9,9 @@ import { Field, inputClass } from '@/components/admin/ui/field'
 import { PhotoField } from '@/components/admin/ui/photo-field'
 import { apiSend } from '@/lib/admin-fetch'
 import { coachSchema, fieldErrors, playerSchema } from '@/lib/admin-schemas'
+import { POSITION_NAMES } from '@/lib/rugby-positions'
 import type { PersonKind, PersonRow } from './people-list'
 
-const POSITIONS = ['Balsts', 'Āķētājs', 'Otrās rindas uzbrucējs', 'Flangs', 'Astotais', 'Saspēles vadītājs', 'Pussargs', 'Centrs', 'Malējais', 'Aizsargs']
 
 const copy = {
   player: { api: '/api/admin/players', base: '/admin/players', back: 'Spēlētāji', newTitle: 'Jauns spēlētājs', del: 'Dzēst šo spēlētāju?', folder: 'players' },
@@ -82,7 +82,7 @@ export function PersonForm({ kind, initial }: { kind: PersonKind; initial?: Pers
           </Field>
           <Field label="Pozīcija" htmlFor="pos" error={errors.position}>
             <input id="pos" list="positions" value={form.position} onChange={(e) => set({ position: e.target.value })} className={inputClass} />
-            <datalist id="positions">{POSITIONS.map((p) => <option key={p} value={p} />)}</datalist>
+            <datalist id="positions">{POSITION_NAMES.map((p) => <option key={p} value={p} />)}</datalist>
           </Field>
         </div>
       ) : (
