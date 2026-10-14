@@ -16,3 +16,14 @@ export function fixtureLogos(teamLogo: string | null, isHome: boolean) {
 export function teamLogoFromFixture(f: { is_home_game: boolean; home_logo_url?: string | null; away_logo_url?: string | null }): string | null {
   return (f.is_home_game ? f.away_logo_url : f.home_logo_url) ?? null
 }
+
+// The logo to store on a saved match. A remembered team without a logo must not wipe the match's own logo.
+export function fixtureLogoToSave(
+  team: { name: string; logo_url: string | null } | null,
+  initial: { opponent: string; is_home_game: boolean; home_logo_url?: string | null; away_logo_url?: string | null } | undefined
+): string | null {
+  const stored = initial ? teamLogoFromFixture(initial) : null
+  if (!team) return stored
+  if (team.logo_url) return team.logo_url
+  return initial && normalizeTeamName(team.name) === normalizeTeamName(initial.opponent) ? stored : null
+}

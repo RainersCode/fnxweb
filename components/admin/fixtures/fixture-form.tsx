@@ -8,7 +8,7 @@ import { Field, inputClass } from '@/components/admin/ui/field'
 import { apiSend } from '@/lib/admin-fetch'
 import { fieldErrors, fixtureSchema } from '@/lib/admin-schemas'
 import { fromDateTimeLocal, toDateTimeLocal } from '@/lib/articles'
-import { findTeamByName, fixtureLogos, teamLogoFromFixture } from '@/lib/teams'
+import { findTeamByName, fixtureLogoToSave, fixtureLogos } from '@/lib/teams'
 import { TeamPicker } from './team-picker'
 import type { TeamRow } from './team-dialog'
 
@@ -45,7 +45,7 @@ export function FixtureForm({ initial, teams: initialTeams }: { initial?: Fixtur
   const save = async () => {
     // Without a picked team an old match keeps its stored opponent and logo
     const opponent = team?.name ?? initial?.opponent ?? ''
-    const logo = team ? team.logo_url : initial ? teamLogoFromFixture(initial) : null
+    const logo = fixtureLogoToSave(team, initial)
     const payload = {
       opponent,
       match_date: form.when ? fromDateTimeLocal(form.when) : '',

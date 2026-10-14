@@ -8,19 +8,21 @@ import {
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { useUnsavedGuard } from './use-unsaved-guard'
+import { leaveWarning } from './leave-warning'
 
-export function AdminFormPage({ backHref, backLabel, title, saving, dirty, onSave, onDelete, deleteTitle, children }: {
+export function AdminFormPage({ backHref, backLabel, title, saving, dirty, uploading, onSave, onDelete, deleteTitle, children }: {
   backHref: string
   backLabel: string
   title: string
   saving: boolean
   dirty: boolean
+  uploading?: boolean
   onSave: () => void
   onDelete?: () => void
   deleteTitle?: string
   children: ReactNode
 }) {
-  useUnsavedGuard(dirty)
+  useUnsavedGuard(leaveWarning({ dirty, uploading }))
   return (
     <div className="min-h-screen bg-white">
       <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-[#DCE3DF] bg-white px-3 lg:px-5">

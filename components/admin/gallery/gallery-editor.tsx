@@ -8,7 +8,9 @@ import { AdminFormPage } from '@/components/admin/ui/admin-form-page'
 import { Field, inputClass } from '@/components/admin/ui/field'
 import { apiSend } from '@/lib/admin-fetch'
 import { fieldErrors, galleryUpdateSchema } from '@/lib/admin-schemas'
-import { galleryCover, moveId } from '@/lib/gallery'
+import { applyOrder, galleryCover, moveId } from '@/lib/gallery'
+import { uploadGalleryPhoto } from '@/lib/gallery-upload'
+import { createLatestSaver } from '@/lib/latest-saver'
 import { uploadWithProgress } from '@/lib/upload-with-progress'
 import { PhotoGrid, type GalleryImageRow } from './photo-grid'
 import { UploadPanel } from './upload-panel'
@@ -28,25 +30,30 @@ export function GalleryEditor({ gallery, initialImages }: { gallery: GalleryRow;
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const nextOrder = useRef(Math.max(0, ...initialImages.map((i) => i.display_order ?? 0)) + 1)
 
-  const queue = useUploadQueue(async (file, order, onProgress) => {
-    const { url } = await uploadWithProgress(file, `galleries/${gallery.id}`, onProgress)
-    const row = await apiSend<GalleryImageRow>(`/api/admin/gallery/${gallery.id}/images`, 'POST', { image_url: url, display_order: order })
-    setImages((prev) => [...prev, row].sort((a, b) => a.display_order - b.display_order))
-  })
+  const queue = useUploadQueue((file, order, onProgress, memo) =>
+    uploadGalleryPhoto(memo, {
+      uploadFile: async () => (await uploadWithProgress(file, `galleries/${gallery.id}`, onProgress)).url,
+      addRow: async (url) => {
+        const row = await apiSend<GalleryImageRow>(`/api/admin/gallery/${gallery.id}/images`, 'POST', { image_url: url, display_order: order })
+        setImages((prev) => (prev.some((i) => i.id === row.id) ? prev : [...prev, row].sort((a, b) => a.display_order - b.display_order)))
+      },
+    })
+  )
   const { total, failed, active, waiting } = queue.summary
   const uploading = active > 0 || waiting > 0
   const { clearDone } = queue
 
-  // Leaving while photos upload would stop them
+  // The finished photos are in the grid now; the queue only keeps failures
   useEffect(() => {
-    if (!uploading) {
-      if (total > 0 && failed === 0) clearDone()
-      return
-    }
-    const warn = (e: BeforeUnloadEvent) => { e.preventDefault(); e.returnValue = '' }
-    window.addEventListener('beforeunload', warn)
-    return () => window.removeEventListener('beforeunload', warn)
+    if (!uploading && total > 0 && failed === 0) clearDone()
   }, [uploading, total, failed, clearDone])
+
+  // One order save at a time; a failed save puts the grid back to the last saved order
+  const savedOrder = useRef(initialImages.map((i) => i.id))
+  const saveOrder = useMemo(() => createLatestSaver(async (ids: string[]) => {
+    await apiSend(`/api/admin/gallery/${gallery.id}/order`, 'PUT', { ids })
+    savedOrder.current = ids
+  }), [gallery.id])
 
   const shownCover = useMemo(() => galleryCover(cover, images[0]?.image_url), [cover, images])
 
@@ -58,12 +65,11 @@ export function GalleryEditor({ gallery, initialImages }: { gallery: GalleryRow;
 
   const reorder = async (activeId: string, overId: string) => {
     const ids = moveId(images.map((i) => i.id), activeId, overId)
-    const previous = images
     setImages(ids.map((id, index) => ({ ...images.find((i) => i.id === id)!, display_order: index + 1 })))
     try {
-      await apiSend(`/api/admin/gallery/${gallery.id}/order`, 'PUT', { ids })
+      await saveOrder(ids)
     } catch (e) {
-      setImages(previous)
+      setImages((prev) => applyOrder(prev, savedOrder.current))
       toast.error(e instanceof Error ? e.message : 'Neizdevās saglabāt secību')
     }
   }
@@ -135,7 +141,7 @@ export function GalleryEditor({ gallery, initialImages }: { gallery: GalleryRow;
   })
 
   return (
-    <AdminFormPage backHref="/admin/gallery" backLabel="Galerijas" title={meta.title || 'Galerija'} saving={saving} dirty={dirty} onSave={saveMeta} onDelete={removeGallery} deleteTitle="Dzēst visu galeriju un tās foto?">
+    <AdminFormPage backHref="/admin/gallery" backLabel="Galerijas" title={meta.title || 'Galerija'} saving={saving} dirty={dirty} uploading={uploading} onSave={saveMeta} onDelete={removeGallery} deleteTitle="Dzēst visu galeriju un tās foto?">
       <a href={`/gallery/${gallery.id}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 justify-self-start text-sm font-semibold text-club">
         Skatīt mājaslapā <ExternalLink className="h-4 w-4" />
       </a>

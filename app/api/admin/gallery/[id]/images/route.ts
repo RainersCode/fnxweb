@@ -9,6 +9,10 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   if (!(await isAdminRequest())) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const parsed = galleryImageCreateSchema.safeParse(await req.json().catch(() => null))
   if (!parsed.success) return NextResponse.json({ error: 'Nederīgi dati' }, { status: 400 })
+  // A retry after a lost response must not add the same photo twice
+  const { data: existing } = await createAdminClient()
+    .from('gallery_images').select('*').eq('gallery_id', params.id).eq('image_url', parsed.data.image_url).limit(1).maybeSingle()
+  if (existing) return NextResponse.json(existing)
   const { data, error } = await createAdminClient()
     .from('gallery_images')
     .insert({ gallery_id: params.id, image_url: parsed.data.image_url, display_order: parsed.data.display_order })

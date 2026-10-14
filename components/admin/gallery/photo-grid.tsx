@@ -18,7 +18,7 @@ function Tile({ image, isCover, selecting, selected, onToggle, onCover, onDelete
     <li ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }} className={`grid gap-1.5 ${isDragging ? 'z-10 opacity-70' : ''}`}>
       <div className="relative aspect-square overflow-hidden rounded-md bg-[#EEF2EF]">
         {/* The photo itself is the drag handle; buttons and caption stay clickable */}
-        <div {...attributes} {...listeners} className={`h-full w-full touch-none ${selecting ? 'cursor-pointer' : 'cursor-grab'}`} onClick={selecting ? onToggle : undefined}>
+        <div {...attributes} {...listeners} className={`h-full w-full touch-manipulation ${selecting ? 'cursor-pointer' : 'cursor-grab'}`} onClick={selecting ? onToggle : undefined}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={image.image_url} alt={caption} className="h-full w-full object-cover" draggable={false} loading="lazy" />
         </div>

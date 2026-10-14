@@ -9,3 +9,15 @@ export function storagePathFromUrl(url: string | null | undefined): string | nul
     return null
   }
 }
+
+// Files an article still shows (in its text or as its cover) must not be deleted
+export function unreferencedUrls(urls: string[], articles: Array<{ content: string | null; image_url: string | null }>): string[] {
+  return urls.filter((url) => {
+    const path = storagePathFromUrl(url)
+    return !articles.some((a) =>
+      a.image_url === url ||
+      (a.content ?? '').includes(url) ||
+      (path !== null && (a.content ?? '').includes(path))
+    )
+  })
+}

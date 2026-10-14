@@ -12,3 +12,9 @@ export function moveId(ids: string[], activeId: string, overId: string): string[
   next.splice(to, 0, moved)
   return next
 }
+
+// Items in the saved order; anything not in it (e.g. new uploads) stays at the end
+export function applyOrder<T extends { id: string }>(items: T[], ids: string[]): T[] {
+  const rank = new Map(ids.map((id, i) => [id, i]))
+  return [...items].sort((a, b) => (rank.get(a.id) ?? Infinity) - (rank.get(b.id) ?? Infinity))
+}

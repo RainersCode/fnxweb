@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { galleryCover, moveId } from './gallery'
+import { galleryCover, moveId, applyOrder } from './gallery'
 
 describe('galleryCover', () => {
   it('uses the chosen cover', () => {
@@ -21,5 +21,12 @@ describe('moveId', () => {
   })
   it('leaves the list unchanged for unknown ids', () => {
     expect(moveId(['a', 'b'], 'x', 'a')).toEqual(['a', 'b'])
+  })
+})
+
+describe('applyOrder', () => {
+  it('arranges items by the saved id order and keeps unknown ones at the end', () => {
+    const items = [{ id: 'c' }, { id: 'a' }, { id: 'new' }, { id: 'b' }]
+    expect(applyOrder(items, ['a', 'b', 'c']).map((i) => i.id)).toEqual(['a', 'b', 'c', 'new'])
   })
 })

@@ -2,14 +2,16 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { naturalSortByName, pickNextToStart, queueSummary, retryFailed, type QueueItem } from '@/lib/upload-queue'
+import type { UploadMemo } from '@/lib/gallery-upload'
 
-type Upload = (file: File, order: number, onProgress: (p: number) => void) => Promise<void>
+type Upload = (file: File, order: number, onProgress: (p: number) => void, memo: UploadMemo) => Promise<void>
 
 // Uploads up to 3 files at once; failed files wait for "Mēģināt vēlreiz"
 export function useUploadQueue(upload: Upload) {
   const [items, setItems] = useState<QueueItem[]>([])
   const files = useRef(new Map<string, File>())
   const previews = useRef(new Map<string, string>())
+  const memos = useRef(new Map<string, UploadMemo>())
   const uploadRef = useRef(upload)
   uploadRef.current = upload
 
@@ -32,10 +34,12 @@ export function useUploadQueue(upload: Upload) {
       const file = files.current.get(id)
       const item = items.find((i) => i.id === id)
       if (!file || !item) continue
-      uploadRef.current(file, item.order, (p) => setItems((prev) => prev.map((i) => (i.id === id ? { ...i, progress: p } : i))))
+      if (!memos.current.has(id)) memos.current.set(id, {})
+      uploadRef.current(file, item.order, (p) => setItems((prev) => prev.map((i) => (i.id === id ? { ...i, progress: p } : i))), memos.current.get(id)!)
         .then(() => {
           setItems((prev) => prev.map((i) => (i.id === id ? { ...i, status: 'done', progress: 100 } : i)))
           files.current.delete(id)
+          memos.current.delete(id)
         })
         .catch((e: unknown) => {
           setItems((prev) => prev.map((i) => (i.id === id ? { ...i, status: 'failed', error: e instanceof Error ? e.message : 'Neizdevās' } : i)))

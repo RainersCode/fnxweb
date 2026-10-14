@@ -2,15 +2,15 @@
 
 import { useEffect } from 'react'
 
-// Closing the tab or following a link with unsaved changes asks first
-export function useUnsavedGuard(dirty: boolean) {
+// Closing the tab or following a link asks first whenever there is something to lose
+export function useUnsavedGuard(message: string | null) {
   useEffect(() => {
-    if (!dirty) return
+    if (!message) return
     const warn = (e: BeforeUnloadEvent) => { e.preventDefault(); e.returnValue = '' }
     const guardLinks = (e: MouseEvent) => {
       const link = (e.target as HTMLElement | null)?.closest('a[href]') as HTMLAnchorElement | null
       if (!link || link.target === '_blank') return
-      if (!window.confirm('Ir nesaglabātas izmaiņas. Iziet bez saglabāšanas?')) {
+      if (!window.confirm(message)) {
         e.preventDefault()
         e.stopPropagation()
       }
@@ -21,5 +21,5 @@ export function useUnsavedGuard(dirty: boolean) {
       window.removeEventListener('beforeunload', warn)
       document.removeEventListener('click', guardLinks, true)
     }
-  }, [dirty])
+  }, [message])
 }
