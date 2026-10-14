@@ -3,6 +3,7 @@ import { default as NextImage } from 'next/image'
 import Link from 'next/link'
 import { MainLayout } from '@/components/layout/main-layout'
 import { aboutUsData } from '@/data/about-us'
+import { getActiveTraining, TrainingTimesSection } from '@/components/features/training-times'
 
 export const metadata: Metadata = {
   title: 'Par mums | RK Fēnikss',
@@ -13,7 +14,10 @@ export const metadata: Metadata = {
   },
 }
 
-export default function AboutPage() {
+export const revalidate = 60
+
+export default async function AboutPage() {
+  const sessions = await getActiveTraining()
   return (
     <MainLayout currentPage="ABOUT">
       <main className="flex-1">
@@ -68,6 +72,8 @@ export default function AboutPage() {
             </div>
           </div>
         </section>
+
+        <TrainingTimesSection sessions={sessions} />
 
         {/* CTA Section */}
         <section className="py-16 md:py-20 bg-[#111] bg-stripes-dark">
