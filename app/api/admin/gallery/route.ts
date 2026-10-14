@@ -1,48 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { isAdminRequest } from '@/lib/admin-auth'
-import { createGallery, getGalleriesWithCovers } from '@/lib/api'
-import { Gallery } from '@/types/supabase'
+import { createAdminClient } from '@/lib/supabase'
+import { fieldErrors, galleryCreateSchema } from '@/lib/admin-schemas'
 
-export async function GET() {
-  // Check authentication
-  if (!(await isAdminRequest())) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+export const dynamic = 'force-dynamic'
 
-  try {
-    // Fetch all galleries with cover images from Supabase
-    const galleries = await getGalleriesWithCovers()
-    return NextResponse.json(galleries)
-  } catch (error) {
-    console.error('Error fetching galleries:', error)
-    return NextResponse.json({ error: 'Failed to fetch galleries' }, { status: 500 })
+export async function POST(req: NextRequest) {
+  if (!(await isAdminRequest())) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const parsed = galleryCreateSchema.safeParse(await req.json().catch(() => null))
+  if (!parsed.success) return NextResponse.json({ error: 'Pārbaudi laukus', fields: fieldErrors(parsed.error) }, { status: 400 })
+  const { data, error } = await createAdminClient().from('galleries').insert(parsed.data).select('*').single()
+  if (error) {
+    console.error('Create gallery:', error)
+    return NextResponse.json({ error: 'Neizdevās izveidot galeriju' }, { status: 500 })
   }
+  return NextResponse.json(data)
 }
-
-export async function POST(request: NextRequest) {
-  // Check authentication
-  if (!(await isAdminRequest())) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
-  try {
-    const body = await request.json()
-    
-    // Validate request body
-    if (!body.title) {
-      return NextResponse.json({ error: 'Gallery title is required' }, { status: 400 })
-    }
-
-    // Create gallery in Supabase
-    const gallery: Gallery = {
-      title: body.title,
-      description: body.description || null,
-    }
-
-    const createdGallery = await createGallery(gallery)
-    return NextResponse.json(createdGallery)
-  } catch (error) {
-    console.error('Error creating gallery:', error)
-    return NextResponse.json({ error: 'Failed to create gallery' }, { status: 500 })
-  }
-} 

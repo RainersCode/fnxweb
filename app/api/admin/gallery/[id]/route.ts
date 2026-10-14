@@ -1,70 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { isAdminRequest } from '@/lib/admin-auth'
-import { updateGallery, deleteGallery, getGalleryWithImages } from '@/lib/api'
-import { Gallery } from '@/types/supabase'
+import { createAdminClient } from '@/lib/supabase'
+import { removeMediaFiles } from '@/lib/storage'
+import { fieldErrors, galleryUpdateSchema } from '@/lib/admin-schemas'
 
-interface RouteParams {
-  params: {
-    id: string
-  }
+export const dynamic = 'force-dynamic'
+
+type Ctx = { params: { id: string } }
+
+export async function PATCH(req: NextRequest, { params }: Ctx) {
+  if (!(await isAdminRequest())) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const parsed = galleryUpdateSchema.safeParse(await req.json().catch(() => null))
+  if (!parsed.success) return NextResponse.json({ error: 'Pārbaudi laukus', fields: fieldErrors(parsed.error) }, { status: 400 })
+  const { data, error } = await createAdminClient().from('galleries').update(parsed.data).eq('id', params.id).select('*').maybeSingle()
+  if (error) return NextResponse.json({ error: 'Neizdevās saglabāt galeriju' }, { status: 500 })
+  if (!data) return NextResponse.json({ error: 'Galerija nav atrasta' }, { status: 404 })
+  return NextResponse.json(data)
 }
 
-export async function GET(request: NextRequest, { params }: RouteParams) {
-  // Check authentication
-  if (!(await isAdminRequest())) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
-  try {
-    // Fetch gallery and its images
-    const gallery = await getGalleryWithImages(params.id)
-    return NextResponse.json(gallery)
-  } catch (error) {
-    console.error('Error fetching gallery:', error)
-    return NextResponse.json({ error: 'Failed to fetch gallery' }, { status: 500 })
-  }
-}
-
-export async function PUT(request: NextRequest, { params }: RouteParams) {
-  // Check authentication
-  if (!(await isAdminRequest())) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
-  try {
-    const body = await request.json()
-
-    // Validate request body
-    if (!body.title) {
-      return NextResponse.json({ error: 'Gallery title is required' }, { status: 400 })
-    }
-
-    // Update gallery in Supabase
-    const galleryUpdate: Partial<Gallery> = {
-      title: body.title,
-      description: body.description || null,
-    }
-
-    const updatedGallery = await updateGallery(params.id, galleryUpdate)
-    return NextResponse.json(updatedGallery)
-  } catch (error) {
-    console.error('Error updating gallery:', error)
-    return NextResponse.json({ error: 'Failed to update gallery' }, { status: 500 })
-  }
-}
-
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
-  // Check authentication
-  if (!(await isAdminRequest())) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
-  try {
-    // Delete gallery from Supabase
-    await deleteGallery(params.id)
-    return NextResponse.json({ success: true })
-  } catch (error) {
-    console.error('Error deleting gallery:', error)
-    return NextResponse.json({ error: 'Failed to delete gallery' }, { status: 500 })
-  }
+export async function DELETE(_req: NextRequest, { params }: Ctx) {
+  if (!(await isAdminRequest())) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const db = createAdminClient()
+  const { data: images } = await db.from('gallery_images').select('image_url').eq('gallery_id', params.id)
+  // Delete rows first (images explicitly, in case the FK has no cascade), then files
+  await db.from('gallery_images').delete().eq('gallery_id', params.id)
+  const { error } = await db.from('galleries').delete().eq('id', params.id)
+  if (error) return NextResponse.json({ error: 'Neizdevās dzēst galeriju' }, { status: 500 })
+  await removeMediaFiles((images ?? []).map((i: { image_url: string }) => i.image_url))
+  return NextResponse.json({ success: true })
 }
