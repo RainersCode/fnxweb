@@ -1,9 +1,9 @@
 import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
-import { supabase, prepareImagePath } from '@/lib/supabase'
+import { notFound, permanentRedirect } from 'next/navigation'
+import { supabase, prepareImagePath, DEFAULT_ARTICLE_IMAGE } from '@/lib/supabase'
 import { galleryCover } from '@/lib/gallery'
 import { Article, Gallery } from '@/types/supabase'
-import { onlyVisible, excerptFor, jsonLdString } from '@/lib/articles'
+import { onlyVisible, excerptFor, jsonLdString, isUuid, articlePath } from '@/lib/articles'
 import { sanitizeArticleHtml } from '@/lib/sanitize-article'
 import { NewsDetailClient, type LinkedFixture, type LinkedGallery } from './news-detail-client'
 import { SITE_URL } from '@/lib/site'
@@ -16,10 +16,11 @@ interface GalleryWithThumbnail extends Gallery {
   thumbnailUrl: string
 }
 
-// Fetch article data (only articles that are publicly visible)
-async function getArticle(id: string): Promise<Article | null> {
+// Fetch article data by slug or id (only articles that are publicly visible)
+async function getArticle(slugOrId: string): Promise<Article | null> {
   try {
-    const { data, error } = await onlyVisible(supabase.from('articles').select('*').eq('id', id)).maybeSingle()
+    const column = isUuid(slugOrId) ? 'id' : 'slug'
+    const { data, error } = await onlyVisible(supabase.from('articles').select('*').eq(column, slugOrId)).maybeSingle()
 
     if (error) throw error
     return data
@@ -107,11 +108,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   }
 
   const description = excerptFor(article)
-  const imageUrl = prepareImagePath(article.image_url ?? null)
+  const imageUrl = article.image_url ? prepareImagePath(article.image_url) : DEFAULT_ARTICLE_IMAGE
 
   // Get the base URL from environment or use a default
   const baseUrl = SITE_URL
-  const articleUrl = `${baseUrl}/news/${id}`
+  const articleUrl = `${baseUrl}${articlePath(article)}`
   const absoluteImageUrl = imageUrl.startsWith('http') ? imageUrl : `${baseUrl}${imageUrl}`
 
   return {
@@ -148,7 +149,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 // Generate JSON-LD structured data
 function generateJsonLd(article: Article, url: string) {
-  const imageUrl = prepareImagePath(article.image_url ?? null)
+  const imageUrl = article.image_url ? prepareImagePath(article.image_url) : DEFAULT_ARTICLE_IMAGE
   const baseUrl = SITE_URL
   const absoluteImageUrl = imageUrl.startsWith('http') ? imageUrl : `${baseUrl}${imageUrl}`
 
@@ -182,19 +183,20 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ id:
   const { id } = await params
 
   // Fetch data on the server
-  const [article, relatedArticles, latestGalleries] = await Promise.all([
-    getArticle(id),
-    getRelatedArticles(id),
-    getLatestGalleries(),
-  ])
+  const [article, latestGalleries] = await Promise.all([getArticle(id), getLatestGalleries()])
 
   // Drafts and scheduled articles are not public yet
   if (!article) notFound()
-  const linked = await getLinked(article)
+
+  // Old /news/<id> links (already shared on social media) move to the readable address
+  const path = articlePath(article)
+  if (`/news/${id}` !== path) permanentRedirect(path)
+
+  const [relatedArticles, linked] = await Promise.all([getRelatedArticles(article.id), getLinked(article)])
   const safeArticle = { ...article, content: sanitizeArticleHtml(article.content) }
 
   const baseUrl = SITE_URL
-  const pageUrl = `${baseUrl}/news/${id}`
+  const pageUrl = `${baseUrl}${path}`
 
   return (
     <>

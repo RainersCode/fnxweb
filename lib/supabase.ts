@@ -33,6 +33,9 @@ export const getImageUrl = (bucket: string, path: string | null): string => {
   return `${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`
 }
 
+// Branded cover for articles saved without a photo (club green + phoenix)
+export const DEFAULT_ARTICLE_IMAGE = '/images/default-article.jpg'
+
 // Helper function to prepare image paths for Next.js Image component
 export const prepareImagePath = (path: string | null): string => {
   console.log('Preparing image path:', path)

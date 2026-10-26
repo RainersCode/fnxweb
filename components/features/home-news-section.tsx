@@ -2,6 +2,8 @@
 
 import { default as NextImage } from 'next/image'
 import Link from 'next/link'
+import { DEFAULT_ARTICLE_IMAGE } from '@/lib/supabase'
+import { articlePath } from '@/lib/articles'
 import { Article } from '@/types/supabase'
 import { useState, useRef, useEffect } from 'react'
 
@@ -19,17 +21,17 @@ const fallbackNewsItems: FallbackNewsItem[] = [
   {
     title: 'SEZONAS ATKLĀŠANA ŠO SESTDIEN',
     description: 'Pievienojieties mums sezonas pirmajā spēlē pret vietējiem sāncenšiem.',
-    image: '/placeholder.svg?height=1080&width=1920&text=Season Opener',
+    image: DEFAULT_ARTICLE_IMAGE,
   },
   {
     title: 'JAUNS TRENIŅU GRAFIKS',
     description: 'Treneris Viljams ir paziņojis jauno treniņu grafiku gaidāmajai sezonai.',
-    image: '/placeholder.svg?height=1080&width=1920&text=Training Schedule',
+    image: DEFAULT_ARTICLE_IMAGE,
   },
   {
     title: 'KOPIENAS LĪDZEKĻU VĀKŠANAS PANĀKUMI',
     description: 'Mūsu nesenā kopienas līdzekļu vākšana ienesa vairāk nekā 2000 mārciņu jaunam treniņu aprīkojumam.',
-    image: '/placeholder.svg?height=1080&width=1920&text=Fundraiser',
+    image: DEFAULT_ARTICLE_IMAGE,
   },
 ]
 
@@ -111,7 +113,7 @@ export function HomeNewsSection({ articles }: HomeNewsSectionProps) {
   }
 
   const getImageUrl = (item: Article | FallbackNewsItem): string => {
-    if ('id' in item) return item.image_url || '/placeholder.svg?height=600&width=900&text=Rugby News'
+    if ('id' in item) return item.image_url || DEFAULT_ARTICLE_IMAGE
     return item.image
   }
   const getTitle = (item: Article | FallbackNewsItem): string => item.title
@@ -124,7 +126,7 @@ export function HomeNewsSection({ articles }: HomeNewsSectionProps) {
     return '15 Apr 2025'
   }
   const getLink = (item: Article | FallbackNewsItem, index: number): string => {
-    if ('id' in item) return `/news/${item.id}`
+    if ('id' in item) return articlePath(item)
     return `/news/${index + 1}`
   }
   const getContent = (item: Article | FallbackNewsItem): string => {
@@ -252,8 +254,8 @@ export function HomeNewsSection({ articles }: HomeNewsSectionProps) {
 }
 
 function MobileNewsCard({ item, index }: { item: Article | FallbackNewsItem; index: number }) {
-  const imageUrl = 'id' in item ? (item.image_url || '/placeholder.svg') : item.image
-  const href = 'id' in item ? `/news/${item.id}` : `/news/${index + 1}`
+  const imageUrl = 'id' in item ? (item.image_url || DEFAULT_ARTICLE_IMAGE) : item.image
+  const href = 'id' in item ? articlePath(item) : `/news/${index + 1}`
   const date = 'id' in item
     ? new Date(item.published_at).toLocaleDateString('lv-LV', { day: '2-digit', month: 'short', year: 'numeric' })
     : '15 Apr 2025'

@@ -41,6 +41,17 @@ export function uniqueSlug(base: string, taken: string[]): string {
   return `${base}-${n}`
 }
 
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+export function isUuid(value: string): boolean {
+  return UUID.test(value)
+}
+
+// Public address of an article: /news/<slug>, or /news/<id> while it has no slug yet (drafts)
+export function articlePath(article: { id: string; slug?: string | null }): string {
+  return `/news/${article.slug || article.id}`
+}
+
 export function plainText(html: string): string {
   return html
     .replace(/<[^>]*>/g, ' ')

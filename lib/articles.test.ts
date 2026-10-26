@@ -1,8 +1,26 @@
 import { describe, it, expect } from 'vitest'
 import {
   slugify, uniqueSlug, plainText, excerptFor, articleState, isPubliclyVisible,
-  onlyVisible, toDateTimeLocal, fromDateTimeLocal, jsonLdString, isMediaUrl,
+  onlyVisible, toDateTimeLocal, fromDateTimeLocal, jsonLdString, isMediaUrl, isUuid, articlePath,
 } from './articles'
+
+describe('articlePath', () => {
+  it('uses the slug when there is one', () => {
+    expect(articlePath({ id: '099dcc11-4c39-4808-8690-546697e9eff5', slug: 'movember-vairak-neka-usas' }))
+      .toBe('/news/movember-vairak-neka-usas')
+  })
+  it('falls back to the id without a slug', () => {
+    expect(articlePath({ id: '099dcc11-4c39-4808-8690-546697e9eff5', slug: null }))
+      .toBe('/news/099dcc11-4c39-4808-8690-546697e9eff5')
+  })
+})
+
+describe('isUuid', () => {
+  it('tells ids from slugs', () => {
+    expect(isUuid('099dcc11-4c39-4808-8690-546697e9eff5')).toBe(true)
+    expect(isUuid('movember-vairak-neka-usas')).toBe(false)
+  })
+})
 
 describe('slugify', () => {
   it('transliterates Latvian letters', () => {

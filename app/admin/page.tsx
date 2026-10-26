@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { requireAdminPage } from '@/lib/require-admin-page'
 import { Images, ExternalLink } from 'lucide-react'
 import { createAdminClient } from '@/lib/supabase'
-import { articleState, formatRigaDateTime } from '@/lib/articles'
+import { articlePath, articleState, formatRigaDateTime } from '@/lib/articles'
 import { isMissingColumnError } from '@/lib/article-publish'
 import { MigrationNotice } from '@/components/admin/migration-notice'
 import { ArticleStatusPill } from '@/components/admin/articles/article-status-pill'
@@ -11,7 +11,7 @@ import { VisitorStats } from '@/components/admin/dashboard/visitor-stats'
 
 export const dynamic = 'force-dynamic'
 
-type Row = { id: string; title: string | null; status: string | null; published_at: string; updated_at: string }
+type Row = { id: string; slug: string | null; title: string | null; status: string | null; published_at: string; updated_at: string }
 
 function Section({ title, empty, children }: { title: string; empty: string; children: React.ReactNode[] }) {
   return (
@@ -27,7 +27,7 @@ export default async function AdminHome() {
   const db = createAdminClient()
   const { data, error } = await db
     .from('articles')
-    .select('id, title, status, published_at, updated_at')
+    .select('id, slug, title, status, published_at, updated_at')
     .order('updated_at', { ascending: false })
     .limit(60)
 
@@ -82,7 +82,7 @@ export default async function AdminHome() {
               {recent.map((a) => (
                 <li key={a.id} className="flex items-center justify-between gap-3 px-5 py-3">
                   <Link href={`/admin/articles/${a.id}`} className="min-w-0 truncate font-medium hover:text-club">{a.title}</Link>
-                  <a href={`/news/${a.id}`} target="_blank" rel="noopener noreferrer" className="flex shrink-0 items-center gap-1 text-sm text-[#5B6863] hover:text-club">
+                  <a href={articlePath(a)} target="_blank" rel="noopener noreferrer" className="flex shrink-0 items-center gap-1 text-sm text-[#5B6863] hover:text-club">
                     Skatīt <ExternalLink className="h-3.5 w-3.5" />
                   </a>
                 </li>
