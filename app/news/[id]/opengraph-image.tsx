@@ -1,5 +1,5 @@
 import { ImageResponse } from 'next/server'
-import { onlyVisible } from '@/lib/articles'
+import { onlyVisible, isUuid } from '@/lib/articles'
 import { createClient } from '@supabase/supabase-js'
 
 export const runtime = 'edge'
@@ -19,7 +19,7 @@ export default async function Image({ params }: { params: { id: string } }) {
   
   // Fetch article data
   const { data: article } = await onlyVisible(
-    supabase.from('articles').select('title, image_url, published_at').eq('id', params.id)
+    supabase.from('articles').select('title, image_url, published_at').eq(isUuid(params.id) ? 'id' : 'slug', params.id)
   ).maybeSingle()
     
   // Use default if article not found

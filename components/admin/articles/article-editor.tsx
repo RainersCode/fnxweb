@@ -7,7 +7,7 @@ import { ArrowLeft, Eye, Settings2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import {
-  type AdminArticle, articleState, formatRigaDateTime, fromDateTimeLocal, toDateTimeLocal, validateForPublish,
+  type AdminArticle, articlePath, articleState, formatRigaDateTime, fromDateTimeLocal, toDateTimeLocal, validateForPublish,
 } from '@/lib/articles'
 import { shouldOfferRestore, type LocalBackup } from '@/lib/autosave'
 import { ArticleStatusPill } from './article-status-pill'
@@ -188,7 +188,7 @@ export function ArticleEditor({ article, fixtures, galleries }: { article: Admin
       try { localStorage.removeItem(backupKey) } catch { /* ignore */ }
       if (articleState(saved) === 'scheduled') toast.success(`Ieplānots uz ${formatRigaDateTime(saved.published_at)}`)
       else toast.success(isDraft ? 'Publicēts' : 'Atjaunināts', {
-        action: { label: 'Skatīt mājaslapā', onClick: () => window.open(`/news/${article.id}`, '_blank') },
+        action: { label: 'Skatīt mājaslapā', onClick: () => window.open(articlePath(saved), '_blank') },
       })
       router.refresh()
     } catch (error) {

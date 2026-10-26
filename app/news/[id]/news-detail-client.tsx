@@ -10,9 +10,9 @@ const XIcon = ({ className }: { className?: string }) => (
   </svg>
 )
 import MainLayout from '@/components/layout/main-layout'
-import { prepareImagePath } from '@/lib/supabase'
+import { prepareImagePath, DEFAULT_ARTICLE_IMAGE } from '@/lib/supabase'
 import { Article, Gallery } from '@/types/supabase'
-import { formatRigaDate } from '@/lib/articles'
+import { formatRigaDate, articlePath } from '@/lib/articles'
 
 interface GalleryWithThumbnail extends Gallery {
   thumbnailUrl: string
@@ -77,7 +77,7 @@ export function NewsDetailClient({ article, relatedArticles, latestGalleries, pa
         <section className="relative h-[400px] md:h-[500px] overflow-hidden">
           <div className="absolute inset-0">
             <NextImage
-              src={getImageUrl(article.image_url ?? null) || '/placeholder.svg?height=600&width=900&text=Rugby News'}
+              src={article.image_url ? getImageUrl(article.image_url) : DEFAULT_ARTICLE_IMAGE}
               alt={article.title}
               fill
               className="object-cover scale-105 blur-[2px]"
@@ -270,11 +270,11 @@ export function NewsDetailClient({ article, relatedArticles, latestGalleries, pa
 
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {relatedArticles.map((related) => (
-                  <Link href={`/news/${related.id}`} key={related.id} className="group cursor-pointer transition-transform duration-300 hover:-translate-y-1">
+                  <Link href={articlePath(related)} key={related.id} className="group cursor-pointer transition-transform duration-300 hover:-translate-y-1">
                     <div className="h-[260px] overflow-hidden mb-3.5">
                       <div className="relative h-full">
                         <NextImage
-                          src={related.image_url || '/placeholder.svg?height=400&width=600&text=News'}
+                          src={related.image_url || DEFAULT_ARTICLE_IMAGE}
                           alt={related.title}
                           fill
                           className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"

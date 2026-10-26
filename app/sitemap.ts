@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { onlyVisible } from '@/lib/articles';
+import { onlyVisible, articlePath } from '@/lib/articles';
 import { latestDate } from '@/lib/sitemap-dates';
 import { SITE_URL } from '@/lib/site';
 import { createClient } from '@supabase/supabase-js';
@@ -12,17 +12,17 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 // Rebuild hourly so new articles reach search engines without a deploy
 export const revalidate = 3600;
 
-type ArticleRow = { id: string; published_at: string; updated_at: string | null };
+type ArticleRow = { id: string; slug: string | null; published_at: string; updated_at: string | null };
 type GalleryRow = { id: string; created_at: string; gallery_images: { uploaded_at: string | null }[] | null };
 
 // lastmod is only set from real change dates; pages without one leave it out
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const { data: articleData } = await onlyVisible(supabase.from('articles').select('id, published_at, updated_at'))
+  const { data: articleData } = await onlyVisible(supabase.from('articles').select('id, slug, published_at, updated_at'))
     .order('published_at', { ascending: false });
   const articles = (articleData ?? []) as ArticleRow[];
 
   const articleUrls = articles.map((article) => ({
-    url: `${SITE_URL}/news/${article.id}`,
+    url: `${SITE_URL}${articlePath(article)}`,
     lastModified: latestDate(article.published_at, article.updated_at),
     changeFrequency: 'weekly' as const,
     priority: 0.8,

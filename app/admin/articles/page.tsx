@@ -11,7 +11,7 @@ export default async function ArticlesPage() {
   const db = createAdminClient()
   const { data, error } = await db
     .from('articles')
-    .select('id, title, status, published_at, updated_at, image_url, author')
+    .select('id, slug, title, status, published_at, updated_at, image_url, author')
     .order('updated_at', { ascending: false })
 
   if (error && isMissingColumnError(error)) {

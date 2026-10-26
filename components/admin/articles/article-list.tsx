@@ -3,12 +3,12 @@
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { Plus, Search, ExternalLink } from 'lucide-react'
-import { articleState, formatRigaDateTime, type ArticleState } from '@/lib/articles'
+import { articleState, articlePath, formatRigaDateTime, type ArticleState } from '@/lib/articles'
 import { ArticleStatusPill } from './article-status-pill'
 import { useCreateArticle } from './use-create-article'
 
 export type ArticleListItem = {
-  id: string; title: string | null; status: string | null; published_at: string
+  id: string; slug: string | null; title: string | null; status: string | null; published_at: string
   updated_at: string; image_url: string | null; author: string | null
 }
 
@@ -108,7 +108,7 @@ export function ArticleList({ articles }: { articles: ArticleListItem[] }) {
                 </Link>
                 <span className="hidden lg:block"><ArticleStatusPill status={a.status} publishedAt={a.published_at} /></span>
                 {a.state === 'published' && (
-                  <a href={`/news/${a.id}`} target="_blank" rel="noopener noreferrer" aria-label="Skatīt mājaslapā" className="hidden shrink-0 text-[#5B6863] hover:text-club lg:block">
+                  <a href={articlePath(a)} target="_blank" rel="noopener noreferrer" aria-label="Skatīt mājaslapā" className="hidden shrink-0 text-[#5B6863] hover:text-club lg:block">
                     <ExternalLink className="h-4 w-4" />
                   </a>
                 )}

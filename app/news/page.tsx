@@ -2,8 +2,8 @@ import { Metadata } from 'next'
 import { default as NextImage } from 'next/image'
 import Link from 'next/link'
 import { MainLayout } from '@/components/layout/main-layout'
-import { supabase } from '@/lib/supabase'
-import { onlyVisible, excerptFor } from '@/lib/articles'
+import { supabase, DEFAULT_ARTICLE_IMAGE } from '@/lib/supabase'
+import { onlyVisible, excerptFor, articlePath } from '@/lib/articles'
 import { Article } from '@/types/supabase'
 import { pageUrl } from '@/lib/site'
 
@@ -88,7 +88,7 @@ export default async function NewsPage() {
             ) : (
               <>
                 {/* Featured Article */}
-                <Link href={`/news/${articles[0].id}`} className="group block mb-12">
+                <Link href={articlePath(articles[0])} className="group block mb-12">
                   <div className="grid md:grid-cols-[1fr_1.4fr] min-h-[440px]">
                     {/* Left text panel */}
                     <div className="bg-[#f5f5f5] p-10 md:p-12 flex flex-col justify-end order-2 md:order-1">
@@ -112,7 +112,7 @@ export default async function NewsPage() {
                     {/* Right image */}
                     <div className="relative h-64 md:h-auto overflow-hidden order-1 md:order-2">
                       <NextImage
-                        src={articles[0].image_url || '/placeholder.svg?height=600&width=900&text=Rugby News'}
+                        src={articles[0].image_url || DEFAULT_ARTICLE_IMAGE}
                         alt={articles[0].title}
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
@@ -125,11 +125,11 @@ export default async function NewsPage() {
                 {articles.length > 1 && (
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                     {articles.slice(1).map((article) => (
-                      <Link href={`/news/${article.id}`} key={article.id} className="group cursor-pointer transition-transform duration-300 hover:-translate-y-1">
+                      <Link href={articlePath(article)} key={article.id} className="group cursor-pointer transition-transform duration-300 hover:-translate-y-1">
                         <div className="h-[260px] overflow-hidden mb-3.5">
                           <div className="relative h-full">
                             <NextImage
-                              src={article.image_url || '/placeholder.svg?height=600&width=900&text=Rugby News'}
+                              src={article.image_url || DEFAULT_ARTICLE_IMAGE}
                               alt={article.title}
                               fill
                               className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
