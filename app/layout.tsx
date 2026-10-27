@@ -2,6 +2,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { ClerkProvider } from '@clerk/nextjs'
+import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as SonnerToaster } from '@/components/ui/sonner'
@@ -236,6 +237,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Toaster />
             <SonnerToaster />
           </ThemeProvider>
+          <Analytics />
         </body>
       </html>
     </ClerkProvider>
