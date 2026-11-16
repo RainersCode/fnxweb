@@ -1,5 +1,6 @@
 import { default as NextImage } from 'next/image'
-import { WORLD_RUGBY_ANCHOR, formatKickoff, type WorldMatch, type WorldTeam } from '@/lib/world-rugby'
+import Link from 'next/link'
+import { WORLD_RUGBY_ANCHOR, WORLD_RUGBY_PATH, formatKickoff, type WorldMatch, type WorldTeam } from '@/lib/world-rugby'
 
 function Team({ team }: { team: WorldTeam }) {
   return (
@@ -31,7 +32,12 @@ export function HomeWorldRugbySection({ matches }: { matches: WorldMatch[] }) {
               Nākamās lielās spēles
             </h2>
           </div>
-          <span className="font-cond text-xs tracking-[1.5px] uppercase text-[#999]">Laiks: Latvijā · Dati: ESPN</span>
+          <Link
+            href={WORLD_RUGBY_PATH}
+            className="px-6 py-2.5 bg-[#111] text-white font-cond text-xs font-bold tracking-[1.5px] uppercase hover:bg-club transition-colors duration-200"
+          >
+            Visas spēles un rezultāti
+          </Link>
         </div>
 
         {/* One scrollable row keeps the strip small on every screen */}
