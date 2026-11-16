@@ -8,6 +8,7 @@ import { SignInButton, UserButton, useAuth, useUser } from '@clerk/nextjs'
 import { isAdmin } from '@/lib/utils'
 import { usePathname } from 'next/navigation'
 import { PageViewTracker } from '@/components/features/page-view-tracker'
+import { WorldRugbyTicker } from '@/components/layout/world-rugby-ticker'
 
 interface MainLayoutProps {
   children: ReactNode
@@ -101,6 +102,9 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
 
   return (
     <div className="flex min-h-screen flex-col bg-white font-body text-[#111]">
+      {/* Upcoming world rugby, scrolling; hidden when there is nothing to show */}
+      <WorldRugbyTicker />
+
       {/* Top bar */}
       <div className="h-8 bg-[#111] flex items-center justify-end px-4 sm:px-8 md:px-16 gap-5">
         <Link href="/contact" className="font-body text-[11px] font-medium text-white/50 tracking-wider uppercase hover:text-white transition-colors">

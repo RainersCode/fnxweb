@@ -1,6 +1,9 @@
 // Upcoming top-level rugby for the home page, from ESPN's public scoreboard (no key needed).
 // It is an unofficial feed, so every step tolerates missing fields and failures return nothing.
 
+// Home page section id; the ticker above the menu links to /#pasaules-regbijs
+export const WORLD_RUGBY_ANCHOR = 'pasaules-regbijs'
+
 export type WorldTeam = { name: string; logo: string | null }
 
 export type WorldMatch = {
@@ -133,6 +136,14 @@ export function pickUpcoming(matches: WorldMatch[], now: Date, limit: number): W
     .sort((a, b) => a.date.localeCompare(b.date))
     .filter((m) => (seen.has(m.id) ? false : (seen.add(m.id), true)))
     .slice(0, limit)
+}
+
+// "Sestd., 21. nov. · 16:10" in Latvian time; the timezone is pinned so server and browser agree
+export function formatKickoff(iso: string): string {
+  const date = new Date(iso)
+  const day = date.toLocaleDateString('lv-LV', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Europe/Riga' })
+  const time = date.toLocaleTimeString('lv-LV', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Riga' })
+  return `${day.charAt(0).toUpperCase()}${day.slice(1)} · ${time}`
 }
 
 const SCOREBOARD = 'https://site.api.espn.com/apis/site/v2/sports/rugby'
