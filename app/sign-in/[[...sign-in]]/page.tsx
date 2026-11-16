@@ -17,6 +17,8 @@ export default function SignInPage({ searchParams }: { searchParams: { redirect_
           </h2>
         </div>
         <SignIn
+          path="/sign-in"
+          routing="path"
           appearance={{
             elements: {
               rootBox: 'w-full',
