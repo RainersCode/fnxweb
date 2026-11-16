@@ -145,7 +145,7 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
                 {item.key === 'ADMIN' ? (
                   <Link
                     href="/admin"
-                    className="flex items-center h-[76px] px-[18px] font-cond text-sm font-bold tracking-[2.5px] uppercase text-amber-600 hover:text-amber-800 relative transition-colors duration-200"
+                    className="flex items-center h-[76px] px-[18px] font-cond text-[15px] font-bold tracking-[1px] uppercase text-amber-600 hover:text-amber-800 relative transition-colors duration-200"
                   >
                     <Settings className="h-4 w-4 mr-1.5" />
                     {item.text}
@@ -153,7 +153,7 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
                 ) : (
                   <Link
                     href={item.key === 'HOME' ? '/' : `/${item.key.toLowerCase()}`}
-                    className={`flex items-center h-[76px] px-[18px] font-cond text-[14px] font-bold tracking-[2.5px] uppercase relative transition-colors duration-250 ${
+                    className={`flex items-center h-[76px] px-[18px] font-cond text-[15px] font-bold tracking-[1px] uppercase relative transition-colors duration-250 ${
                       currentPage === item.key ? 'text-club' : 'text-[#111] hover:text-club'
                     }`}
                   >
@@ -177,7 +177,7 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
             ) : (
               <Link
                 href="/contact"
-                className="hidden md:inline-flex items-center gap-2 px-6 py-2.5 bg-teal-700 text-white font-cond text-xs font-bold tracking-[2px] uppercase hover:bg-[#111] transition-colors duration-200 ml-1.5"
+                className="hidden md:inline-flex items-center gap-2 px-6 py-2.5 bg-teal-700 text-white font-cond text-xs font-bold tracking-[1px] uppercase hover:bg-[#111] transition-colors duration-200 ml-1.5"
               >
                 Pievienojies
                 <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
