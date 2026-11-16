@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { MainLayout } from '@/components/layout/main-layout'
 import { supabase, DEFAULT_ARTICLE_IMAGE } from '@/lib/supabase'
 import { onlyVisible, excerptFor, articlePath } from '@/lib/articles'
+import { categoryFromParam, categoryHref, categoryLabel, usedCategories } from '@/lib/article-categories'
 import { Article } from '@/types/supabase'
 import { pageUrl } from '@/lib/site'
 
@@ -39,8 +40,21 @@ async function getArticles(): Promise<Article[]> {
   }
 }
 
-export default async function NewsPage() {
-  const articles = await getArticles()
+function CategoryTag({ category }: { category?: string | null }) {
+  const label = categoryLabel(category)
+  if (!label) return null
+  return (
+    <span className="block font-cond text-xs font-bold tracking-[2.5px] uppercase text-club mb-2.5">
+      {label}
+    </span>
+  )
+}
+
+export default async function NewsPage({ searchParams }: { searchParams: { kategorija?: string | string[] } }) {
+  const allArticles = await getArticles()
+  const categories = usedCategories(allArticles)
+  const active = categoryFromParam(searchParams.kategorija)
+  const articles = active ? allArticles.filter((a) => a.category === active) : allArticles
 
   return (
     <MainLayout currentPage="NEWS">
@@ -73,7 +87,37 @@ export default async function NewsPage() {
         {/* Articles */}
         <section className="py-16 md:py-20 bg-white">
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
-            {articles.length === 0 ? (
+            {categories.length > 0 && (
+              <nav aria-label="Ziņu kategorijas" className="flex flex-wrap gap-2.5 mb-10">
+                {[null, ...categories.map((c) => c.value)].map((value) => {
+                  const isActive = value === active
+                  return (
+                    <Link
+                      key={value ?? 'all'}
+                      href={categoryHref(value)}
+                      scroll={false}
+                      aria-current={isActive ? 'page' : undefined}
+                      className={`px-5 py-2.5 font-cond text-xs font-bold tracking-[2px] uppercase border-2 transition-colors duration-200 ${
+                        isActive ? 'bg-[#111] border-[#111] text-white' : 'border-[#ddd] text-[#111] hover:border-[#111]'
+                      }`}
+                    >
+                      {value ? categoryLabel(value) : 'Visas'}
+                    </Link>
+                  )
+                })}
+              </nav>
+            )}
+
+            {articles.length === 0 && active ? (
+              <div className="py-16 text-center max-w-lg mx-auto">
+                <h3 className="font-display text-2xl font-bold uppercase text-[#111]/50 tracking-tight mb-4">
+                  Šajā kategorijā vēl nav ziņu
+                </h3>
+                <Link href="/news" className="font-cond text-xs font-bold tracking-[2px] uppercase text-club hover:underline">
+                  Skatīt visas ziņas
+                </Link>
+              </div>
+            ) : articles.length === 0 ? (
               <div className="py-16 text-center max-w-lg mx-auto">
                 <div className="relative w-16 h-16 mx-auto mb-5 opacity-30">
                   <NextImage src="/Logo/fēniks_logo-removebg-preview.png" alt="Fēnikss" fill className="object-contain" />
@@ -92,6 +136,7 @@ export default async function NewsPage() {
                   <div className="grid md:grid-cols-[1fr_1.4fr] min-h-[440px]">
                     {/* Left text panel */}
                     <div className="bg-[#f5f5f5] p-10 md:p-12 flex flex-col justify-end order-2 md:order-1">
+                      <CategoryTag category={articles[0].category} />
                       <h3 className="font-display text-[clamp(26px,3vw,38px)] font-bold uppercase leading-[0.98] text-[#111]">
                         {articles[0].title}
                       </h3>
@@ -136,6 +181,7 @@ export default async function NewsPage() {
                             />
                           </div>
                         </div>
+                        <CategoryTag category={article.category} />
                         <h3 className="font-display text-xl font-bold uppercase leading-[1.15] text-[#111] tracking-wide">
                           {article.title}
                         </h3>

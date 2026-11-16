@@ -1,6 +1,7 @@
 'use client'
 
 import { formatRigaDate } from '@/lib/articles'
+import { ARTICLE_CATEGORIES } from '@/lib/article-categories'
 import { Switch } from '@/components/ui/switch'
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
@@ -62,6 +63,15 @@ export function ArticleSettings(p: Props) {
           />
         )}
       </div>
+
+      <label className="grid gap-2">
+        <span className={label}>Kategorija</span>
+        <select value={p.fields.category ?? ''} onChange={(e) => p.onChange({ category: e.target.value || null })} className={control}>
+          <option value="">Nav</option>
+          {ARTICLE_CATEGORIES.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
+        </select>
+        <span className="text-xs text-[#5B6863]">Pēc tās ziņas var atlasīt ziņu lapā.</span>
+      </label>
 
       <label className="grid gap-2">
         <span className={label}>Īss apraksts</span>

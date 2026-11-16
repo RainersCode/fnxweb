@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { validateForPublish } from './articles'
 import { sanitizeArticleHtml } from './sanitize-article'
+import { CATEGORY_VALUES } from './article-categories'
 
 export const MIGRATION_MESSAGE = 'Datubāzei vajadzīgs atjauninājums'
 
@@ -13,6 +14,7 @@ export const articleFieldsSchema = z.object({
   is_featured: z.boolean().optional(),
   fixture_id: z.string().uuid().nullable().optional(),
   gallery_id: z.string().uuid().nullable().optional(),
+  category: z.enum(CATEGORY_VALUES).nullable().optional(),
   published_at: z.string().datetime({ offset: true }).optional(),
 })
 

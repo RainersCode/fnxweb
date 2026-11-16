@@ -15,6 +15,7 @@ export type AdminArticle = {
   is_featured: boolean
   fixture_id: string | null
   gallery_id: string | null
+  category: string | null
 }
 
 const LATVIAN: Record<string, string> = {

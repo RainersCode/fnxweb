@@ -13,6 +13,7 @@ import MainLayout from '@/components/layout/main-layout'
 import { prepareImagePath, DEFAULT_ARTICLE_IMAGE } from '@/lib/supabase'
 import { Article, Gallery } from '@/types/supabase'
 import { formatRigaDate, articlePath } from '@/lib/articles'
+import { categoryFromParam, categoryHref, categoryLabel } from '@/lib/article-categories'
 
 interface GalleryWithThumbnail extends Gallery {
   thumbnailUrl: string
@@ -94,6 +95,15 @@ export function NewsDetailClient({ article, relatedArticles, latestGalleries, pa
                 Ziņas
               </span>
             </Link>
+
+            {categoryLabel(article.category) && (
+              <Link
+                href={categoryHref(categoryFromParam(article.category ?? undefined))}
+                className="self-start mb-3 font-cond text-xs font-bold tracking-[2.5px] uppercase text-club-mint hover:text-white transition-colors"
+              >
+                {categoryLabel(article.category)}
+              </Link>
+            )}
 
             <h1 className="font-display text-[clamp(28px,4vw,52px)] font-bold uppercase text-white leading-[1.05] tracking-tight max-w-[800px] break-words">
               {article.title}
