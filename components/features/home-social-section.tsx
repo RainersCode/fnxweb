@@ -85,11 +85,11 @@ function LazyEmbed({
 
 export function HomeSocialSection() {
   return (
-    <section className="py-20 bg-club-phoenix relative">
+    <section className="py-20 bg-club-pale relative">
       <div className="relative z-[1] max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
         {/* Section header */}
         <div className="flex items-end justify-between mb-12">
-          <h2 className="font-display text-[clamp(34px,4vw,56px)] font-bold uppercase text-white leading-[1.15] tracking-tight">
+          <h2 className="font-display text-[clamp(34px,4vw,56px)] font-bold uppercase text-club leading-[1.15] tracking-tight">
             Sociālie tīkli
           </h2>
         </div>
@@ -177,7 +177,7 @@ export function HomeSocialSection() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Facebook"
-            className="w-8 h-8 grid place-items-center text-white opacity-70 hover:opacity-100 transition-opacity duration-200"
+            className="w-8 h-8 grid place-items-center text-club opacity-70 hover:opacity-100 transition-opacity duration-200"
           >
             <Facebook className="h-[18px] w-[18px]" />
           </Link>
@@ -186,7 +186,7 @@ export function HomeSocialSection() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
-            className="w-8 h-8 grid place-items-center text-white opacity-70 hover:opacity-100 transition-opacity duration-200"
+            className="w-8 h-8 grid place-items-center text-club opacity-70 hover:opacity-100 transition-opacity duration-200"
           >
             <Instagram className="h-[18px] w-[18px]" />
           </Link>
@@ -195,7 +195,7 @@ export function HomeSocialSection() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="TikTok"
-            className="w-8 h-8 grid place-items-center text-white opacity-70 hover:opacity-100 transition-opacity duration-200"
+            className="w-8 h-8 grid place-items-center text-club opacity-70 hover:opacity-100 transition-opacity duration-200"
           >
             <TikTokIcon className="h-[18px] w-[18px]" />
           </Link>

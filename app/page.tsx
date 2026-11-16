@@ -183,16 +183,16 @@ export default async function HomePage() {
         <HomeNewsSection articles={articles} />
 
         {/* Players Section: from tablet up the cards hang below the green into a band
-            painted like the gallery that follows, so no white strip shows between them */}
-        <div className="flow-root bg-[#111] bg-stripes-dark">
+            painted like the matches section that follows, so no white strip shows between them */}
+        <div className="flow-root bg-club-pale">
           <HomePlayersSection players={players} />
         </div>
 
-        {/* Gallery Section */}
-        <HomeGallerySection galleries={galleries} />
-
         {/* Upcoming Matches Section */}
         <HomeFixturesSection initialFixtures={fixtures} recentResults={recentResults} />
+
+        {/* Gallery Section */}
+        <HomeGallerySection galleries={galleries} />
 
         {/* Social Media Section */}
         <HomeSocialSection />
