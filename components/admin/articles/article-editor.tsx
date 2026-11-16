@@ -19,12 +19,13 @@ import { useAutosave } from './use-autosave'
 
 export type EditorFields = {
   title: string; content: string; image_url: string | null; excerpt: string; author: string
-  is_featured: boolean; fixture_id: string | null; gallery_id: string | null
+  is_featured: boolean; fixture_id: string | null; gallery_id: string | null; category: string | null
 }
 
 const fieldsFrom = (a: AdminArticle): EditorFields => ({
   title: a.title ?? '', content: a.content ?? '', image_url: a.image_url, excerpt: a.excerpt ?? '',
   author: a.author ?? '', is_featured: a.is_featured ?? false, fixture_id: a.fixture_id, gallery_id: a.gallery_id,
+  category: a.category ?? null,
 })
 
 const defaultSchedule = () => {
@@ -90,6 +91,7 @@ export function ArticleEditor({ article, fixtures, galleries }: { article: Admin
   const payload = useMemo(() => ({
     title: fields.title, content: fields.content, image_url: fields.image_url, excerpt: fields.excerpt,
     author: fields.author, is_featured: fields.is_featured, fixture_id: fields.fixture_id, gallery_id: fields.gallery_id,
+    category: fields.category,
   }), [fields])
 
   // Latest values for callbacks that outlive a render (save completions, page hide, unmount)

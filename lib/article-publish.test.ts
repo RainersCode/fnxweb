@@ -17,6 +17,11 @@ describe('schemas', () => {
     expect(articleFieldsSchema.safeParse({ excerpt: 'x'.repeat(161) }).success).toBe(false)
     expect(articleFieldsSchema.safeParse({ fixture_id: 'nope' }).success).toBe(false)
   })
+  it('accepts a known category or none, and rejects anything else', () => {
+    expect(articleFieldsSchema.parse({ category: 'speles' })).toEqual({ category: 'speles' })
+    expect(articleFieldsSchema.parse({ category: null })).toEqual({ category: null })
+    expect(articleFieldsSchema.safeParse({ category: 'politika' }).success).toBe(false)
+  })
   it('parses the three actions', () => {
     expect(articleActionSchema.parse({ action: 'unpublish' })).toEqual({ action: 'unpublish' })
     expect(articleActionSchema.safeParse({ action: 'explode' }).success).toBe(false)

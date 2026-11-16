@@ -12,6 +12,7 @@ export type Article = {
   excerpt?: string | null
   fixture_id?: string | null
   gallery_id?: string | null
+  category?: string | null
 }
 
 export type Fixture = {
