@@ -204,7 +204,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {process.env.NEXT_PUBLIC_SUPABASE_URL && (
             <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL} />
           )}
-          <link rel="dns-prefetch" href="https://clerk.accounts.dev" />
+          <link rel="dns-prefetch" href="https://clerk.fnx-rugby.lv" />
 
           {/* JSON-LD Structured Data for AI and Search Engines */}
           <script
