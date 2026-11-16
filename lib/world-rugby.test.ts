@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { parseScoreboard, upcomingCalendarDates, pickUpcoming, teamNameLv, type WorldMatch } from './world-rugby'
+import { parseScoreboard, upcomingCalendarDates, pickUpcoming, teamNameLv, formatKickoff, type WorldMatch } from './world-rugby'
 
 const competitor = (homeAway: 'home' | 'away', name: string, logo?: string) => ({
   homeAway,
@@ -87,5 +87,13 @@ describe('pickUpcoming', () => {
   it('stops at the limit', () => {
     const many = ['21', '22', '23', '24'].map((d) => m(d, `2026-11-${d}T12:00Z`))
     expect(pickUpcoming(many, now, 3).map((x) => x.id)).toEqual(['21', '22', '23'])
+  })
+})
+
+describe('formatKickoff', () => {
+  it('shows the day and the Latvian kick-off time', () => {
+    // 14:10 UTC is 16:10 in Riga in November
+    const text = formatKickoff('2026-11-21T14:10Z')
+    expect(text).toMatch(/^S.*21\. nov\. · 16:10$/)
   })
 })

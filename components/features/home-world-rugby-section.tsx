@@ -1,13 +1,5 @@
 import { default as NextImage } from 'next/image'
-import type { WorldMatch, WorldTeam } from '@/lib/world-rugby'
-
-// Pin the timezone so server and browser render the same kick-off time
-const kickoff = (iso: string) => {
-  const date = new Date(iso)
-  const day = date.toLocaleDateString('lv-LV', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Europe/Riga' })
-  const time = date.toLocaleTimeString('lv-LV', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Riga' })
-  return `${day.charAt(0).toUpperCase()}${day.slice(1)} · ${time}`
-}
+import { WORLD_RUGBY_ANCHOR, formatKickoff, type WorldMatch, type WorldTeam } from '@/lib/world-rugby'
 
 function Team({ team }: { team: WorldTeam }) {
   return (
@@ -28,7 +20,7 @@ export function HomeWorldRugbySection({ matches }: { matches: WorldMatch[] }) {
   if (matches.length === 0) return null
 
   return (
-    <section className="py-12 md:py-14 bg-white" aria-labelledby="world-rugby-title">
+    <section id={WORLD_RUGBY_ANCHOR} className="py-12 md:py-14 bg-white scroll-mt-24" aria-labelledby="world-rugby-title">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-16">
         <div className="flex flex-wrap items-end justify-between gap-3 mb-6">
           <div>
@@ -51,7 +43,7 @@ export function HomeWorldRugbySection({ matches }: { matches: WorldMatch[] }) {
                   {match.competition}
                 </span>
                 <span className="font-cond text-xs font-semibold tracking-[1px] uppercase text-[#111] whitespace-nowrap">
-                  {kickoff(match.date)}
+                  {formatKickoff(match.date)}
                 </span>
               </div>
               <div className="grid gap-2">

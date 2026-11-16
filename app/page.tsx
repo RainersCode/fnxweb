@@ -191,9 +191,6 @@ export default async function HomePage() {
         {/* Upcoming Matches Section */}
         <HomeFixturesSection initialFixtures={fixtures} recentResults={recentResults} />
 
-        {/* Upcoming international rugby (ESPN) */}
-        <HomeWorldRugbySection matches={worldMatches} />
-
         {/* Social Media Section */}
         <HomeSocialSection />
 
@@ -263,6 +260,9 @@ export default async function HomePage() {
             </Link>
           </div>
         </section>
+
+        {/* Upcoming international rugby (ESPN); the ticker above the menu links here */}
+        <HomeWorldRugbySection matches={worldMatches} />
       </main>
     </MainLayout>
   )
