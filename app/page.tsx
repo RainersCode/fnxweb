@@ -14,6 +14,8 @@ import { HomeGallerySection } from '@/components/features/home-gallery-section'
 import { HomeFixturesSection } from '@/components/features/home-fixtures-section'
 import { HomeSocialSection } from '@/components/features/home-social-section'
 import { HomePlayersSection } from '@/components/features/home-players-section'
+import { HomeWorldRugbySection } from '@/components/features/home-world-rugby-section'
+import { getUpcomingWorldMatches } from '@/lib/world-rugby'
 import { getActiveTraining, TrainingTimesList } from '@/components/features/training-times'
 import { SITE_URL } from '@/lib/site'
 
@@ -157,13 +159,14 @@ async function getRecentResults(): Promise<Fixture[]> {
 
 export default async function HomePage() {
   // Fetch all data in parallel on the server
-  const [articles, galleries, fixtures, players, recentResults, training] = await Promise.all([
+  const [articles, galleries, fixtures, players, recentResults, training, worldMatches] = await Promise.all([
     getArticles(),
     getGalleries(),
     getFixtures(),
     getPlayers(),
     getRecentResults(),
     getActiveTraining(),
+    getUpcomingWorldMatches(),
   ])
 
   // Fixtures are fetched from midnight, so skip any match that already kicked off today
@@ -187,6 +190,9 @@ export default async function HomePage() {
 
         {/* Upcoming Matches Section */}
         <HomeFixturesSection initialFixtures={fixtures} recentResults={recentResults} />
+
+        {/* Upcoming international rugby (ESPN) */}
+        <HomeWorldRugbySection matches={worldMatches} />
 
         {/* Social Media Section */}
         <HomeSocialSection />
