@@ -179,11 +179,14 @@ export default async function HomePage() {
         {/* Hero Section - contains the page's primary H1 */}
         <HomeHero nextFixture={nextFixture} />
 
-        {/* Players Section */}
-        <HomePlayersSection players={players} />
-
         {/* Latest News Section */}
         <HomeNewsSection articles={articles} />
+
+        {/* Players Section: from tablet up the cards hang below the green into a band
+            painted like the gallery that follows, so no white strip shows between them */}
+        <div className="flow-root bg-[#111] bg-stripes-dark">
+          <HomePlayersSection players={players} />
+        </div>
 
         {/* Gallery Section */}
         <HomeGallerySection galleries={galleries} />
