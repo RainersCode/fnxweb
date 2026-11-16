@@ -161,7 +161,7 @@ export function HomePlayersSection({ players }: HomePlayersSectionProps) {
           ))}
         </div>
 
-        {/* Desktop page dots */}
+        {/* Desktop page dots: they sit below the green, on the light band of the next section */}
         {totalPages > 1 && (
           <div className="hidden sm:flex justify-center gap-2 translate-y-[70px] lg:translate-y-[80px]">
             {Array.from({ length: totalPages }).map((_, i) => (
@@ -169,7 +169,7 @@ export function HomePlayersSection({ players }: HomePlayersSectionProps) {
                 key={i}
                 onClick={() => setPage(i)}
                 className={`h-[3px] transition-all duration-300 ${
-                  i === page ? 'w-8 bg-white' : 'w-4 bg-white/30 hover:bg-white/50'
+                  i === page ? 'w-8 bg-club' : 'w-4 bg-club/25 hover:bg-club/50'
                 }`}
                 aria-label={`Lapa ${i + 1}`}
               />
