@@ -57,6 +57,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/privacy-policy`, changeFrequency: 'yearly' as const, priority: 0.3 },
     { url: `${SITE_URL}/cookies-policy`, changeFrequency: 'yearly' as const, priority: 0.3 },
     { url: `${SITE_URL}/team`, changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: `${SITE_URL}/pasaules-regbijs`, changeFrequency: 'daily' as const, priority: 0.6 },
   ];
 
   return [...staticRoutes, ...articleUrls, ...galleryUrls];

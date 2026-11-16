@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { WORLD_RUGBY_ANCHOR, formatKickoff, type WorldMatch, type WorldTeam } from '@/lib/world-rugby'
+import { WORLD_RUGBY_PATH, formatKickoff, type WorldMatch, type WorldTeam } from '@/lib/world-rugby'
 
 // Plain <img>: tiny remote crests in a looping strip don't need the image optimiser
 function Crest({ team }: { team: WorldTeam }) {
@@ -11,7 +11,7 @@ function Crest({ team }: { team: WorldTeam }) {
   return <img src={team.logo} alt="" width={20} height={20} className="h-5 w-5 shrink-0 object-contain" />
 }
 
-// Thin strip above the menu: the next big games scroll past; a click opens the home page section
+// Thin strip above the menu: the next big games scroll past; a click opens the world rugby page
 export function WorldRugbyTicker() {
   const [matches, setMatches] = useState<WorldMatch[]>([])
 
@@ -43,7 +43,7 @@ export function WorldRugbyTicker() {
 
   return (
     <Link
-      href={`/#${WORLD_RUGBY_ANCHOR}`}
+      href={WORLD_RUGBY_PATH}
       aria-label="Pasaules regbija tuvākās spēles"
       className="group flex h-8 items-stretch overflow-hidden border-b border-[#e5e7eb] bg-white font-cond text-[12px] font-semibold uppercase tracking-[1px]"
     >

@@ -427,6 +427,11 @@ export function MainLayout({ children, currentPage: propCurrentPage }: MainLayou
                       </Link>
                     </li>
                   ))}
+                  <li>
+                    <Link href="/pasaules-regbijs" className="text-sm text-white/65 hover:text-club-mint transition-colors">
+                      Pasaules regbijs
+                    </Link>
+                  </li>
                 </ul>
               </div>
             </div>

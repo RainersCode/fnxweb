@@ -1,30 +1,59 @@
-// Upcoming top-level rugby for the home page, from ESPN's public scoreboard (no key needed).
-// It is an unofficial feed, so every step tolerates missing fields and failures return nothing.
+// Top-level rugby from ESPN's public scoreboard (no key needed): the home page strip, the ticker
+// above the menu and the /pasaules-regbijs page. It is an unofficial feed, so every step tolerates
+// missing fields and failures return nothing.
 
-// Home page section id; the ticker above the menu links to /#pasaules-regbijs
+// Home page section id
 export const WORLD_RUGBY_ANCHOR = 'pasaules-regbijs'
+export const WORLD_RUGBY_PATH = '/pasaules-regbijs'
 
-export type WorldTeam = { name: string; logo: string | null }
+export type WorldTeam = { name: string; logo: string | null; score: string | null; winner: boolean }
 
 export type WorldMatch = {
   id: string
   date: string
   status: string
   competition: string
+  competitionSlug: string
   home: WorldTeam
   away: WorldTeam
   venue: string | null
+  city: string | null
 }
 
 // ESPN league ids; Champions Cup keeps the strip alive between the international windows
 export const WORLD_COMPETITIONS = [
-  { id: '17567', label: 'Nāciju čempionāts' },
-  { id: '180659', label: 'Sešu nāciju turnīrs' },
-  { id: '244293', label: 'Rugby Championship' },
-  { id: '164205', label: 'Pasaules kauss' },
-  { id: '268565', label: 'Lions tūre' },
-  { id: '271937', label: 'Čempionu kauss' },
+  {
+    id: '17567', slug: 'naciju-cempionats', label: 'Nāciju čempionāts',
+    description: 'Jaunais World Rugby izlašu turnīrs (no 2026. gada): Sešu nāciju izlases spēlē pret Jaunzēlandi, Dienvidāfriku, Austrāliju, Argentīnu, Japānu un Fidži. Spēles jūlijā un novembrī, sezonu noslēdz finālu nedēļas nogale.',
+  },
+  {
+    id: '180659', slug: 'sesu-naciju-turnirs', label: 'Sešu nāciju turnīrs',
+    description: 'Eiropas vecākais izlašu turnīrs: Anglija, Francija, Īrija, Itālija, Skotija un Velsa. Notiek katru gadu februārī un martā.',
+  },
+  {
+    id: '244293', slug: 'rugby-championship', label: 'Rugby Championship',
+    description: 'Dienvidu puslodes spēcīgāko izlašu turnīrs: Jaunzēlande, Dienvidāfrika, Austrālija un Argentīna.',
+  },
+  {
+    id: '164205', slug: 'pasaules-kauss', label: 'Pasaules kauss',
+    description: 'Lielākais regbija turnīrs, notiek reizi četros gados. 2027. gadā tas norisināsies Austrālijā, pirmo reizi ar 24 komandām.',
+  },
+  {
+    id: '268565', slug: 'lions-ture', label: 'Lions tūre',
+    description: 'Britu un īru lauvas: Anglijas, Īrijas, Skotijas un Velsas labāko spēlētāju izlase, kas reizi četros gados dodas tūrē uz Dienvidu puslodi.',
+  },
+  {
+    id: '271937', slug: 'cempionu-kauss', label: 'Čempionu kauss',
+    description: 'Eiropas spēcīgāko klubu turnīrs (Anglija, Francija, Īrija, Skotija, Velsa, Itālija un Dienvidāfrika). Grupu spēles decembrī un janvārī, fināls maijā.',
+  },
 ]
+
+export type CompetitionSlug = string
+
+export function competitionFromParam(param: string | string[] | undefined): CompetitionSlug | null {
+  const value = Array.isArray(param) ? param[0] : param
+  return WORLD_COMPETITIONS.some((c) => c.slug === value) ? (value as string) : null
+}
 
 const TEAM_NAMES_LV: Record<string, string> = {
   England: 'Anglija',
@@ -74,10 +103,10 @@ function parseTeam(competitor: Json | null): WorldTeam | null {
   const team = obj(competitor?.team)
   const name = str(team?.displayName) ?? str(team?.name)
   if (!name) return null
-  return { name: teamNameLv(name), logo: str(team?.logo) }
+  return { name: teamNameLv(name), logo: str(team?.logo), score: str(competitor?.score), winner: competitor?.winner === true }
 }
 
-export function parseScoreboard(json: unknown, competition: string): WorldMatch[] {
+export function parseScoreboard(json: unknown, competition: { label: string; slug: string }): WorldMatch[] {
   const events = obj(json)?.events
   if (!Array.isArray(events)) return []
   const matches: WorldMatch[] = []
@@ -96,10 +125,12 @@ export function parseScoreboard(json: unknown, competition: string): WorldMatch[
       id,
       date,
       status: str(obj(obj(e?.status)?.type)?.name) ?? 'STATUS_SCHEDULED',
-      competition,
+      competition: competition.label,
+      competitionSlug: competition.slug,
       home,
       away,
       venue: str(obj(comp?.venue)?.fullName),
+      city: str(obj(obj(comp?.venue)?.address)?.city),
     })
   }
   return matches
@@ -107,11 +138,12 @@ export function parseScoreboard(json: unknown, competition: string): WorldMatch[
 
 const yyyymmdd = (iso: string) => iso.slice(0, 10).replace(/-/g, '')
 
+const DAY_MS = 86_400_000
 const WINDOW_DAYS = 120
 
 // League calendars list match days either as ISO strings or as { startDate } / { entries: [...] } objects.
-// Only days in the next few months count: a strip of "upcoming" games half a year away is not useful.
-export function upcomingCalendarDates(calendar: unknown, now: Date, max: number): string[] {
+// Returns the YYYYMMDD days between two dates (inclusive), in order.
+export function calendarDays(calendar: unknown, from: Date, to: Date): string[] {
   if (!Array.isArray(calendar)) return []
   const isoDates: string[] = []
   for (const item of calendar) {
@@ -123,19 +155,69 @@ export function upcomingCalendarDates(calendar: unknown, now: Date, max: number)
       if (start) isoDates.push(start)
     }
   }
-  const today = yyyymmdd(now.toISOString())
-  const last = yyyymmdd(new Date(now.getTime() + WINDOW_DAYS * 86_400_000).toISOString())
+  const first = yyyymmdd(from.toISOString())
+  const last = yyyymmdd(to.toISOString())
   const days = Array.from(new Set(isoDates.filter((d) => /^\d{4}-\d{2}-\d{2}/.test(d)).map(yyyymmdd)))
-  return days.filter((d) => d >= today && d <= last).sort().slice(0, max)
+  return days.filter((d) => d >= first && d <= last).sort()
+}
+
+// Only days in the next few months count: a strip of "upcoming" games half a year away is not useful
+export function upcomingCalendarDates(calendar: unknown, now: Date, max: number): string[] {
+  return calendarDays(calendar, now, new Date(now.getTime() + WINDOW_DAYS * DAY_MS)).slice(0, max)
+}
+
+const uniqueById = () => {
+  const seen = new Set<string>()
+  return (m: WorldMatch) => (seen.has(m.id) ? false : (seen.add(m.id), true))
 }
 
 export function pickUpcoming(matches: WorldMatch[], now: Date, limit: number): WorldMatch[] {
-  const seen = new Set<string>()
   return matches
     .filter((m) => m.status === 'STATUS_SCHEDULED' && new Date(m.date) > now)
     .sort((a, b) => a.date.localeCompare(b.date))
-    .filter((m) => (seen.has(m.id) ? false : (seen.add(m.id), true)))
+    .filter(uniqueById())
     .slice(0, limit)
+}
+
+export function pickRecent(matches: WorldMatch[], now: Date, days: number): WorldMatch[] {
+  const since = now.getTime() - days * DAY_MS
+  return matches
+    .filter((m) => m.status === 'STATUS_FINAL' && new Date(m.date).getTime() >= since && new Date(m.date) <= now)
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .filter(uniqueById())
+}
+
+const rigaDay = (iso: string) => new Date(iso).toLocaleDateString('en-CA', { timeZone: 'Europe/Riga' })
+
+// Consecutive matches on the same Latvian calendar day, in the order given
+export function groupByRigaDay(matches: WorldMatch[]): { day: string; matches: WorldMatch[] }[] {
+  const groups: { day: string; matches: WorldMatch[] }[] = []
+  for (const match of matches) {
+    const day = rigaDay(match.date)
+    const last = groups[groups.length - 1]
+    if (last?.day === day) last.matches.push(match)
+    else groups.push({ day, matches: [match] })
+  }
+  return groups
+}
+
+const capitalise = (text: string) => `${text.charAt(0).toUpperCase()}${text.slice(1)}`
+
+// "2026-11-21" → "Sestdiena, 21. novembris"
+export function formatDayHeading(day: string): string {
+  return capitalise(new Date(`${day}T12:00:00Z`).toLocaleDateString('lv-LV', {
+    weekday: 'long', day: 'numeric', month: 'long', timeZone: 'Europe/Riga',
+  }))
+}
+
+// "20271001" or an ISO date → "2027. g. 1. okt."
+export function formatShortDate(day: string): string {
+  const iso = /^\d{8}$/.test(day) ? `${day.slice(0, 4)}-${day.slice(4, 6)}-${day.slice(6)}T12:00:00Z` : day
+  return new Date(iso).toLocaleDateString('lv-LV', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Europe/Riga' })
+}
+
+export function formatTime(iso: string): string {
+  return new Date(iso).toLocaleTimeString('lv-LV', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Riga' })
 }
 
 // "Sestd., 21. nov. · 16:10" in Latvian time; the timezone is pinned so server and browser agree
@@ -143,7 +225,7 @@ export function formatKickoff(iso: string): string {
   const date = new Date(iso)
   const day = date.toLocaleDateString('lv-LV', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Europe/Riga' })
   const time = date.toLocaleTimeString('lv-LV', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Riga' })
-  return `${day.charAt(0).toUpperCase()}${day.slice(1)} · ${time}`
+  return `${capitalise(day)} · ${time}`
 }
 
 const SCOREBOARD = 'https://site.api.espn.com/apis/site/v2/sports/rugby'
@@ -157,16 +239,46 @@ async function fetchJson(url: string): Promise<unknown> {
   }
 }
 
-// The default scoreboard holds the current week plus the league calendar; later match days are fetched by date
+type League = (typeof WORLD_COMPETITIONS)[number]
+
+// The default scoreboard holds the current week plus the league calendar; other match days are fetched by date
+async function loadLeague(league: League, pickDays: (calendar: unknown) => string[]) {
+  const current = await fetchJson(`${SCOREBOARD}/${league.id}/scoreboard`)
+  const calendar = obj(Array.isArray(obj(current)?.leagues) ? (obj(current)!.leagues as unknown[])[0] : null)?.calendar
+  const days = pickDays(calendar)
+  const others = await Promise.all(days.map((d) => fetchJson(`${SCOREBOARD}/${league.id}/scoreboard?dates=${d}`)))
+  return { calendar, matches: [current, ...others].flatMap((json) => parseScoreboard(json, league)) }
+}
+
 export async function getUpcomingWorldMatches(limit = 6, now: Date = new Date()): Promise<WorldMatch[]> {
   const perLeague = await Promise.all(
-    WORLD_COMPETITIONS.map(async ({ id, label }) => {
-      const current = await fetchJson(`${SCOREBOARD}/${id}/scoreboard`)
-      const league = obj(Array.isArray(obj(current)?.leagues) ? (obj(current)!.leagues as unknown[])[0] : null)
-      const days = upcomingCalendarDates(league?.calendar, now, 3)
-      const later = await Promise.all(days.map((d) => fetchJson(`${SCOREBOARD}/${id}/scoreboard?dates=${d}`)))
-      return [current, ...later].flatMap((json) => parseScoreboard(json, label))
+    WORLD_COMPETITIONS.map((league) => loadLeague(league, (calendar) => upcomingCalendarDates(calendar, now, 3)))
+  )
+  return pickUpcoming(perLeague.flatMap((l) => l.matches), now, limit)
+}
+
+export type WorldSchedule = {
+  upcoming: WorldMatch[]
+  recent: WorldMatch[]
+  // Next match day per tournament (YYYYMMDD), also beyond the window, e.g. a World Cup a year away
+  nextDay: Record<CompetitionSlug, string | null>
+}
+
+// Everything for the /pasaules-regbijs page: the next weeks, the last week's results, and when each tournament resumes
+export async function getWorldRugbySchedule(now: Date = new Date(), daysAhead = 60, daysBack = 7): Promise<WorldSchedule> {
+  const from = new Date(now.getTime() - daysBack * DAY_MS)
+  const to = new Date(now.getTime() + daysAhead * DAY_MS)
+  const perLeague = await Promise.all(
+    WORLD_COMPETITIONS.map(async (league) => {
+      const loaded = await loadLeague(league, (calendar) => calendarDays(calendar, from, to).slice(0, 14))
+      const future = calendarDays(loaded.calendar, now, new Date(now.getTime() + 3 * 365 * DAY_MS))
+      return { slug: league.slug, matches: loaded.matches, next: future[0] ?? null }
     })
   )
-  return pickUpcoming(perLeague.flat(), now, limit)
+  const all = perLeague.flatMap((l) => l.matches)
+  return {
+    upcoming: pickUpcoming(all, now, 200).filter((m) => new Date(m.date) <= to),
+    recent: pickRecent(all, now, daysBack),
+    nextDay: Object.fromEntries(perLeague.map((l) => [l.slug, l.next])),
+  }
 }
